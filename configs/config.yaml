@@ -1,0 +1,86 @@
+# -----------------------------------------------------------------------
+# LLM configuration
+# -----------------------------------------------------------------------
+llm:
+  provider: "openai"
+  model: "gpt-4o-mini"           # Default model (cost-efficient)
+
+  # OpenAI models (as of 2026-06)
+  openai_models:
+    primary:   "gpt-4o"          # Main model — best quality
+    mini:      "gpt-4o-mini"     # Cheaper, faster (benchmark comparison)
+    reasoning: "o4-mini"         # Reasoning tasks
+
+  max_tokens: 2000
+  temperature: 0.1
+
+# -----------------------------------------------------------------------
+# Embedding (Week 3 — RAG)
+# -----------------------------------------------------------------------
+embedding:
+  model: "intfloat/multilingual-e5-large"
+  batch_size: 32
+
+# -----------------------------------------------------------------------
+# Retrieval (Week 3)
+# -----------------------------------------------------------------------
+retrieval:
+  top_k_default: 5
+  top_k_per_section:
+    tong_quan: 5
+    ly_do_kham: 4
+    tien_su: 8
+    thuoc_hien_tai: 6
+    allergies: 5
+    xn_bat_thuong: 10
+    diagnoses: 5
+    luu_y: 10
+
+# -----------------------------------------------------------------------
+# Citation pipeline (Week 4)
+# -----------------------------------------------------------------------
+citation:
+  min_similarity_threshold: 0.75
+  low_confidence_threshold: 0.85   # Below this -> LOW_CONFIDENCE
+  judge_model: "claude-sonnet-4-6"
+  max_chunks_per_claim: 3          # Limit LLM calls for cost control
+
+# -----------------------------------------------------------------------
+# Data paths
+# -----------------------------------------------------------------------
+stores:
+  structured_path: "data/stores/structured.json"
+  vector_path: "data/stores/vector_index"
+
+data:
+  seed_dir: "data/vietnamese-clinic-data-seeds/seed-dataset"
+  assembled_dir: "data/medical_summarization/assembled"
+  abbreviation_dict: "data/medical_summarization/dictionaries/medical_abbreviations_vi.json"
+
+# -----------------------------------------------------------------------
+# PoC settings
+# -----------------------------------------------------------------------
+poc:
+  max_chunks_in_context: 60
+  output_dir: "data/medical_summarization/poc_outputs"
+
+# -----------------------------------------------------------------------
+# Benchmark configs (Week 3)
+# -----------------------------------------------------------------------
+benchmark:
+  configs:
+    - name: "gpt4o_zero_shot"
+      model: "gpt-4o"
+      prompt_version: "v1_zero_shot"
+
+    - name: "gpt4o_few_shot"
+      model: "gpt-4o"
+      prompt_version: "v2_few_shot"
+
+    - name: "gpt4o_chain_of_thought"
+      model: "gpt-4o"
+      prompt_version: "v3_cot"
+
+    - name: "gpt4o_mini_zero_shot"
+      model: "gpt-4o-mini"
+      prompt_version: "v1_zero_shot"

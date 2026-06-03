@@ -1,0 +1,15 @@
+openai>=1.0.0
+pydantic>=2.0.0
+python-dotenv>=1.0.0
+pyyaml>=6.0
+fastapi>=0.110.0
+uvicorn>=0.27.0
+pytest>=8.0.0
+# Week 3 additions (RAG pipeline)
+faiss-cpu>=1.8.0
+sentence-transformers>=3.0.0
+rank-bm25>=0.2.2
+# Experiment tracking
+mlflow>=2.14.0
+# Data analysis
+pandas>=2.0.0

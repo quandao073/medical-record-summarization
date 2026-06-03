@@ -1,0 +1,43 @@
+[
+  {
+    "allergy_id": "P001-ALLERGY001",
+    "patient_id": "P001",
+    "encounter_id": null,
+    "recorded_date": "2021-03-15",
+    "substance": "Penicillin",
+    "reaction": "Nổi mề đay toàn thân",
+    "severity": "moderate",
+    "status": "active",
+    "source_text": "Bệnh nhân báo cáo dị ứng Penicillin — nổi mề đay toàn thân sau khi dùng Amoxicillin năm 2021. Đã xác nhận với bệnh nhân.",
+    "needs_patient_confirmation": false,
+    "source_system": "EMR-Allergy"
+  },
+  {
+    "allergy_id": "P003-ALLERGY001",
+    "patient_id": "P003",
+    "encounter_id": null,
+    "recorded_date": "2018-08-20",
+    "substance": "Sulfonamide (Co-trimoxazole)",
+    "reaction": null,
+    "severity": "unknown",
+    "status": "active",
+    "source_text": "Hồ sơ cũ ghi 'dị ứng Sulfonamide'. Không rõ phản ứng cụ thể và mức độ. Chưa xác nhận lại với bệnh nhân.",
+    "needs_patient_confirmation": true,
+    "source_system": "EMR-Allergy",
+    "data_note": "EC-03: reaction = null, severity = unknown. Thiếu thông tin phản ứng dị ứng. Cần xác nhận lại với bệnh nhân trong lần khám tiếp theo."
+  },
+  {
+    "allergy_id": "P004-ALLERGY001",
+    "patient_id": "P004",
+    "encounter_id": "P004-E001",
+    "recorded_date": "2024-03-05",
+    "substance": "Thuốc (không rõ loại)",
+    "reaction": null,
+    "severity": "unknown",
+    "status": "unknown",
+    "source_text": "Bệnh nhân tự báo cáo 'dị ứng thuốc' nhưng không nhớ tên thuốc và không mô tả được phản ứng. Chưa có hồ sơ xác nhận.",
+    "needs_patient_confirmation": true,
+    "source_system": "EMR-Allergy",
+    "data_note": "EC-03: substance không rõ, reaction = null. Bệnh nhân P004 không cung cấp được thông tin dị ứng đầy đủ. Dùng để test pipeline xử lý dị ứng không rõ."
+  }
+]
