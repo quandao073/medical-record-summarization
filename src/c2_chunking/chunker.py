@@ -40,8 +40,8 @@ def _chunk_vitals(enc: dict, pid: str) -> list[SourceChunk]:
         bp_sys = vit.get("blood_pressure_systolic")
         bp_dia = vit.get("blood_pressure_diastolic")
         hr     = vit.get("heart_rate")
-        temp   = vit.get("temperature_c")
-        spo2   = vit.get("spo2")
+        temp   = vit.get("temperature_celsius")
+        spo2   = vit.get("spo2_percent")
         weight = vit.get("weight_kg")
         height = vit.get("height_cm")
         bmi    = vit.get("bmi")
@@ -49,17 +49,17 @@ def _chunk_vitals(enc: dict, pid: str) -> list[SourceChunk]:
 
         parts = []
         if bp_sys and bp_dia:
-            parts.append(f"Huyet ap: {bp_sys}/{bp_dia} mmHg")
+            parts.append(f"Huyết áp: {bp_sys}/{bp_dia} mmHg")
         if hr:
-            parts.append(f"Mach: {hr} lan/phut")
+            parts.append(f"Mạch: {hr} lần/phút")
         if temp:
-            parts.append(f"Nhiet do: {temp} C")
+            parts.append(f"Nhiệt độ: {temp} C")
         if spo2:
             parts.append(f"SpO2: {spo2}%")
         if weight:
-            parts.append(f"Can nang: {weight} kg")
+            parts.append(f"Cân nặng: {weight} kg")
         if height:
-            parts.append(f"Chieu cao: {height} cm")
+            parts.append(f"Chiều cao: {height} cm")
         if bmi:
             parts.append(f"BMI: {bmi}")
 
@@ -68,7 +68,7 @@ def _chunk_vitals(enc: dict, pid: str) -> list[SourceChunk]:
 
         text = ". ".join(parts)
         if flags:
-            text += f". Bat thuong: {', '.join(flags)}"
+            text += f". Bất thường: {', '.join(flags)}"
 
         chunks.append(SourceChunk(
             source_id=_sid(enc["encounter_id"], "VIT", vit.get("vital_id", "VIT001")),
@@ -100,12 +100,12 @@ def _chunk_labs(enc: dict, pid: str) -> list[SourceChunk]:
 
         text = f"{name}: {value} {unit}".strip()
         if ref:
-            text += f" (tham chieu: {ref})"
-        if lab.get("abnormal"):
+            text += f" (tham chiếu: {ref})"
+        if lab.get("is_abnormal"):
             direction = "cao" if lab.get("interpretation") == "high" else "thap"
-            text += f" [BAT THUONG - {direction}]"
-        if lab.get("critical"):
-            text += " [NGUY HIEM]"
+            text += f" [BẤT THƯỜNG - {direction}]"
+        if lab.get("is_critical"):
+            text += " [NGUY HIỂM]"
         if comment:
             text += f". {comment}"
 
@@ -121,8 +121,8 @@ def _chunk_labs(enc: dict, pid: str) -> list[SourceChunk]:
                 "test_name": name,
                 "value": value,
                 "unit": unit,
-                "abnormal": lab.get("abnormal", False),
-                "critical": lab.get("critical", False),
+                "abnormal": lab.get("is_abnormal", False),
+                "critical": lab.get("is_critical", False),
                 "interpretation": lab.get("interpretation"),
             },
         ))
@@ -142,16 +142,16 @@ def _chunk_medications(enc: dict, pid: str) -> list[SourceChunk]:
         if strength:
             parts[0] += f" {strength}"
         if dose:
-            parts.append(f"lieu: {dose}")
+            parts.append(f"liều: {dose}")
         if freq:
-            parts.append(f"tan suat: {freq}")
+            parts.append(f"tần suất: {freq}")
         if instr:
             parts.append(instr)
 
         text = ". ".join(parts)
 
         if not med.get("dose") and not med.get("strength"):
-            text += " [THIEU THONG TIN LIEU]"
+            text += " [THIẾU THÔNG TIN LIỀU]"
 
         chunks.append(SourceChunk(
             source_id=_sid(enc["encounter_id"], "MED", drug),
@@ -288,11 +288,11 @@ def _chunk_allergies(ehr: dict) -> list[SourceChunk]:
         note      = allergy.get("source_text", "")
         needs_confirm = allergy.get("needs_patient_confirmation", False)
 
-        text = f"Di ung: {substance}. Phan ung: {reaction}. Muc do: {severity}. Trang thai: {status}."
+        text = f"Dị ứng: {substance}. Phản ứng: {reaction}. Mức độ: {severity}. Trang thái: {status}."
         if needs_confirm:
-            text += " [CAN XAC NHAN LAI VOI BENH NHAN]"
+            text += " [CẦN XÁC NHẬN VỚI BỆNH NHÂN]"
         if note:
-            text += f" Ghi chu: {note}"
+            text += f" Ghi chú: {note}"
 
         chunks.append(SourceChunk(
             source_id=f"{pid}-PATIENT-ALLERGY-{substance.replace(' ', '_').upper()[:15]}",
@@ -316,27 +316,27 @@ def _chunk_patient_info(ehr: dict) -> list[SourceChunk]:
     pid = ehr["patient_id"]
     p   = ehr.get("patient", {})
     name   = p.get("full_name", "BN")
-    dob    = p.get("dob", "")
+    dob    = p.get("date_of_birth", p.get("dob", ""))
     age    = p.get("age")
     gender = p.get("gender", "")
     occ    = p.get("occupation", "")
 
-    parts = [f"Benh nhan: {name}"]
+    parts = [f"Bệnh nhân: {name}"]
     if age:
-        parts.append(f"Tuoi: {age}")
+        parts.append(f"Tuổi: {age}")
     elif dob:
-        parts.append(f"Ngay sinh: {dob}")
+        parts.append(f"Ngày sinh: {dob}")
     if gender:
-        parts.append(f"Gioi tinh: {gender}")
+        parts.append(f"Giới tính: {gender}")
     if occ:
-        parts.append(f"Nghe nghiep: {occ}")
+        parts.append(f" Nghề nghiệp: {occ}")
 
     return [SourceChunk(
         source_id=f"{pid}-PATIENT-INFO",
         source_type="patient_info",
         patient_id=pid,
         encounter_id="PATIENT_LEVEL",
-        ngay=None,
+        date=None,
         content=". ".join(parts),
         metadata={"age": age, "gender": gender},
     )]

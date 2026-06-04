@@ -10,7 +10,8 @@
     "status": "active",
     "source_text": "Bệnh nhân báo cáo dị ứng Penicillin — nổi mề đay toàn thân sau khi dùng Amoxicillin năm 2021. Đã xác nhận với bệnh nhân.",
     "needs_patient_confirmation": false,
-    "source_system": "EMR-Allergy"
+    "source_system": "EMR-Allergy",
+    "language": "vi"
   },
   {
     "allergy_id": "P003-ALLERGY001",
@@ -24,7 +25,8 @@
     "source_text": "Hồ sơ cũ ghi 'dị ứng Sulfonamide'. Không rõ phản ứng cụ thể và mức độ. Chưa xác nhận lại với bệnh nhân.",
     "needs_patient_confirmation": true,
     "source_system": "EMR-Allergy",
-    "data_note": "EC-03: reaction = null, severity = unknown. Thiếu thông tin phản ứng dị ứng. Cần xác nhận lại với bệnh nhân trong lần khám tiếp theo."
+    "data_note": "EC-03: reaction = null, severity = unknown. Thiếu thông tin phản ứng dị ứng. Cần xác nhận lại với bệnh nhân trong lần khám tiếp theo.",
+    "language": "vi"
   },
   {
     "allergy_id": "P004-ALLERGY001",
@@ -38,6 +40,7 @@
     "source_text": "Bệnh nhân tự báo cáo 'dị ứng thuốc' nhưng không nhớ tên thuốc và không mô tả được phản ứng. Chưa có hồ sơ xác nhận.",
     "needs_patient_confirmation": true,
     "source_system": "EMR-Allergy",
-    "data_note": "EC-03: substance không rõ, reaction = null. Bệnh nhân P004 không cung cấp được thông tin dị ứng đầy đủ. Dùng để test pipeline xử lý dị ứng không rõ."
+    "data_note": "EC-03: substance không rõ, reaction = null. Bệnh nhân P004 không cung cấp được thông tin dị ứng đầy đủ. Dùng để test pipeline xử lý dị ứng không rõ.",
+    "language": "vi"
   }
 ]

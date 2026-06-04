@@ -16,7 +16,7 @@ from src.c2_chunking.store_builder import build_structured_store, save_structure
 from poc.poc_pipeline import format_chunks_as_context, build_section_prompt, SECTIONS
 
 ROOT = Path(__file__).parent.parent
-DATA_DIR = ROOT / "data" / "medical_summarization"
+DATA_DIR = ROOT / "data" / "processed"
 ASSEMBLED_DIR = DATA_DIR / "assembled"
 STORE_DIR = DATA_DIR / "stores"
 
@@ -47,7 +47,7 @@ def run_dry(patient_id: str):
 
     # --- Context + Prompt (no LLM call) ---
     context = format_chunks_as_context(chunks, max_chunks=60)
-    sample_prompt = build_section_prompt("thuoc_hien_tai", context)
+    sample_prompt = build_section_prompt("current_medications", context)
 
     # Print stats
     enc_count = len(safe_ehr.get("encounters", []))
@@ -73,9 +73,10 @@ def main():
 
     print(f"\n{'='*56}")
     print("Dry-run PASSED. C1+C2 pipeline works for all patients.")
-    print("Next step: set ANTHROPIC_API_KEY in .env and run:")
+    print("Next step: set OPENAI_API_KEY in .env and run:")
     print("  python poc/poc_pipeline.py --patient P001")
     print("  python poc/poc_pipeline.py --all-patients")
+    print("(Week 3: will migrate to ANTHROPIC_API_KEY after Claude API integration)")
 
 
 if __name__ == "__main__":

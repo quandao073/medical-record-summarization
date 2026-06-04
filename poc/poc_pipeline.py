@@ -28,10 +28,10 @@ from src.schemas import SourceChunk, FinalSummary, SummarySection, CitedClaim, S
 load_dotenv()
 
 ROOT = Path(__file__).parent.parent
-DATA_DIR      = ROOT / "data" / "medical_summarization"
+DATA_DIR      = ROOT / "data" / "processed"
 ASSEMBLED_DIR = DATA_DIR / "assembled"
 STORE_DIR     = DATA_DIR / "stores"
-OUTPUT_DIR    = DATA_DIR / "poc_outputs"
+OUTPUT_DIR    = DATA_DIR / "outputs"
 
 # ---------------------------------------------------------------------------
 # Section definitions — English IDs, Vietnamese display labels
@@ -127,7 +127,7 @@ SECTION_GUIDELINES = {
 def format_chunks_as_context(chunks: list[SourceChunk], max_chunks: int = 60) -> str:
     lines = []
     for chunk in chunks[:max_chunks]:
-        date_str = f" [{chunk.ngay}]" if chunk.ngay else ""
+        date_str = f" [{chunk.date}]" if chunk.date else ""
         lines.append(f"[{chunk.source_id}]{date_str} ({chunk.source_type}): {chunk.content}")
     return "\n".join(lines)
 

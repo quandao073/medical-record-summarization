@@ -9,7 +9,7 @@ from src.c1_emr.deidentifier import deidentify, is_deidentified
 from src.c1_emr.normalizer import normalize_text, normalize_ehr
 
 ROOT = Path(__file__).parent.parent
-ASSEMBLED_DIR = ROOT / "data" / "medical_summarization" / "assembled"
+ASSEMBLED_DIR = ROOT / "data" / "processed" / "assembled"
 
 
 # ---------------------------------------------------------------------------

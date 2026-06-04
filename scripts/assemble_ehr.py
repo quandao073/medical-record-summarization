@@ -12,8 +12,8 @@ from pathlib import Path
 from collections import defaultdict
 
 ROOT = Path(__file__).parent.parent
-SEED_DIR = ROOT / "data" / "vietnamese-clinic-data-seeds" / "seed-dataset"
-OUT_DIR  = ROOT / "data" / "medical_summarization" / "assembled"
+SEED_DIR = ROOT / "data" / "seeds" / "seed-dataset"
+OUT_DIR  = ROOT / "data" / "processed" / "assembled"
 
 
 def load(filename: str) -> list[dict]:

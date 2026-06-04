@@ -6,10 +6,11 @@
     "study_date": "2024-01-10",
     "modality": "ECG",
     "body_part": "Tim",
-    "report_text": "ECG 12 chuyển đạo: Nhịp xoang đều, tần số 82 lần/phút. Trục tim bình thường. Khoảng PR 0.16s, QRS 0.08s bình thường. Sóng T đảo nhẹ ở V5-V6. Điện thế thất trái tăng nhẹ (Sokolow-Lyon 36mm). Không có biến đổi ST cấp tính.",
     "impression": "Nhịp xoang bình thường. Điện thế thất trái tăng nhẹ phù hợp với THA. Sóng T đảo nhẹ V5-V6: theo dõi.",
     "radiologist_or_reader": "BS. Nguyễn Thị Hoa",
-    "source_system": "HIS-Cardiology"
+    "source_system": "HIS-Cardiology",
+    "findings": "ECG 12 chuyển đạo: Nhịp xoang đều, tần số 82 lần/phút. Trục tim bình thường. Khoảng PR 0.16s, QRS 0.08s bình thường. Sóng T đảo nhẹ ở V5-V6. Điện thế thất trái tăng nhẹ (Sokolow-Lyon 36mm). Không có biến đổi ST cấp tính.",
+    "language": "vi"
   },
   {
     "imaging_id": "P001-E003-IMG001",
@@ -18,10 +19,11 @@
     "study_date": "2024-07-10",
     "modality": "Ultrasound",
     "body_part": "Bụng tổng quát",
-    "report_text": "Siêu âm bụng tổng quát: Gan kích thước bình thường, nhu mô gan đồng đều, không ổ dị âm. Không có dấu hiệu gan nhiễm mỡ. Túi mật không sỏi, thành bình thường. Tụy không phóng to. Thận hai bên kích thước bình thường, nhu mô bình thường, không ứ nước. Lách bình thường. Không có dịch tự do ổ bụng.",
     "impression": "Siêu âm bụng bình thường. Không phát hiện bệnh lý gan, mật, tụy, thận.",
     "radiologist_or_reader": "BS. Lê Văn Khánh",
-    "source_system": "HIS-Imaging"
+    "source_system": "HIS-Imaging",
+    "findings": "Siêu âm bụng tổng quát: Gan kích thước bình thường, nhu mô gan đồng đều, không ổ dị âm. Không có dấu hiệu gan nhiễm mỡ. Túi mật không sỏi, thành bình thường. Tụy không phóng to. Thận hai bên kích thước bình thường, nhu mô bình thường, không ứ nước. Lách bình thường. Không có dịch tự do ổ bụng.",
+    "language": "vi"
   },
   {
     "imaging_id": "P001-E004-IMG001",
@@ -30,10 +32,11 @@
     "study_date": "2024-10-10",
     "modality": "ECG",
     "body_part": "Tim",
-    "report_text": "ECG 12 chuyển đạo: Nhịp xoang đều, tần số 74 lần/phút. Điện thế thất trái tăng nhẹ tồn tại (Sokolow-Lyon 35mm). Sóng T đảo nhẹ V5-V6 không thay đổi. So với lần trước: ổn định, không có biến đổi mới.",
     "impression": "ECG ổn định so với lần khám 01/2024. Phì đại thất trái nhẹ theo điện thế. Không có bằng chứng thiếu máu cơ tim cấp.",
     "radiologist_or_reader": "BS. Nguyễn Thị Hoa",
-    "source_system": "HIS-Cardiology"
+    "source_system": "HIS-Cardiology",
+    "findings": "ECG 12 chuyển đạo: Nhịp xoang đều, tần số 74 lần/phút. Điện thế thất trái tăng nhẹ tồn tại (Sokolow-Lyon 35mm). Sóng T đảo nhẹ V5-V6 không thay đổi. So với lần trước: ổn định, không có biến đổi mới.",
+    "language": "vi"
   },
   {
     "imaging_id": "P002-E001-IMG001",
@@ -42,10 +45,11 @@
     "study_date": "2024-01-15",
     "modality": "ECG",
     "body_part": "Tim",
-    "report_text": "ECG 12 chuyển đạo: Nhịp xoang đều, tần số 72 lần/phút. Trục tim bình thường. Khoảng PR, QRS, QT bình thường. Sóng T và ST bình thường. Không có bất thường.",
     "impression": "ECG bình thường. Nhịp xoang đều.",
     "radiologist_or_reader": "BS. Trần Văn Minh",
-    "source_system": "HIS-Cardiology"
+    "source_system": "HIS-Cardiology",
+    "findings": "ECG 12 chuyển đạo: Nhịp xoang đều, tần số 72 lần/phút. Trục tim bình thường. Khoảng PR, QRS, QT bình thường. Sóng T và ST bình thường. Không có bất thường.",
+    "language": "vi"
   },
   {
     "imaging_id": "P002-E003-IMG001",
@@ -54,10 +58,11 @@
     "study_date": "2024-07-15",
     "modality": "Ultrasound",
     "body_part": "Bụng tổng quát",
-    "report_text": "Siêu âm bụng tổng quát 6 tháng: Gan không to, nhu mô đồng đều, không có ổ tổn thương khu trú. Túi mật không sỏi. Tụy bình thường. Thận hai bên bình thường (trái 10.2cm, phải 10.0cm), nhu mô thận bình thường, không ứ nước. Lách kích thước bình thường.",
     "impression": "Siêu âm bụng bình thường. Không có bằng chứng biến chứng ĐTĐ trên siêu âm bụng.",
     "radiologist_or_reader": "BS. Lê Văn Khánh",
-    "source_system": "HIS-Imaging"
+    "source_system": "HIS-Imaging",
+    "findings": "Siêu âm bụng tổng quát 6 tháng: Gan không to, nhu mô đồng đều, không có ổ tổn thương khu trú. Túi mật không sỏi. Tụy bình thường. Thận hai bên bình thường (trái 10.2cm, phải 10.0cm), nhu mô thận bình thường, không ứ nước. Lách kích thước bình thường.",
+    "language": "vi"
   },
   {
     "imaging_id": "P003-E001-IMG001",
@@ -66,10 +71,11 @@
     "study_date": "2023-06-10",
     "modality": "ECG",
     "body_part": "Tim",
-    "report_text": "ECG 12 chuyển đạo: Nhịp xoang đều, tần số 85 lần/phút. Trục tim bình thường. Điện thế thất trái tăng rõ: Sokolow-Lyon 42mm (>35mm = phì đại thất trái). Sóng T đảo ở V4-V6 và aVL. Không có biến đổi ST cấp tính. Khoảng QTc 0.42s.",
     "impression": "Phì đại thất trái theo điện thế ECG. Sóng T đảo V4-V6: liên quan THA kiểm soát kém. Khuyến nghị siêu âm tim để đánh giá chính xác hơn.",
     "radiologist_or_reader": "BS. Phạm Quang Hùng",
-    "source_system": "HIS-Cardiology"
+    "source_system": "HIS-Cardiology",
+    "findings": "ECG 12 chuyển đạo: Nhịp xoang đều, tần số 85 lần/phút. Trục tim bình thường. Điện thế thất trái tăng rõ: Sokolow-Lyon 42mm (>35mm = phì đại thất trái). Sóng T đảo ở V4-V6 và aVL. Không có biến đổi ST cấp tính. Khoảng QTc 0.42s.",
+    "language": "vi"
   },
   {
     "imaging_id": "P003-E002-IMG001",
@@ -78,10 +84,11 @@
     "study_date": "2023-10-15",
     "modality": "Echocardiography",
     "body_part": "Tim",
-    "report_text": "Siêu âm tim 2D + Doppler: Buồng tim: Thất trái không giãn (đường kính tâm trương 48mm), thành sau 12mm, vách liên thất 13mm — phì đại đồng tâm. Chức năng tâm thu: EF 60% (bình thường). Chức năng tâm trương: rối loạn độ I (E/A < 1). Van tim: van hai lá, van ba lá, van động mạch chủ không hở, không hẹp. Áp lực động mạch phổi bình thường.",
     "impression": "Phì đại thất trái đồng tâm. Chức năng tâm thu bảo tồn (EF 60%). Rối loạn chức năng tâm trương độ I liên quan THA. Phù hợp tổn thương cơ quan đích do THA kéo dài.",
     "radiologist_or_reader": "BS. Nguyễn Văn Đức",
-    "source_system": "HIS-Imaging"
+    "source_system": "HIS-Imaging",
+    "findings": "Siêu âm tim 2D + Doppler: Buồng tim: Thất trái không giãn (đường kính tâm trương 48mm), thành sau 12mm, vách liên thất 13mm — phì đại đồng tâm. Chức năng tâm thu: EF 60% (bình thường). Chức năng tâm trương: rối loạn độ I (E/A < 1). Van tim: van hai lá, van ba lá, van động mạch chủ không hở, không hẹp. Áp lực động mạch phổi bình thường.",
+    "language": "vi"
   },
   {
     "imaging_id": "P003-E003-IMG001",
@@ -90,10 +97,11 @@
     "study_date": "2024-02-10",
     "modality": "Ultrasound",
     "body_part": "Bụng tổng quát",
-    "report_text": "Siêu âm bụng: Gan to nhẹ (17cm), nhu mô gan tăng âm lan tỏa, echo dày đặc hơn bình thường — hình ảnh gan nhiễm mỡ độ I. Không có ổ tổn thương khu trú. Túi mật không sỏi. Tụy bình thường. Thận hai bên kích thước bình thường.",
     "impression": "Gan nhiễm mỡ độ I. Phù hợp với bệnh nhân béo phì + rối loạn lipid máu. Khuyến nghị tư vấn chế độ ăn giảm mỡ và theo dõi.",
     "radiologist_or_reader": "BS. Lê Văn Khánh",
-    "source_system": "HIS-Imaging"
+    "source_system": "HIS-Imaging",
+    "findings": "Siêu âm bụng: Gan to nhẹ (17cm), nhu mô gan tăng âm lan tỏa, echo dày đặc hơn bình thường — hình ảnh gan nhiễm mỡ độ I. Không có ổ tổn thương khu trú. Túi mật không sỏi. Tụy bình thường. Thận hai bên kích thước bình thường.",
+    "language": "vi"
   },
   {
     "imaging_id": "P003-E004-IMG001",
@@ -102,10 +110,11 @@
     "study_date": "2024-06-10",
     "modality": "ECG",
     "body_part": "Tim",
-    "report_text": "ECG cấp cứu: Nhịp xoang nhanh, tần số 96 lần/phút. Điện thế thất trái tăng Sokolow-Lyon 44mm. Sóng T đảo V4-V6 và aVL. Không có ST chênh lên. Không blốc dẫn truyền. Không có hình ảnh thiếu máu cơ tim cấp.",
     "impression": "Nhịp nhanh xoang. Phì đại thất trái theo điện thế. Không có dấu hiệu NMCT cấp. Phù hợp THA cấp.",
     "radiologist_or_reader": "BS. Phạm Quang Hùng",
-    "source_system": "HIS-Cardiology"
+    "source_system": "HIS-Cardiology",
+    "findings": "ECG cấp cứu: Nhịp xoang nhanh, tần số 96 lần/phút. Điện thế thất trái tăng Sokolow-Lyon 44mm. Sóng T đảo V4-V6 và aVL. Không có ST chênh lên. Không blốc dẫn truyền. Không có hình ảnh thiếu máu cơ tim cấp.",
+    "language": "vi"
   },
   {
     "imaging_id": "P003-E004-IMG002",
@@ -114,10 +123,11 @@
     "study_date": "2024-06-11",
     "modality": "Echocardiography",
     "body_part": "Tim",
-    "report_text": "Siêu âm tim trong nhập viện: Thất trái: đường kính tâm trương 50mm, thành sau 13mm, vách liên thất 14mm — phì đại đồng tâm tăng so với lần trước. EF 58% (bảo tồn). Không giãn nhĩ trái. Rối loạn tâm trương độ II (E/e' 14). Chức năng van tim bình thường.",
     "impression": "Phì đại thất trái đồng tâm, nặng hơn so với siêu âm 10/2023. EF bảo tồn. Rối loạn chức năng tâm trương độ II — tổn thương cơ quan đích tiến triển do THA không kiểm soát.",
     "radiologist_or_reader": "BS. Nguyễn Văn Đức",
-    "source_system": "HIS-Imaging"
+    "source_system": "HIS-Imaging",
+    "findings": "Siêu âm tim trong nhập viện: Thất trái: đường kính tâm trương 50mm, thành sau 13mm, vách liên thất 14mm — phì đại đồng tâm tăng so với lần trước. EF 58% (bảo tồn). Không giãn nhĩ trái. Rối loạn tâm trương độ II (E/e' 14). Chức năng van tim bình thường.",
+    "language": "vi"
   },
   {
     "imaging_id": "P003-E005-IMG001",
@@ -126,10 +136,11 @@
     "study_date": "2024-10-10",
     "modality": "ECG",
     "body_part": "Tim",
-    "report_text": "ECG tái khám: Nhịp xoang đều, tần số 72 lần/phút. Điện thế thất trái Sokolow-Lyon 43mm — ổn định. Sóng T đảo V4-V6 và aVL không thay đổi. Không có biến đổi mới.",
     "impression": "ECG ổn định so với lúc nhập viện 06/2024. Nhịp đã về bình thường. Phì đại thất trái tồn tại.",
     "radiologist_or_reader": "BS. Phạm Quang Hùng",
-    "source_system": "HIS-Cardiology"
+    "source_system": "HIS-Cardiology",
+    "findings": "ECG tái khám: Nhịp xoang đều, tần số 72 lần/phút. Điện thế thất trái Sokolow-Lyon 43mm — ổn định. Sóng T đảo V4-V6 và aVL không thay đổi. Không có biến đổi mới.",
+    "language": "vi"
   },
   {
     "imaging_id": "P004-E001-IMG001",
@@ -138,10 +149,11 @@
     "study_date": "2024-03-05",
     "modality": "ECG",
     "body_part": "Tim",
-    "report_text": "ECG 12 chuyển đạo: Nhịp xoang đều, tần số 80 lần/phút. Trục tim bình thường. Điện thế bình thường. Không có biến đổi ST, T bất thường. QTc 0.44s trong giới hạn bình thường.",
     "impression": "ECG bình thường. Không có bằng chứng bệnh tim thực thể.",
     "radiologist_or_reader": "BS. Hoàng Thị Lan",
-    "source_system": "HIS-Cardiology"
+    "source_system": "HIS-Cardiology",
+    "findings": "ECG 12 chuyển đạo: Nhịp xoang đều, tần số 80 lần/phút. Trục tim bình thường. Điện thế bình thường. Không có biến đổi ST, T bất thường. QTc 0.44s trong giới hạn bình thường.",
+    "language": "vi"
   },
   {
     "imaging_id": "P004-E003-IMG001",
@@ -150,9 +162,10 @@
     "study_date": "2024-09-05",
     "modality": "Ultrasound",
     "body_part": "Bụng tổng quát",
-    "report_text": "Siêu âm bụng: Gan kích thước bình thường, nhu mô gan đồng đều. Không có ổ tổn thương. Túi mật không sỏi. Tụy và lách bình thường. Thận hai bên kích thước bình thường, nhu mô bình thường.",
     "impression": "Siêu âm bụng bình thường. Không phát hiện bệnh lý nội tạng bụng.",
     "radiologist_or_reader": "BS. Lê Văn Khánh",
-    "source_system": "HIS-Imaging"
+    "source_system": "HIS-Imaging",
+    "findings": "Siêu âm bụng: Gan kích thước bình thường, nhu mô gan đồng đều. Không có ổ tổn thương. Túi mật không sỏi. Tụy và lách bình thường. Thận hai bên kích thước bình thường, nhu mô bình thường.",
+    "language": "vi"
   }
 ]

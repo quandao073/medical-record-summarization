@@ -1,86 +1,97 @@
-# -----------------------------------------------------------------------
+# =============================================================================
+# Medical Record Summarization — Configuration
+# =============================================================================
+
+# ---------------------------------------------------------------------------
 # LLM configuration
-# -----------------------------------------------------------------------
+# ---------------------------------------------------------------------------
 llm:
-  provider: "openai"
-  model: "gpt-4o-mini"           # Default model (cost-efficient)
+  provider: "anthropic"              # Week 3+: migrated from openai → anthropic
+  model: "claude-haiku-4-5-20251001" # Default: fast/cheap for dev
 
-  # OpenAI models (as of 2026-06)
-  openai_models:
-    primary:   "gpt-4o"          # Main model — best quality
-    mini:      "gpt-4o-mini"     # Cheaper, faster (benchmark comparison)
-    reasoning: "o4-mini"         # Reasoning tasks
+  anthropic_models:
+    dev:    "claude-haiku-4-5-20251001"  # Dev/test — fast, cheap
+    prod:   "claude-sonnet-4-6"          # Demo/production
+    reason: "claude-opus-4-8"            # Heavy reasoning tasks (optional)
 
-  max_tokens: 2000
+  openai_models:                     # Kept for benchmark comparison only
+    primary: "gpt-4o"
+    mini:    "gpt-4o-mini"
+
+  max_tokens: 1500
   temperature: 0.1
 
-# -----------------------------------------------------------------------
-# Embedding (Week 3 — RAG)
-# -----------------------------------------------------------------------
-embedding:
-  model: "intfloat/multilingual-e5-large"
-  batch_size: 32
-
-# -----------------------------------------------------------------------
-# Retrieval (Week 3)
-# -----------------------------------------------------------------------
+# ---------------------------------------------------------------------------
+# Retrieval (C3 — Week 3)
+# ---------------------------------------------------------------------------
 retrieval:
-  top_k_default: 5
-  top_k_per_section:
-    tong_quan: 5
-    ly_do_kham: 4
-    tien_su: 8
-    thuoc_hien_tai: 6
-    allergies: 5
-    xn_bat_thuong: 10
-    diagnoses: 5
-    luu_y: 10
+  max_chunks_per_section: 15         # Hard cap per section
+  top_k_default: 10
 
-# -----------------------------------------------------------------------
-# Citation pipeline (Week 4)
-# -----------------------------------------------------------------------
+  section_source_types:
+    overview:            ["patient_info", "diagnoses", "vitals"]
+    reason_for_visit:    ["clinical_notes"]
+    medical_history:     ["clinical_notes", "diagnoses", "allergies"]
+    current_medications: ["medications"]
+    allergies:           ["allergies", "clinical_notes"]
+    abnormal_labs:       ["labs"]
+    diagnoses:           ["diagnoses"]
+    treatment_timeline:  ["labs", "medications", "diagnoses", "clinical_notes"]
+    clinical_alerts:     ["labs", "vitals", "allergies", "diagnoses"]
+
+# ---------------------------------------------------------------------------
+# Citation pipeline (C5 — Week 3)
+# ---------------------------------------------------------------------------
 citation:
-  min_similarity_threshold: 0.75
-  low_confidence_threshold: 0.85   # Below this -> LOW_CONFIDENCE
-  judge_model: "claude-sonnet-4-6"
-  max_chunks_per_claim: 3          # Limit LLM calls for cost control
+  min_keyword_overlap: 2             # Minimum shared tokens for general match
+  low_confidence_threshold: 0.5      # keyword-only match → LOW_CONFIDENCE
+  max_chunks_per_claim: 5
 
-# -----------------------------------------------------------------------
-# Data paths
-# -----------------------------------------------------------------------
-stores:
-  structured_path: "data/stores/structured.json"
-  vector_path: "data/stores/vector_index"
+# ---------------------------------------------------------------------------
+# Verifier decision matrix (C6 — Week 3)
+# ---------------------------------------------------------------------------
+verifier:
+  # When REMOVE is too aggressive, set conservative_mode=true → FLAG instead
+  conservative_mode: true
 
+# ---------------------------------------------------------------------------
+# Evaluation (C7 — Week 4)
+# ---------------------------------------------------------------------------
+evaluation:
+  rubric_criteria:
+    - clinical_relevance
+    - factual_correctness
+    - citation_correctness
+    - completeness
+    - conciseness
+    - vietnamese_fluency
+    - safety
+    - doctor_usefulness
+  score_scale: [1, 5]
+
+# ---------------------------------------------------------------------------
+# Data paths (all relative to project root)
+# ---------------------------------------------------------------------------
 data:
-  seed_dir: "data/vietnamese-clinic-data-seeds/seed-dataset"
-  assembled_dir: "data/medical_summarization/assembled"
-  abbreviation_dict: "data/medical_summarization/dictionaries/medical_abbreviations_vi.json"
+  raw_dir:         "data/raw"
+  dict_dir:        "data/dictionaries"
+  assembled_dir:   "data/processed/assembled"
+  stores_dir:      "data/processed/stores"
+  outputs_dir:     "data/processed/outputs"
+  eval_dir:        "eval/cases"
 
-# -----------------------------------------------------------------------
+# ---------------------------------------------------------------------------
 # PoC settings
-# -----------------------------------------------------------------------
+# ---------------------------------------------------------------------------
 poc:
   max_chunks_in_context: 60
-  output_dir: "data/medical_summarization/poc_outputs"
-
-# -----------------------------------------------------------------------
-# Benchmark configs (Week 3)
-# -----------------------------------------------------------------------
-benchmark:
-  configs:
-    - name: "gpt4o_zero_shot"
-      model: "gpt-4o"
-      prompt_version: "v1_zero_shot"
-
-    - name: "gpt4o_few_shot"
-      model: "gpt-4o"
-      prompt_version: "v2_few_shot"
-
-    - name: "gpt4o_chain_of_thought"
-      model: "gpt-4o"
-      prompt_version: "v3_cot"
-
-    - name: "gpt4o_mini_zero_shot"
-      model: "gpt-4o-mini"
-      prompt_version: "v1_zero_shot"
+  sections:
+    - overview
+    - reason_for_visit
+    - medical_history
+    - current_medications
+    - allergies
+    - abnormal_labs
+    - diagnoses
+    - treatment_timeline
+    - clinical_alerts

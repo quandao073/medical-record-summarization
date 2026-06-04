@@ -13,7 +13,7 @@ from src.c2_chunking.store_builder import (
 from src.schemas import SourceChunk
 
 ROOT = Path(__file__).parent.parent
-ASSEMBLED_DIR = ROOT / "data" / "medical_summarization" / "assembled"
+ASSEMBLED_DIR = ROOT / "data" / "processed" / "assembled"
 
 
 @pytest.fixture

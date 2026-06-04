@@ -11,7 +11,7 @@ from functools import lru_cache
 
 
 ROOT = Path(__file__).parent.parent.parent
-DEFAULT_DICT_PATH = ROOT / "data" / "medical_summarization" / "dictionaries" / "medical_abbreviations_vi.json"
+DEFAULT_DICT_PATH = ROOT / "data" / "dictionaries" / "medical_abbreviations_vi.json"
 
 # Text fields to normalize (dot-notation paths relative to encounter or patient)
 NORMALIZE_FIELDS_ENCOUNTER = [
@@ -44,7 +44,7 @@ def normalize_text(
     """
     Expand Vietnamese medical abbreviations in text.
     Uses word-boundary matching to avoid partial replacements.
-    e.g. 'THA' -> 'tang huyet ap', but 'THAY' is not touched.
+    e.g. 'THA' -> 'tăng huyết áp', but 'THAY' is not touched.
     """
     if not text or not isinstance(text, str):
         return text

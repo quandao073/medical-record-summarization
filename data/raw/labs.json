@@ -11,10 +11,10 @@
     "unit": "%",
     "reference_range": "4.0 - 5.6",
     "interpretation": "high",
-    "abnormal": true,
-    "critical": false,
     "comment": "Kiểm soát đường huyết kém. Mục tiêu <7.5% cho BN 55 tuổi có biến chứng nhẹ.",
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": true,
+    "is_critical": false
   },
   {
     "lab_id": "P001-E001-LAB002",
@@ -28,10 +28,10 @@
     "unit": "mmol/L",
     "reference_range": "3.9 - 6.1",
     "interpretation": "high",
-    "abnormal": true,
-    "critical": false,
     "comment": "Đường huyết đói cao. Mục tiêu 4.4-7.0 mmol/L.",
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": true,
+    "is_critical": false
   },
   {
     "lab_id": "P001-E001-LAB003",
@@ -45,10 +45,10 @@
     "unit": "mmol/L",
     "reference_range": "< 2.6",
     "interpretation": "high",
-    "abnormal": true,
-    "critical": false,
     "comment": "LDL chưa đạt mục tiêu <2.6 mmol/L. Tăng Atorvastatin 40mg.",
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": true,
+    "is_critical": false
   },
   {
     "lab_id": "P001-E001-LAB004",
@@ -62,10 +62,10 @@
     "unit": "mmol/L",
     "reference_range": "< 5.2",
     "interpretation": "high",
-    "abnormal": true,
-    "critical": false,
     "comment": null,
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": true,
+    "is_critical": false
   },
   {
     "lab_id": "P001-E001-LAB005",
@@ -79,10 +79,10 @@
     "unit": "mmol/L",
     "reference_range": "< 1.7",
     "interpretation": "high",
-    "abnormal": true,
-    "critical": false,
     "comment": null,
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": true,
+    "is_critical": false
   },
   {
     "lab_id": "P001-E001-LAB006",
@@ -96,10 +96,10 @@
     "unit": "mmol/L",
     "reference_range": "> 1.0 (Nam)",
     "interpretation": "low",
-    "abnormal": true,
-    "critical": false,
     "comment": null,
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": true,
+    "is_critical": false
   },
   {
     "lab_id": "P001-E001-LAB007",
@@ -113,10 +113,10 @@
     "unit": "µmol/L",
     "reference_range": "62 - 115",
     "interpretation": "normal",
-    "abnormal": false,
-    "critical": false,
     "comment": null,
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": false,
+    "is_critical": false
   },
   {
     "lab_id": "P001-E001-LAB008",
@@ -130,10 +130,10 @@
     "unit": "mg/g",
     "reference_range": "< 30",
     "interpretation": "high",
-    "abnormal": true,
-    "critical": false,
     "comment": "Microalbuminuria giai đoạn sớm (30-300 mg/g). Cần theo dõi chức năng thận.",
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": true,
+    "is_critical": false
   },
   {
     "lab_id": "P001-E002-LAB001",
@@ -147,10 +147,10 @@
     "unit": "%",
     "reference_range": "4.0 - 5.6",
     "interpretation": "high",
-    "abnormal": true,
-    "critical": false,
     "comment": "Cải thiện từ 9.2% → 8.1%. Tiếp tục phác đồ.",
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": true,
+    "is_critical": false
   },
   {
     "lab_id": "P001-E002-LAB002",
@@ -164,10 +164,10 @@
     "unit": "mmol/L",
     "reference_range": "3.9 - 6.1",
     "interpretation": "high",
-    "abnormal": true,
-    "critical": false,
     "comment": null,
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": true,
+    "is_critical": false
   },
   {
     "lab_id": "P001-E002-LAB003",
@@ -181,10 +181,10 @@
     "unit": "mmol/L",
     "reference_range": "< 2.6",
     "interpretation": "high",
-    "abnormal": true,
-    "critical": false,
     "comment": null,
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": true,
+    "is_critical": false
   },
   {
     "lab_id": "P001-E002-LAB004",
@@ -198,10 +198,10 @@
     "unit": "µmol/L",
     "reference_range": "62 - 115",
     "interpretation": "normal",
-    "abnormal": false,
-    "critical": false,
     "comment": null,
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": false,
+    "is_critical": false
   },
   {
     "lab_id": "P001-E002-LAB005",
@@ -215,10 +215,10 @@
     "unit": "mg/g",
     "reference_range": "< 30",
     "interpretation": "high",
-    "abnormal": true,
-    "critical": false,
     "comment": "Microalbuminuria tiếp tục hiện diện nhưng giảm từ 42 → 38 mg/g.",
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": true,
+    "is_critical": false
   },
   {
     "lab_id": "P001-E003-LAB001",
@@ -232,10 +232,10 @@
     "unit": "%",
     "reference_range": "4.0 - 5.6",
     "interpretation": "high",
-    "abnormal": true,
-    "critical": false,
     "comment": "Cải thiện đáng kể từ 9.2% → 7.5% trong 6 tháng.",
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": true,
+    "is_critical": false
   },
   {
     "lab_id": "P001-E003-LAB002",
@@ -249,10 +249,10 @@
     "unit": "mmol/L",
     "reference_range": "3.9 - 6.1",
     "interpretation": "high",
-    "abnormal": true,
-    "critical": false,
     "comment": null,
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": true,
+    "is_critical": false
   },
   {
     "lab_id": "P001-E003-LAB003",
@@ -266,10 +266,10 @@
     "unit": "mmol/L",
     "reference_range": "< 2.6",
     "interpretation": "high",
-    "abnormal": true,
-    "critical": false,
     "comment": null,
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": true,
+    "is_critical": false
   },
   {
     "lab_id": "P001-E003-LAB004",
@@ -283,10 +283,10 @@
     "unit": "µmol/L",
     "reference_range": "62 - 115",
     "interpretation": "normal",
-    "abnormal": false,
-    "critical": false,
     "comment": null,
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": false,
+    "is_critical": false
   },
   {
     "lab_id": "P001-E003-LAB005",
@@ -300,10 +300,10 @@
     "unit": "mg/g",
     "reference_range": "< 30",
     "interpretation": "high",
-    "abnormal": true,
-    "critical": false,
     "comment": "Microalbuminuria tiếp tục giảm 42→38→35 mg/g.",
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": true,
+    "is_critical": false
   },
   {
     "lab_id": "P001-E004-LAB001",
@@ -317,10 +317,10 @@
     "unit": "%",
     "reference_range": "4.0 - 5.6",
     "interpretation": "high",
-    "abnormal": true,
-    "critical": false,
     "comment": "Đạt mục tiêu <7.5% sau 9 tháng điều trị.",
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": true,
+    "is_critical": false
   },
   {
     "lab_id": "P001-E004-LAB002",
@@ -334,10 +334,10 @@
     "unit": "mmol/L",
     "reference_range": "3.9 - 6.1",
     "interpretation": "high",
-    "abnormal": true,
-    "critical": false,
     "comment": null,
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": true,
+    "is_critical": false
   },
   {
     "lab_id": "P001-E004-LAB003",
@@ -351,10 +351,10 @@
     "unit": "mmol/L",
     "reference_range": "< 2.6",
     "interpretation": "normal",
-    "abnormal": false,
-    "critical": false,
     "comment": "Đạt mục tiêu LDL <2.6 mmol/L.",
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": false,
+    "is_critical": false
   },
   {
     "lab_id": "P001-E004-LAB004",
@@ -368,10 +368,10 @@
     "unit": "µmol/L",
     "reference_range": "62 - 115",
     "interpretation": "normal",
-    "abnormal": false,
-    "critical": false,
     "comment": null,
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": false,
+    "is_critical": false
   },
   {
     "lab_id": "P001-E004-LAB005",
@@ -385,10 +385,10 @@
     "unit": "mg/g",
     "reference_range": "< 30",
     "interpretation": "high",
-    "abnormal": true,
-    "critical": false,
     "comment": "Microalbuminuria giảm từ 42→32 mg/g. Tiếp tục theo dõi.",
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": true,
+    "is_critical": false
   },
   {
     "lab_id": "P002-E001-LAB001",
@@ -402,10 +402,10 @@
     "unit": "%",
     "reference_range": "4.0 - 5.6",
     "interpretation": "high",
-    "abnormal": true,
-    "critical": false,
     "comment": "Kiểm soát tốt. Mục tiêu đạt được (<7%).",
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": true,
+    "is_critical": false
   },
   {
     "lab_id": "P002-E001-LAB002",
@@ -419,10 +419,10 @@
     "unit": "mmol/L",
     "reference_range": "3.9 - 6.1",
     "interpretation": "normal",
-    "abnormal": false,
-    "critical": false,
     "comment": null,
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": false,
+    "is_critical": false
   },
   {
     "lab_id": "P002-E001-LAB003",
@@ -436,10 +436,10 @@
     "unit": "mmol/L",
     "reference_range": "< 2.6",
     "interpretation": "normal",
-    "abnormal": false,
-    "critical": false,
     "comment": "LDL đạt mục tiêu.",
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": false,
+    "is_critical": false
   },
   {
     "lab_id": "P002-E001-LAB004",
@@ -453,10 +453,10 @@
     "unit": "mmol/L",
     "reference_range": "< 5.2",
     "interpretation": "normal",
-    "abnormal": false,
-    "critical": false,
     "comment": null,
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": false,
+    "is_critical": false
   },
   {
     "lab_id": "P002-E001-LAB005",
@@ -470,10 +470,10 @@
     "unit": "µmol/L",
     "reference_range": "53 - 97",
     "interpretation": "normal",
-    "abnormal": false,
-    "critical": false,
     "comment": null,
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": false,
+    "is_critical": false
   },
   {
     "lab_id": "P002-E002-LAB001",
@@ -487,10 +487,10 @@
     "unit": "%",
     "reference_range": "4.0 - 5.6",
     "interpretation": "high",
-    "abnormal": true,
-    "critical": false,
     "comment": "Ổn định.",
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": true,
+    "is_critical": false
   },
   {
     "lab_id": "P002-E002-LAB002",
@@ -504,10 +504,10 @@
     "unit": "mmol/L",
     "reference_range": "3.9 - 6.1",
     "interpretation": "normal",
-    "abnormal": false,
-    "critical": false,
     "comment": null,
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": false,
+    "is_critical": false
   },
   {
     "lab_id": "P002-E002-LAB003",
@@ -521,10 +521,10 @@
     "unit": "µmol/L",
     "reference_range": "53 - 97",
     "interpretation": "normal",
-    "abnormal": false,
-    "critical": false,
     "comment": null,
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": false,
+    "is_critical": false
   },
   {
     "lab_id": "P002-E003-LAB001",
@@ -538,10 +538,10 @@
     "unit": "%",
     "reference_range": "4.0 - 5.6",
     "interpretation": "high",
-    "abnormal": true,
-    "critical": false,
     "comment": "Ổn định trong khoảng tốt 6.5-6.8%.",
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": true,
+    "is_critical": false
   },
   {
     "lab_id": "P002-E003-LAB002",
@@ -555,10 +555,10 @@
     "unit": "mmol/L",
     "reference_range": "3.9 - 6.1",
     "interpretation": "high",
-    "abnormal": true,
-    "critical": false,
     "comment": null,
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": true,
+    "is_critical": false
   },
   {
     "lab_id": "P002-E003-LAB003",
@@ -572,10 +572,10 @@
     "unit": "mmol/L",
     "reference_range": "< 2.6",
     "interpretation": "normal",
-    "abnormal": false,
-    "critical": false,
     "comment": null,
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": false,
+    "is_critical": false
   },
   {
     "lab_id": "P002-E003-LAB004",
@@ -589,10 +589,10 @@
     "unit": "µmol/L",
     "reference_range": "53 - 97",
     "interpretation": "normal",
-    "abnormal": false,
-    "critical": false,
     "comment": null,
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": false,
+    "is_critical": false
   },
   {
     "lab_id": "P002-E003-LAB005",
@@ -606,10 +606,10 @@
     "unit": "mmol/L",
     "reference_range": "< 5.2",
     "interpretation": "normal",
-    "abnormal": false,
-    "critical": false,
     "comment": null,
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": false,
+    "is_critical": false
   },
   {
     "lab_id": "P003-E001-LAB001",
@@ -623,10 +623,10 @@
     "unit": "mmol/L",
     "reference_range": "< 5.2",
     "interpretation": "high",
-    "abnormal": true,
-    "critical": false,
     "comment": null,
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": true,
+    "is_critical": false
   },
   {
     "lab_id": "P003-E001-LAB002",
@@ -640,10 +640,10 @@
     "unit": "mmol/L",
     "reference_range": "< 2.6",
     "interpretation": "high",
-    "abnormal": true,
-    "critical": false,
     "comment": "LDL rất cao. Cần tăng liều statin.",
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": true,
+    "is_critical": false
   },
   {
     "lab_id": "P003-E001-LAB003",
@@ -657,10 +657,10 @@
     "unit": "mmol/L",
     "reference_range": "< 1.7",
     "interpretation": "high",
-    "abnormal": true,
-    "critical": false,
     "comment": null,
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": true,
+    "is_critical": false
   },
   {
     "lab_id": "P003-E001-LAB004",
@@ -674,10 +674,10 @@
     "unit": "µmol/L",
     "reference_range": "62 - 115",
     "interpretation": "normal",
-    "abnormal": false,
-    "critical": false,
     "comment": null,
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": false,
+    "is_critical": false
   },
   {
     "lab_id": "P003-E001-LAB005",
@@ -691,10 +691,10 @@
     "unit": "mmol/L",
     "reference_range": "3.9 - 6.1",
     "interpretation": "normal",
-    "abnormal": false,
-    "critical": false,
     "comment": "Đường huyết bình thường. Tiếp tục theo dõi.",
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": false,
+    "is_critical": false
   },
   {
     "lab_id": "P003-E002-LAB001",
@@ -708,10 +708,10 @@
     "unit": "mmol/L",
     "reference_range": "3.9 - 6.1",
     "interpretation": "high",
-    "abnormal": true,
-    "critical": false,
     "comment": "Tiền ĐTĐ (prediabetes): 6.1-7.0 mmol/L.",
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": true,
+    "is_critical": false
   },
   {
     "lab_id": "P003-E002-LAB002",
@@ -725,10 +725,10 @@
     "unit": "%",
     "reference_range": "4.0 - 5.6",
     "interpretation": "high",
-    "abnormal": true,
-    "critical": false,
     "comment": "Vùng tiền ĐTĐ (5.7-6.4%). Cần theo dõi và tư vấn lối sống.",
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": true,
+    "is_critical": false
   },
   {
     "lab_id": "P003-E002-LAB003",
@@ -742,10 +742,10 @@
     "unit": "mmol/L",
     "reference_range": "< 5.2",
     "interpretation": "high",
-    "abnormal": true,
-    "critical": false,
     "comment": null,
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": true,
+    "is_critical": false
   },
   {
     "lab_id": "P003-E002-LAB004",
@@ -759,10 +759,10 @@
     "unit": "mmol/L",
     "reference_range": "< 2.6",
     "interpretation": "high",
-    "abnormal": true,
-    "critical": false,
     "comment": "Cải thiện từ 4.1 → 3.2 nhưng chưa đạt mục tiêu.",
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": true,
+    "is_critical": false
   },
   {
     "lab_id": "P003-E002-LAB005",
@@ -776,10 +776,10 @@
     "unit": "µmol/L",
     "reference_range": "62 - 115",
     "interpretation": "normal",
-    "abnormal": false,
-    "critical": false,
     "comment": null,
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": false,
+    "is_critical": false
   },
   {
     "lab_id": "P003-E003-LAB001",
@@ -793,10 +793,10 @@
     "unit": "mmol/L",
     "reference_range": "3.9 - 6.1",
     "interpretation": "high",
-    "abnormal": true,
-    "critical": false,
     "comment": "ĐTĐ xác nhận: FPG ≥7.0 mmol/L.",
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": true,
+    "is_critical": false
   },
   {
     "lab_id": "P003-E003-LAB002",
@@ -810,10 +810,10 @@
     "unit": "%",
     "reference_range": "4.0 - 5.6",
     "interpretation": "high",
-    "abnormal": true,
-    "critical": false,
     "comment": "ĐTĐ xác nhận: HbA1c ≥6.5%.",
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": true,
+    "is_critical": false
   },
   {
     "lab_id": "P003-E003-LAB003",
@@ -827,10 +827,10 @@
     "unit": "mmol/L",
     "reference_range": "< 2.6",
     "interpretation": "high",
-    "abnormal": true,
-    "critical": false,
     "comment": null,
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": true,
+    "is_critical": false
   },
   {
     "lab_id": "P003-E003-LAB004",
@@ -844,10 +844,10 @@
     "unit": "mmol/L",
     "reference_range": "< 5.2",
     "interpretation": "normal",
-    "abnormal": false,
-    "critical": false,
     "comment": null,
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": false,
+    "is_critical": false
   },
   {
     "lab_id": "P003-E003-LAB005",
@@ -861,10 +861,10 @@
     "unit": "µmol/L",
     "reference_range": "62 - 115",
     "interpretation": "normal",
-    "abnormal": false,
-    "critical": false,
     "comment": null,
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": false,
+    "is_critical": false
   },
   {
     "lab_id": "P003-E003-LAB006",
@@ -878,10 +878,10 @@
     "unit": "U/L",
     "reference_range": "7 - 40",
     "interpretation": "high",
-    "abnormal": true,
-    "critical": false,
     "comment": "ALT tăng nhẹ, có thể liên quan gan nhiễm mỡ. Theo dõi.",
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": true,
+    "is_critical": false
   },
   {
     "lab_id": "P003-E004-LAB001",
@@ -895,10 +895,10 @@
     "unit": "mmol/L",
     "reference_range": "3.9 - 6.1",
     "interpretation": "high",
-    "abnormal": true,
-    "critical": false,
     "comment": "ĐTĐ kiểm soát kém trong nhập viện.",
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": true,
+    "is_critical": false
   },
   {
     "lab_id": "P003-E004-LAB002",
@@ -912,10 +912,10 @@
     "unit": "%",
     "reference_range": "4.0 - 5.6",
     "interpretation": "high",
-    "abnormal": true,
-    "critical": false,
     "comment": null,
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": true,
+    "is_critical": false
   },
   {
     "lab_id": "P003-E004-LAB003",
@@ -929,10 +929,10 @@
     "unit": "µmol/L",
     "reference_range": "62 - 115",
     "interpretation": "normal",
-    "abnormal": false,
-    "critical": false,
     "comment": "Creatinine tăng so với lần trước. Theo dõi eGFR.",
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": false,
+    "is_critical": false
   },
   {
     "lab_id": "P003-E004-LAB004",
@@ -946,10 +946,10 @@
     "unit": "mmol/L",
     "reference_range": "< 2.6",
     "interpretation": "high",
-    "abnormal": true,
-    "critical": false,
     "comment": null,
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": true,
+    "is_critical": false
   },
   {
     "lab_id": "P003-E005-LAB001",
@@ -963,10 +963,10 @@
     "unit": "%",
     "reference_range": "4.0 - 5.6",
     "interpretation": "high",
-    "abnormal": true,
-    "critical": false,
     "comment": "Cải thiện từ 7.8% → 7.2%.",
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": true,
+    "is_critical": false
   },
   {
     "lab_id": "P003-E005-LAB002",
@@ -980,10 +980,10 @@
     "unit": "mmol/L",
     "reference_range": "3.9 - 6.1",
     "interpretation": "high",
-    "abnormal": true,
-    "critical": false,
     "comment": null,
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": true,
+    "is_critical": false
   },
   {
     "lab_id": "P003-E005-LAB003",
@@ -997,10 +997,10 @@
     "unit": "mmol/L",
     "reference_range": "< 2.6",
     "interpretation": "high",
-    "abnormal": true,
-    "critical": false,
     "comment": null,
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": true,
+    "is_critical": false
   },
   {
     "lab_id": "P003-E005-LAB004",
@@ -1014,10 +1014,10 @@
     "unit": "µmol/L",
     "reference_range": "62 - 115",
     "interpretation": "normal",
-    "abnormal": false,
-    "critical": false,
     "comment": "Ổn định sau xuất viện.",
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": false,
+    "is_critical": false
   },
   {
     "lab_id": "P003-E005-LAB005",
@@ -1031,10 +1031,10 @@
     "unit": "U/L",
     "reference_range": "7 - 40",
     "interpretation": "high",
-    "abnormal": true,
-    "critical": false,
     "comment": "ALT tăng nhẹ, ổn định so với lần trước.",
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": true,
+    "is_critical": false
   },
   {
     "lab_id": "P004-E001-LAB001",
@@ -1048,10 +1048,10 @@
     "unit": "%",
     "reference_range": "4.0 - 5.6",
     "interpretation": "high",
-    "abnormal": true,
-    "critical": false,
     "comment": "Kiểm soát chưa đạt mục tiêu.",
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": true,
+    "is_critical": false
   },
   {
     "lab_id": "P004-E001-LAB002",
@@ -1065,10 +1065,10 @@
     "unit": "mmol/L",
     "reference_range": "3.9 - 6.1",
     "interpretation": "high",
-    "abnormal": true,
-    "critical": false,
     "comment": null,
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": true,
+    "is_critical": false
   },
   {
     "lab_id": "P004-E001-LAB003",
@@ -1082,11 +1082,11 @@
     "unit": null,
     "reference_range": "7 - 35",
     "interpretation": "normal",
-    "abnormal": false,
-    "critical": false,
     "comment": "EC-02: unit = null. Thiếu đơn vị xét nghiệm ALT. Cần xác nhận lại với LIS.",
     "source_system": "LIS",
-    "data_note": "EC-02: unit bị null do lỗi nhập liệu từ LIS. Dùng để test pipeline xử lý thiếu đơn vị."
+    "data_note": "EC-02: unit bị null do lỗi nhập liệu từ LIS. Dùng để test pipeline xử lý thiếu đơn vị.",
+    "is_abnormal": false,
+    "is_critical": false
   },
   {
     "lab_id": "P004-E001-LAB004",
@@ -1100,10 +1100,10 @@
     "unit": "µmol/L",
     "reference_range": "53 - 97",
     "interpretation": "normal",
-    "abnormal": false,
-    "critical": false,
     "comment": null,
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": false,
+    "is_critical": false
   },
   {
     "lab_id": "P004-E001-LAB005",
@@ -1117,10 +1117,10 @@
     "unit": "mmol/L",
     "reference_range": "< 2.6",
     "interpretation": "high",
-    "abnormal": true,
-    "critical": false,
     "comment": null,
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": true,
+    "is_critical": false
   },
   {
     "lab_id": "P004-E003-LAB001",
@@ -1134,11 +1134,11 @@
     "unit": "mmol/L",
     "reference_range": "3.9 - 6.1",
     "interpretation": "low",
-    "abnormal": true,
-    "critical": true,
     "comment": "EC-09: Hạ đường huyết CRITICAL (<2.8 mmol/L). Cần xử trí ngay. Có triệu chứng: vã mồ hôi, run tay tại nhà.",
     "source_system": "LIS",
-    "data_note": "EC-09: glucose critical low = 2.5 mmol/L. Dùng để test critical alert pipeline."
+    "data_note": "EC-09: glucose critical low = 2.5 mmol/L. Dùng để test critical alert pipeline.",
+    "is_abnormal": true,
+    "is_critical": true
   },
   {
     "lab_id": "P004-E003-LAB002",
@@ -1152,10 +1152,10 @@
     "unit": "%",
     "reference_range": "4.0 - 5.6",
     "interpretation": "high",
-    "abnormal": true,
-    "critical": false,
     "comment": null,
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": true,
+    "is_critical": false
   },
   {
     "lab_id": "P004-E003-LAB003",
@@ -1169,9 +1169,9 @@
     "unit": "µmol/L",
     "reference_range": "53 - 97",
     "interpretation": "normal",
-    "abnormal": false,
-    "critical": false,
     "comment": null,
-    "source_system": "LIS"
+    "source_system": "LIS",
+    "is_abnormal": false,
+    "is_critical": false
   }
 ]

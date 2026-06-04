@@ -10,7 +10,9 @@
     "chief_complaint": "Tái khám ĐTĐ type 2 + THA + RLLPM định kỳ. Mệt mỏi, khát nước nhiều.",
     "visit_reason": "Kiểm tra định kỳ HbA1c, glucose, lipid máu, chức năng thận. Đánh giá kiểm soát đường huyết và huyết áp.",
     "source_system": "HIS-Outpatient",
-    "created_at": "2024-01-10T08:15:00+07:00"
+    "created_at": "2024-01-10T08:15:00+07:00",
+    "language": "vi",
+    "text_encoding": "utf-8"
   },
   {
     "encounter_id": "P001-E002",
@@ -23,7 +25,9 @@
     "chief_complaint": "Tái khám sau 3 tháng điều chỉnh phác đồ. Bệnh nhân tuân thủ điều trị.",
     "visit_reason": "Kiểm tra đáp ứng điều trị sau khi tăng liều Metformin và thêm Empagliflozin.",
     "source_system": "HIS-Outpatient",
-    "created_at": "2024-04-10T08:30:00+07:00"
+    "created_at": "2024-04-10T08:30:00+07:00",
+    "language": "vi",
+    "text_encoding": "utf-8"
   },
   {
     "encounter_id": "P001-E003",
@@ -36,7 +40,9 @@
     "chief_complaint": "Tái khám định kỳ. Cảm thấy khỏe hơn, ăn ngủ tốt.",
     "visit_reason": "Kiểm tra HbA1c, sinh hiệu, đánh giá biến chứng thần kinh ngoại biên và microalbuminuria.",
     "source_system": "HIS-Outpatient",
-    "created_at": "2024-07-10T08:00:00+07:00"
+    "created_at": "2024-07-10T08:00:00+07:00",
+    "language": "vi",
+    "text_encoding": "utf-8"
   },
   {
     "encounter_id": "P001-E004",
@@ -49,7 +55,9 @@
     "chief_complaint": "Tái khám định kỳ. Bệnh nhân ổn định, tuân thủ tốt.",
     "visit_reason": "Đánh giá toàn diện sau 9 tháng điều trị tích cực. HbA1c đạt mục tiêu, HA đạt mục tiêu.",
     "source_system": "HIS-Outpatient",
-    "created_at": "2024-10-10T08:00:00+07:00"
+    "created_at": "2024-10-10T08:00:00+07:00",
+    "language": "vi",
+    "text_encoding": "utf-8"
   },
   {
     "encounter_id": "P002-E001",
@@ -62,7 +70,9 @@
     "chief_complaint": "Tái khám ĐTĐ type 2 + THA định kỳ. Bệnh nhân kiểm soát tốt.",
     "visit_reason": "Kiểm tra HbA1c, glucose, chức năng thận, huyết áp định kỳ 3 tháng.",
     "source_system": "HIS-Outpatient",
-    "created_at": "2024-01-15T09:00:00+07:00"
+    "created_at": "2024-01-15T09:00:00+07:00",
+    "language": "vi",
+    "text_encoding": "utf-8"
   },
   {
     "encounter_id": "P002-E002",
@@ -75,7 +85,9 @@
     "chief_complaint": "Tái khám. Không có triệu chứng mới.",
     "visit_reason": "Kiểm tra định kỳ 3 tháng. Duy trì phác đồ hiện tại.",
     "source_system": "HIS-Outpatient",
-    "created_at": "2024-04-15T09:15:00+07:00"
+    "created_at": "2024-04-15T09:15:00+07:00",
+    "language": "vi",
+    "text_encoding": "utf-8"
   },
   {
     "encounter_id": "P002-E003",
@@ -88,7 +100,9 @@
     "chief_complaint": "Tái khám. Sức khỏe ổn định, không có phàn nàn mới.",
     "visit_reason": "Kiểm tra 6 tháng toàn diện: HbA1c, lipid, chức năng thận, siêu âm bụng.",
     "source_system": "HIS-Outpatient",
-    "created_at": "2024-07-15T09:00:00+07:00"
+    "created_at": "2024-07-15T09:00:00+07:00",
+    "language": "vi",
+    "text_encoding": "utf-8"
   },
   {
     "encounter_id": "P003-E001",
@@ -101,7 +115,9 @@
     "chief_complaint": "Tái khám THA + RLLPM. Đau đầu vùng chẩm khi thức dậy, chóng mặt nhẹ.",
     "visit_reason": "Kiểm tra huyết áp, lipid máu. Đánh giá đáp ứng điều trị THA + RLLPM.",
     "source_system": "HIS-Outpatient",
-    "created_at": "2023-06-10T08:00:00+07:00"
+    "created_at": "2023-06-10T08:00:00+07:00",
+    "language": "vi",
+    "text_encoding": "utf-8"
   },
   {
     "encounter_id": "P003-E002",
@@ -114,7 +130,9 @@
     "chief_complaint": "Tái khám THA + RLLPM. Phát hiện đường huyết đói cao trong xét nghiệm trước.",
     "visit_reason": "Kiểm tra đường huyết, HbA1c để loại trừ ĐTĐ. Kiểm tra lipid và HA.",
     "source_system": "HIS-Outpatient",
-    "created_at": "2023-10-10T08:30:00+07:00"
+    "created_at": "2023-10-10T08:30:00+07:00",
+    "language": "vi",
+    "text_encoding": "utf-8"
   },
   {
     "encounter_id": "P003-E003",
@@ -127,7 +145,9 @@
     "chief_complaint": "Tái khám sau xét nghiệm. Được chẩn đoán ĐTĐ type 2 lần đầu, bắt đầu điều trị.",
     "visit_reason": "Xác nhận chẩn đoán ĐTĐ type 2, khởi trị Metformin. Điều chỉnh phác đồ THA.",
     "source_system": "HIS-Outpatient",
-    "created_at": "2024-02-10T08:00:00+07:00"
+    "created_at": "2024-02-10T08:00:00+07:00",
+    "language": "vi",
+    "text_encoding": "utf-8"
   },
   {
     "encounter_id": "P003-E004",
@@ -140,7 +160,9 @@
     "chief_complaint": "Nhập viện cấp cứu vì THA cấp. BP 178/108 mmHg, đau đầu dữ dội.",
     "visit_reason": "THA cấp không kiểm soát. Đánh giá tổn thương cơ quan đích: tim, thận, đáy mắt.",
     "source_system": "HIS-Inpatient",
-    "created_at": "2024-06-10T14:00:00+07:00"
+    "created_at": "2024-06-10T14:00:00+07:00",
+    "language": "vi",
+    "text_encoding": "utf-8"
   },
   {
     "encounter_id": "P003-E005",
@@ -153,7 +175,9 @@
     "chief_complaint": "Tái khám sau xuất viện. Bệnh nhân tuân thủ tốt phác đồ mới.",
     "visit_reason": "Kiểm tra sau nhập viện: HbA1c, lipid, chức năng thận, HA sau điều chỉnh phác đồ.",
     "source_system": "HIS-Outpatient",
-    "created_at": "2024-10-10T08:00:00+07:00"
+    "created_at": "2024-10-10T08:00:00+07:00",
+    "language": "vi",
+    "text_encoding": "utf-8"
   },
   {
     "encounter_id": "P004-E001",
@@ -166,7 +190,9 @@
     "chief_complaint": "Tái khám ĐTĐ type 2 + THA. Mệt mỏi, đái nhiều, khát nước.",
     "visit_reason": "Kiểm tra HbA1c, glucose, chức năng thận, huyết áp.",
     "source_system": "HIS-Outpatient",
-    "created_at": "2024-03-05T08:00:00+07:00"
+    "created_at": "2024-03-05T08:00:00+07:00",
+    "language": "vi",
+    "text_encoding": "utf-8"
   },
   {
     "encounter_id": "P004-E002",
@@ -179,7 +205,9 @@
     "chief_complaint": "Tái khám. Bệnh nhân phàn nàn hay quên uống thuốc.",
     "visit_reason": "Tái khám định kỳ. Kiểm tra tuân thủ điều trị. Không có XN lần này (EC-06).",
     "source_system": "HIS-Outpatient",
-    "created_at": "2024-06-05T08:30:00+07:00"
+    "created_at": "2024-06-05T08:30:00+07:00",
+    "language": "vi",
+    "text_encoding": "utf-8"
   },
   {
     "encounter_id": "P004-E003",
@@ -192,6 +220,8 @@
     "chief_complaint": "Tái khám. Bệnh nhân bị hạ đường huyết tại nhà, vã mồ hôi, run tay.",
     "visit_reason": "Đánh giá hạ đường huyết. Điều chỉnh liều thuốc ĐTĐ.",
     "source_system": "HIS-Outpatient",
-    "created_at": "2024-09-05T08:00:00+07:00"
+    "created_at": "2024-09-05T08:00:00+07:00",
+    "language": "vi",
+    "text_encoding": "utf-8"
   }
 ]

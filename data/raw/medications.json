@@ -12,7 +12,8 @@
     "instruction": "Uống sau ăn sáng và sau ăn tối. Tăng từ 500mg lên 1000mg.",
     "duration_days": 90,
     "is_current": true,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P001-E001-MED002",
@@ -27,7 +28,8 @@
     "instruction": "Uống buổi sáng trước hoặc sau ăn. Thuốc mới thêm vào. Uống đủ nước.",
     "duration_days": 90,
     "is_current": true,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P001-E001-MED003",
@@ -42,7 +44,8 @@
     "instruction": "Uống buổi sáng sau ăn. Tiếp tục từ đơn cũ.",
     "duration_days": 90,
     "is_current": true,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P001-E001-MED004",
@@ -57,7 +60,8 @@
     "instruction": "Uống buổi sáng trước ăn. Thuốc mới thêm vào để bảo vệ thận và hạ áp.",
     "duration_days": 90,
     "is_current": true,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P001-E001-MED005",
@@ -72,7 +76,8 @@
     "instruction": "Uống buổi tối sau ăn. Tăng từ 20mg lên 40mg.",
     "duration_days": 90,
     "is_current": true,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P001-E002-MED001",
@@ -87,7 +92,8 @@
     "instruction": "Uống sau ăn sáng và sau ăn tối. Giữ nguyên liều.",
     "duration_days": 90,
     "is_current": true,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P001-E002-MED002",
@@ -102,7 +108,8 @@
     "instruction": "Uống buổi sáng. Giữ nguyên.",
     "duration_days": 90,
     "is_current": true,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P001-E002-MED003",
@@ -117,7 +124,8 @@
     "instruction": "Uống buổi sáng sau ăn.",
     "duration_days": 90,
     "is_current": true,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P001-E002-MED004",
@@ -132,7 +140,8 @@
     "instruction": "Uống buổi sáng trước ăn.",
     "duration_days": 90,
     "is_current": true,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P001-E002-MED005",
@@ -147,7 +156,8 @@
     "instruction": "Uống buổi tối sau ăn.",
     "duration_days": 90,
     "is_current": true,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P001-E003-MED001",
@@ -162,7 +172,8 @@
     "instruction": "Uống sau ăn sáng và tối.",
     "duration_days": 90,
     "is_current": true,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P001-E003-MED002",
@@ -177,7 +188,8 @@
     "instruction": "Uống buổi sáng.",
     "duration_days": 90,
     "is_current": true,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P001-E003-MED003",
@@ -192,7 +204,8 @@
     "instruction": "Uống buổi sáng.",
     "duration_days": 90,
     "is_current": true,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P001-E003-MED004",
@@ -207,7 +220,8 @@
     "instruction": "Uống buổi sáng trước ăn.",
     "duration_days": 90,
     "is_current": true,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P001-E003-MED005",
@@ -222,7 +236,8 @@
     "instruction": "Uống buổi tối.",
     "duration_days": 90,
     "is_current": true,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P001-E004-MED001",
@@ -237,7 +252,8 @@
     "instruction": "Uống sau ăn sáng và tối. Duy trì liều, theo dõi thêm 6 tháng.",
     "duration_days": 90,
     "is_current": true,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P001-E004-MED002",
@@ -252,7 +268,8 @@
     "instruction": "Uống buổi sáng.",
     "duration_days": 90,
     "is_current": true,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P001-E004-MED003",
@@ -267,7 +284,8 @@
     "instruction": "Uống buổi sáng.",
     "duration_days": 90,
     "is_current": true,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P001-E004-MED004",
@@ -282,7 +300,8 @@
     "instruction": "Uống buổi sáng trước ăn.",
     "duration_days": 90,
     "is_current": true,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P001-E004-MED005",
@@ -297,7 +316,8 @@
     "instruction": "Uống buổi tối.",
     "duration_days": 90,
     "is_current": true,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P002-E001-MED001",
@@ -312,7 +332,8 @@
     "instruction": "Uống sau ăn sáng và sau ăn tối.",
     "duration_days": 90,
     "is_current": true,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P002-E001-MED002",
@@ -327,7 +348,8 @@
     "instruction": "Uống buổi sáng sau ăn.",
     "duration_days": 90,
     "is_current": true,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P002-E001-MED003",
@@ -342,7 +364,8 @@
     "instruction": "Uống buổi sáng sau ăn.",
     "duration_days": 90,
     "is_current": true,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P002-E002-MED001",
@@ -357,7 +380,8 @@
     "instruction": "Uống sau ăn sáng và tối. Giữ nguyên.",
     "duration_days": 90,
     "is_current": true,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P002-E002-MED002",
@@ -372,7 +396,8 @@
     "instruction": "Uống buổi sáng.",
     "duration_days": 90,
     "is_current": true,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P002-E002-MED003",
@@ -387,7 +412,8 @@
     "instruction": "Uống buổi sáng.",
     "duration_days": 90,
     "is_current": true,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P002-E003-MED001",
@@ -402,7 +428,8 @@
     "instruction": "Uống sau ăn. Tiếp tục duy trì.",
     "duration_days": 90,
     "is_current": true,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P002-E003-MED002",
@@ -417,7 +444,8 @@
     "instruction": "Uống buổi sáng.",
     "duration_days": 90,
     "is_current": true,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P002-E003-MED003",
@@ -432,7 +460,8 @@
     "instruction": "Uống buổi sáng.",
     "duration_days": 90,
     "is_current": true,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P003-E001-MED001",
@@ -447,7 +476,8 @@
     "instruction": "Uống buổi sáng sau ăn.",
     "duration_days": 120,
     "is_current": false,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P003-E001-MED002",
@@ -462,7 +492,8 @@
     "instruction": "Uống buổi sáng sau ăn.",
     "duration_days": 120,
     "is_current": false,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P003-E001-MED003",
@@ -477,7 +508,8 @@
     "instruction": "Uống buổi tối sau ăn.",
     "duration_days": 120,
     "is_current": false,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P003-E002-MED001",
@@ -492,7 +524,8 @@
     "instruction": "Uống buổi sáng.",
     "duration_days": 120,
     "is_current": false,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P003-E002-MED002",
@@ -507,7 +540,8 @@
     "instruction": "Uống buổi sáng.",
     "duration_days": 120,
     "is_current": false,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P003-E002-MED003",
@@ -522,7 +556,8 @@
     "instruction": "Uống buổi tối. Tăng từ 20mg lên 40mg.",
     "duration_days": 120,
     "is_current": false,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P003-E002-MED004",
@@ -537,7 +572,8 @@
     "instruction": "Uống buổi sáng. Thuốc mới thêm cho THA kháng trị.",
     "duration_days": 120,
     "is_current": false,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P003-E002-MED005",
@@ -553,7 +589,8 @@
     "duration_days": 0,
     "is_current": false,
     "source_system": "HIS-Pharmacy",
-    "data_note": "EC-08: Thuốc bị ngưng giữa chừng (is_current = false). Indapamide ngưng do tác dụng phụ tăng acid uric."
+    "data_note": "EC-08: Thuốc bị ngưng giữa chừng (is_current = false). Indapamide ngưng do tác dụng phụ tăng acid uric.",
+    "language": "vi"
   },
   {
     "medication_id": "P003-E003-MED001",
@@ -568,7 +605,8 @@
     "instruction": "Uống buổi sáng.",
     "duration_days": 120,
     "is_current": false,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P003-E003-MED002",
@@ -583,7 +621,8 @@
     "instruction": "Uống buổi sáng.",
     "duration_days": 120,
     "is_current": false,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P003-E003-MED003",
@@ -598,7 +637,8 @@
     "instruction": "Uống buổi sáng.",
     "duration_days": 120,
     "is_current": false,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P003-E003-MED004",
@@ -613,7 +653,8 @@
     "instruction": "Uống buổi tối.",
     "duration_days": 120,
     "is_current": false,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P003-E003-MED005",
@@ -628,7 +669,8 @@
     "instruction": "Uống sau ăn sáng và tối. Mới thêm vào cho ĐTĐ mới chẩn đoán.",
     "duration_days": 120,
     "is_current": false,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P003-E004-MED001",
@@ -643,7 +685,8 @@
     "instruction": "Uống buổi sáng. Tăng từ 160mg lên 320mg sau nhập viện.",
     "duration_days": 120,
     "is_current": false,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P003-E004-MED002",
@@ -658,7 +701,8 @@
     "instruction": "Uống buổi sáng.",
     "duration_days": 120,
     "is_current": false,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P003-E004-MED003",
@@ -673,7 +717,8 @@
     "instruction": "Uống buổi sáng. Thuốc mới thêm vào sau nhập viện cho phì đại thất trái.",
     "duration_days": 120,
     "is_current": false,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P003-E004-MED004",
@@ -688,7 +733,8 @@
     "instruction": "Uống buổi sáng.",
     "duration_days": 120,
     "is_current": false,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P003-E004-MED005",
@@ -703,7 +749,8 @@
     "instruction": "Uống sau ăn. Tăng từ 500mg lên 1000mg.",
     "duration_days": 120,
     "is_current": false,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P003-E004-MED006",
@@ -718,7 +765,8 @@
     "instruction": "Uống buổi tối.",
     "duration_days": 120,
     "is_current": false,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P003-E005-MED001",
@@ -733,7 +781,8 @@
     "instruction": "Uống buổi sáng. Duy trì.",
     "duration_days": 90,
     "is_current": true,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P003-E005-MED002",
@@ -748,7 +797,8 @@
     "instruction": "Uống buổi sáng.",
     "duration_days": 90,
     "is_current": true,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P003-E005-MED003",
@@ -763,7 +813,8 @@
     "instruction": "Uống buổi sáng.",
     "duration_days": 90,
     "is_current": true,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P003-E005-MED004",
@@ -778,7 +829,8 @@
     "instruction": "Uống buổi sáng.",
     "duration_days": 90,
     "is_current": true,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P003-E005-MED005",
@@ -793,7 +845,8 @@
     "instruction": "Uống sau ăn sáng và tối.",
     "duration_days": 90,
     "is_current": true,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P003-E005-MED006",
@@ -808,7 +861,8 @@
     "instruction": "Uống buổi tối.",
     "duration_days": 90,
     "is_current": true,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P004-E001-MED001",
@@ -823,7 +877,8 @@
     "instruction": "Uống sau ăn sáng và tối. Nhắc bệnh nhân không được bỏ thuốc.",
     "duration_days": 90,
     "is_current": false,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P004-E001-MED002",
@@ -838,7 +893,8 @@
     "instruction": "Uống buổi sáng sau ăn.",
     "duration_days": 90,
     "is_current": false,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P004-E001-MED003",
@@ -853,7 +909,8 @@
     "instruction": "Uống buổi sáng sau ăn.",
     "duration_days": 90,
     "is_current": false,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P004-E002-MED001",
@@ -868,7 +925,8 @@
     "instruction": "Uống sau ăn. Đặt báo thức nhắc nhở.",
     "duration_days": 90,
     "is_current": false,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P004-E002-MED002",
@@ -883,7 +941,8 @@
     "instruction": "Uống buổi sáng.",
     "duration_days": 90,
     "is_current": false,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P004-E002-MED003",
@@ -898,7 +957,8 @@
     "instruction": "Uống buổi sáng.",
     "duration_days": 90,
     "is_current": false,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P004-E002-MED004",
@@ -914,7 +974,8 @@
     "duration_days": 90,
     "is_current": false,
     "source_system": "HIS-Pharmacy",
-    "data_note": "EC-01: dose = null, strength = null. Thiếu thông tin liều Gliclazide MR. Dùng để test pipeline xử lý thiếu liều thuốc."
+    "data_note": "EC-01: dose = null, strength = null. Thiếu thông tin liều Gliclazide MR. Dùng để test pipeline xử lý thiếu liều thuốc.",
+    "language": "vi"
   },
   {
     "medication_id": "P004-E003-MED001",
@@ -929,7 +990,8 @@
     "instruction": "Giảm xuống 1 lần/ngày buổi tối sau ăn. Giảm liều để tránh hạ đường huyết.",
     "duration_days": 90,
     "is_current": true,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P004-E003-MED002",
@@ -944,7 +1006,8 @@
     "instruction": "Uống buổi sáng. Tiếp tục.",
     "duration_days": 90,
     "is_current": true,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P004-E003-MED003",
@@ -959,7 +1022,8 @@
     "instruction": "Uống buổi sáng.",
     "duration_days": 90,
     "is_current": true,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   },
   {
     "medication_id": "P004-E003-MED004",
@@ -974,6 +1038,7 @@
     "instruction": "NGƯNG Gliclazide MR do hạ đường huyết. Không dùng lại.",
     "duration_days": 0,
     "is_current": false,
-    "source_system": "HIS-Pharmacy"
+    "source_system": "HIS-Pharmacy",
+    "language": "vi"
   }
 ]

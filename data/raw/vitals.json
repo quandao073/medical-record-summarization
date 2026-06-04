@@ -7,13 +7,16 @@
     "blood_pressure_systolic": 148,
     "blood_pressure_diastolic": 92,
     "heart_rate": 82,
-    "temperature_c": 36.8,
-    "spo2": 98,
     "weight_kg": 82.0,
     "height_cm": 168.0,
     "bmi": 29.1,
-    "abnormal_flags": ["HA_CAO", "BMI_THUA_CAN"],
-    "source_system": "EMR-Vitals"
+    "abnormal_flags": [
+      "high_blood_pressure",
+      "overweight_bmi"
+    ],
+    "source_system": "EMR-Vitals",
+    "temperature_celsius": 36.8,
+    "spo2_percent": 98
   },
   {
     "vital_id": "P001-E002-VIT001",
@@ -23,13 +26,16 @@
     "blood_pressure_systolic": 138,
     "blood_pressure_diastolic": 88,
     "heart_rate": 78,
-    "temperature_c": 36.6,
-    "spo2": 98,
     "weight_kg": 81.0,
     "height_cm": 168.0,
     "bmi": 28.7,
-    "abnormal_flags": ["HA_CAO", "BMI_THUA_CAN"],
-    "source_system": "EMR-Vitals"
+    "abnormal_flags": [
+      "high_blood_pressure",
+      "overweight_bmi"
+    ],
+    "source_system": "EMR-Vitals",
+    "temperature_celsius": 36.6,
+    "spo2_percent": 98
   },
   {
     "vital_id": "P001-E003-VIT001",
@@ -39,13 +45,15 @@
     "blood_pressure_systolic": 132,
     "blood_pressure_diastolic": 82,
     "heart_rate": 76,
-    "temperature_c": 36.7,
-    "spo2": 99,
     "weight_kg": 80.0,
     "height_cm": 168.0,
     "bmi": 28.3,
-    "abnormal_flags": ["BMI_THUA_CAN"],
-    "source_system": "EMR-Vitals"
+    "abnormal_flags": [
+      "overweight_bmi"
+    ],
+    "source_system": "EMR-Vitals",
+    "temperature_celsius": 36.7,
+    "spo2_percent": 99
   },
   {
     "vital_id": "P001-E004-VIT001",
@@ -55,13 +63,15 @@
     "blood_pressure_systolic": 128,
     "blood_pressure_diastolic": 78,
     "heart_rate": 74,
-    "temperature_c": 36.5,
-    "spo2": 99,
     "weight_kg": 79.0,
     "height_cm": 168.0,
     "bmi": 28.0,
-    "abnormal_flags": ["BMI_THUA_CAN"],
-    "source_system": "EMR-Vitals"
+    "abnormal_flags": [
+      "overweight_bmi"
+    ],
+    "source_system": "EMR-Vitals",
+    "temperature_celsius": 36.5,
+    "spo2_percent": 99
   },
   {
     "vital_id": "P002-E001-VIT001",
@@ -71,13 +81,15 @@
     "blood_pressure_systolic": 135,
     "blood_pressure_diastolic": 85,
     "heart_rate": 72,
-    "temperature_c": 36.6,
-    "spo2": 99,
     "weight_kg": 65.0,
     "height_cm": 158.0,
     "bmi": 26.0,
-    "abnormal_flags": ["BMI_THUA_CAN_NHE"],
-    "source_system": "EMR-Vitals"
+    "abnormal_flags": [
+      "mildly_overweight_bmi"
+    ],
+    "source_system": "EMR-Vitals",
+    "temperature_celsius": 36.6,
+    "spo2_percent": 99
   },
   {
     "vital_id": "P002-E002-VIT001",
@@ -87,13 +99,15 @@
     "blood_pressure_systolic": 132,
     "blood_pressure_diastolic": 82,
     "heart_rate": 70,
-    "temperature_c": 36.5,
-    "spo2": 99,
     "weight_kg": 64.5,
     "height_cm": 158.0,
     "bmi": 25.8,
-    "abnormal_flags": ["BMI_THUA_CAN_NHE"],
-    "source_system": "EMR-Vitals"
+    "abnormal_flags": [
+      "mildly_overweight_bmi"
+    ],
+    "source_system": "EMR-Vitals",
+    "temperature_celsius": 36.5,
+    "spo2_percent": 99
   },
   {
     "vital_id": "P002-E003-VIT001",
@@ -103,13 +117,13 @@
     "blood_pressure_systolic": 128,
     "blood_pressure_diastolic": 80,
     "heart_rate": 68,
-    "temperature_c": 36.4,
-    "spo2": 99,
     "weight_kg": 64.0,
     "height_cm": 158.0,
     "bmi": 25.7,
     "abnormal_flags": [],
-    "source_system": "EMR-Vitals"
+    "source_system": "EMR-Vitals",
+    "temperature_celsius": 36.4,
+    "spo2_percent": 99
   },
   {
     "vital_id": "P003-E001-VIT001",
@@ -119,13 +133,16 @@
     "blood_pressure_systolic": 158,
     "blood_pressure_diastolic": 98,
     "heart_rate": 85,
-    "temperature_c": 36.8,
-    "spo2": 97,
     "weight_kg": 88.0,
     "height_cm": 172.0,
     "bmi": 29.8,
-    "abnormal_flags": ["HA_CAO", "BMI_THUA_CAN"],
-    "source_system": "EMR-Vitals"
+    "abnormal_flags": [
+      "high_blood_pressure",
+      "overweight_bmi"
+    ],
+    "source_system": "EMR-Vitals",
+    "temperature_celsius": 36.8,
+    "spo2_percent": 97
   },
   {
     "vital_id": "P003-E002-VIT001",
@@ -135,13 +152,16 @@
     "blood_pressure_systolic": 152,
     "blood_pressure_diastolic": 94,
     "heart_rate": 82,
-    "temperature_c": 36.7,
-    "spo2": 97,
     "weight_kg": 87.5,
     "height_cm": 172.0,
     "bmi": 29.6,
-    "abnormal_flags": ["HA_CAO", "BMI_THUA_CAN"],
-    "source_system": "EMR-Vitals"
+    "abnormal_flags": [
+      "high_blood_pressure",
+      "overweight_bmi"
+    ],
+    "source_system": "EMR-Vitals",
+    "temperature_celsius": 36.7,
+    "spo2_percent": 97
   },
   {
     "vital_id": "P003-E003-VIT001",
@@ -151,13 +171,16 @@
     "blood_pressure_systolic": 148,
     "blood_pressure_diastolic": 92,
     "heart_rate": 80,
-    "temperature_c": 36.6,
-    "spo2": 98,
     "weight_kg": 87.0,
     "height_cm": 172.0,
     "bmi": 29.4,
-    "abnormal_flags": ["HA_CAO", "BMI_THUA_CAN"],
-    "source_system": "EMR-Vitals"
+    "abnormal_flags": [
+      "high_blood_pressure",
+      "overweight_bmi"
+    ],
+    "source_system": "EMR-Vitals",
+    "temperature_celsius": 36.6,
+    "spo2_percent": 98
   },
   {
     "vital_id": "P003-E004-VIT001",
@@ -167,13 +190,17 @@
     "blood_pressure_systolic": 178,
     "blood_pressure_diastolic": 108,
     "heart_rate": 96,
-    "temperature_c": 37.0,
-    "spo2": 96,
     "weight_kg": 88.0,
     "height_cm": 172.0,
     "bmi": 29.8,
-    "abnormal_flags": ["HA_CAO_NGUY_HIEM", "NHIP_TIM_NHANH", "SPO2_THAP_NHE"],
-    "source_system": "EMR-Vitals"
+    "abnormal_flags": [
+      "severely_high_blood_pressure",
+      "tachycardia",
+      "mildly_low_spo2"
+    ],
+    "source_system": "EMR-Vitals",
+    "temperature_celsius": 37.0,
+    "spo2_percent": 96
   },
   {
     "vital_id": "P003-E005-VIT001",
@@ -183,13 +210,16 @@
     "blood_pressure_systolic": 142,
     "blood_pressure_diastolic": 88,
     "heart_rate": 72,
-    "temperature_c": 36.6,
-    "spo2": 98,
     "weight_kg": 86.0,
     "height_cm": 172.0,
     "bmi": 29.1,
-    "abnormal_flags": ["HA_CAO", "BMI_THUA_CAN"],
-    "source_system": "EMR-Vitals"
+    "abnormal_flags": [
+      "high_blood_pressure",
+      "overweight_bmi"
+    ],
+    "source_system": "EMR-Vitals",
+    "temperature_celsius": 36.6,
+    "spo2_percent": 98
   },
   {
     "vital_id": "P004-E001-VIT001",
@@ -199,13 +229,16 @@
     "blood_pressure_systolic": 142,
     "blood_pressure_diastolic": 90,
     "heart_rate": 80,
-    "temperature_c": 36.8,
-    "spo2": 97,
     "weight_kg": 72.0,
     "height_cm": 160.0,
     "bmi": 28.1,
-    "abnormal_flags": ["HA_CAO", "BMI_THUA_CAN"],
-    "source_system": "EMR-Vitals"
+    "abnormal_flags": [
+      "high_blood_pressure",
+      "overweight_bmi"
+    ],
+    "source_system": "EMR-Vitals",
+    "temperature_celsius": 36.8,
+    "spo2_percent": 97
   },
   {
     "vital_id": "P004-E002-VIT001",
@@ -215,13 +248,16 @@
     "blood_pressure_systolic": 138,
     "blood_pressure_diastolic": 88,
     "heart_rate": 80,
-    "temperature_c": 36.9,
-    "spo2": 97,
     "weight_kg": 72.0,
     "height_cm": 160.0,
     "bmi": 28.1,
-    "abnormal_flags": ["HA_CAO", "BMI_THUA_CAN"],
-    "source_system": "EMR-Vitals"
+    "abnormal_flags": [
+      "high_blood_pressure",
+      "overweight_bmi"
+    ],
+    "source_system": "EMR-Vitals",
+    "temperature_celsius": 36.9,
+    "spo2_percent": 97
   },
   {
     "vital_id": "P004-E003-VIT001",
@@ -231,12 +267,16 @@
     "blood_pressure_systolic": 136,
     "blood_pressure_diastolic": 86,
     "heart_rate": 88,
-    "temperature_c": 36.7,
-    "spo2": 97,
     "weight_kg": 72.0,
     "height_cm": 160.0,
     "bmi": 28.1,
-    "abnormal_flags": ["HA_BINH_THUONG_KHI_DO", "NHIP_TIM_NHANH_NHE", "HA_DUONG_HUYET_THAP_TRUOC_DO"],
-    "source_system": "EMR-Vitals"
+    "abnormal_flags": [
+      "normal_blood_pressure_at_measurement",
+      "mild_tachycardia",
+      "history_of_hypotension_or_hypoglycemia"
+    ],
+    "source_system": "EMR-Vitals",
+    "temperature_celsius": 36.7,
+    "spo2_percent": 97
   }
 ]
