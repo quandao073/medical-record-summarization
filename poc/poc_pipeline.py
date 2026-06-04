@@ -1,7 +1,7 @@
 """
-PoC Pipeline — Tuan 2.
-Minimal end-to-end: EHR -> C1 -> C2 -> LLM (all chunks as context) -> structured summary.
-Provider: OpenAI only.
+PoC Pipeline — Tuan 3.
+End-to-end: EHR -> C1 -> C2 -> C3 (section retrieval) -> LLM -> structured summary.
+Provider: OpenAI (gpt-4o-mini for dev/test, gpt-4o for demo).
 Section IDs: English. Summary content: Vietnamese.
 
 Usage:
@@ -23,6 +23,7 @@ from dotenv import load_dotenv
 from src.c1_emr.pipeline import load_and_process, C1ProcessingError
 from src.c2_chunking.chunker import chunk_ehr
 from src.c2_chunking.store_builder import build_structured_store, save_structured_store
+from src.c3_retrieval.retriever import retrieve_for_section
 from src.schemas import SourceChunk, FinalSummary, SummarySection, CitedClaim, SummaryMetrics
 
 load_dotenv()
@@ -45,6 +46,7 @@ SECTIONS = [
     "allergies",
     "abnormal_labs",
     "diagnoses",
+    "treatment_timeline",
     "clinical_alerts",
 ]
 
@@ -56,6 +58,7 @@ SECTION_LABELS = {
     "allergies":           "Dị ứng",
     "abnormal_labs":       "Kết quả xét nghiệm bất thường",
     "diagnoses":           "Chẩn đoán",
+    "treatment_timeline":  "Diễn biến điều trị",
     "clinical_alerts":     "Điểm cần lưu ý / Cảnh báo",
 }
 
@@ -115,6 +118,12 @@ SECTION_GUIDELINES = {
         "Liệt kê chẩn đoán từ lần khám gần nhất. "
         "Format: Bệnh chính: tên (mã ICD-10). Bệnh kèm: tên (mã ICD-10). "
         "Giữ nguyên mã ICD-10 từ context."
+    ),
+    "treatment_timeline": (
+        "Mô tả diễn biến điều trị theo thứ tự thời gian (cũ → mới). "
+        "Tập trung vào: HbA1c, huyết áp, LDL, UACR, thay đổi thuốc, biến chứng mới. "
+        "Format mỗi dòng: [Ngày/Encounter] — [Thay đổi chính]. "
+        "Không đưa khuyến nghị mới. Chỉ dùng dữ liệu trong context."
     ),
     "clinical_alerts": (
         "Liệt kê 3-5 điểm quan trọng nhất cần lưu ý: "
@@ -243,9 +252,7 @@ def run_poc(
             type_counts[c.source_type] = type_counts.get(c.source_type, 0) + 1
         print(f"[C2] {len(chunks)} chunks: {type_counts}")
 
-    context = format_chunks_as_context(chunks, max_context_chunks)
-
-    # LLM: Generate each section
+    # LLM: Generate each section with C3 section-wise retrieval
     sections: list[SummarySection] = []
     total_tokens = 0
 
@@ -253,6 +260,9 @@ def run_poc(
         if verbose:
             print(f"[LLM] {section_id}...", end=" ", flush=True)
 
+        # C3: retrieve only relevant chunks for this section
+        section_chunks = retrieve_for_section(chunks, section_id, max_chunks=15)
+        context = format_chunks_as_context(section_chunks, max_context_chunks)
         prompt = build_section_prompt(section_id, context)
         try:
             raw_text, tokens = call_llm(prompt, client, model)
@@ -309,7 +319,7 @@ def run_poc(
 
     final = FinalSummary(
         patient_id=patient_id,
-        prompt_version="poc_v1",
+        prompt_version="poc_v2",
         model_version=model,
         sections=sections,
         metrics=metrics,
@@ -337,7 +347,7 @@ def main():
     parser = argparse.ArgumentParser(description="PoC Pipeline — Medical Record Summarization")
     parser.add_argument("--patient", default="P001")
     parser.add_argument("--all-patients", action="store_true")
-    parser.add_argument("--model", default="gpt-4o")
+    parser.add_argument("--model", default="gpt-4o-mini")
     parser.add_argument("--max-chunks", type=int, default=60)
     args = parser.parse_args()
 
