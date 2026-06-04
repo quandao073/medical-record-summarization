@@ -1,0 +1,196 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import type { CitedClaim, ClaimStatus, SourceChunk } from "@/lib/types";
+import { STATUS_COLORS, STATUS_LABELS, STATUS_TOOLTIPS } from "@/lib/types";
+import { getSources } from "@/lib/api";
+
+// ─── Value position indicator ────────────────────────────────────────────────
+
+type Interp = "high" | "low" | "normal" | "critical" | string | null;
+
+const INTERP_STYLE: Record<string, { text: string; arrow: string; justify: string }> = {
+  high:     { text: "text-red-600 font-semibold",   arrow: "↑", justify: "justify-end"    },
+  critical: { text: "text-red-800 font-bold",        arrow: "⚠", justify: "justify-end"    },
+  low:      { text: "text-blue-600 font-semibold",  arrow: "↓", justify: "justify-start"  },
+  normal:   { text: "text-green-700",               arrow: "→", justify: "justify-center" },
+};
+
+/** Shows only the numeric value + direction arrow, no unit. */
+function LabValue({
+  value,
+  interpretation,
+}: {
+  value: number | null;
+  interpretation: Interp;
+}) {
+  const key = interpretation && interpretation in INTERP_STYLE ? interpretation : "normal";
+  const { text, arrow, justify } = INTERP_STYLE[key];
+  const display = value !== null && value !== undefined ? String(value) : "—";
+
+  return (
+    <div className={`flex items-center gap-1 ${justify}`}>
+      <span className={`${text} font-mono text-sm`}>
+        {arrow} {display}
+      </span>
+    </div>
+  );
+}
+
+// ─── Inline citation badge (minimal, no separate component needed) ────────────
+
+function InlineBadge({
+  sourceId,
+  status,
+  active,
+  onClick,
+}: {
+  sourceId: string;
+  status: ClaimStatus;
+  active: boolean;
+  onClick: (id: string) => void;
+}) {
+  const tooltip = `${STATUS_TOOLTIPS[status]}\n${sourceId}`;
+  return (
+    <button
+      onClick={() => onClick(sourceId)}
+      title={tooltip}
+      className={`
+        px-2 py-0.5 rounded-full text-xs font-mono cursor-pointer
+        transition-all hover:opacity-80
+        ${STATUS_COLORS[status]}
+        ${active ? "ring-2 ring-offset-1 ring-blue-400" : ""}
+      `}
+    >
+      {STATUS_LABELS[status]}
+    </button>
+  );
+}
+
+// ─── Skeleton row ─────────────────────────────────────────────────────────────
+
+function SkeletonRow() {
+  return (
+    <tr>
+      {[55, 25, 20, 45, 30, 20].map((w, i) => (
+        <td key={i} className="px-3 py-2.5">
+          <div className="skeleton h-3 rounded" style={{ width: `${w}%` }} />
+        </td>
+      ))}
+    </tr>
+  );
+}
+
+// ─── Main component ───────────────────────────────────────────────────────────
+
+interface Props {
+  citedClaims: CitedClaim[];
+  activeSourceId: string | null;
+  onCitationClick: (sourceId: string) => void;
+}
+
+interface LabRow {
+  chunk: SourceChunk;
+  status: ClaimStatus;
+}
+
+export default function LabsTable({ citedClaims, activeSourceId, onCitationClick }: Props) {
+  const [rows, setRows]       = useState<LabRow[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Collect unique source_ids preserving first-seen status
+    const idToStatus = new Map<string, ClaimStatus>();
+    for (const claim of citedClaims) {
+      for (const sid of claim.citations) {
+        if (!idToStatus.has(sid)) {
+          idToStatus.set(sid, claim.status);
+        }
+      }
+    }
+
+    if (idToStatus.size === 0) {
+      setLoading(false);
+      return;
+    }
+
+    getSources(Array.from(idToStatus.keys())).then((chunks) => {
+      const result: LabRow[] = [];
+      chunks.forEach((chunk, i) => {
+        const sid = Array.from(idToStatus.keys())[i];
+        if (chunk && chunk.source_type === "labs") {
+          result.push({ chunk, status: idToStatus.get(sid)! });
+        }
+      });
+      // Sort by date ascending so timeline is readable
+      result.sort((a, b) => (a.chunk.date ?? "").localeCompare(b.chunk.date ?? ""));
+      setRows(result);
+      setLoading(false);
+    });
+  }, [citedClaims]);
+
+  if (!loading && rows.length === 0) return null;
+
+  return (
+    <div className="overflow-x-auto rounded-lg border border-gray-200">
+      <table className="w-full text-sm">
+        <thead>
+          <tr className="bg-gray-50 border-b border-gray-200 text-xs text-gray-500 uppercase tracking-wide">
+            <th className="px-3 py-2 text-left font-medium">Tên xét nghiệm</th>
+            <th className="px-3 py-2 text-center font-medium w-28">Kết quả</th>
+            <th className="px-3 py-2 text-left font-medium w-24">Đơn vị</th>
+            <th className="px-3 py-2 text-left font-medium">Khoảng tham chiếu</th>
+            <th className="px-3 py-2 text-left font-medium w-28">Ngày</th>
+            <th className="px-3 py-2 text-center font-medium w-16">Nguồn</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-gray-100">
+          {loading
+            ? Array.from({ length: 3 }).map((_, i) => <SkeletonRow key={i} />)
+            : rows.map(({ chunk, status }) => {
+                const m        = chunk.metadata;
+                const val      = m.value as number | null;
+                const unit     = (m.unit as string | null) || null;
+                const interp   = m.interpretation as Interp;
+                const testName = (m.test_name as string) ?? chunk.source_id;
+                const isActive = activeSourceId === chunk.source_id;
+
+                // reference_range: prefer metadata (new stores), fallback parse content
+                let refRange = (m.reference_range as string) || null;
+                if (!refRange) {
+                  const match = chunk.content.match(/\(tham chiếu:\s*([^)]+)\)/);
+                  refRange = match ? match[1].trim() : null;
+                }
+
+                return (
+                  <tr
+                    key={chunk.source_id}
+                    className={`transition-colors ${isActive ? "bg-blue-50" : "hover:bg-gray-50"}`}
+                  >
+                    <td className="px-3 py-2.5 text-gray-800 font-medium">{testName}</td>
+                    <td className="px-3 py-2.5">
+                      <LabValue value={val} interpretation={interp} />
+                    </td>
+                    <td className="px-3 py-2.5 text-gray-500 font-mono text-xs">
+                      {unit ?? <span className="text-gray-300">—</span>}
+                    </td>
+                    <td className="px-3 py-2.5 text-gray-500 font-mono text-xs">
+                      {refRange ?? <span className="text-gray-300">—</span>}
+                    </td>
+                    <td className="px-3 py-2.5 text-gray-500 text-xs">{chunk.date ?? "—"}</td>
+                    <td className="px-3 py-2.5 text-center">
+                      <InlineBadge
+                        sourceId={chunk.source_id}
+                        status={status}
+                        active={isActive}
+                        onClick={onCitationClick}
+                      />
+                    </td>
+                  </tr>
+                );
+              })}
+        </tbody>
+      </table>
+    </div>
+  );
+}

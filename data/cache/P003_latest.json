@@ -1,0 +1,360 @@
+{
+  "patient_id": "P003",
+  "created_at": "2026-06-04T10:48:35.997177",
+  "prompt_version": "poc_v2",
+  "model_version": "gpt-4o",
+  "sections": [
+    {
+      "section_id": "overview",
+      "title": null,
+      "content": "Bệnh nhân nam 62 tuổi, tiền sử tăng huyết áp kháng trị 10 năm, đái tháo đường type 2 mới chẩn đoán.",
+      "cited_claims": [
+        {
+          "claim_text": "Bệnh nhân nam 62 tuổi, tiền sử tăng huyết áp kháng trị 10 năm, đái tháo đường type 2 mới chẩn đoán.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P003-E003-DX-E11.9",
+            "P003-E004-DX-E11.9",
+            "P003-E005-DX-E11.9"
+          ],
+          "confidence_score": null,
+          "is_critical": false,
+          "verification_status": "PENDING"
+        }
+      ]
+    },
+    {
+      "section_id": "reason_for_visit",
+      "title": null,
+      "content": "[CẦN XÁC NHẬN] Bệnh nhân tái khám sau xuất viện 4 tháng. [CẦN XÁC NHẬN] Tuân thủ điều trị tốt. [CẦN XÁC NHẬN] Huyết áp 142/88 mmHg — cải thiện nhưng vẫn chưa đạt mục tiêu hoàn toàn.",
+      "cited_claims": [
+        {
+          "claim_text": "Bệnh nhân tái khám sau xuất viện 4 tháng.",
+          "status": "PARTIALLY_SUPPORTED",
+          "citations": [
+            "P003-E001-NOTE-NOTE001",
+            "P003-E002-NOTE-NOTE001",
+            "P003-E002-NOTE-NOTE002"
+          ],
+          "confidence_score": null,
+          "is_critical": false,
+          "verification_status": "PENDING"
+        },
+        {
+          "claim_text": "Tuân thủ điều trị tốt.",
+          "status": "PARTIALLY_SUPPORTED",
+          "citations": [
+            "P003-E001-NOTE-NOTE001",
+            "P003-E001-NOTE-NOTE002",
+            "P003-E002-NOTE-NOTE001"
+          ],
+          "confidence_score": null,
+          "is_critical": false,
+          "verification_status": "PENDING"
+        },
+        {
+          "claim_text": "Huyết áp 142/88 mmHg — cải thiện nhưng vẫn chưa đạt mục tiêu hoàn toàn.",
+          "status": "PARTIALLY_SUPPORTED",
+          "citations": [
+            "P003-E001-NOTE-NOTE001",
+            "P003-E001-NOTE-NOTE002",
+            "P003-E001-NOTE-NOTE003"
+          ],
+          "confidence_score": null,
+          "is_critical": true,
+          "verification_status": "PENDING"
+        }
+      ]
+    },
+    {
+      "section_id": "medical_history",
+      "title": null,
+      "content": "Tăng huyết áp kháng trị 10 năm, rối loạn lipid máu 5 năm, phì đại thất trái (siêu âm tim 2022), đái tháo đường type 2 mới chẩn đoán 02/2024, gan nhiễm mỡ độ 1 mới phát hiện.",
+      "cited_claims": [
+        {
+          "claim_text": "Tăng huyết áp kháng trị 10 năm, rối loạn lipid máu 5 năm, phì đại thất trái (siêu âm tim 2022), đái tháo đường type 2 mới chẩn đoán 02/2024, gan nhiễm mỡ độ 1 mới phát hiện.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P003-E003-DX-E11.9",
+            "P003-E003-DX-K76.0",
+            "P003-E004-DX-E11.9",
+            "P003-E004-DX-I51.7",
+            "P003-E005-DX-E11.9"
+          ],
+          "confidence_score": null,
+          "is_critical": false,
+          "verification_status": "PENDING"
+        }
+      ]
+    },
+    {
+      "section_id": "current_medications",
+      "title": null,
+      "content": "Valsartan 320 mg — 1 viên, 1 lần/ngày. Amlodipine 10 mg — 1 viên, 1 lần/ngày. Bisoprolol 5 mg — 1 viên, 1 lần/ngày. Spironolactone 25 mg — 1 viên, 1 lần/ngày. Metformin 1000 mg — 1 viên, 2 lần/ngày. Atorvastatin 40 mg — 1 viên, 1 lần/ngày (tối).",
+      "cited_claims": [
+        {
+          "claim_text": "Valsartan 320 mg — 1 viên, 1 lần/ngày.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P003-E004-MED-VALSARTAN",
+            "P003-E005-MED-VALSARTAN"
+          ],
+          "confidence_score": null,
+          "is_critical": true,
+          "verification_status": "PENDING"
+        },
+        {
+          "claim_text": "Amlodipine 10 mg — 1 viên, 1 lần/ngày.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P003-E001-MED-AMLODIPINE",
+            "P003-E002-MED-AMLODIPINE",
+            "P003-E003-MED-AMLODIPINE",
+            "P003-E004-MED-AMLODIPINE",
+            "P003-E005-MED-AMLODIPINE"
+          ],
+          "confidence_score": null,
+          "is_critical": true,
+          "verification_status": "PENDING"
+        },
+        {
+          "claim_text": "Bisoprolol 5 mg — 1 viên, 1 lần/ngày.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P003-E004-MED-BISOPROLOL",
+            "P003-E005-MED-BISOPROLOL"
+          ],
+          "confidence_score": null,
+          "is_critical": true,
+          "verification_status": "PENDING"
+        },
+        {
+          "claim_text": "Spironolactone 25 mg — 1 viên, 1 lần/ngày.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P003-E002-MED-SPIRONOLACTONE",
+            "P003-E003-MED-SPIRONOLACTONE",
+            "P003-E004-MED-SPIRONOLACTONE",
+            "P003-E005-MED-SPIRONOLACTONE"
+          ],
+          "confidence_score": null,
+          "is_critical": true,
+          "verification_status": "PENDING"
+        },
+        {
+          "claim_text": "Metformin 1000 mg — 1 viên, 2 lần/ngày.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P003-E004-MED-METFORMIN",
+            "P003-E005-MED-METFORMIN"
+          ],
+          "confidence_score": null,
+          "is_critical": true,
+          "verification_status": "PENDING"
+        },
+        {
+          "claim_text": "Atorvastatin 40 mg — 1 viên, 1 lần/ngày (tối).",
+          "status": "SUPPORTED",
+          "citations": [
+            "P003-E002-MED-ATORVASTATIN",
+            "P003-E003-MED-ATORVASTATIN",
+            "P003-E004-MED-ATORVASTATIN",
+            "P003-E005-MED-ATORVASTATIN"
+          ],
+          "confidence_score": null,
+          "is_critical": true,
+          "verification_status": "PENDING"
+        }
+      ]
+    },
+    {
+      "section_id": "allergies",
+      "title": null,
+      "content": "Dị ứng: Sulfonamide (Co-trimoxazole). [CẦN XÁC NHẬN] [CẦN XÁC NHẬN]",
+      "cited_claims": [
+        {
+          "claim_text": "Dị ứng: Sulfonamide (Co-trimoxazole).",
+          "status": "SUPPORTED",
+          "citations": [
+            "P003-PATIENT-ALLERGY-SULFONAMIDE_(CO"
+          ],
+          "confidence_score": null,
+          "is_critical": true,
+          "verification_status": "PENDING"
+        },
+        {
+          "claim_text": "[CẦN XÁC NHẬN]",
+          "status": "PARTIALLY_SUPPORTED",
+          "citations": [
+            "P003-PATIENT-ALLERGY-SULFONAMIDE_(CO"
+          ],
+          "confidence_score": null,
+          "is_critical": false,
+          "verification_status": "PENDING"
+        }
+      ]
+    },
+    {
+      "section_id": "abnormal_labs",
+      "title": null,
+      "content": "Cholesterol toàn phần: 6.2 mmol/L ↑ (tham chiếu: < 5.2) [2023-06-10]; LDL-Cholesterol: 4.1 mmol/L ↑ (tham chiếu: < 2.6) [2023-06-10]; Triglyceride: 2.2 mmol/L ↑ (tham chiếu: < 1.7) [2023-06-10]; Glucose huyết tương lúc đói: 6.3 mmol/L ↑ (tham chiếu: 3.9 - 6.1) [2023-10-10]; HbA1c: 6.2 % ↑ (tham chiếu: 4.0 - 5.6) [2023-10-10]; Cholesterol toàn phần: 5.4 mmol/L ↑ (tham chiếu: < 5.2) [2023-10-10]; LDL-Cholesterol: 3.2 mmol/L ↑ (tham chiếu: < 2.6) [2023-10-10]; Glucose huyết tương lúc đói: 7.2 mmol/L ↑ (tham chiếu: 3.9 - 6.1) [2024-02-10]; HbA1c: 6.9 % ↑ (tham chiếu: 4.0 - 5.6) [2024-02-10]; LDL-Cholesterol: 2.9 mmol/L ↑ (tham chiếu: < 2.6) [2024-02-10]; ALT: 48 U/L ↑ (tham chiếu: 7 - 40) [2024-02-10]; Glucose huyết tương lúc đói: 8.5 mmol/L ↑ (tham chiếu: 3.9 - 6.1) [2024-06-10]; HbA1c: 7.8 % ↑ (tham chiếu: 4.0 - 5.6) [2024-06-10]; LDL-Cholesterol: 2.8 mmol/L ↑ (tham chiếu: < 2.6) [2024-06-10]; HbA1c: 7.2 % ↑ (tham chiếu: 4.0 - 5.6) [2024-10-10]",
+      "cited_claims": [
+        {
+          "claim_text": "Cholesterol toàn phần: 6.2 mmol/L ↑ (tham chiếu: < 5.2) [2023-06-10]; LDL-Cholesterol: 4.1 mmol/L ↑ (tham chiếu: < 2.6) [2023-06-10]; Triglyceride: 2.2 mmol/L ↑ (tham chiếu: < 1.7) [2023-06-10]; Glucose huyết tương lúc đói: 6.3 mmol/L ↑ (tham chiếu: 3.9 - 6.1) [2023-10-10]; HbA1c: 6.2 % ↑ (tham chiếu: 4.0 - 5.6) [2023-10-10]; Cholesterol toàn phần: 5.4 mmol/L ↑ (tham chiếu: < 5.2) [2023-10-10]; LDL-Cholesterol: 3.2 mmol/L ↑ (tham chiếu: < 2.6) [2023-10-10]; Glucose huyết tương lúc đói: 7.2 mmol/L ↑ (tham chiếu: 3.9 - 6.1) [2024-02-10]; HbA1c: 6.9 % ↑ (tham chiếu: 4.0 - 5.6) [2024-02-10]; LDL-Cholesterol: 2.9 mmol/L ↑ (tham chiếu: < 2.6) [2024-02-10]; ALT: 48 U/L ↑ (tham chiếu: 7 - 40) [2024-02-10]; Glucose huyết tương lúc đói: 8.5 mmol/L ↑ (tham chiếu: 3.9 - 6.1) [2024-06-10]; HbA1c: 7.8 % ↑ (tham chiếu: 4.0 - 5.6) [2024-06-10]; LDL-Cholesterol: 2.8 mmol/L ↑ (tham chiếu: < 2.6) [2024-06-10]; HbA1c: 7.2 % ↑ (tham chiếu: 4.0 - 5.6) [2024-10-10]",
+          "status": "SUPPORTED",
+          "citations": [
+            "P003-E001-LAB-TC",
+            "P003-E001-LAB-LDL",
+            "P003-E001-LAB-TG",
+            "P003-E002-LAB-FPG",
+            "P003-E002-LAB-TC"
+          ],
+          "confidence_score": null,
+          "is_critical": true,
+          "verification_status": "PENDING"
+        }
+      ]
+    },
+    {
+      "section_id": "diagnoses",
+      "title": null,
+      "content": "Bệnh chính: Tăng huyết áp nguyên phát (I10). Bệnh kèm: Đái tháo đường type 2 (E11.9), Rối loạn chuyển hóa lipid hỗn hợp (E78.5).",
+      "cited_claims": [
+        {
+          "claim_text": "Bệnh chính: Tăng huyết áp nguyên phát (I10).",
+          "status": "SUPPORTED",
+          "citations": [
+            "P003-E001-DX-I10",
+            "P003-E002-DX-I10",
+            "P003-E003-DX-I10",
+            "P003-E004-DX-I10",
+            "P003-E005-DX-I10"
+          ],
+          "confidence_score": null,
+          "is_critical": true,
+          "verification_status": "PENDING"
+        },
+        {
+          "claim_text": "Bệnh kèm: Đái tháo đường type 2 (E11.9), Rối loạn chuyển hóa lipid hỗn hợp (E78.5).",
+          "status": "SUPPORTED",
+          "citations": [
+            "P003-E001-DX-E78.5",
+            "P003-E002-DX-E78.5",
+            "P003-E003-DX-E11.9",
+            "P003-E003-DX-E78.5",
+            "P003-E004-DX-E11.9"
+          ],
+          "confidence_score": null,
+          "is_critical": true,
+          "verification_status": "PENDING"
+        }
+      ]
+    },
+    {
+      "section_id": "treatment_timeline",
+      "title": null,
+      "content": "[CẦN XÁC NHẬN] [2023-06-10] — Huyết áp 158/98 mmHg, LDL 4.1 mmol/L, thêm Spironolactone 25mg để điều trị tăng huyết áp kháng trị. [CẦN XÁC NHẬN] [2023-10-10] — Huyết áp 152/94 mmHg, LDL 3.2 mmol/L, HbA1c 6.2%, glucose đói 6.3 mmol/L, nằm ở vùng tiền đái tháo đường.",
+      "cited_claims": [
+        {
+          "claim_text": "[2023-06-10] — Huyết áp 158/98 mmHg, LDL 4.1 mmol/L, thêm Spironolactone 25mg để điều trị tăng huyết áp kháng trị.",
+          "status": "PARTIALLY_SUPPORTED",
+          "citations": [
+            "P003-E001-VIT-VIT001",
+            "P003-E001-NOTE-NOTE001",
+            "P003-E001-NOTE-NOTE002"
+          ],
+          "confidence_score": null,
+          "is_critical": true,
+          "verification_status": "PENDING"
+        },
+        {
+          "claim_text": "[2023-10-10] — Huyết áp 152/94 mmHg, LDL 3.2 mmol/L, HbA1c 6.2%, glucose đói 6.3 mmol/L, nằm ở vùng tiền đái tháo đường.",
+          "status": "PARTIALLY_SUPPORTED",
+          "citations": [
+            "P003-E001-NOTE-NOTE001",
+            "P003-E001-NOTE-NOTE002",
+            "P003-E001-NOTE-NOTE003"
+          ],
+          "confidence_score": null,
+          "is_critical": true,
+          "verification_status": "PENDING"
+        }
+      ]
+    },
+    {
+      "section_id": "clinical_alerts",
+      "title": null,
+      "content": "[CẦN XÁC NHẬN] Huyết áp vẫn cao dù đã dùng 3 loại thuốc, cần theo dõi và điều chỉnh điều trị. [CẦN XÁC NHẬN] LDL-Cholesterol vẫn cao, cần tiếp tục điều chỉnh liều statin. [CẦN XÁC NHẬN] Tiền đái tháo đường cần theo dõi và tư vấn lối sống. [CẦN XÁC NHẬN] Dị ứng Sulfonamide chưa xác nhận lại với bệnh nhân, cần làm rõ. Phì đại thất trái cần đánh giá thêm bằng siêu âm tim.",
+      "cited_claims": [
+        {
+          "claim_text": "Huyết áp vẫn cao dù đã dùng 3 loại thuốc, cần theo dõi và điều chỉnh điều trị.",
+          "status": "PARTIALLY_SUPPORTED",
+          "citations": [
+            "P003-E001-NOTE-NOTE001",
+            "P003-E001-NOTE-NOTE002",
+            "P003-E001-NOTE-NOTE003"
+          ],
+          "confidence_score": null,
+          "is_critical": false,
+          "verification_status": "PENDING"
+        },
+        {
+          "claim_text": "LDL-Cholesterol vẫn cao, cần tiếp tục điều chỉnh liều statin.",
+          "status": "PARTIALLY_SUPPORTED",
+          "citations": [
+            "P003-E001-LAB-LDL",
+            "P003-E001-LAB-FPG",
+            "P003-E002-NOTE-NOTE001"
+          ],
+          "confidence_score": null,
+          "is_critical": false,
+          "verification_status": "PENDING"
+        },
+        {
+          "claim_text": "Tiền đái tháo đường cần theo dõi và tư vấn lối sống.",
+          "status": "PARTIALLY_SUPPORTED",
+          "citations": [
+            "P003-E001-NOTE-NOTE002",
+            "P003-E001-DX-I51.7",
+            "P003-E001-LAB-FPG"
+          ],
+          "confidence_score": null,
+          "is_critical": false,
+          "verification_status": "PENDING"
+        },
+        {
+          "claim_text": "Dị ứng Sulfonamide chưa xác nhận lại với bệnh nhân, cần làm rõ.",
+          "status": "PARTIALLY_SUPPORTED",
+          "citations": [
+            "P003-PATIENT-ALLERGY-SULFONAMIDE_(CO",
+            "P003-E001-NOTE-NOTE001",
+            "P003-E001-NOTE-NOTE002"
+          ],
+          "confidence_score": null,
+          "is_critical": true,
+          "verification_status": "PENDING"
+        },
+        {
+          "claim_text": "Phì đại thất trái cần đánh giá thêm bằng siêu âm tim.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P003-E004-DX-I51.7"
+          ],
+          "confidence_score": null,
+          "is_critical": false,
+          "verification_status": "PENDING"
+        }
+      ]
+    }
+  ],
+  "metrics": {
+    "citation_coverage": 0.565,
+    "unsupported_claim_rate": 0.0,
+    "hallucination_rate": 0.0,
+    "missing_section_rate": 0.0,
+    "total_claims": 23,
+    "latency_seconds": 19.83,
+    "token_count": 16019
+  },
+  "_from_cache": false
+}

@@ -70,3 +70,8 @@ drafts/
 eval/cases/
 
 reports/
+
+# Frontend (Next.js) — generated files not tracked
+frontend/node_modules/
+frontend/.next/
+frontend/.env.local

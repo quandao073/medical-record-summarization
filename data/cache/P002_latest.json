@@ -1,0 +1,306 @@
+{
+  "patient_id": "P002",
+  "created_at": "2026-06-04T10:43:54.579589",
+  "prompt_version": "poc_v2",
+  "model_version": "gpt-4o",
+  "sections": [
+    {
+      "section_id": "overview",
+      "title": null,
+      "content": "Bệnh nhân nữ 50 tuổi, đái tháo đường type 2 không biến chứng, tăng huyết áp nguyên phát.",
+      "cited_claims": [
+        {
+          "claim_text": "Bệnh nhân nữ 50 tuổi, đái tháo đường type 2 không biến chứng, tăng huyết áp nguyên phát.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P002-E001-DX-E11.9",
+            "P002-E001-DX-I10",
+            "P002-E002-DX-E11.9",
+            "P002-E002-DX-I10",
+            "P002-E003-DX-E11.9"
+          ],
+          "confidence_score": null,
+          "is_critical": false,
+          "verification_status": "PENDING"
+        }
+      ]
+    },
+    {
+      "section_id": "reason_for_visit",
+      "title": null,
+      "content": "[CẦN XÁC NHẬN] Tái khám sau 6 tháng điều trị ổn định. [CẦN XÁC NHẬN] Bệnh nhân không có triệu chứng mới, sức khỏe ổn định.",
+      "cited_claims": [
+        {
+          "claim_text": "Tái khám sau 6 tháng điều trị ổn định.",
+          "status": "PARTIALLY_SUPPORTED",
+          "citations": [
+            "P002-E001-NOTE-NOTE001",
+            "P002-E001-DX-I10",
+            "P002-E002-NOTE-NOTE001"
+          ],
+          "confidence_score": null,
+          "is_critical": false,
+          "verification_status": "PENDING"
+        },
+        {
+          "claim_text": "Bệnh nhân không có triệu chứng mới, sức khỏe ổn định.",
+          "status": "PARTIALLY_SUPPORTED",
+          "citations": [
+            "P002-E001-NOTE-NOTE001",
+            "P002-E001-DX-E11.9",
+            "P002-E001-DX-I10"
+          ],
+          "confidence_score": null,
+          "is_critical": false,
+          "verification_status": "PENDING"
+        }
+      ]
+    },
+    {
+      "section_id": "medical_history",
+      "title": null,
+      "content": "[CẦN XÁC NHẬN] Bệnh nhân có tiền sử đái tháo đường type 2 phát hiện năm 2020 và tăng huyết áp phát hiện năm 2018. [CẦN XÁC NHẬN] Không có tiền sử nhồi máu cơ tim, đột quỵ, phẫu thuật.",
+      "cited_claims": [
+        {
+          "claim_text": "Bệnh nhân có tiền sử đái tháo đường type 2 phát hiện năm 2020 và tăng huyết áp phát hiện năm 2018.",
+          "status": "PARTIALLY_SUPPORTED",
+          "citations": [
+            "P002-E001-NOTE-NOTE001",
+            "P002-E001-NOTE-NOTE002",
+            "P002-E001-NOTE-NOTE003"
+          ],
+          "confidence_score": null,
+          "is_critical": false,
+          "verification_status": "PENDING"
+        },
+        {
+          "claim_text": "Không có tiền sử nhồi máu cơ tim, đột quỵ, phẫu thuật.",
+          "status": "PARTIALLY_SUPPORTED",
+          "citations": [
+            "P002-E001-NOTE-NOTE001",
+            "P002-E001-NOTE-NOTE002"
+          ],
+          "confidence_score": null,
+          "is_critical": false,
+          "verification_status": "PENDING"
+        }
+      ]
+    },
+    {
+      "section_id": "current_medications",
+      "title": null,
+      "content": "Metformin 500 mg — 1 viên, 2 lần/ngày. Losartan 50 mg — 1 viên, 1 lần/ngày. Amlodipine 5 mg — 1 viên, 1 lần/ngày.",
+      "cited_claims": [
+        {
+          "claim_text": "Metformin 500 mg — 1 viên, 2 lần/ngày.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P002-E001-MED-METFORMIN",
+            "P002-E002-MED-METFORMIN",
+            "P002-E003-MED-METFORMIN"
+          ],
+          "confidence_score": null,
+          "is_critical": true,
+          "verification_status": "PENDING"
+        },
+        {
+          "claim_text": "Losartan 50 mg — 1 viên, 1 lần/ngày.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P002-E001-MED-LOSARTAN",
+            "P002-E002-MED-LOSARTAN",
+            "P002-E003-MED-LOSARTAN"
+          ],
+          "confidence_score": null,
+          "is_critical": true,
+          "verification_status": "PENDING"
+        },
+        {
+          "claim_text": "Amlodipine 5 mg — 1 viên, 1 lần/ngày.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P002-E001-MED-AMLODIPINE",
+            "P002-E002-MED-AMLODIPINE",
+            "P002-E003-MED-AMLODIPINE"
+          ],
+          "confidence_score": null,
+          "is_critical": true,
+          "verification_status": "PENDING"
+        }
+      ]
+    },
+    {
+      "section_id": "allergies",
+      "title": null,
+      "content": "Chưa thấy ghi nhận dị ứng trong dữ liệu được cung cấp.",
+      "cited_claims": [
+        {
+          "claim_text": "Chưa thấy ghi nhận dị ứng trong dữ liệu được cung cấp.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P002-E001-NOTE-NOTE002"
+          ],
+          "confidence_score": null,
+          "is_critical": true,
+          "verification_status": "PENDING"
+        }
+      ]
+    },
+    {
+      "section_id": "abnormal_labs",
+      "title": null,
+      "content": "HbA1c: 6.5 % ↑ (tham chiếu: 4.0 - 5.6) [2024-01-15]; HbA1c: 6.7 % ↑ (tham chiếu: 4.0 - 5.6) [2024-04-15]; HbA1c: 6.8 % ↑ (tham chiếu: 4.0 - 5.6) [2024-07-15]; Glucose huyết tương lúc đói: 6.2 mmol/L ↑ (tham chiếu: 3.9 - 6.1) [2024-07-15]",
+      "cited_claims": [
+        {
+          "claim_text": "HbA1c: 6.5 % ↑ (tham chiếu: 4.0 - 5.6) [2024-01-15]; HbA1c: 6.7 % ↑ (tham chiếu: 4.0 - 5.6) [2024-04-15]; HbA1c: 6.8 % ↑ (tham chiếu: 4.0 - 5.6) [2024-07-15]; Glucose huyết tương lúc đói: 6.2 mmol/L ↑ (tham chiếu: 3.9 - 6.1) [2024-07-15]",
+          "status": "SUPPORTED",
+          "citations": [
+            "P002-E003-LAB-FPG"
+          ],
+          "confidence_score": null,
+          "is_critical": true,
+          "verification_status": "PENDING"
+        }
+      ]
+    },
+    {
+      "section_id": "diagnoses",
+      "title": null,
+      "content": "Bệnh chính: Đái tháo đường type 2 không biến chứng (E11.9). Bệnh kèm: Tăng huyết áp nguyên phát (I10).",
+      "cited_claims": [
+        {
+          "claim_text": "Bệnh chính: Đái tháo đường type 2 không biến chứng (E11.9).",
+          "status": "SUPPORTED",
+          "citations": [
+            "P002-E001-DX-E11.9",
+            "P002-E002-DX-E11.9",
+            "P002-E003-DX-E11.9"
+          ],
+          "confidence_score": null,
+          "is_critical": true,
+          "verification_status": "PENDING"
+        },
+        {
+          "claim_text": "Bệnh kèm: Tăng huyết áp nguyên phát (I10).",
+          "status": "SUPPORTED",
+          "citations": [
+            "P002-E001-DX-I10",
+            "P002-E002-DX-I10",
+            "P002-E003-DX-I10"
+          ],
+          "confidence_score": null,
+          "is_critical": true,
+          "verification_status": "PENDING"
+        }
+      ]
+    },
+    {
+      "section_id": "treatment_timeline",
+      "title": null,
+      "content": "[CẦN XÁC NHẬN] [2024-01-15] — HbA1c 6.5%, huyết áp 135/85 mmHg, LDL 2.4 mmol/L, không có biến chứng mới. [CẦN XÁC NHẬN] Tiếp tục phác đồ hiện tại. [CẦN XÁC NHẬN] [2024-04-15] — HbA1c 6.7%, huyết áp 132/82 mmHg, không có biến chứng mới. [CẦN XÁC NHẬN] Tiếp tục phác đồ hiện tại.",
+      "cited_claims": [
+        {
+          "claim_text": "[2024-01-15] — HbA1c 6.5%, huyết áp 135/85 mmHg, LDL 2.4 mmol/L, không có biến chứng mới.",
+          "status": "PARTIALLY_SUPPORTED",
+          "citations": [
+            "P002-E001-VIT-VIT001",
+            "P002-E001-NOTE-NOTE001",
+            "P002-E001-NOTE-NOTE002"
+          ],
+          "confidence_score": null,
+          "is_critical": true,
+          "verification_status": "PENDING"
+        },
+        {
+          "claim_text": "Tiếp tục phác đồ hiện tại.",
+          "status": "PARTIALLY_SUPPORTED",
+          "citations": [
+            "P002-E002-NOTE-NOTE001",
+            "P002-E003-NOTE-NOTE001",
+            "P002-E003-MED-METFORMIN"
+          ],
+          "confidence_score": null,
+          "is_critical": false,
+          "verification_status": "PENDING"
+        },
+        {
+          "claim_text": "[2024-04-15] — HbA1c 6.7%, huyết áp 132/82 mmHg, không có biến chứng mới.",
+          "status": "PARTIALLY_SUPPORTED",
+          "citations": [
+            "P002-E001-NOTE-NOTE001",
+            "P002-E001-NOTE-NOTE002",
+            "P002-E001-NOTE-NOTE003"
+          ],
+          "confidence_score": null,
+          "is_critical": true,
+          "verification_status": "PENDING"
+        },
+        {
+          "claim_text": "Tiếp tục phác đồ hiện tại.",
+          "status": "PARTIALLY_SUPPORTED",
+          "citations": [
+            "P002-E002-NOTE-NOTE001",
+            "P002-E003-NOTE-NOTE001",
+            "P002-E003-MED-METFORMIN"
+          ],
+          "confidence_score": null,
+          "is_critical": false,
+          "verification_status": "PENDING"
+        }
+      ]
+    },
+    {
+      "section_id": "clinical_alerts",
+      "title": null,
+      "content": "[CẦN XÁC NHẬN] Bệnh nhân có chỉ số HbA1c cao hơn mức tham chiếu, mặc dù được kiểm soát ổn định nhưng vẫn cần theo dõi sát sao để đảm bảo không vượt quá mục tiêu (<7%). [CẦN XÁC NHẬN] Bệnh nhân có BMI ở mức thừa cân nhẹ, cần theo dõi và có thể cần điều chỉnh chế độ ăn uống và vận động để giảm nguy cơ liên quan đến thừa cân. Tăng huyết áp nguyên phát được ghi nhận nhưng đang ổn định, cần tiếp tục theo dõi để đảm bảo huyết áp duy trì gần mục tiêu.",
+      "cited_claims": [
+        {
+          "claim_text": "Bệnh nhân có chỉ số HbA1c cao hơn mức tham chiếu, mặc dù được kiểm soát ổn định nhưng vẫn cần theo dõi sát sao để đảm bảo không vượt quá mục tiêu (<7%).",
+          "status": "PARTIALLY_SUPPORTED",
+          "citations": [
+            "P002-E001-NOTE-NOTE001",
+            "P002-E001-NOTE-NOTE003",
+            "P002-E001-DX-E11.9"
+          ],
+          "confidence_score": null,
+          "is_critical": false,
+          "verification_status": "PENDING"
+        },
+        {
+          "claim_text": "Bệnh nhân có BMI ở mức thừa cân nhẹ, cần theo dõi và có thể cần điều chỉnh chế độ ăn uống và vận động để giảm nguy cơ liên quan đến thừa cân.",
+          "status": "PARTIALLY_SUPPORTED",
+          "citations": [
+            "P002-E001-NOTE-NOTE001",
+            "P002-E001-NOTE-NOTE003",
+            "P002-E001-MED-METFORMIN"
+          ],
+          "confidence_score": null,
+          "is_critical": false,
+          "verification_status": "PENDING"
+        },
+        {
+          "claim_text": "Tăng huyết áp nguyên phát được ghi nhận nhưng đang ổn định, cần tiếp tục theo dõi để đảm bảo huyết áp duy trì gần mục tiêu.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P002-E001-DX-I10",
+            "P002-E002-DX-I10",
+            "P002-E003-DX-I10"
+          ],
+          "confidence_score": null,
+          "is_critical": false,
+          "verification_status": "PENDING"
+        }
+      ]
+    }
+  ],
+  "metrics": {
+    "citation_coverage": 0.474,
+    "unsupported_claim_rate": 0.0,
+    "hallucination_rate": 0.0,
+    "missing_section_rate": 0.0,
+    "total_claims": 19,
+    "latency_seconds": 15.4,
+    "token_count": 11205
+  },
+  "_from_cache": false
+}

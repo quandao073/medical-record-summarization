@@ -121,8 +121,9 @@ def _chunk_labs(enc: dict, pid: str) -> list[SourceChunk]:
                 "test_name": name,
                 "value": value,
                 "unit": unit,
-                "abnormal": lab.get("is_abnormal", False),
-                "critical": lab.get("is_critical", False),
+                "reference_range": ref,
+                "is_abnormal": lab.get("is_abnormal", False),
+                "is_critical": lab.get("is_critical", False),
                 "interpretation": lab.get("interpretation"),
             },
         ))

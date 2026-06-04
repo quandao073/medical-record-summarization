@@ -1,0 +1,387 @@
+{
+  "patient_id": "P004",
+  "created_at": "2026-06-04T10:49:18.962005",
+  "prompt_version": "poc_v2",
+  "model_version": "gpt-4o",
+  "sections": [
+    {
+      "section_id": "overview",
+      "title": null,
+      "content": "Bệnh nhân nữ 68 tuổi, đái tháo đường type 2, tăng huyết áp nguyên phát.",
+      "cited_claims": [
+        {
+          "claim_text": "Bệnh nhân nữ 68 tuổi, đái tháo đường type 2, tăng huyết áp nguyên phát.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P004-E001-DX-E11",
+            "P004-E001-DX-I10",
+            "P004-E002-DX-E11",
+            "P004-E002-DX-I10",
+            "P004-E003-DX-I10"
+          ],
+          "confidence_score": null,
+          "is_critical": false,
+          "verification_status": "PENDING"
+        }
+      ]
+    },
+    {
+      "section_id": "reason_for_visit",
+      "title": null,
+      "content": "[CẦN XÁC NHẬN] Bệnh nhân tái khám do hạ đường huyết rõ rệt với triệu chứng vã mồ hôi, run tay, choáng váng lúc 6h sáng. [CẦN XÁC NHẬN] Xét nghiệm glucose đói tại phòng khám cho thấy hạ đường huyết nặng (2.5 mmol/L).",
+      "cited_claims": [
+        {
+          "claim_text": "Bệnh nhân tái khám do hạ đường huyết rõ rệt với triệu chứng vã mồ hôi, run tay, choáng váng lúc 6h sáng.",
+          "status": "PARTIALLY_SUPPORTED",
+          "citations": [
+            "P004-PATIENT-ALLERGY-THUỐC_(KHÔNG_RÕ",
+            "P004-E001-NOTE-NOTE001",
+            "P004-E001-NOTE-NOTE002"
+          ],
+          "confidence_score": null,
+          "is_critical": false,
+          "verification_status": "PENDING"
+        },
+        {
+          "claim_text": "Xét nghiệm glucose đói tại phòng khám cho thấy hạ đường huyết nặng (2.5 mmol/L).",
+          "status": "PARTIALLY_SUPPORTED",
+          "citations": [
+            "P004-E001-NOTE-NOTE001",
+            "P004-E001-NOTE-NOTE002",
+            "P004-E001-DX-E11"
+          ],
+          "confidence_score": null,
+          "is_critical": true,
+          "verification_status": "PENDING"
+        }
+      ]
+    },
+    {
+      "section_id": "medical_history",
+      "title": null,
+      "content": "Bệnh nhân nữ 68 tuổi có tiền sử đái tháo đường type 2 phát hiện năm 2019 và tăng huyết áp phát hiện năm 2016. [CẦN XÁC NHẬN] Không có tiền sử nhồi máu cơ tim, đột quỵ hay phẫu thuật. [CẦN XÁC NHẬN] Tiền sử gia đình: mẹ bị đái tháo đường.",
+      "cited_claims": [
+        {
+          "claim_text": "Bệnh nhân nữ 68 tuổi có tiền sử đái tháo đường type 2 phát hiện năm 2019 và tăng huyết áp phát hiện năm 2016.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P004-E001-DX-E11",
+            "P004-E002-DX-E11"
+          ],
+          "confidence_score": null,
+          "is_critical": false,
+          "verification_status": "PENDING"
+        },
+        {
+          "claim_text": "Không có tiền sử nhồi máu cơ tim, đột quỵ hay phẫu thuật.",
+          "status": "PARTIALLY_SUPPORTED",
+          "citations": [
+            "P004-E001-NOTE-NOTE001",
+            "P004-E001-NOTE-NOTE002",
+            "P004-E002-NOTE-NOTE001"
+          ],
+          "confidence_score": null,
+          "is_critical": false,
+          "verification_status": "PENDING"
+        },
+        {
+          "claim_text": "Tiền sử gia đình: mẹ bị đái tháo đường.",
+          "status": "PARTIALLY_SUPPORTED",
+          "citations": [
+            "P004-E001-NOTE-NOTE001",
+            "P004-E001-NOTE-NOTE002",
+            "P004-E001-DX-E11"
+          ],
+          "confidence_score": null,
+          "is_critical": false,
+          "verification_status": "PENDING"
+        }
+      ]
+    },
+    {
+      "section_id": "current_medications",
+      "title": null,
+      "content": "Metformin 500 mg — 1 viên, 1 lần/ngày (tối). Amlodipine 5 mg — 1 viên, 1 lần/ngày. Losartan 50 mg — 1 viên, 1 lần/ngày.",
+      "cited_claims": [
+        {
+          "claim_text": "Metformin 500 mg — 1 viên, 1 lần/ngày (tối).",
+          "status": "SUPPORTED",
+          "citations": [
+            "P004-E001-MED-METFORMIN",
+            "P004-E002-MED-METFORMIN",
+            "P004-E003-MED-METFORMIN"
+          ],
+          "confidence_score": null,
+          "is_critical": true,
+          "verification_status": "PENDING"
+        },
+        {
+          "claim_text": "Amlodipine 5 mg — 1 viên, 1 lần/ngày.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P004-E001-MED-AMLODIPINE",
+            "P004-E002-MED-AMLODIPINE",
+            "P004-E003-MED-AMLODIPINE"
+          ],
+          "confidence_score": null,
+          "is_critical": true,
+          "verification_status": "PENDING"
+        },
+        {
+          "claim_text": "Losartan 50 mg — 1 viên, 1 lần/ngày.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P004-E001-MED-LOSARTAN",
+            "P004-E002-MED-LOSARTAN",
+            "P004-E003-MED-LOSARTAN"
+          ],
+          "confidence_score": null,
+          "is_critical": true,
+          "verification_status": "PENDING"
+        }
+      ]
+    },
+    {
+      "section_id": "allergies",
+      "title": null,
+      "content": "Dị ứng: Thuốc (không rõ loại) [CẦN XÁC NHẬN].",
+      "cited_claims": [
+        {
+          "claim_text": "Dị ứng: Thuốc (không rõ loại) [CẦN XÁC NHẬN].",
+          "status": "SUPPORTED",
+          "citations": [
+            "P004-PATIENT-ALLERGY-THUỐC_(KHÔNG_RÕ"
+          ],
+          "confidence_score": null,
+          "is_critical": true,
+          "verification_status": "PENDING"
+        }
+      ]
+    },
+    {
+      "section_id": "abnormal_labs",
+      "title": null,
+      "content": "HbA1c: 7.8 % ↑ (tham chiếu: 4.0 - 5.6) [2024-03-05]; Glucose huyết tương lúc đói: 8.2 mmol/L ↑ (tham chiếu: 3.9 - 6.1) [2024-03-05]; LDL-Cholesterol: 3.0 mmol/L ↑ (tham chiếu: < 2.6) [2024-03-05]; Glucose huyết tương lúc đói: 2.5 mmol/L ↓ (tham chiếu: 3.9 - 6.1) [2024-09-05]; HbA1c: 7.5 % ↑ (tham chiếu: 4.0 - 5.6) [2024-09-05]",
+      "cited_claims": [
+        {
+          "claim_text": "HbA1c: 7.8 % ↑ (tham chiếu: 4.0 - 5.6) [2024-03-05]; Glucose huyết tương lúc đói: 8.2 mmol/L ↑ (tham chiếu: 3.9 - 6.1) [2024-03-05]; LDL-Cholesterol: 3.0 mmol/L ↑ (tham chiếu: < 2.6) [2024-03-05]; Glucose huyết tương lúc đói: 2.5 mmol/L ↓ (tham chiếu: 3.9 - 6.1) [2024-09-05]; HbA1c: 7.5 % ↑ (tham chiếu: 4.0 - 5.6) [2024-09-05]",
+          "status": "SUPPORTED",
+          "citations": [
+            "P004-E001-LAB-FPG",
+            "P004-E001-LAB-LDL",
+            "P004-E003-LAB-FPG"
+          ],
+          "confidence_score": null,
+          "is_critical": true,
+          "verification_status": "PENDING"
+        }
+      ]
+    },
+    {
+      "section_id": "diagnoses",
+      "title": null,
+      "content": "Bệnh chính: Đái tháo đường type 2 không biến chứng (E11.9). Bệnh kèm: Tăng huyết áp nguyên phát (I10).",
+      "cited_claims": [
+        {
+          "claim_text": "Bệnh chính: Đái tháo đường type 2 không biến chứng (E11.9).",
+          "status": "SUPPORTED",
+          "citations": [
+            "P004-E001-DX-E11",
+            "P004-E002-DX-E11",
+            "P004-E003-DX-E11.9"
+          ],
+          "confidence_score": null,
+          "is_critical": true,
+          "verification_status": "PENDING"
+        },
+        {
+          "claim_text": "Bệnh kèm: Tăng huyết áp nguyên phát (I10).",
+          "status": "SUPPORTED",
+          "citations": [
+            "P004-E001-DX-I10",
+            "P004-E002-DX-I10",
+            "P004-E003-DX-I10"
+          ],
+          "confidence_score": null,
+          "is_critical": true,
+          "verification_status": "PENDING"
+        }
+      ]
+    },
+    {
+      "section_id": "treatment_timeline",
+      "title": null,
+      "content": "[CẦN XÁC NHẬN] [2024-03-05] — HbA1c 7.8%, Glucose đói 8.2 mmol/L, LDL 3.0 mmol/L, huyết áp 142/90 mmHg. [CẦN XÁC NHẬN] Bệnh nhân tuân thủ kém, không kiểm soát chế độ ăn. [CẦN XÁC NHẬN] Đang dùng Metformin, Amlodipine, Losartan. [CẦN XÁC NHẬN] [2024-06-05] — Huyết áp 138/88 mmHg. [CẦN XÁC NHẬN] Bệnh nhân phàn nàn hay quên uống thuốc. [CẦN XÁC NHẬN] Kê thêm Gliclazide MR. [CẦN XÁC NHẬN] Không có xét nghiệm do không chuẩn bị đói trước.",
+      "cited_claims": [
+        {
+          "claim_text": "[2024-03-05] — HbA1c 7.8%, Glucose đói 8.2 mmol/L, LDL 3.0 mmol/L, huyết áp 142/90 mmHg.",
+          "status": "PARTIALLY_SUPPORTED",
+          "citations": [
+            "P004-E001-VIT-VIT001",
+            "P004-E001-NOTE-NOTE001",
+            "P004-E001-NOTE-NOTE002"
+          ],
+          "confidence_score": null,
+          "is_critical": true,
+          "verification_status": "PENDING"
+        },
+        {
+          "claim_text": "Bệnh nhân tuân thủ kém, không kiểm soát chế độ ăn.",
+          "status": "PARTIALLY_SUPPORTED",
+          "citations": [
+            "P004-PATIENT-ALLERGY-THUỐC_(KHÔNG_RÕ",
+            "P004-E001-NOTE-NOTE001",
+            "P004-E001-DX-E11"
+          ],
+          "confidence_score": null,
+          "is_critical": false,
+          "verification_status": "PENDING"
+        },
+        {
+          "claim_text": "Đang dùng Metformin, Amlodipine, Losartan.",
+          "status": "PARTIALLY_SUPPORTED",
+          "citations": [
+            "P004-E003-NOTE-NOTE001"
+          ],
+          "confidence_score": null,
+          "is_critical": false,
+          "verification_status": "PENDING"
+        },
+        {
+          "claim_text": "[2024-06-05] — Huyết áp 138/88 mmHg.",
+          "status": "PARTIALLY_SUPPORTED",
+          "citations": [
+            "P004-E001-VIT-VIT001",
+            "P004-E001-NOTE-NOTE001",
+            "P004-E001-NOTE-NOTE002"
+          ],
+          "confidence_score": null,
+          "is_critical": true,
+          "verification_status": "PENDING"
+        },
+        {
+          "claim_text": "Bệnh nhân phàn nàn hay quên uống thuốc.",
+          "status": "PARTIALLY_SUPPORTED",
+          "citations": [
+            "P004-PATIENT-ALLERGY-THUỐC_(KHÔNG_RÕ",
+            "P004-E001-NOTE-NOTE001",
+            "P004-E001-MED-METFORMIN"
+          ],
+          "confidence_score": null,
+          "is_critical": false,
+          "verification_status": "PENDING"
+        },
+        {
+          "claim_text": "Kê thêm Gliclazide MR.",
+          "status": "PARTIALLY_SUPPORTED",
+          "citations": [
+            "P004-E002-NOTE-NOTE001",
+            "P004-E002-MED-GLICLAZIDE_MR",
+            "P004-E003-NOTE-NOTE001"
+          ],
+          "confidence_score": null,
+          "is_critical": false,
+          "verification_status": "PENDING"
+        },
+        {
+          "claim_text": "Không có xét nghiệm do không chuẩn bị đói trước.",
+          "status": "PARTIALLY_SUPPORTED",
+          "citations": [
+            "P004-E001-NOTE-NOTE001",
+            "P004-E001-LAB-ALT",
+            "P004-E002-NOTE-NOTE001"
+          ],
+          "confidence_score": null,
+          "is_critical": false,
+          "verification_status": "PENDING"
+        }
+      ]
+    },
+    {
+      "section_id": "clinical_alerts",
+      "title": null,
+      "content": "[CẦN XÁC NHẬN] Bệnh nhân có tiền sử dị ứng thuốc nhưng chưa xác định được loại thuốc và phản ứng cụ thể. [CẦN XÁC NHẬN] Cần xác nhận lại với bệnh nhân. Đái tháo đường type 2 chưa kiểm soát tốt, HbA1c cao 7.8% và glucose đói 8.2 mmol/L. Tăng huyết áp nguyên phát chưa đạt mục tiêu, huyết áp thường xuyên cao hơn mức bình thường. LDL-Cholesterol cao 3.0 mmol/L, cần theo dõi và điều chỉnh. [CẦN XÁC NHẬN] Hạ đường huyết nghiêm trọng do Gliclazide, đã ngưng thuốc và giảm liều Metformin.",
+      "cited_claims": [
+        {
+          "claim_text": "Bệnh nhân có tiền sử dị ứng thuốc nhưng chưa xác định được loại thuốc và phản ứng cụ thể.",
+          "status": "PARTIALLY_SUPPORTED",
+          "citations": [
+            "P004-PATIENT-ALLERGY-THUỐC_(KHÔNG_RÕ",
+            "P004-E001-NOTE-NOTE001",
+            "P004-E001-NOTE-NOTE002"
+          ],
+          "confidence_score": null,
+          "is_critical": true,
+          "verification_status": "PENDING"
+        },
+        {
+          "claim_text": "Cần xác nhận lại với bệnh nhân.",
+          "status": "PARTIALLY_SUPPORTED",
+          "citations": [
+            "P004-PATIENT-ALLERGY-THUỐC_(KHÔNG_RÕ",
+            "P004-E001-NOTE-NOTE002",
+            "P004-E001-LAB-ALT"
+          ],
+          "confidence_score": null,
+          "is_critical": false,
+          "verification_status": "PENDING"
+        },
+        {
+          "claim_text": "Đái tháo đường type 2 chưa kiểm soát tốt, HbA1c cao 7.8% và glucose đói 8.2 mmol/L.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P004-E001-DX-E11",
+            "P004-E002-DX-E11"
+          ],
+          "confidence_score": null,
+          "is_critical": true,
+          "verification_status": "PENDING"
+        },
+        {
+          "claim_text": "Tăng huyết áp nguyên phát chưa đạt mục tiêu, huyết áp thường xuyên cao hơn mức bình thường.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P004-E001-DX-I10",
+            "P004-E002-DX-I10",
+            "P004-E003-DX-I10"
+          ],
+          "confidence_score": null,
+          "is_critical": false,
+          "verification_status": "PENDING"
+        },
+        {
+          "claim_text": "LDL-Cholesterol cao 3.0 mmol/L, cần theo dõi và điều chỉnh.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P004-E001-LAB-LDL"
+          ],
+          "confidence_score": null,
+          "is_critical": true,
+          "verification_status": "PENDING"
+        },
+        {
+          "claim_text": "Hạ đường huyết nghiêm trọng do Gliclazide, đã ngưng thuốc và giảm liều Metformin.",
+          "status": "PARTIALLY_SUPPORTED",
+          "citations": [
+            "P004-E001-NOTE-NOTE001",
+            "P004-E001-NOTE-NOTE002",
+            "P004-E001-PROC-PROC001"
+          ],
+          "confidence_score": null,
+          "is_critical": false,
+          "verification_status": "PENDING"
+        }
+      ]
+    }
+  ],
+  "metrics": {
+    "citation_coverage": 0.462,
+    "unsupported_claim_rate": 0.0,
+    "hallucination_rate": 0.0,
+    "missing_section_rate": 0.0,
+    "total_claims": 26,
+    "latency_seconds": 17.07,
+    "token_count": 11764
+  },
+  "_from_cache": false
+}
