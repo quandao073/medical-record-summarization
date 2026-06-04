@@ -58,9 +58,41 @@ class CitedClaim(BaseModel):
     confidence_score: Optional[float] = None
     is_critical: bool = False
     verification_status: VerificationStatus = "PENDING"
+    is_structural: bool = False
+
+
+def is_structural_content(text: str) -> bool:
+    """Return True if the text is a structural header or empty placeholder, not a clinical claim."""
+    cleaned = text.strip().lower()
+    if cleaned.endswith(":"):
+        return True
+
+    # Common headers and placeholders in Vietnamese clinical summaries
+    structural_keywords = {
+        "cảnh báo hiện tại",
+        "đã cải thiện",
+        "cần xác minh",
+        "không ghi nhận",
+        "không có",
+        "chưa ghi nhận",
+        "tiền sử bản thân",
+        "tiền sử gia đình",
+        "thói quen nguy cơ",
+        "ghi chú lâm sàng khác",
+        "chưa thấy ghi nhận",
+        "không có thông tin",
+    }
+
+    # Remove ending period if any
+    cleaned_nopoint = cleaned.rstrip(".")
+    if cleaned_nopoint in structural_keywords:
+        return True
+
+    return False
 
 
 # ---------------------------------------------------------------------------
+
 # Summary layer
 # ---------------------------------------------------------------------------
 
@@ -74,9 +106,16 @@ class SummarySection(BaseModel):
 
 
 class SummaryMetrics(BaseModel):
+    # Overall coverage — SUPPORTED / total_claims
     citation_coverage: float = 0.0
-    unsupported_claim_rate: float = 0.0
-    hallucination_rate: float = 0.0
+    # Critical-only coverage — SUPPORTED / total_critical_claims (drugs, labs, diagnoses, allergies)
+    critical_citation_coverage: float = 0.0
+    total_critical_claims: int = 0
+    # Rates for problematic statuses
+    unsupported_claim_rate: float = 0.0    # (UNSUPPORTED + NO_CITATION) / total
+    low_confidence_rate: float = 0.0       # (PARTIALLY_SUPPORTED + LOW_CONFIDENCE) / total
+    need_review_rate: float = 0.0          # NEED_REVIEW / total
+    hallucination_rate: float = 0.0        # CONTRADICTED / total
     missing_section_rate: float = 0.0
     total_claims: int = 0
     latency_seconds: float = 0.0

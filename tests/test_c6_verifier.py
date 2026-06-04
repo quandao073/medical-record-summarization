@@ -108,13 +108,15 @@ class TestVerifySection:
         assert vsec.content != ""
         assert "[CẦN XÁC NHẬN]" not in vsec.content or "Metformin" in vsec.content
 
-    def test_flagged_claims_marked(self):
-        chunks = []  # no matching chunks → all NO_CITATION
+    def test_flagged_claims_marked_with_status_prefix(self):
+        """Flagged claims should have a status-specific prefix, not a blanket [CẦN XÁC NHẬN]."""
+        chunks = []  # no matching chunks → NO_CITATION
         section = _section("Bệnh nhân dùng thuốc bí mật 5000 mg.")
         vsec, actions = verify_section(section, chunks, conservative=True)
-        # Conservative mode: NO_CITATION critical → FLAG
+        # Conservative mode: NO_CITATION critical → FLAG with [Chưa có nguồn] prefix
         if any(a == "FLAG" for a in actions):
-            assert "[CẦN XÁC NHẬN]" in vsec.content
+            # Status-specific label, not the old blanket label
+            assert "[Chưa có nguồn]" in vsec.content or "[Cần xác minh]" in vsec.content
 
     def test_empty_section_unchanged(self, med_chunks):
         section = _section("Chưa thấy ghi nhận trong dữ liệu được cung cấp.")
@@ -208,3 +210,40 @@ class TestVerifySummary:
                       "hallucination_rate", "missing_section_rate"):
             val = getattr(metrics, field)
             assert 0.0 <= val <= 1.0, f"{field}={val} out of range"
+
+    def test_structural_claims_behavior(self):
+        from src.schemas import is_structural_content
+        from src.c5_citation.claim_extractor import extract_claims
+        from src.c5_citation.evidence_matcher import match_claims
+
+        # Test helper function
+        assert is_structural_content("Cảnh báo hiện tại:") is True
+        assert is_structural_content("Không ghi nhận.") is True
+        assert is_structural_content("Metformin 1000 mg.") is False
+
+        # Test extraction sets is_structural
+        section = _section("Cảnh báo hiện tại:\n- Không ghi nhận.\n- Metformin 1000 mg.")
+        claims = extract_claims(section)
+        assert len(claims) == 3
+        assert claims[0].is_structural is True
+        assert claims[1].is_structural is True
+        assert claims[2].is_structural is False
+
+        # Test match_claims marks structural claims as SUPPORTED with no prefix
+        matched = match_claims(claims, [])
+        assert matched[0].status == "SUPPORTED"
+        assert matched[0].citations == []
+        assert matched[1].status == "SUPPORTED"
+        
+        # Test verify_section does not add prefixes to structural claims
+        vsec, actions = verify_section(section, [])
+        assert "[Cần xác minh] Cảnh báo hiện tại:" not in vsec.content
+        assert "[Cần xác minh] Không ghi nhận." not in vsec.content
+        # Non-structural critical claim "Metformin 1000 mg" with no source is flagged
+        assert "[Chưa có nguồn] Metformin 1000 mg" in vsec.content or "[Cần xác minh] Metformin 1000 mg" in vsec.content
+
+        # Test verify_summary excludes structural claims from metrics counts
+        vsections, metrics = verify_summary([section], [])
+        # The section has 3 claims, 2 are structural. So total_claims should be 1 (only Metformin)
+        assert metrics.total_claims == 1
+

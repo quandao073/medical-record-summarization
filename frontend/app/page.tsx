@@ -1,7 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import type { FinalSummary, SourceChunk } from "@/lib/types";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type { CitedClaim, FinalSummary, SourceChunk } from "@/lib/types";
 import {
   checkHealth,
   clearCache,
@@ -57,10 +57,25 @@ export default function HomePage() {
   const [flagSubmitted, setFlagSubmitted] = useState(false);
 
   // ─ Source panel
-  const [activeId, setActiveId]   = useState<string | null>(null);
-  const [chunk, setChunk]         = useState<SourceChunk | null>(null);
+  const [activeId, setActiveId]       = useState<string | null>(null);
+  const [chunk, setChunk]             = useState<SourceChunk | null>(null);
+  const [claimContext, setClaimContext] = useState<CitedClaim | null>(null);
   const [chunkLoading, setChunkLoading] = useState(false);
   const [chunkError, setChunkError]     = useState<string | null>(null);
+
+  // ─ sourceId → CitedClaim map (rebuilt whenever summary changes)
+  const sourceToClaimMap = useMemo(() => {
+    const map = new Map<string, CitedClaim>();
+    if (!summary) return map;
+    for (const section of summary.sections) {
+      for (const claim of section.cited_claims) {
+        for (const sid of claim.citations) {
+          if (!map.has(sid)) map.set(sid, claim);
+        }
+      }
+    }
+    return map;
+  }, [summary]);
 
   const abortRef = useRef<AbortController | null>(null);
 
@@ -86,10 +101,12 @@ export default function HomePage() {
     if (activeId === sourceId) {
       setActiveId(null);
       setChunk(null);
+      setClaimContext(null);
       return;
     }
     setActiveId(sourceId);
     setChunk(null);
+    setClaimContext(sourceToClaimMap.get(sourceId) ?? null);
     setChunkError(null);
     setChunkLoading(true);
     try {
@@ -481,9 +498,10 @@ export default function HomePage() {
       <SourcePanel
         sourceId={activeId}
         chunk={chunk}
+        claimContext={claimContext}
         loading={chunkLoading}
         error={chunkError}
-        onClose={() => { setActiveId(null); setChunk(null); }}
+        onClose={() => { setActiveId(null); setChunk(null); setClaimContext(null); }}
       />
     </div>
   );

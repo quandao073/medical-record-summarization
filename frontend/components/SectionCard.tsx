@@ -4,6 +4,7 @@ import type { SummarySection } from "@/lib/types";
 import { SECTION_ICONS, SECTION_LABELS } from "@/lib/types";
 import CitationBadge from "./CitationBadge";
 import ClaimContent from "./ClaimContent";
+import DiagnosesTable from "./DiagnosesTable";
 import LabsTable from "./LabsTable";
 import MedsTable from "./MedsTable";
 
@@ -35,6 +36,16 @@ export default function SectionCard({
     }
   }
 
+  // Claim status breakdown for the header chip
+  const claims = section.cited_claims.filter(c => !c.is_structural);
+  const nSupported      = claims.filter(c => c.status === "SUPPORTED").length;
+  const nNeedsAttention = claims.filter(c =>
+    ["NEED_REVIEW", "NO_CITATION", "UNSUPPORTED", "CONTRADICTED"].includes(c.status)
+  ).length;
+  const nLowConf = claims.filter(c =>
+    ["PARTIALLY_SUPPORTED", "LOW_CONFIDENCE"].includes(c.status)
+  ).length;
+
   const isEmpty =
     !section.content ||
     section.content.includes("Chưa thấy ghi nhận") ||
@@ -58,9 +69,24 @@ export default function SectionCard({
         >
           {label}
         </h2>
-        {allCitations.length > 0 && (
-          <span className="ml-auto text-xs text-gray-400">
-            {allCitations.length} nguồn
+        {claims.length > 0 && (
+          <span className="ml-auto flex items-center gap-1.5 text-xs text-gray-400 flex-wrap justify-end">
+            <span className="text-gray-400">{allCitations.length} nguồn</span>
+            {nSupported > 0 && (
+              <span className="px-2 py-0.5 rounded-full bg-green-50 text-green-700 border border-green-200 font-medium whitespace-nowrap">
+                {nSupported} đã có nguồn
+              </span>
+            )}
+            {nLowConf > 0 && (
+              <span className="px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200 font-medium whitespace-nowrap">
+                {nLowConf} hỗ trợ một phần
+              </span>
+            )}
+            {nNeedsAttention > 0 && (
+              <span className="px-2 py-0.5 rounded-full bg-red-50 text-red-700 border border-red-200 font-medium whitespace-nowrap">
+                {nNeedsAttention} cần xem lại
+              </span>
+            )}
           </span>
         )}
       </div>
@@ -78,6 +104,12 @@ export default function SectionCard({
           activeSourceId={activeSourceId}
           onCitationClick={onCitationClick}
         />
+      ) : section.section_id === "diagnoses" && section.cited_claims.length > 0 ? (
+        <DiagnosesTable
+          citedClaims={section.cited_claims}
+          activeSourceId={activeSourceId}
+          onCitationClick={onCitationClick}
+        />
       ) : (
         <>
           {/* Default: claim-aware content with hover citations */}
@@ -87,6 +119,7 @@ export default function SectionCard({
             activeSourceId={activeSourceId}
             onCitationClick={onCitationClick}
             isEmpty={isEmpty}
+            sectionId={section.section_id}
           />
 
           {/* Citation badges row — fallback for sections with no structured claims */}

@@ -5,28 +5,6 @@ import type { CitedClaim, ClaimStatus, SourceChunk } from "@/lib/types";
 import { STATUS_COLORS, STATUS_LABELS, STATUS_TOOLTIPS } from "@/lib/types";
 import { getSources } from "@/lib/api";
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-
-function formatDosage(m: Record<string, unknown>): string {
-  const dose      = (m.dose as string | null)?.trim();
-  const frequency = (m.frequency as string | null)?.trim();
-  const strength  = (m.strength as string | null)?.trim();
-
-  if (!dose && !frequency) return "(Thiếu thông tin liều)";
-
-  const parts: string[] = [];
-  if (dose && dose !== "0") parts.push(dose);
-  if (frequency && frequency !== "NGƯNG") parts.push(frequency);
-
-  const label = parts.join(", ");
-
-  // Flag stopped medications
-  if (frequency === "NGƯNG" || (m.is_current === false)) {
-    return `${strength ?? ""} — NGƯNG`.trim();
-  }
-
-  return strength ? `${strength} — ${label}` : label;
-}
 
 function InlineBadge({
   sourceId,
@@ -59,7 +37,7 @@ function InlineBadge({
 function SkeletonRow() {
   return (
     <tr>
-      {[55, 65, 24].map((w, i) => (
+      {[40, 20, 30, 50, 25, 20].map((w, i) => (
         <td key={i} className="px-3 py-2.5">
           <div className="skeleton h-3 rounded" style={{ width: `${w}%` }} />
         </td>
@@ -107,52 +85,89 @@ export default function MedsTable({ citedClaims, activeSourceId, onCitationClick
         }
       });
 
-      // Deduplicate by drug_name — keep most recent (first seen after sort desc by date)
-      const seen = new Set<string>();
-      const deduped: MedRow[] = [];
-      result
-        .sort((a, b) => (b.chunk.date ?? "").localeCompare(a.chunk.date ?? ""))
-        .forEach((row) => {
-          const name = (row.chunk.metadata.drug_name as string ?? row.chunk.source_id).toLowerCase();
-          if (!seen.has(name)) {
-            seen.add(name);
-            deduped.push(row);
-          }
-        });
+      if (result.length === 0) {
+        setLoading(false);
+        return;
+      }
 
-      // Final sort: alphabetical by drug name for readability
-      deduped.sort((a, b) => {
+      // Find the latest prescription date across all fetched med chunks
+      const latestDate = result.reduce<string>((max, r) => {
+        const d = r.chunk.date ?? "";
+        return d > max ? d : max;
+      }, "");
+
+      // Keep only medications from the latest prescription date (latest encounter)
+      const fromLatest = latestDate
+        ? result.filter((r) => r.chunk.date === latestDate)
+        : result;
+
+      // Sort alphabetically within the latest encounter
+      fromLatest.sort((a, b) => {
         const na = (a.chunk.metadata.drug_name as string ?? "").toLowerCase();
         const nb = (b.chunk.metadata.drug_name as string ?? "").toLowerCase();
         return na.localeCompare(nb, "vi");
       });
 
-      setRows(deduped);
+      setRows(fromLatest);
       setLoading(false);
     });
   }, [citedClaims]);
 
   if (!loading && rows.length === 0) return null;
 
+  // Prescription date for the header (all rows have the same latest date)
+  const prescriptionDate = rows[0]?.chunk.date ?? null;
+
   return (
     <div className="overflow-x-auto rounded-lg border border-gray-200">
+      {/* Prescription date header */}
+      {prescriptionDate && !loading && (
+        <div className="bg-blue-50 border-b border-blue-100 px-3 py-1.5 flex items-center gap-2">
+          <span className="text-xs text-blue-600 font-medium">📅 Đơn thuốc ngày:</span>
+          <span className="text-xs text-blue-800 font-semibold font-mono">{prescriptionDate}</span>
+        </div>
+      )}
       <table className="w-full text-sm">
         <thead>
           <tr className="bg-gray-50 border-b border-gray-200 text-xs text-gray-500 uppercase tracking-wide">
             <th className="px-3 py-2 text-left font-medium">Tên thuốc</th>
-            <th className="px-3 py-2 text-left font-medium">Liều lượng</th>
-            <th className="px-3 py-2 text-center font-medium w-16">Nguồn</th>
+            <th className="px-3 py-2 text-left font-medium w-24">Hàm lượng</th>
+            <th className="px-3 py-2 text-left font-medium">Liều / Tần suất</th>
+            <th className="px-3 py-2 text-left font-medium">Hướng dẫn</th>
+            <th className="px-3 py-2 text-left font-medium w-28">Ngày kê</th>
+            <th className="px-3 py-2 text-center font-medium w-20">Nguồn</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-100">
           {loading
             ? Array.from({ length: 3 }).map((_, i) => <SkeletonRow key={i} />)
             : rows.map(({ chunk, status }) => {
-                const m        = chunk.metadata;
-                const drugName = (m.drug_name as string) ?? chunk.source_id;
-                const dosage   = formatDosage(m);
-                const stopped  = m.is_current === false || (m.frequency as string) === "NGƯNG";
-                const isActive = activeSourceId === chunk.source_id;
+                const m           = chunk.metadata;
+                const drugName    = (m.drug_name as string) ?? chunk.source_id;
+                const strength    = (m.strength as string | null)?.trim() || null;
+                const dose        = (m.dose as string | null)?.trim();
+                const frequency   = (m.frequency as string | null)?.trim();
+                const instruction = (m.instruction as string | null)?.trim() || null;
+                const stopped     = m.is_current === false || frequency === "NGƯNG";
+                const isActive    = activeSourceId === chunk.source_id;
+
+                // Liều / Tần suất: only dose + frequency (no strength)
+                let doseFreq = "(Thiếu thông tin liều)";
+                if (stopped) {
+                  doseFreq = "NGƯNG";
+                } else if (dose || frequency) {
+                  const parts = [];
+                  if (dose && dose !== "0") parts.push(dose);
+                  if (frequency) parts.push(frequency);
+                  doseFreq = parts.join(", ");
+                }
+
+                // Instruction: truncate to ~40 chars, full text in tooltip
+                const instrShort = instruction
+                  ? instruction.length > 45
+                    ? instruction.slice(0, 42) + "…"
+                    : instruction
+                  : null;
 
                 return (
                   <tr
@@ -161,12 +176,32 @@ export default function MedsTable({ citedClaims, activeSourceId, onCitationClick
                       isActive ? "bg-blue-50" : stopped ? "bg-gray-50 opacity-60" : "hover:bg-gray-50"
                     }`}
                   >
+                    {/* Tên thuốc */}
                     <td className="px-3 py-2.5">
-                      <span className={`font-medium ${stopped ? "line-through text-gray-400" : "text-gray-800"}`}>
+                      <span className={`font-semibold ${stopped ? "line-through text-gray-400" : "text-gray-800"}`}>
                         {drugName}
                       </span>
                     </td>
-                    <td className="px-3 py-2.5 text-gray-600">{dosage}</td>
+                    {/* Hàm lượng */}
+                    <td className="px-3 py-2.5 text-gray-600 font-mono text-xs">
+                      {strength ?? <span className="text-gray-300">—</span>}
+                    </td>
+                    {/* Liều / Tần suất */}
+                    <td className="px-3 py-2.5 text-gray-700 text-sm">
+                      {stopped
+                        ? <span className="text-red-500 font-medium text-xs">NGƯNG</span>
+                        : doseFreq}
+                    </td>
+                    {/* Hướng dẫn */}
+                    <td className="px-3 py-2.5 text-gray-500 text-xs"
+                        title={instruction ?? undefined}>
+                      {instrShort ?? <span className="text-gray-300">—</span>}
+                    </td>
+                    {/* Ngày kê */}
+                    <td className="px-3 py-2.5 text-gray-400 text-xs font-mono">
+                      {chunk.date ?? "—"}
+                    </td>
+                    {/* Nguồn + status */}
                     <td className="px-3 py-2.5 text-center">
                       <InlineBadge
                         sourceId={chunk.source_id}

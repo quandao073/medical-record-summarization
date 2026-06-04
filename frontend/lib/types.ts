@@ -14,6 +14,7 @@ export interface CitedClaim {
   confidence_score: number | null;
   is_critical: boolean;
   verification_status: string;
+  is_structural?: boolean;
 }
 
 export interface SummarySection {
@@ -25,7 +26,11 @@ export interface SummarySection {
 
 export interface SummaryMetrics {
   citation_coverage: number;
+  critical_citation_coverage: number;
+  total_critical_claims: number;
   unsupported_claim_rate: number;
+  low_confidence_rate: number;
+  need_review_rate: number;
   hallucination_rate: number;
   missing_section_rate: number;
   total_claims: number;
@@ -89,9 +94,20 @@ export const STATUS_COLORS: Record<ClaimStatus, string> = {
   NEED_REVIEW:         "bg-purple-100 text-purple-800 border border-purple-300",
 };
 
+/** Human-readable display names — used in headers, panels, and tooltips */
+export const STATUS_DISPLAY_NAMES: Record<ClaimStatus, string> = {
+  SUPPORTED:           "Đã có nguồn",
+  PARTIALLY_SUPPORTED: "Hỗ trợ một phần",
+  LOW_CONFIDENCE:      "Độ tin cậy thấp",
+  UNSUPPORTED:         "Cần xác minh",
+  NO_CITATION:         "Chưa có nguồn",
+  CONTRADICTED:        "Mâu thuẫn",
+  NEED_REVIEW:         "Cần xem xét",
+};
+
 export const STATUS_TOOLTIPS: Record<ClaimStatus, string> = {
   SUPPORTED:           "Khớp chính xác với dữ liệu nguồn",
-  PARTIALLY_SUPPORTED: "Khớp từ khóa — cần xem lại nguồn",
+  PARTIALLY_SUPPORTED: "Hỗ trợ một phần — khớp từ khóa, nên xem lại nguồn gốc",
   LOW_CONFIDENCE:      "Tin cậy thấp — không đủ bằng chứng rõ ràng",
   UNSUPPORTED:         "Không tìm thấy bằng chứng hỗ trợ",
   NO_CITATION:         "Không tìm thấy nguồn — cần xác minh",

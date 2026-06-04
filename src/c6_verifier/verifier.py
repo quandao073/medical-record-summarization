@@ -1,7 +1,7 @@
 """
 C6 — Hallucination Verifier.
 Applies the KEEP / FLAG / REMOVE decision matrix to each CitedClaim,
-rebuilds section content, and computes SummaryMetrics.
+rebuilds section content with status-specific prefixes, and computes SummaryMetrics.
 """
 
 from __future__ import annotations
@@ -31,14 +31,23 @@ _ACTION: dict[tuple[str, bool], str] = {
     ("NEED_REVIEW",         False): "FLAG",
 }
 
-_FLAG_PREFIX = "[CẦN XÁC NHẬN] "
+# Status-specific prefixes — match the UI labels in ClaimContent.tsx
+_STATUS_PREFIX: dict[str, str] = {
+    "PARTIALLY_SUPPORTED": "[Hỗ trợ một phần] ",
+    "LOW_CONFIDENCE":      "[Độ tin cậy thấp] ",
+    "UNSUPPORTED":         "[Cần xác minh] ",
+    "NO_CITATION":         "[Chưa có nguồn] ",
+    "NEED_REVIEW":         "[Cần xem xét] ",
+    "CONTRADICTED":        "[Mâu thuẫn] ",
+}
+
 _EMPTY_CONTENT = "Chưa thấy ghi nhận được xác minh trong dữ liệu được cung cấp."
 
 
 def decide(claim: CitedClaim, conservative: bool = True) -> str:
     """
     Return 'KEEP', 'FLAG', or 'REMOVE' for a single claim.
-    conservative=True: REMOVE → FLAG (safer for demo, avoids silencing valid claims).
+    conservative=True: REMOVE → FLAG (avoids silencing valid claims in demo).
     """
     action = _ACTION.get((claim.status, claim.is_critical), "FLAG")
     if conservative and action == "REMOVE":
@@ -53,8 +62,8 @@ def verify_section(
 ) -> tuple[SummarySection, list[str]]:
     """
     Verify one section.
-    Returns (verified_section, action_list) where action_list parallels
-    the matched claims (KEEP / FLAG / REMOVE).
+    Returns (verified_section, action_list) — action_list parallels matched claims.
+    FLAG claims get a status-specific prefix (e.g. "[Cần xác minh]"), not a blanket label.
     """
     claims = extract_claims(section)
     if not claims:
@@ -63,9 +72,7 @@ def verify_section(
     matched = match_claims(claims, chunks)
     actions = [decide(c, conservative) for c in matched]
 
-    kept_pairs = [
-        (c, a) for c, a in zip(matched, actions) if a != "REMOVE"
-    ]
+    kept_pairs = [(c, a) for c, a in zip(matched, actions) if a != "REMOVE"]
 
     if not kept_pairs:
         new_content = _EMPTY_CONTENT
@@ -73,16 +80,15 @@ def verify_section(
     else:
         parts = []
         for c, a in kept_pairs:
-            text = (_FLAG_PREFIX + c.claim_text) if a == "FLAG" else c.claim_text
-            parts.append(text)
+            if a == "FLAG":
+                prefix = _STATUS_PREFIX.get(c.status, "[Cần kiểm tra] ")
+                parts.append(prefix + c.claim_text)
+            else:
+                parts.append(c.claim_text)
         new_content = " ".join(parts)
         kept_claims = [c for c, _ in kept_pairs]
 
-    verified = section.model_copy(update={
-        "content": new_content,
-        "cited_claims": kept_claims,
-    })
-    return verified, actions
+    return section.model_copy(update={"content": new_content, "cited_claims": kept_claims}), actions
 
 
 def verify_summary(
@@ -92,7 +98,7 @@ def verify_summary(
 ) -> tuple[list[SummarySection], SummaryMetrics]:
     """
     Verify all sections and compute aggregate SummaryMetrics.
-    Metrics computed from verified claims only (after REMOVE).
+    All rates are consistent with the UI label taxonomy.
     """
     verified_sections: list[SummarySection] = []
     all_claims: list[CitedClaim] = []
@@ -100,22 +106,31 @@ def verify_summary(
     for section in sections:
         vsec, _ = verify_section(section, chunks, conservative)
         verified_sections.append(vsec)
-        all_claims.extend(vsec.cited_claims)
+        all_claims.extend([c for c in vsec.cited_claims if not c.is_structural])
 
     total = len(all_claims)
-    supported = sum(1 for c in all_claims if c.status == "SUPPORTED")
-    unsupported = sum(
-        1 for c in all_claims if c.status in ("UNSUPPORTED", "NO_CITATION")
-    )
-    contradicted = sum(1 for c in all_claims if c.status == "CONTRADICTED")
-    empty = sum(1 for s in verified_sections if _EMPTY_CONTENT in s.content)
+
+    critical_claims = [c for c in all_claims if c.is_critical]
+    total_critical = len(critical_claims)
+
+    supported       = sum(1 for c in all_claims if c.status == "SUPPORTED")
+    crit_supported  = sum(1 for c in critical_claims if c.status == "SUPPORTED")
+    unsupported     = sum(1 for c in all_claims if c.status in ("UNSUPPORTED", "NO_CITATION"))
+    low_conf        = sum(1 for c in all_claims if c.status in ("PARTIALLY_SUPPORTED", "LOW_CONFIDENCE"))
+    need_rev        = sum(1 for c in all_claims if c.status == "NEED_REVIEW")
+    contradicted    = sum(1 for c in all_claims if c.status == "CONTRADICTED")
+    empty           = sum(1 for s in verified_sections if _EMPTY_CONTENT in s.content)
 
     metrics = SummaryMetrics(
-        citation_coverage=round(supported / total, 3) if total else 0.0,
-        unsupported_claim_rate=round(unsupported / total, 3) if total else 0.0,
-        hallucination_rate=round(contradicted / total, 3) if total else 0.0,
-        missing_section_rate=round(empty / len(sections), 3) if sections else 0.0,
-        total_claims=total,
+        citation_coverage          = round(supported / total, 3)        if total          else 0.0,
+        critical_citation_coverage = round(crit_supported / total_critical, 3) if total_critical else 0.0,
+        total_critical_claims      = total_critical,
+        unsupported_claim_rate     = round(unsupported / total, 3)       if total          else 0.0,
+        low_confidence_rate        = round(low_conf / total, 3)          if total          else 0.0,
+        need_review_rate           = round(need_rev / total, 3)          if total          else 0.0,
+        hallucination_rate         = round(contradicted / total, 3)      if total          else 0.0,
+        missing_section_rate       = round(empty / len(sections), 3)     if sections       else 0.0,
+        total_claims               = total,
     )
 
     return verified_sections, metrics

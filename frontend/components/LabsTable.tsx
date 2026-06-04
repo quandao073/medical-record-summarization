@@ -72,7 +72,7 @@ function InlineBadge({
 function SkeletonRow() {
   return (
     <tr>
-      {[55, 25, 20, 45, 30, 20].map((w, i) => (
+      {[50, 20, 18, 40, 25, 28, 18].map((w, i) => (
         <td key={i} className="px-3 py-2.5">
           <div className="skeleton h-3 rounded" style={{ width: `${w}%` }} />
         </td>
@@ -92,6 +92,8 @@ interface Props {
 interface LabRow {
   chunk: SourceChunk;
   status: ClaimStatus;
+  prevValue?: number | null;   // previous encounter value for trend display
+  prevDate?: string | null;
 }
 
 export default function LabsTable({ citedClaims, activeSourceId, onCitationClick }: Props) {
@@ -115,15 +117,45 @@ export default function LabsTable({ citedClaims, activeSourceId, onCitationClick
     }
 
     getSources(Array.from(idToStatus.keys())).then((chunks) => {
-      const result: LabRow[] = [];
+      const labChunks: Array<{ chunk: SourceChunk; status: ClaimStatus }> = [];
       chunks.forEach((chunk, i) => {
         const sid = Array.from(idToStatus.keys())[i];
         if (chunk && chunk.source_type === "labs") {
-          result.push({ chunk, status: idToStatus.get(sid)! });
+          labChunks.push({ chunk, status: idToStatus.get(sid)! });
         }
       });
-      // Sort by date ascending so timeline is readable
-      result.sort((a, b) => (a.chunk.date ?? "").localeCompare(b.chunk.date ?? ""));
+
+      // Sort descending by date so [0] = latest
+      labChunks.sort((a, b) => (b.chunk.date ?? "").localeCompare(a.chunk.date ?? ""));
+
+      // Group by test_name — keep latest as main row, previous as trend source
+      const byTest = new Map<string, typeof labChunks>();
+      for (const row of labChunks) {
+        const name = (row.chunk.metadata.test_name as string ?? row.chunk.source_id).toLowerCase();
+        if (!byTest.has(name)) byTest.set(name, []);
+        byTest.get(name)!.push(row);
+      }
+
+      // One result row per test: latest value + optional previous for trend
+      const result: LabRow[] = [];
+      Array.from(byTest.values()).forEach((group) => {
+        const latest = group[0];
+        const prev   = group[1] ?? null;
+        result.push({
+          chunk:     latest.chunk,
+          status:    latest.status,
+          prevValue: prev ? (prev.chunk.metadata.value as number | null) : undefined,
+          prevDate:  prev ? prev.chunk.date : undefined,
+        });
+      });
+
+      // Final sort: by test_name alphabetically
+      result.sort((a, b) => {
+        const na = (a.chunk.metadata.test_name as string ?? "").toLowerCase();
+        const nb = (b.chunk.metadata.test_name as string ?? "").toLowerCase();
+        return na.localeCompare(nb, "vi");
+      });
+
       setRows(result);
       setLoading(false);
     });
@@ -141,13 +173,14 @@ export default function LabsTable({ citedClaims, activeSourceId, onCitationClick
             <th className="px-3 py-2 text-left font-medium w-24">Đơn vị</th>
             <th className="px-3 py-2 text-left font-medium">Khoảng tham chiếu</th>
             <th className="px-3 py-2 text-left font-medium w-28">Ngày</th>
+            <th className="px-3 py-2 text-left font-medium w-32">Xu hướng</th>
             <th className="px-3 py-2 text-center font-medium w-16">Nguồn</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-100">
           {loading
             ? Array.from({ length: 3 }).map((_, i) => <SkeletonRow key={i} />)
-            : rows.map(({ chunk, status }) => {
+            : rows.map(({ chunk, status, prevValue, prevDate }) => {
                 const m        = chunk.metadata;
                 const val      = m.value as number | null;
                 const unit     = (m.unit as string | null) || null;
@@ -155,11 +188,29 @@ export default function LabsTable({ citedClaims, activeSourceId, onCitationClick
                 const testName = (m.test_name as string) ?? chunk.source_id;
                 const isActive = activeSourceId === chunk.source_id;
 
-                // reference_range: prefer metadata (new stores), fallback parse content
+                // reference_range: prefer metadata, fallback parse content
                 let refRange = (m.reference_range as string) || null;
                 if (!refRange) {
                   const match = chunk.content.match(/\(tham chiếu:\s*([^)]+)\)/);
                   refRange = match ? match[1].trim() : null;
+                }
+
+                // Trend: compare current vs previous value
+                let trendNode: React.ReactNode = <span className="text-gray-300 text-xs">—</span>;
+                if (prevValue !== undefined && prevValue !== null && val !== null) {
+                  const diff = val - prevValue;
+                  const improved = diff < 0; // lower is better for HbA1c, LDL, etc.
+                  // For HDL, higher is better — but we can't easily tell without a flag
+                  // Use a neutral arrow with the old value
+                  const arrow = diff < 0 ? "↓" : diff > 0 ? "↑" : "→";
+                  const color = diff === 0
+                    ? "text-gray-500"
+                    : improved ? "text-green-600" : "text-orange-600";
+                  trendNode = (
+                    <span className={`text-xs font-mono ${color}`} title={prevDate ?? undefined}>
+                      {prevValue} {arrow} {val}
+                    </span>
+                  );
                 }
 
                 return (
@@ -178,6 +229,7 @@ export default function LabsTable({ citedClaims, activeSourceId, onCitationClick
                       {refRange ?? <span className="text-gray-300">—</span>}
                     </td>
                     <td className="px-3 py-2.5 text-gray-500 text-xs">{chunk.date ?? "—"}</td>
+                    <td className="px-3 py-2.5">{trendNode}</td>
                     <td className="px-3 py-2.5 text-center">
                       <InlineBadge
                         sourceId={chunk.source_id}

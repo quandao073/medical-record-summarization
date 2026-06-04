@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import type { CitedClaim, ClaimStatus } from "@/lib/types";
-import { STATUS_COLORS, STATUS_LABELS, STATUS_TOOLTIPS } from "@/lib/types";
+import { STATUS_COLORS, STATUS_DISPLAY_NAMES, STATUS_LABELS, STATUS_TOOLTIPS } from "@/lib/types";
 
 // ─── Status → visual maps ────────────────────────────────────────────────────
 
@@ -58,9 +58,37 @@ function InlineBadge({
   );
 }
 
+// ─── STATUS → inline badge (null = SUPPORTED, no badge needed) ───────────────
+
+/**
+ * Inline badge shown BEFORE the claim text for problematic statuses only.
+ * PARTIALLY_SUPPORTED and LOW_CONFIDENCE are intentionally omitted here —
+ * they get a colored underline (via STATUS_UNDERLINE) but NO inline text badge,
+ * to keep the summary readable. Their counts appear in the section header instead.
+ */
+const CLAIM_BADGE: Partial<Record<ClaimStatus, { text: string; cls: string }>> = {
+  // PARTIALLY_SUPPORTED → no badge (only colored underline + hover tooltip)
+  // LOW_CONFIDENCE      → no badge (only colored underline + hover tooltip)
+  UNSUPPORTED:         { text: "Cần xác minh",  cls: "bg-red-100 text-red-700 border border-red-300" },
+  NO_CITATION:         { text: "Chưa có nguồn", cls: "bg-gray-100 text-gray-600 border border-gray-300" },
+  CONTRADICTED:        { text: "Mâu thuẫn",     cls: "bg-red-200 text-red-800 border border-red-400" },
+  NEED_REVIEW:         { text: "Cần xem xét",   cls: "bg-purple-100 text-purple-700 border border-purple-300" },
+};
+
 // ─── Single hoverable claim span ──────────────────────────────────────────────
 
-const FLAG = "[CẦN XÁC NHẬN]";
+// Known prefixes injected by C6 verifier — strip before display
+const KNOWN_PREFIXES = [
+  "[CẦN XÁC NHẬN] ",
+  "[Hỗ trợ một phần] ",
+  "[Khớp một phần] ",      // legacy — strip if still present
+  "[Độ tin cậy thấp] ",
+  "[Cần xác minh] ",
+  "[Chưa có nguồn] ",
+  "[Cần xem xét] ",
+  "[Mâu thuẫn] ",
+  "[Cần kiểm tra] ",
+];
 
 function ClaimSpan({
   claim,
@@ -75,11 +103,16 @@ function ClaimSpan({
   const leaveTimer              = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const hasCitations = claim.citations.length > 0;
-  const isFlagged    = claim.status !== "SUPPORTED";
+  const badge = CLAIM_BADGE[claim.status] ?? null;  // null for SUPPORTED
 
-  const rawText = claim.claim_text.startsWith(FLAG)
-    ? claim.claim_text.slice(FLAG.length).trimStart()
-    : claim.claim_text;
+  // Strip any verifier prefix from claim_text before display
+  const rawText = (() => {
+    let t = claim.claim_text;
+    for (const p of KNOWN_PREFIXES) {
+      if (t.startsWith(p)) { t = t.slice(p.length).trimStart(); break; }
+    }
+    return t;
+  })();
 
   // ── Shared hover handlers with a delay so the tooltip stays alive ──────────
   const handleEnter = () => {
@@ -102,10 +135,10 @@ function ClaimSpan({
           ${hovered ? STATUS_HIGHLIGHT[claim.status] : ""}
         `}
       >
-        {/* Flag badge */}
-        {isFlagged && (
-          <mark className="bg-yellow-100 text-yellow-800 rounded px-0.5 mr-1 text-sm not-italic font-semibold">
-            {FLAG}
+        {/* Status-specific badge — only shown for non-SUPPORTED claims */}
+        {badge && (
+          <mark className={`rounded px-1.5 py-0.5 mr-1 text-xs not-italic font-medium ${badge.cls}`}>
+            {badge.text}
           </mark>
         )}
         {rawText}
@@ -125,9 +158,14 @@ function ClaimSpan({
             pointer-events-auto
           `}
         >
-          {/* Label */}
-          <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide shrink-0 mr-1">
-            Nguồn:
+          {/* Status label in tooltip — shows "Hỗ trợ một phần" even when no inline badge */}
+          <span className={`text-xs font-semibold shrink-0 mr-1 ${
+            claim.status === "SUPPORTED" ? "text-green-600" :
+            claim.status === "PARTIALLY_SUPPORTED" ? "text-amber-600" :
+            claim.status === "LOW_CONFIDENCE" ? "text-orange-600" :
+            "text-gray-500"
+          }`}>
+            {STATUS_DISPLAY_NAMES[claim.status]}:
           </span>
 
           {/* Badges — fully clickable */}
@@ -173,6 +211,7 @@ interface Props {
   activeSourceId: string | null;
   onCitationClick: (id: string) => void;
   isEmpty: boolean;
+  sectionId?: string;
 }
 
 export default function ClaimContent({
@@ -181,6 +220,7 @@ export default function ClaimContent({
   activeSourceId,
   onCitationClick,
   isEmpty,
+  sectionId,
 }: Props) {
   const hasAnyClaims =
     citedClaims.length > 0 &&
@@ -195,6 +235,101 @@ export default function ClaimContent({
       >
         {content || "Chưa có nội dung"}
       </p>
+    );
+  }
+
+  // Custom renderer for treatment_timeline (Diễn biến điều trị)
+  if (sectionId === "treatment_timeline") {
+    return (
+      <div className="space-y-2 text-base leading-relaxed text-gray-700">
+        {citedClaims.map((claim, i) => (
+          <div key={i} className="flex items-start gap-2">
+            <span className="text-blue-500 shrink-0 select-none pt-0.5">•</span>
+            <ClaimSpan
+              claim={claim}
+              activeSourceId={activeSourceId}
+              onCitationClick={onCitationClick}
+            />
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  // Custom renderer for medical_history (Tiền sử bệnh)
+  if (sectionId === "medical_history") {
+    return (
+      <div className="space-y-1.5 text-base leading-relaxed text-gray-700">
+        {citedClaims.map((claim, i) => {
+          const isHeader = claim.is_structural && claim.claim_text.trim().endsWith(":");
+          if (isHeader) {
+            return (
+              <div key={i} className="font-semibold text-gray-800 pt-2 first:pt-0">
+                <ClaimSpan
+                  claim={claim}
+                  activeSourceId={activeSourceId}
+                  onCitationClick={onCitationClick}
+                />
+              </div>
+            );
+          }
+          return (
+            <div key={i} className="flex items-start gap-2 pl-4">
+              <span className="text-gray-400 shrink-0 select-none pt-0.5">•</span>
+              <ClaimSpan
+                claim={claim}
+                activeSourceId={activeSourceId}
+                onCitationClick={onCitationClick}
+              />
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+
+  // Custom renderer for clinical_alerts (Điểm cần lưu ý / Cảnh báo)
+  if (sectionId === "clinical_alerts") {
+    return (
+      <div className="space-y-1.5 text-base leading-relaxed">
+        {citedClaims.map((claim, i) => {
+          const isHeader = claim.is_structural && claim.claim_text.trim().endsWith(":");
+          const isPlaceholder = claim.is_structural && !isHeader;
+
+          if (isHeader) {
+            return (
+              <div key={i} className="font-semibold text-gray-800 pt-2.5 first:pt-0">
+                <ClaimSpan
+                  claim={claim}
+                  activeSourceId={activeSourceId}
+                  onCitationClick={onCitationClick}
+                />
+              </div>
+            );
+          } else if (isPlaceholder) {
+            return (
+              <div key={i} className="pl-4 text-gray-400 italic">
+                <ClaimSpan
+                  claim={claim}
+                  activeSourceId={activeSourceId}
+                  onCitationClick={onCitationClick}
+                />
+              </div>
+            );
+          } else {
+            return (
+              <div key={i} className="pl-4 flex items-start gap-2">
+                <span className="text-red-400 shrink-0 select-none pt-0.5">•</span>
+                <ClaimSpan
+                  claim={claim}
+                  activeSourceId={activeSourceId}
+                  onCitationClick={onCitationClick}
+                />
+              </div>
+            );
+          }
+        })}
+      </div>
     );
   }
 

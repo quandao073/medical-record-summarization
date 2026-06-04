@@ -6,7 +6,7 @@ and assigns a ClaimStatus based on match quality.
 
 from __future__ import annotations
 import re
-from src.schemas import CitedClaim, SourceChunk, ClaimStatus
+from src.schemas import CitedClaim, SourceChunk, ClaimStatus, is_structural_content
 
 
 # ---------------------------------------------------------------------------
@@ -98,33 +98,44 @@ def match_claim(
     Returns a new CitedClaim with status and citations populated.
 
     Status assignment:
-      SUPPORTED           — at least one exact metadata match
-      PARTIALLY_SUPPORTED — keyword overlap ≥ min_keyword_overlap, no exact match
-      LOW_CONFIDENCE      — keyword overlap = 1 (below threshold)
-      NO_CITATION         — no match at all (for critical claims)
-      UNSUPPORTED         — no match at all (for non-critical claims)
+      SUPPORTED           — exact metadata match (and allergy confirmed by patient)
+      NEED_REVIEW         — allergy match found but needs_patient_confirmation=True
+      PARTIALLY_SUPPORTED — keyword overlap ≥ min_keyword_overlap
+      NO_CITATION         — no match (critical claim)
+      UNSUPPORTED         — no match (non-critical claim)
     """
+    if claim.is_structural or is_structural_content(claim.claim_text):
+        return claim.model_copy(update={"status": "SUPPORTED", "citations": [], "is_structural": True})
+
     exact_ids: list[str] = []
+
+    need_review_ids: list[str] = []
     keyword_ids: list[str] = []
 
     for chunk in chunks:
-        if _exact_match(claim.claim_text, chunk):
+        # Allergy chunks: check needs_patient_confirmation before marking SUPPORTED
+        if chunk.source_type == "allergies":
+            substance = _norm(chunk.metadata.get("substance", ""))
+            if substance and len(substance) > 3 and substance in _norm(claim.claim_text):
+                if chunk.metadata.get("needs_patient_confirmation"):
+                    need_review_ids.append(chunk.source_id)
+                else:
+                    exact_ids.append(chunk.source_id)
+        elif _exact_match(claim.claim_text, chunk):
             exact_ids.append(chunk.source_id)
         elif _keyword_overlap(claim.claim_text, chunk.content, min_overlap=min_keyword_overlap):
             keyword_ids.append(chunk.source_id)
 
     if exact_ids:
-        status: ClaimStatus = "SUPPORTED"
-        citations = exact_ids[:5]
+        return claim.model_copy(update={"status": "SUPPORTED", "citations": exact_ids[:5]})
+    elif need_review_ids:
+        # Allergy substance found but doctor confirmation still needed
+        return claim.model_copy(update={"status": "NEED_REVIEW", "citations": need_review_ids})
     elif keyword_ids:
-        status = "PARTIALLY_SUPPORTED"
-        citations = keyword_ids[:3]
+        return claim.model_copy(update={"status": "PARTIALLY_SUPPORTED", "citations": keyword_ids[:3]})
     else:
-        # No match
-        status = "NO_CITATION" if claim.is_critical else "UNSUPPORTED"
-        citations = []
-
-    return claim.model_copy(update={"status": status, "citations": citations})
+        status: ClaimStatus = "NO_CITATION" if claim.is_critical else "UNSUPPORTED"
+        return claim.model_copy(update={"status": status, "citations": []})
 
 
 def match_claims(

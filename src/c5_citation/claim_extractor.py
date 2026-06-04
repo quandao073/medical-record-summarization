@@ -6,13 +6,12 @@ and marks each as critical or non-critical.
 
 from __future__ import annotations
 import re
-from src.schemas import CitedClaim, SummarySection
+from src.schemas import CitedClaim, SummarySection, is_structural_content
 
 
 # ---------------------------------------------------------------------------
 # Patterns that signal a CRITICAL claim
 # ---------------------------------------------------------------------------
-
 # Drug name + dosage: "Metformin 1000 mg", "Amlodipine 5mg"
 _DRUG_DOSE_RE = re.compile(r"\b\d+[\.,]?\d*\s*mg\b", re.IGNORECASE)
 
@@ -104,6 +103,8 @@ def extract_claims(section: SummarySection) -> list[CitedClaim]:
             claim_text=s,
             is_critical=_is_critical(s),
             status="NO_CITATION",
+            is_structural=is_structural_content(s),
         )
         for s in sentences
     ]
+

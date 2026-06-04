@@ -19,7 +19,7 @@ llm:
     mini:    "gpt-4o-mini"
 
   max_tokens: 1500
-  temperature: 0.1
+  temperature: 0
 
 # ---------------------------------------------------------------------------
 # Retrieval (C3 — Week 3)

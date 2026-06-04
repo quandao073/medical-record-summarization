@@ -81,21 +81,8 @@ async def summarize(
     except Exception as exc:
         raise HTTPException(status_code=500, detail=f"Pipeline error: {exc}") from exc
 
-    # Apply C5+C6 verification on top of LLM-generated sections
-    store_path = STORE_DIR / f"{patient_id}_store.json"
-    if store_path.exists():
-        store = load_structured_store(store_path)
-        chunks = [SourceChunk(**v) for v in store.values()]
-        verified_sections, v_metrics = verify_summary(summary.sections, chunks)
-        final = summary.model_copy(update={
-            "sections": verified_sections,
-            "metrics": v_metrics.model_copy(update={
-                "latency_seconds": summary.metrics.latency_seconds,
-                "token_count":     summary.metrics.token_count,
-            }),
-        })
-    else:
-        final = summary
+    final = summary
+
 
     result = final.model_dump()
     result["_from_cache"] = False
