@@ -55,6 +55,54 @@ def minimal_ehr():
     }
 
 
+@pytest.fixture
+def pii_ehr():
+    """EHR with all PII field types populated — used for deidentifier tests."""
+    return {
+        "patient_id": "P_TEST",
+        "patient": {
+            "patient_id": "P_TEST",
+            "full_name": "Nguyen Van Test",
+            "date_of_birth": "1969-01-15",
+            "age": 55,
+            "gender": "male",
+            "citizen_id": "001069123456",
+            "insurance_id": "0123456789",
+            "phone": "0912345678",
+            "address": "Số 5 Nguyễn Trãi, Phường Bến Thành, Quận 1, Thành phố Hồ Chí Minh",
+            "occupation": "Công chức",
+        },
+        "allergies": [
+            {
+                "allergy_id": "A1",
+                "patient_id": "P_TEST",
+                "substance": "Penicillin",
+                "data_note": "EC-03: test annotation for synthetic data",
+            }
+        ],
+        "encounters": [
+            {
+                "encounter_id": "P_TEST-E001",
+                "patient_id": "P_TEST",
+                "encounter_date": "2024-01-10",
+                "labs": [],
+                "medications": [
+                    {
+                        "medication_id": "M1",
+                        "drug_name": "Metformin",
+                        "data_note": "EC-01: dose intentionally missing",
+                    }
+                ],
+                "diagnoses": [],
+                "vitals": [],
+                "clinical_notes": [],
+                "imaging": [],
+                "procedures": [],
+            }
+        ],
+    }
+
+
 # ---------------------------------------------------------------------------
 # Validator tests
 # ---------------------------------------------------------------------------
@@ -96,7 +144,6 @@ class TestValidator:
         ehr = dict(minimal_ehr)
         ehr["encounters"] = [ehr["encounters"][0], dict(ehr["encounters"][0])]
         ok, errors = validate_ehr(ehr)
-        # Should produce a blocking error for duplicate encounter_id
         blocking = [e for e in errors if e.severity == "error"]
         assert any("Duplicate" in e.message for e in blocking)
 
@@ -109,7 +156,7 @@ class TestValidator:
         }]
         ok, errors = validate_ehr(ehr)
         warnings = [e for e in errors if e.severity == "warning"]
-        assert ok  # warnings don't block
+        assert ok
         assert any("dose" in e.message.lower() or "strength" in e.message.lower()
                    for e in warnings)
 
@@ -126,45 +173,198 @@ class TestValidator:
 # ---------------------------------------------------------------------------
 
 class TestDeidentifier:
-    def test_citizen_id_redacted(self):
-        ehr = {"patient_id": "P1", "patient": {"citizen_id": "012345678901"}}
-        result = deidentify(ehr)
+
+    # --- Full-redact fields ---
+
+    def test_citizen_id_redacted(self, pii_ehr):
+        result = deidentify(pii_ehr)
         assert result["patient"]["citizen_id"] == "[REDACTED]"
 
-    def test_insurance_id_redacted(self):
-        ehr = {"patient_id": "P1", "patient": {"insurance_id": "GD4030000012345"}}
-        result = deidentify(ehr)
+    def test_insurance_id_redacted(self, pii_ehr):
+        result = deidentify(pii_ehr)
         assert result["patient"]["insurance_id"] == "[REDACTED]"
 
-    def test_phone_redacted(self):
-        ehr = {"patient_id": "P1", "patient": {"phone": "0912345678"}}
-        result = deidentify(ehr)
+    def test_phone_redacted(self, pii_ehr):
+        result = deidentify(pii_ehr)
         assert result["patient"]["phone"] == "[REDACTED]"
 
-    def test_full_name_preserved(self):
-        ehr = {"patient_id": "P1", "patient": {"full_name": "Nguyen Van A"}}
+    def test_citizen_id_inline(self):
+        ehr = {"patient_id": "P1", "patient": {"citizen_id": "012345678901"}}
+        assert deidentify(ehr)["patient"]["citizen_id"] == "[REDACTED]"
+
+    def test_insurance_id_inline(self):
+        ehr = {"patient_id": "P1", "patient": {"insurance_id": "GD4030000012345"}}
+        assert deidentify(ehr)["patient"]["insurance_id"] == "[REDACTED]"
+
+    def test_phone_inline(self):
+        ehr = {"patient_id": "P1", "patient": {"phone": "0912345678"}}
+        assert deidentify(ehr)["patient"]["phone"] == "[REDACTED]"
+
+    # --- Year-only masking ---
+
+    def test_date_of_birth_year_only(self, pii_ehr):
+        result = deidentify(pii_ehr)
+        assert result["patient"]["date_of_birth"] == "1969"
+
+    def test_date_of_birth_various_formats(self):
+        for dob, expected in [
+            ("1969-01-15", "1969"),
+            ("1974-03-20", "1974"),
+            ("1962/05/10", "1962"),
+            ("2001",       "2001"),
+        ]:
+            ehr = {"patient_id": "P1", "patient": {"date_of_birth": dob}}
+            assert deidentify(ehr)["patient"]["date_of_birth"] == expected, f"Failed for {dob}"
+
+    def test_date_of_birth_none_handled(self):
+        ehr = {"patient_id": "P1", "patient": {"date_of_birth": None}}
         result = deidentify(ehr)
-        assert result["patient"]["full_name"] == "Nguyen Van A"
+        assert result["patient"]["date_of_birth"] == "[REDACTED]"
 
-    def test_does_not_mutate_input(self):
-        ehr = {"patient_id": "P1", "patient": {"citizen_id": "123456789012"}}
-        _ = deidentify(ehr)
-        assert ehr["patient"]["citizen_id"] == "123456789012"
+    # --- Partial address masking ---
 
-    def test_p001_already_redacted_passes(self, valid_ehr):
-        # Seed data already has REDACTED — deidentifier should not break it
-        result = deidentify(valid_ehr)
-        assert result["patient_id"] == valid_ehr["patient_id"]
+    def test_address_keeps_district_province(self, pii_ehr):
+        result = deidentify(pii_ehr)
+        addr = result["patient"]["address"]
+        assert "Quận 1" in addr
+        assert "Thành phố Hồ Chí Minh" in addr
+        assert "Số 5" not in addr
+        assert "Nguyễn Trãi" not in addr
 
-    def test_nested_pii_redacted(self):
+    def test_address_single_token_fallback(self):
+        ehr = {"patient_id": "P1", "patient": {"address": "Hà Nội"}}
+        result = deidentify(ehr)
+        assert result["patient"]["address"] == "Hà Nội"
+
+    def test_address_two_tokens(self):
+        ehr = {"patient_id": "P1", "patient": {"address": "Quận Cầu Giấy, Hà Nội"}}
+        result = deidentify(ehr)
+        assert result["patient"]["address"] == "Quận Cầu Giấy, Hà Nội"
+
+    # --- Strip metadata fields ---
+
+    def test_data_note_stripped_from_allergy(self, pii_ehr):
+        result = deidentify(pii_ehr)
+        allergy = result["allergies"][0]
+        assert "data_note" not in allergy
+
+    def test_data_note_stripped_from_medication(self, pii_ehr):
+        result = deidentify(pii_ehr)
+        med = result["encounters"][0]["medications"][0]
+        assert "data_note" not in med
+
+    def test_data_note_key_absent_not_error(self):
+        """data_note key doesn't exist → should not raise."""
+        ehr = {"patient_id": "P1", "patient": {"full_name": "Test"}, "allergies": [], "encounters": []}
+        result = deidentify(ehr)
+        assert result["patient"]["full_name"] == "Test"
+
+    # --- Preserved fields ---
+
+    def test_full_name_preserved(self, pii_ehr):
+        result = deidentify(pii_ehr)
+        assert result["patient"]["full_name"] == "Nguyen Van Test"
+
+    def test_age_preserved(self, pii_ehr):
+        result = deidentify(pii_ehr)
+        assert result["patient"]["age"] == 55
+
+    def test_gender_preserved(self, pii_ehr):
+        result = deidentify(pii_ehr)
+        assert result["patient"]["gender"] == "male"
+
+    def test_clinical_substance_preserved(self, pii_ehr):
+        result = deidentify(pii_ehr)
+        assert result["allergies"][0]["substance"] == "Penicillin"
+
+    def test_drug_name_preserved(self, pii_ehr):
+        result = deidentify(pii_ehr)
+        assert result["encounters"][0]["medications"][0]["drug_name"] == "Metformin"
+
+    # --- Immutability ---
+
+    def test_does_not_mutate_input(self, pii_ehr):
+        original_cid = pii_ehr["patient"]["citizen_id"]
+        _ = deidentify(pii_ehr)
+        assert pii_ehr["patient"]["citizen_id"] == original_cid
+
+    # --- Nested PII ---
+
+    def test_nested_pii_in_encounter_patient_object(self):
         ehr = {
             "patient_id": "P1",
             "patient": {"citizen_id": "111111111111"},
             "encounters": [{"encounter_id": "E1", "patient": {"insurance_id": "GD123"}}],
+            "allergies": [],
         }
         result = deidentify(ehr)
         assert result["patient"]["citizen_id"] == "[REDACTED]"
         assert result["encounters"][0]["patient"]["insurance_id"] == "[REDACTED]"
+
+    # --- Real data: P001 assembled file ---
+
+    def test_p001_all_pii_fields_deidentified(self, valid_ehr):
+        result = deidentify(valid_ehr)
+        patient = result["patient"]
+        assert patient.get("citizen_id") == "[REDACTED]"
+        assert patient.get("insurance_id") == "[REDACTED]"
+        assert patient.get("phone") == "[REDACTED]"
+        # date_of_birth should be year only
+        dob = patient.get("date_of_birth")
+        if dob:
+            assert len(dob) == 4 and dob.isdigit(), f"Expected YYYY got: {dob}"
+
+    def test_p001_address_partially_masked(self, valid_ehr):
+        result = deidentify(valid_ehr)
+        addr = result["patient"].get("address", "")
+        # Should keep province/city-level info
+        assert addr != ""
+        # Should not contain house numbers (single digits at start of address)
+        raw_addr = valid_ehr["patient"].get("address", "")
+        if raw_addr and "," in raw_addr:
+            assert result["patient"]["address"] != raw_addr
+
+    def test_p001_patient_id_unchanged(self, valid_ehr):
+        result = deidentify(valid_ehr)
+        assert result["patient_id"] == valid_ehr["patient_id"]
+
+    def test_p001_data_notes_stripped(self, valid_ehr):
+        result = deidentify(valid_ehr)
+        text = str(result)
+        assert "data_note" not in text
+
+
+# ---------------------------------------------------------------------------
+# is_deidentified() tests
+# ---------------------------------------------------------------------------
+
+class TestIsDeidentified:
+    def test_false_when_cccd_present(self):
+        ehr = {"patient": {"citizen_id": "001069123456"}}
+        assert is_deidentified(ehr) is False
+
+    def test_false_when_phone_present(self):
+        ehr = {"patient": {"phone": "0912345678"}}
+        assert is_deidentified(ehr) is False
+
+    def test_false_when_bhyt_present(self):
+        ehr = {"patient": {"insurance_id": "GD4030000012345"}}
+        assert is_deidentified(ehr) is False
+
+    def test_true_after_deidentify(self, pii_ehr):
+        result = deidentify(pii_ehr)
+        assert is_deidentified(result) is True
+
+    def test_true_for_minimal_ehr(self, minimal_ehr):
+        result = deidentify(minimal_ehr)
+        assert is_deidentified(result) is True
+
+    def test_true_for_p001_after_deidentify(self, valid_ehr):
+        result = deidentify(valid_ehr)
+        assert is_deidentified(result) is True
+
+    def test_false_for_p001_raw(self, valid_ehr):
+        assert is_deidentified(valid_ehr) is False
 
 
 # ---------------------------------------------------------------------------
@@ -181,16 +381,14 @@ class TestNormalizer:
         assert "đái tháo đường" in result or "dai thao duong" in result.lower()
 
     def test_partial_word_not_replaced(self):
-        # 'THA' inside 'THAY' should not be replaced
         text = "THAY the thuoc"
         result = normalize_text(text)
-        assert "THAY" in result  # unchanged
+        assert "THAY" in result
         assert "tăng huyết áp" not in result
 
     def test_multiple_abbrevs_in_one_text(self):
         text = "BN THA + ĐTĐ, RLLPM"
         result = normalize_text(text)
-        # At least some abbreviations should be expanded
         assert result != text
 
     def test_normalize_ehr_does_not_crash(self, valid_ehr):
@@ -199,11 +397,9 @@ class TestNormalizer:
         assert len(result["encounters"]) == len(valid_ehr["encounters"])
 
     def test_icd10_not_expanded(self):
-        # ICD-10 codes should NOT be in text fields that get normalized
-        # This tests that the chunker (not normalizer) preserves ICD-10
         text = "Chan doan: E11 - DTD type 2"
         result = normalize_text(text)
-        assert "E11" in result  # ICD-10 code preserved
+        assert "E11" in result
 
     def test_empty_text_returns_empty(self):
         assert normalize_text("") == ""
