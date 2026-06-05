@@ -2,7 +2,7 @@
 
 Pipeline tóm tắt bệnh án điện tử (EHR) tiếng Việt có citation grounding — mỗi thông tin trong summary đều được truy vết về nguồn dữ liệu gốc và xác minh tự động.
 
-**Dự án thực tập — VSF Healthcare AI, Phase 3**
+**Dự án thực tập tại VSF - Khối y tế**
 
 ---
 
@@ -156,7 +156,3 @@ Next.js app theo mô hình T-C-R (Transparency · Control · Recovery):
 | GPT-4o | ~$0.079 (~1.974 VND) | ~$237 (~5.925.000 VND) |
 
 ---
-
-## Tác giả
-
-**Đào Anh Quân** — Thực tập VSF Healthcare AI, Phase 3
