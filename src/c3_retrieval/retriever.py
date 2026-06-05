@@ -40,7 +40,7 @@ _LATEST_ENCOUNTER_SECTIONS = {
 }
 
 # Sections where chronological order matters (oldest → newest)
-_CHRONOLOGICAL = {"treatment_timeline"}
+_CHRONOLOGICAL = {"treatment_timeline", "medical_history"}
 
 
 # ---------------------------------------------------------------------------
@@ -58,7 +58,7 @@ def _latest_encounter_ids(chunks: list[SourceChunk]) -> set[str]:
 
     enc_max_date: dict[str, str] = {}
     for c in chunks:
-        if not c.encounter_id:
+        if _is_patient_level(c):
             continue
         d = c.date or ""
         if c.encounter_id not in enc_max_date or d > enc_max_date[c.encounter_id]:
@@ -71,15 +71,22 @@ def _latest_encounter_ids(chunks: list[SourceChunk]) -> set[str]:
     return {eid for eid, d in enc_max_date.items() if d == latest_date}
 
 
+_PATIENT_LEVEL_ENC = "PATIENT_LEVEL"
+
+
+def _is_patient_level(chunk: SourceChunk) -> bool:
+    return chunk.encounter_id is None or chunk.encounter_id == _PATIENT_LEVEL_ENC
+
+
 def _filter_latest_encounter(chunks: list[SourceChunk]) -> list[SourceChunk]:
     """
     Keep only chunks whose encounter_id belongs to the most recent encounter.
-    Chunks without encounter_id (e.g. patient_info, allergies) are always kept.
+    Patient-level chunks (encounter_id is None or "PATIENT_LEVEL") are always kept.
     """
     latest = _latest_encounter_ids(chunks)
     if not latest:
         return chunks
-    result = [c for c in chunks if c.encounter_id is None or c.encounter_id in latest]
+    result = [c for c in chunks if _is_patient_level(c) or c.encounter_id in latest]
     return result if result else chunks
 
 
@@ -87,14 +94,14 @@ def _filter_latest_n_encounters(chunks: list[SourceChunk], n: int = 2) -> list[S
     """
     Keep chunks from the n most recent distinct encounters.
     Used for abnormal_labs to include current value + previous value for trend.
-    Chunks without encounter_id are always kept.
+    Patient-level chunks are always kept.
     """
     if not chunks:
         return chunks
 
     enc_max_date: dict[str, str] = {}
     for c in chunks:
-        if not c.encounter_id:
+        if _is_patient_level(c):
             continue
         d = c.date or ""
         if c.encounter_id not in enc_max_date or d > enc_max_date[c.encounter_id]:
@@ -106,7 +113,7 @@ def _filter_latest_n_encounters(chunks: list[SourceChunk], n: int = 2) -> list[S
     latest_n = set(
         sorted(enc_max_date, key=enc_max_date.__getitem__, reverse=True)[:n]
     )
-    result = [c for c in chunks if c.encounter_id is None or c.encounter_id in latest_n]
+    result = [c for c in chunks if _is_patient_level(c) or c.encounter_id in latest_n]
     return result if result else chunks
 
 
@@ -174,8 +181,20 @@ def retrieve_for_section(
     # ── Sort ───────────────────────────────────────────────────────────────
     if section_id in _CHRONOLOGICAL:
         filtered = sorted(filtered, key=lambda c: c.date or "")
+    elif section_id == "allergies":
+        # Allergy-type chunks first (primary source), then clinical_notes by recency
+        allergy_chunks = [c for c in filtered if c.source_type == "allergies"]
+        other_chunks = sorted(
+            [c for c in filtered if c.source_type != "allergies"],
+            key=lambda c: c.date or "", reverse=True,
+        )
+        filtered = allergy_chunks + other_chunks
     else:
-        # Default: most-recent first
-        filtered = sorted(filtered, key=lambda c: c.date or "", reverse=True)
+        # Default: most-recent first, but patient-level chunks always first
+        filtered = sorted(
+            filtered,
+            key=lambda c: ("0" if _is_patient_level(c) else "1", c.date or ""),
+            reverse=True,
+        )
 
     return filtered[:max_chunks]

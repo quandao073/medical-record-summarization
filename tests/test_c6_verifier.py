@@ -108,15 +108,16 @@ class TestVerifySection:
         assert vsec.content != ""
         assert "[CẦN XÁC NHẬN]" not in vsec.content or "Metformin" in vsec.content
 
-    def test_flagged_claims_marked_with_status_prefix(self):
-        """Flagged claims should have a status-specific prefix, not a blanket [CẦN XÁC NHẬN]."""
+    def test_flagged_claims_content_stays_clean(self):
+        """Flagged claims should NOT have status prefixes in content — status is in CitedClaim.status only."""
         chunks = []  # no matching chunks → NO_CITATION
         section = _section("Bệnh nhân dùng thuốc bí mật 5000 mg.")
         vsec, actions = verify_section(section, chunks, conservative=True)
-        # Conservative mode: NO_CITATION critical → FLAG with [Chưa có nguồn] prefix
         if any(a == "FLAG" for a in actions):
-            # Status-specific label, not the old blanket label
-            assert "[Chưa có nguồn]" in vsec.content or "[Cần xác minh]" in vsec.content
+            assert "[Chưa có nguồn]" not in vsec.content
+            assert "[Cần xác minh]" not in vsec.content
+            assert "[CẦN XÁC NHẬN]" not in vsec.content
+            assert "thuốc bí mật 5000 mg" in vsec.content
 
     def test_empty_section_unchanged(self, med_chunks):
         section = _section("Chưa thấy ghi nhận trong dữ liệu được cung cấp.")
@@ -235,12 +236,12 @@ class TestVerifySummary:
         assert matched[0].citations == []
         assert matched[1].status == "SUPPORTED"
         
-        # Test verify_section does not add prefixes to structural claims
+        # Test verify_section does not add prefixes to any claims (content stays clean)
         vsec, actions = verify_section(section, [])
-        assert "[Cần xác minh] Cảnh báo hiện tại:" not in vsec.content
-        assert "[Cần xác minh] Không ghi nhận." not in vsec.content
-        # Non-structural critical claim "Metformin 1000 mg" with no source is flagged
-        assert "[Chưa có nguồn] Metformin 1000 mg" in vsec.content or "[Cần xác minh] Metformin 1000 mg" in vsec.content
+        assert "[Cần xác minh]" not in vsec.content
+        assert "[Chưa có nguồn]" not in vsec.content
+        # Non-structural critical claim "Metformin 1000 mg" is kept in content (flagged, not removed)
+        assert "Metformin 1000 mg" in vsec.content
 
         # Test verify_summary excludes structural claims from metrics counts
         vsections, metrics = verify_summary([section], [])

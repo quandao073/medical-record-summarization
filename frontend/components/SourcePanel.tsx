@@ -143,6 +143,17 @@ export default function SourcePanel({
               </span>
             )}
 
+            {/* Status explanation line */}
+            <p className="text-xs text-gray-500 leading-relaxed">
+              {claimContext.status === "SUPPORTED" && "Claim này được hỗ trợ đầy đủ bởi nguồn dữ liệu bên dưới."}
+              {claimContext.status === "PARTIALLY_SUPPORTED" && "Nguồn này chỉ hỗ trợ một phần claim. Một số chi tiết chưa được xác nhận đầy đủ."}
+              {claimContext.status === "LOW_CONFIDENCE" && "Nguồn có liên quan nhưng chưa đủ rõ ràng để xác nhận claim."}
+              {claimContext.status === "NEED_REVIEW" && "Claim cần bác sĩ hoặc bệnh nhân xác nhận trước khi tin cậy."}
+              {claimContext.status === "NO_CITATION" && "Không tìm thấy nguồn dữ liệu hỗ trợ claim này."}
+              {claimContext.status === "UNSUPPORTED" && "Claim không có nguồn hỗ trợ trong dữ liệu được cung cấp."}
+              {claimContext.status === "CONTRADICTED" && "Nguồn dữ liệu mâu thuẫn với nội dung claim này."}
+            </p>
+
             {/* All citations for this claim (issue 4) */}
             {claimContext.citations.length > 1 && (
               <div>

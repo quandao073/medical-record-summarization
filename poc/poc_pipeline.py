@@ -14,8 +14,12 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import sys
 import time
 from pathlib import Path
+
+if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
+    sys.stdout.reconfigure(encoding="utf-8")
 
 from openai import OpenAI
 from dotenv import load_dotenv
@@ -207,7 +211,8 @@ SECTION_GUIDELINES = {
         "Ví dụ:\n"
         "- 2024-01-10: HbA1c 9.2%, huyết áp 148/92 mmHg, LDL 3.4 mmol/L — tăng Metformin, thêm Empagliflozin, thêm Perindopril — kiểm soát chưa đạt.\n"
         "- 2024-10-10: HbA1c 7.1%, huyết áp 128/78 mmHg, LDL 2.6 mmol/L — duy trì phác đồ — cải thiện rõ.\n\n"
-        "Mỗi encounter trong context nên có tối đa một dòng. "
+        "BẮT BUỘC: Viết một dòng cho MỖI encounter trong context, đặc biệt encounter MỚI NHẤT phải có mặt. "
+        "Không bỏ sót encounter nào. "
         "Không đưa khuyến nghị. Chỉ dùng dữ liệu trong context."
     ),
 

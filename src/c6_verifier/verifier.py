@@ -78,13 +78,7 @@ def verify_section(
         new_content = _EMPTY_CONTENT
         kept_claims: list[CitedClaim] = []
     else:
-        parts = []
-        for c, a in kept_pairs:
-            if a == "FLAG":
-                prefix = _STATUS_PREFIX.get(c.status, "[Cần kiểm tra] ")
-                parts.append(prefix + c.claim_text)
-            else:
-                parts.append(c.claim_text)
+        parts = [c.claim_text for c, _ in kept_pairs]
         new_content = " ".join(parts)
         kept_claims = [c for c, _ in kept_pairs]
 

@@ -318,7 +318,7 @@
     "diagnosis_date": "2023-06-10",
     "diagnosis_type": "complication",
     "icd10_code": "I51.7",
-    "diagnosis_name": "Phì đại tim do THA",
+    "diagnosis_name": "Phì đại thất trái",
     "diagnosis_text": "Phì đại thất trái theo ECG điện thế (Sokolow-Lyon). Cần đánh giá bằng siêu âm tim.",
     "is_active": true,
     "source_system": "HIS-Diagnosis",
@@ -383,7 +383,7 @@
     "diagnosis_date": "2024-02-10",
     "diagnosis_type": "comorbidity",
     "icd10_code": "E11.9",
-    "diagnosis_name": "Đái tháo đường type 2 mới chẩn đoán",
+    "diagnosis_name": "Đái tháo đường type 2",
     "diagnosis_text": "ĐTĐ type 2 mới phát hiện 02/2024. HbA1c 6.9%, glucose đói 7.2 mmol/L (>7.0). Khởi trị Metformin 500mg x2.",
     "is_active": true,
     "source_system": "HIS-Diagnosis",
@@ -421,9 +421,9 @@
     "encounter_id": "P003-E004",
     "diagnosis_date": "2024-06-10",
     "diagnosis_type": "primary",
-    "icd10_code": "I10",
-    "diagnosis_name": "Tăng huyết áp cấp cứu",
-    "diagnosis_text": "THA cấp: BP 178/108 mmHg tại nhà, đau đầu dữ dội. Nhập viện điều trị tích cực. Nghi ngờ tổn thương cơ quan đích.",
+    "icd10_code": "I16.1",
+    "diagnosis_name": "Cơn tăng huyết áp cấp cứu",
+    "diagnosis_text": "THA cấp cứu: BP 178/108 mmHg tại nhà, đau đầu dữ dội. Nhập viện điều trị tích cực. Nghi ngờ tổn thương cơ quan đích. Bệnh nền: THA nguyên phát (I10).",
     "is_active": true,
     "source_system": "HIS-Diagnosis",
     "language": "vi"
@@ -556,7 +556,6 @@
     "diagnosis_text": "ĐTĐ type 2, hạ đường huyết do Gliclazide. Glucose đói 2.5 mmol/L (critical). Ngưng Gliclazide, giảm liều Metformin.",
     "is_active": true,
     "source_system": "HIS-Diagnosis",
-    "data_note": "EC-04: ICD-10 ghi E11.9 (ĐTĐ type 2) nhưng clinical note P004-E003-NOTE001 ghi 'BN ĐTĐ type 1'. Đây là mâu thuẫn dữ liệu dùng để test hallucination detection pipeline.",
     "language": "vi"
   },
   {
