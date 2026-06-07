@@ -282,14 +282,17 @@ def _chunk_allergies(ehr: dict) -> list[SourceChunk]:
     chunks = []
     pid = ehr["patient_id"]
     for allergy in ehr.get("allergies", []):
-        substance = allergy.get("substance", "?")
-        reaction  = allergy.get("reaction", "khong ro")
-        severity  = allergy.get("severity", "unknown")
-        status    = allergy.get("status", "unknown")
+        # Coerce null / "unknown" to Vietnamese placeholders — never surface "None"/"unknown".
+        substance = allergy.get("substance") or "không rõ"
+        reaction  = allergy.get("reaction") or "chưa rõ"
+        severity_raw = allergy.get("severity")
+        severity  = "chưa xác định" if not severity_raw or severity_raw == "unknown" else severity_raw
+        status_raw = allergy.get("status")
+        status    = "chưa xác nhận" if not status_raw or status_raw == "unknown" else status_raw
         note      = allergy.get("source_text", "")
         needs_confirm = allergy.get("needs_patient_confirmation", False)
 
-        text = f"Dị ứng: {substance}. Phản ứng: {reaction}. Mức độ: {severity}. Trang thái: {status}."
+        text = f"Dị ứng: {substance}. Phản ứng: {reaction}. Mức độ: {severity}. Trạng thái: {status}."
         if needs_confirm:
             text += " [CẦN XÁC NHẬN VỚI BỆNH NHÂN]"
         if note:

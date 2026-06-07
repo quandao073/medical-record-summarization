@@ -48,6 +48,9 @@ VerificationStatus = Literal[
     "INCORRECT",
 ]
 
+# C6 verifier decision — distinct from human verification_status above.
+VerifierAction = Literal["KEEP", "FLAG", "REMOVE"]
+
 
 class CitedClaim(BaseModel):
     """One atomic claim generated in the summary."""
@@ -57,7 +60,8 @@ class CitedClaim(BaseModel):
     citations: list[str] = Field(default_factory=list)   # List of source_id
     confidence_score: Optional[float] = None
     is_critical: bool = False
-    verification_status: VerificationStatus = "PENDING"
+    verification_status: VerificationStatus = "PENDING"   # human-in-the-loop axis
+    verifier_action: VerifierAction = "KEEP"              # C6 automatic decision
     is_structural: bool = False
 
 
@@ -118,6 +122,10 @@ class SummaryMetrics(BaseModel):
     hallucination_rate: float = 0.0        # CONTRADICTED / total
     missing_section_rate: float = 0.0
     total_claims: int = 0
+    # Quality counters (added Week 3)
+    contradiction_count: int = 0           # claims marked CONTRADICTED (internal/source conflict)
+    duplicate_claim_count: int = 0         # duplicate claim_texts dropped during extraction
+    need_review_count: int = 0             # claims needing clinician confirmation
     latency_seconds: float = 0.0
     token_count: int = 0
 
@@ -129,6 +137,8 @@ class FinalSummary(BaseModel):
     model_version: str = "claude-sonnet-4-6"
     sections: list[SummarySection] = Field(default_factory=list)
     metrics: SummaryMetrics = Field(default_factory=SummaryMetrics)
+    # Audit trail: claims removed by C6 (only populated in strict/non-conservative mode)
+    removed_claims: list[CitedClaim] = Field(default_factory=list)
 
 
 # ---------------------------------------------------------------------------

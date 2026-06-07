@@ -2,7 +2,9 @@
 
 import pytest
 from src.schemas import CitedClaim, SummarySection, SourceChunk
-from src.c6_verifier.verifier import decide, verify_section, verify_summary
+from src.c6_verifier.verifier import (
+    decide, verify_section, verify_summary, check_internal_consistency,
+)
 
 
 # ---------------------------------------------------------------------------
@@ -247,4 +249,88 @@ class TestVerifySummary:
         vsections, metrics = verify_summary([section], [])
         # The section has 3 claims, 2 are structural. So total_claims should be 1 (only Metformin)
         assert metrics.total_claims == 1
+
+
+# ---------------------------------------------------------------------------
+# Week 3 quality fixes
+# ---------------------------------------------------------------------------
+
+class TestVerifierActionWritten:
+    """Q8 — every kept claim carries its KEEP/FLAG decision."""
+
+    def test_verifier_action_set_on_claims(self, med_chunks):
+        section = _section("Metformin 1000 mg uống sau ăn. Thuốc bí mật 9999 mg.")
+        vsec, _ = verify_section(section, med_chunks, conservative=True)
+        assert vsec.cited_claims  # non-empty
+        for c in vsec.cited_claims:
+            assert c.verifier_action in ("KEEP", "FLAG")
+
+    def test_supported_claim_is_keep(self, med_chunks):
+        section = _section("Metformin 1000 mg uống sau ăn sáng và tối.")
+        vsec, _ = verify_section(section, med_chunks)
+        met = [c for c in vsec.cited_claims if "Metformin" in c.claim_text]
+        assert met and met[0].verifier_action == "KEEP"
+
+
+class TestRemovedClaimsAudit:
+    """Q8 — REMOVE'd claims are captured for audit in strict mode."""
+
+    def test_removed_claims_logged(self):
+        removed: list = []
+        section = _section("Insulin glargine 9999 mg tiêm mỗi tối.")
+        vsec, actions = verify_section(section, [], conservative=False, removed_out=removed)
+        if "REMOVE" in actions:
+            assert len(removed) >= 1
+            assert all(c.verifier_action == "REMOVE" for c in removed)
+
+    def test_conservative_mode_removes_nothing(self):
+        removed: list = []
+        section = _section("Insulin glargine 9999 mg tiêm mỗi tối.")
+        verify_section(section, [], conservative=True, removed_out=removed)
+        assert removed == []
+
+
+class TestInternalConsistency:
+    """Q1 — cross-section diabetes-type disagreement is flagged."""
+
+    def test_minority_type_marked_contradicted(self):
+        sections = [
+            SummarySection(section_id="overview", cited_claims=[
+                CitedClaim(claim_text="Đái tháo đường type 2 nhiều năm", status="SUPPORTED"),
+            ]),
+            SummarySection(section_id="diagnoses", cited_claims=[
+                CitedClaim(claim_text="Chẩn đoán: Đái tháo đường type 2 (E11.9)", status="SUPPORTED"),
+            ]),
+            SummarySection(section_id="reason_for_visit", cited_claims=[
+                CitedClaim(claim_text="Bệnh nhân đái tháo đường type 1 tái khám", status="SUPPORTED"),
+            ]),
+        ]
+        updated, count = check_internal_consistency(sections)
+        assert count == 1
+        minority = updated[2].cited_claims[0]
+        assert minority.status == "CONTRADICTED"
+
+    def test_no_conflict_when_consistent(self):
+        sections = [
+            SummarySection(section_id="overview", cited_claims=[
+                CitedClaim(claim_text="Đái tháo đường type 2", status="SUPPORTED"),
+            ]),
+            SummarySection(section_id="diagnoses", cited_claims=[
+                CitedClaim(claim_text="Đái tháo đường type 2 (E11.9)", status="SUPPORTED"),
+            ]),
+        ]
+        updated, count = check_internal_consistency(sections)
+        assert count == 0
+
+
+class TestNewMetrics:
+    """New quality counters are present and consistent."""
+
+    def test_metrics_have_new_counters(self, med_chunks):
+        sections = [_section("Metformin 1000 mg uống sau ăn.", "current_medications")]
+        _, metrics = verify_summary(sections, med_chunks)
+        assert hasattr(metrics, "contradiction_count")
+        assert hasattr(metrics, "need_review_count")
+        assert hasattr(metrics, "duplicate_claim_count")
+        assert metrics.contradiction_count >= 0
 

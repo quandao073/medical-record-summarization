@@ -28,10 +28,8 @@ from src.c1_emr.pipeline import load_and_process, C1ProcessingError
 from src.c2_chunking.chunker import chunk_ehr
 from src.c2_chunking.store_builder import build_structured_store, save_structured_store
 from src.c3_retrieval.retriever import retrieve_for_section
-from src.c5_citation.claim_extractor import extract_claims
-from src.c5_citation.evidence_matcher import match_claims
-from src.c6_verifier.verifier import verify_section
-from src.schemas import SourceChunk, FinalSummary, SummarySection, SummaryMetrics
+from src.c6_verifier.verifier import verify_section, check_internal_consistency
+from src.schemas import SourceChunk, CitedClaim, FinalSummary, SummarySection, SummaryMetrics
 
 load_dotenv()
 
@@ -105,6 +103,8 @@ NGUYÊN TẮC BẮT BUỘC — VI PHẠM LÀ LỖI NGHIÊM TRỌNG:
 13. Content chỉ dùng plain text, heading ngắn và bullet dấu "-" nếu cần.
 14. Không dùng các ký hiệu gây rối UI như: ⚠️, ✅, ❓, 📅, ↑, ↓.
 15. Nếu cần diễn đạt xu hướng, dùng chữ: "tăng", "giảm", "cải thiện", "xấu đi", "ổn định".
+16. NHẤT QUÁN giữa các section: loại bệnh (ví dụ đái tháo đường type 1 hay type 2), giá trị số, mã ICD phải GIỐNG NHAU ở mọi section. Lấy đúng loại bệnh từ chẩn đoán gốc trong [CONTEXT], KHÔNG suy diễn, KHÔNG để mâu thuẫn type giữa các section.
+17. Nếu dữ liệu thiếu, ghi "chưa rõ" hoặc "chưa xác định". TUYỆT ĐỐI KHÔNG in "None", "null", "unknown", "nan" trong content.
 
 ĐỊNH DẠNG OUTPUT BẮT BUỘC:
 Trả về một JSON object hợp lệ với key là section_id được yêu cầu.
@@ -162,6 +162,9 @@ SECTION_GUIDELINES = {
     "current_medications": (
         "Liệt kê thuốc từ đơn thuốc mới nhất trong [CONTEXT], dựa trên prescription_date hoặc encounter gần nhất. "
         "Không merge thuốc từ nhiều lần khám. Chỉ dùng đơn thuốc ngày gần nhất. "
+        "Mỗi thuốc viết thành MỘT câu hoàn chỉnh trên một dòng, gồm tên, hàm lượng, liều, "
+        "tần suất và thời điểm dùng. KHÔNG tách thời điểm dùng (ví dụ 'Uống buổi sáng') "
+        "thành câu riêng — phải gộp vào cùng câu với tên thuốc.\n"
         "Format mỗi dòng:\n"
         "- Tên thuốc hàm lượng — liều, tần suất, hướng dẫn dùng nếu có.\n"
         "Nếu thiếu liều, ghi '(thiếu thông tin liều)'. "
@@ -173,6 +176,7 @@ SECTION_GUIDELINES = {
         "Liệt kê tất cả dị ứng đã biết từ context. "
         "Format mỗi dòng:\n"
         "- Dị ứng: [tác nhân]; phản ứng: [phản ứng nếu có]; mức độ: [mức độ nếu có]; trạng thái: [trạng thái nếu có].\n"
+        "Nếu một trường thiếu dữ liệu, ghi 'chưa rõ' hoặc 'chưa xác định'. KHÔNG in 'None'/'unknown'/'null'. "
         "Nếu không có dữ liệu dị ứng, ghi: 'Chưa thấy ghi nhận dị ứng trong dữ liệu được cung cấp.' "
         "Nếu dị ứng cần bệnh nhân hoặc bác sĩ xác nhận, ghi rõ 'Cần xác nhận'. "
         "Nếu context có đầy đủ tác nhân, phản ứng, mức độ và trạng thái thì không tự đánh dấu cần xác nhận."
@@ -503,15 +507,15 @@ def run_poc(
         print("[C5/C6] Verifying claims per section...")
 
     verified_sections: list[SummarySection] = []
+    removed_claims: list[CitedClaim] = []
     for draft in draft_sections:
         sc = section_chunks_map.get(draft.section_id, chunks)
-        # C5: extract atomic claims from LLM output, match against source chunks
-        raw_claims  = extract_claims(draft)
-        matched     = match_claims(raw_claims, sc)
-        draft_with_claims = draft.model_copy(update={"cited_claims": matched})
-        # C6: apply KEEP/FLAG/REMOVE decision matrix, rebuild content
-        v_section, _ = verify_section(draft_with_claims, sc, conservative=True)
+        # C5 (extract + match) + C6 (KEEP/FLAG/REMOVE) run inside verify_section.
+        v_section, _ = verify_section(draft, sc, conservative=True, removed_out=removed_claims)
         verified_sections.append(v_section)
+
+    # Cross-section consistency pass (e.g. diabetes type disagreement across sections)
+    verified_sections, _ = check_internal_consistency(verified_sections, conservative=True)
 
     # ──────────────────────────────────────────────────────────────────────────
     # Metrics — computed from verified atomic claims (not blob-per-section)
@@ -543,6 +547,9 @@ def run_poc(
         hallucination_rate         = round(contradicted / total_claims, 3)     if total_claims   else 0.0,
         missing_section_rate       = round(empty_sections / len(SECTIONS), 3)  if SECTIONS       else 0.0,
         total_claims               = total_claims,
+        contradiction_count        = contradicted,
+        need_review_count          = need_rev,
+        duplicate_claim_count      = 0,
         latency_seconds            = latency,
         token_count                = total_tokens,
     )
@@ -551,10 +558,11 @@ def run_poc(
 
     final = FinalSummary(
         patient_id=patient_id,
-        prompt_version="poc_v3",
+        prompt_version="poc_v4",
         model_version=model,
         sections=sections,
         metrics=metrics,
+        removed_claims=removed_claims,
     )
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)

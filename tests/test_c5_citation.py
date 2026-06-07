@@ -222,3 +222,113 @@ class TestEvidenceMatcher:
         results = match_claims(claims, med_chunks + lab_chunks)
         assert len(results) == 2
         assert all(isinstance(r, CitedClaim) for r in results)
+
+
+# ---------------------------------------------------------------------------
+# Week 3 quality fixes
+# ---------------------------------------------------------------------------
+
+class TestConflictDetection:
+    """Q1/Q2 — discriminative conflicts must not be SUPPORTED."""
+
+    def test_conflicting_diabetes_type_not_supported(self):
+        chunk = _chunk("DX-E11", "diagnoses",
+                       "[PRIMARY] Đái tháo đường type 2 không biến chứng (E11.9)",
+                       icd10_code="E11.9", diagnosis_name="Đái tháo đường type 2")
+        claim = CitedClaim(
+            claim_text="Bệnh nhân đái tháo đường type 1 tái khám sau 3 tháng",
+            is_critical=True,
+        )
+        result = match_claim(claim, [chunk])
+        assert result.status != "SUPPORTED"
+        assert result.status == "CONTRADICTED"
+
+    def test_matching_diabetes_type_still_supported(self):
+        chunk = _chunk("DX-E11", "diagnoses",
+                       "[PRIMARY] Đái tháo đường type 2 không biến chứng (E11.9)",
+                       icd10_code="E11.9", diagnosis_name="Đái tháo đường type 2")
+        claim = CitedClaim(
+            claim_text="Chẩn đoán chính: Đái tháo đường type 2 (E11.9)",
+            is_critical=True,
+        )
+        result = match_claim(claim, [chunk])
+        assert result.status == "SUPPORTED"
+
+
+class TestAllergyNeedReview:
+    """Q3 — unconfirmed allergy with a source record → NEED_REVIEW, not NO_CITATION."""
+
+    def test_unconfirmed_allergy_is_need_review(self):
+        chunk = _chunk(
+            "P004-PATIENT-ALLERGY-THUOC", "allergies",
+            "Dị ứng: Thuốc (không rõ loại). Phản ứng: chưa rõ. Mức độ: chưa xác định.",
+            substance="Thuốc (không rõ loại)", needs_patient_confirmation=True,
+        )
+        claim = CitedClaim(
+            claim_text="Dị ứng: Thuốc; phản ứng: chưa rõ; mức độ: chưa xác định.",
+            is_critical=True,
+        )
+        result = match_claim(claim, [chunk])
+        assert result.status == "NEED_REVIEW"
+        assert chunk.source_id in result.citations
+
+    def test_confirmed_allergy_is_supported(self):
+        chunk = _chunk("ALLERGY-PEN", "allergies",
+                       "Dị ứng: Penicillin. Phản ứng: nổi mề đay.",
+                       substance="Penicillin", needs_patient_confirmation=False)
+        claim = CitedClaim(claim_text="Dị ứng Penicillin gây nổi mề đay", is_critical=True)
+        result = match_claim(claim, [chunk])
+        assert result.status == "SUPPORTED"
+
+
+class TestMultiFactAndConfidence:
+    """Q7/Q9 — multi-fact citations and populated confidence_score."""
+
+    def test_multifact_claim_collects_multiple_citations(self):
+        chunks = [
+            _chunk("LAB-HBA1C", "labs", "HbA1c: 7.8 %",
+                   test_name="HbA1c", value=7.8, unit="%", is_abnormal=True),
+            _chunk("VIT-1", "vitals", "Huyết áp: 142/90 mmHg",
+                   blood_pressure="142/90"),
+        ]
+        claim = CitedClaim(
+            claim_text="2024-03-05: HbA1c 7.8%, huyết áp 142/90 mmHg",
+            is_critical=True,
+        )
+        result = match_claim(claim, chunks)
+        assert result.status == "SUPPORTED"
+        assert len(result.citations) >= 2
+
+    def test_trend_claim_supported_by_value_match(self):
+        chunks = [
+            _chunk("LAB-HBA1C-OLD", "labs", "HbA1c: 7.8 %",
+                   test_name="HbA1c", value=7.8, unit="%", is_abnormal=True),
+            _chunk("LAB-HBA1C-NEW", "labs", "HbA1c: 7.5 %",
+                   test_name="HbA1c", value=7.5, unit="%", is_abnormal=True),
+        ]
+        claim = CitedClaim(claim_text="Xu hướng: 7.8% xuống 7.5%, cải thiện", is_critical=False)
+        result = match_claim(claim, chunks)
+        assert result.status == "SUPPORTED"
+        assert len(result.citations) >= 2
+
+    def test_confidence_score_populated_on_match(self, med_chunks):
+        claim = CitedClaim(claim_text="Metformin 1000 mg 2 lần/ngày", is_critical=True)
+        result = match_claim(claim, med_chunks)
+        assert result.confidence_score is not None
+        assert result.confidence_score > 0
+
+    def test_confidence_zero_when_no_match(self, med_chunks):
+        claim = CitedClaim(claim_text="Insulin glargine 20 units tiêm tối", is_critical=True)
+        result = match_claim(claim, med_chunks)
+        assert result.confidence_score == 0.0
+
+
+class TestNoDuplicateClaims:
+    """Q5 — identical sentences in a section collapse to one claim."""
+
+    def test_no_duplicate_claims_in_section(self):
+        content = ("Amlodipine 5 mg — 1 viên/ngày. Uống buổi sáng. "
+                   "Losartan 50 mg — 1 viên/ngày. Uống buổi sáng.")
+        claims = extract_claims(_section(content))
+        texts = [c.claim_text.strip().lower() for c in claims]
+        assert len(texts) == len(set(texts))

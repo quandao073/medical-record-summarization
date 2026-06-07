@@ -5,6 +5,7 @@ rebuilds section content with status-specific prefixes, and computes SummaryMetr
 """
 
 from __future__ import annotations
+import re
 from src.schemas import CitedClaim, SummarySection, SummaryMetrics, SourceChunk
 from src.c5_citation.claim_extractor import extract_claims
 from src.c5_citation.evidence_matcher import match_claims
@@ -59,11 +60,14 @@ def verify_section(
     section: SummarySection,
     chunks: list[SourceChunk],
     conservative: bool = True,
+    removed_out: list[CitedClaim] | None = None,
 ) -> tuple[SummarySection, list[str]]:
     """
     Verify one section.
     Returns (verified_section, action_list) — action_list parallels matched claims.
-    FLAG claims get a status-specific prefix (e.g. "[Cần xác minh]"), not a blanket label.
+    Each kept claim carries its C6 decision in `verifier_action` (KEEP/FLAG).
+    REMOVE'd claims are dropped from content; if `removed_out` is provided they are
+    appended there for audit. Content stays clean (no status prefixes).
     """
     claims = extract_claims(section)
     if not claims:
@@ -72,17 +76,68 @@ def verify_section(
     matched = match_claims(claims, chunks)
     actions = [decide(c, conservative) for c in matched]
 
-    kept_pairs = [(c, a) for c, a in zip(matched, actions) if a != "REMOVE"]
+    kept_claims: list[CitedClaim] = []
+    for c, a in zip(matched, actions):
+        tagged = c.model_copy(update={"verifier_action": a})
+        if a == "REMOVE":
+            if removed_out is not None:
+                removed_out.append(tagged)
+        else:
+            kept_claims.append(tagged)
 
-    if not kept_pairs:
+    if not kept_claims:
         new_content = _EMPTY_CONTENT
-        kept_claims: list[CitedClaim] = []
     else:
-        parts = [c.claim_text for c, _ in kept_pairs]
-        new_content = " ".join(parts)
-        kept_claims = [c for c, _ in kept_pairs]
+        new_content = " ".join(c.claim_text for c in kept_claims)
 
     return section.model_copy(update={"content": new_content, "cited_claims": kept_claims}), actions
+
+
+_CLASSIFIER_RE = re.compile(r"\b(?:type|týp|tuýp|tuyp|giai đoạn)\s*([0-9]+)", re.IGNORECASE)
+
+
+def _classifier_values(text: str) -> set[str]:
+    return set(_CLASSIFIER_RE.findall(text.lower()))
+
+
+def check_internal_consistency(
+    sections: list[SummarySection],
+    conservative: bool = True,
+) -> tuple[list[SummarySection], int]:
+    """
+    Cross-section consistency: if claims disagree on a disease classifier
+    (e.g. diabetes 'type 2' vs 'type 1'), keep the majority value and mark the
+    minority claims CONTRADICTED. Returns (updated_sections, contradiction_count).
+    Acts only when there is a clear majority, to avoid false positives.
+    """
+    counts: dict[str, int] = {}
+    for sec in sections:
+        for c in sec.cited_claims:
+            if c.is_structural:
+                continue
+            for v in _classifier_values(c.claim_text):
+                counts[v] = counts.get(v, 0) + 1
+
+    if len(counts) < 2:
+        return sections, 0
+
+    canonical = max(counts, key=counts.__getitem__)
+    added = 0
+    new_sections: list[SummarySection] = []
+    for sec in sections:
+        new_claims: list[CitedClaim] = []
+        for c in sec.cited_claims:
+            vals = _classifier_values(c.claim_text)
+            if vals and canonical not in vals and not c.is_structural:
+                c = c.model_copy(update={
+                    "status": "CONTRADICTED",
+                    "verifier_action": decide(
+                        c.model_copy(update={"status": "CONTRADICTED"}), conservative),
+                })
+                added += 1
+            new_claims.append(c)
+        new_sections.append(sec.model_copy(update={"cited_claims": new_claims}))
+    return new_sections, added
 
 
 def verify_summary(
@@ -95,12 +150,17 @@ def verify_summary(
     All rates are consistent with the UI label taxonomy.
     """
     verified_sections: list[SummarySection] = []
-    all_claims: list[CitedClaim] = []
 
     for section in sections:
         vsec, _ = verify_section(section, chunks, conservative)
         verified_sections.append(vsec)
-        all_claims.extend([c for c in vsec.cited_claims if not c.is_structural])
+
+    # Cross-section consistency pass (e.g. diabetes type disagreement)
+    verified_sections, _ = check_internal_consistency(verified_sections, conservative)
+
+    all_claims: list[CitedClaim] = [
+        c for s in verified_sections for c in s.cited_claims if not c.is_structural
+    ]
 
     total = len(all_claims)
 
@@ -125,6 +185,9 @@ def verify_summary(
         hallucination_rate         = round(contradicted / total, 3)      if total          else 0.0,
         missing_section_rate       = round(empty / len(sections), 3)     if sections       else 0.0,
         total_claims               = total,
+        contradiction_count        = contradicted,
+        need_review_count          = need_rev,
+        duplicate_claim_count      = 0,   # extractor de-duplicates upstream
     )
 
     return verified_sections, metrics

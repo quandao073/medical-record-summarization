@@ -8,6 +8,8 @@ from __future__ import annotations
 import re
 from src.schemas import CitedClaim, SummarySection, is_structural_content
 
+_WS_RE = re.compile(r"\s+")
+
 
 # ---------------------------------------------------------------------------
 # Patterns that signal a CRITICAL claim
@@ -98,6 +100,17 @@ def extract_claims(section: SummarySection) -> list[CitedClaim]:
         # Whole section as a single claim
         sentences = [content]
 
+    # Drop exact duplicate sentences within the same section (e.g. the LLM
+    # emitting "Uống buổi sáng." once per drug). Keep first occurrence, preserve order.
+    seen: set[str] = set()
+    unique_sentences: list[str] = []
+    for s in sentences:
+        key = _WS_RE.sub(" ", s.strip().lower())
+        if key in seen:
+            continue
+        seen.add(key)
+        unique_sentences.append(s)
+
     return [
         CitedClaim(
             claim_text=s,
@@ -105,6 +118,6 @@ def extract_claims(section: SummarySection) -> list[CitedClaim]:
             status="NO_CITATION",
             is_structural=is_structural_content(s),
         )
-        for s in sentences
+        for s in unique_sentences
     ]
 

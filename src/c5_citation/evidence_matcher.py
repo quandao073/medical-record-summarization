@@ -122,6 +122,74 @@ def _exact_match(claim_text: str, chunk: SourceChunk) -> bool:
 
 
 # ---------------------------------------------------------------------------
+# Conflict detection — block false SUPPORTED on discriminative differences
+# ---------------------------------------------------------------------------
+
+# Disease classifier numbers, e.g. "type 2", "týp 1", "tuýp 2", "giai đoạn 3"
+_CLASSIFIER_RE = re.compile(
+    r"\b(?:type|týp|tuýp|tuyp|giai đoạn)\s*([0-9]+)", re.IGNORECASE
+)
+
+
+def _classifier_values(text: str) -> set[str]:
+    return set(_CLASSIFIER_RE.findall(text.lower()))
+
+
+def _has_conflicting_token(claim_text: str, chunk_content: str) -> bool:
+    """
+    True when claim and chunk both specify a discriminative classifier
+    (e.g. diabetes type) but the values differ — preventing a false SUPPORTED
+    such as "ĐTĐ type 1" matched against a "type 2" source.
+    """
+    cl = _classifier_values(claim_text)
+    ch = _classifier_values(chunk_content)
+    if cl and ch and cl.isdisjoint(ch):
+        return True
+    return False
+
+
+# ---------------------------------------------------------------------------
+# Numeric value match — supports multi-fact and trend claims
+# ---------------------------------------------------------------------------
+
+def _value_match(claim_text: str, chunk: SourceChunk) -> bool:
+    """
+    True when a lab's numeric value appears in the claim alongside its unit
+    or short name. Catches trend claims ("7.8% xuống 7.5%") and multi-fact
+    timeline lines where the full test name is absent.
+    """
+    if chunk.source_type != "labs":
+        return False
+    ct = _norm(claim_text)
+    val = chunk.metadata.get("value")
+    if val is None or not any(v in ct for v in _value_strings(val)):
+        return False
+    unit = _norm(str(chunk.metadata.get("unit", "")))
+    test_short = _norm(chunk.metadata.get("test_name", "")).split("(")[0].strip()
+    if unit and unit in ct:
+        return True
+    if test_short and len(test_short) > 2 and test_short in ct:
+        return True
+    return False
+
+
+def _substance_core(substance: str) -> str:
+    """Core substance word, dropping any parenthetical, e.g.
+    'Thuốc (không rõ loại)' → 'thuốc', 'Sulfonamide (Co-trimoxazole)' → 'sulfonamide'."""
+    return _norm(substance.split("(")[0])
+
+
+def _dedup(seq: list[str]) -> list[str]:
+    seen: set[str] = set()
+    out: list[str] = []
+    for x in seq:
+        if x not in seen:
+            seen.add(x)
+            out.append(x)
+    return out
+
+
+# ---------------------------------------------------------------------------
 # Public API
 # ---------------------------------------------------------------------------
 
@@ -132,50 +200,80 @@ def match_claim(
 ) -> CitedClaim:
     """
     Search chunks for evidence supporting claim.
-    Returns a new CitedClaim with status and citations populated.
+    Returns a new CitedClaim with status, citations and confidence_score populated.
 
     Match tiers (highest to lowest):
-      1. SUPPORTED           — exact structured metadata match
-      2. SUPPORTED           — ≥70% keyword overlap with chunk content
-      3. NEED_REVIEW         — allergy match with needs_patient_confirmation
-      4. PARTIALLY_SUPPORTED — keyword overlap ≥ min_keyword_overlap (low overlap)
-      5. NO_CITATION         — no match (critical claim)
-      6. UNSUPPORTED         — no match (non-critical claim)
+      1. SUPPORTED           — exact metadata / numeric value match  (conf 1.0 / 0.85)
+      2. SUPPORTED           — ≥70% content overlap                  (conf 0.8)
+      3. NEED_REVIEW         — allergy needing patient confirmation   (conf 0.6)
+      4. PARTIALLY_SUPPORTED — low keyword overlap                    (conf 0.5)
+      5. CONTRADICTED        — only conflicting evidence found        (conf 0.0)
+      6. NO_CITATION / UNSUPPORTED — no evidence                      (conf 0.0)
     """
     if claim.is_structural or is_structural_content(claim.claim_text):
-        return claim.model_copy(update={"status": "SUPPORTED", "citations": [], "is_structural": True})
+        return claim.model_copy(update={
+            "status": "SUPPORTED", "citations": [], "is_structural": True,
+            "confidence_score": None,
+        })
+
+    norm_claim = _norm(claim.claim_text)
 
     exact_ids: list[str] = []
+    value_ids: list[str] = []
     high_overlap_ids: list[str] = []
-    need_review_ids: list[str] = []
+    allergy_review_ids: list[str] = []
+    allergy_exact_ids: list[str] = []
     keyword_ids: list[str] = []
+    conflict_ids: list[str] = []
 
     for chunk in chunks:
         if chunk.source_type == "allergies":
-            substance = _norm(chunk.metadata.get("substance", ""))
-            if substance and len(substance) > 3 and substance in _norm(claim.claim_text):
+            core = _substance_core(chunk.metadata.get("substance", ""))
+            if core and len(core) >= 3 and core in norm_claim:
                 if chunk.metadata.get("needs_patient_confirmation"):
-                    need_review_ids.append(chunk.source_id)
+                    allergy_review_ids.append(chunk.source_id)
                 else:
-                    exact_ids.append(chunk.source_id)
-        elif _exact_match(claim.claim_text, chunk):
+                    allergy_exact_ids.append(chunk.source_id)
+            continue
+
+        # Discriminative conflict (e.g. diabetes type mismatch) → not positive evidence
+        if _has_conflicting_token(claim.claim_text, chunk.content):
+            conflict_ids.append(chunk.source_id)
+            continue
+
+        if _exact_match(claim.claim_text, chunk):
             exact_ids.append(chunk.source_id)
+        elif _value_match(claim.claim_text, chunk):
+            value_ids.append(chunk.source_id)
         elif _high_content_overlap(claim.claim_text, chunk.content):
             high_overlap_ids.append(chunk.source_id)
         elif _keyword_overlap(claim.claim_text, chunk.content, min_overlap=min_keyword_overlap):
             keyword_ids.append(chunk.source_id)
 
-    if exact_ids:
-        return claim.model_copy(update={"status": "SUPPORTED", "citations": exact_ids[:5]})
-    elif high_overlap_ids:
-        return claim.model_copy(update={"status": "SUPPORTED", "citations": high_overlap_ids[:5]})
-    elif need_review_ids:
-        return claim.model_copy(update={"status": "NEED_REVIEW", "citations": need_review_ids})
-    elif keyword_ids:
-        return claim.model_copy(update={"status": "PARTIALLY_SUPPORTED", "citations": keyword_ids[:3]})
-    else:
-        status: ClaimStatus = "NO_CITATION" if claim.is_critical else "UNSUPPORTED"
-        return claim.model_copy(update={"status": status, "citations": []})
+    strong = _dedup(exact_ids + allergy_exact_ids + value_ids)
+    if strong:
+        conf = 1.0 if (exact_ids or allergy_exact_ids) else 0.85
+        return claim.model_copy(update={
+            "status": "SUPPORTED", "citations": strong[:5], "confidence_score": conf})
+    if high_overlap_ids:
+        return claim.model_copy(update={
+            "status": "SUPPORTED", "citations": _dedup(high_overlap_ids)[:5],
+            "confidence_score": 0.8})
+    if allergy_review_ids:
+        return claim.model_copy(update={
+            "status": "NEED_REVIEW", "citations": _dedup(allergy_review_ids)[:5],
+            "confidence_score": 0.6})
+    if keyword_ids:
+        return claim.model_copy(update={
+            "status": "PARTIALLY_SUPPORTED", "citations": _dedup(keyword_ids)[:3],
+            "confidence_score": 0.5})
+    if conflict_ids:
+        return claim.model_copy(update={
+            "status": "CONTRADICTED", "citations": _dedup(conflict_ids)[:3],
+            "confidence_score": 0.0})
+
+    status: ClaimStatus = "NO_CITATION" if claim.is_critical else "UNSUPPORTED"
+    return claim.model_copy(update={"status": status, "citations": [], "confidence_score": 0.0})
 
 
 def match_claims(
