@@ -102,7 +102,7 @@ def _chunk_labs(enc: dict, pid: str) -> list[SourceChunk]:
         if ref:
             text += f" (tham chiếu: {ref})"
         if lab.get("is_abnormal"):
-            direction = "cao" if lab.get("interpretation") == "high" else "thap"
+            direction = "cao" if lab.get("interpretation") == "high" else "thấp"
             text += f" [BẤT THƯỜNG - {direction}]"
         if lab.get("is_critical"):
             text += " [NGUY HIỂM]"
@@ -210,7 +210,7 @@ def _chunk_clinical_notes(enc: dict, pid: str) -> list[SourceChunk]:
         text = note.get("text", "").strip()
         if not text:
             continue
-        section = note.get("section", "ghi_chu")
+        section = note.get("section", "ghi chú")
 
         chunks.append(SourceChunk(
             source_id=_sid(enc["encounter_id"], "NOTE", note.get("note_id", section)),
@@ -282,19 +282,33 @@ def _chunk_allergies(ehr: dict) -> list[SourceChunk]:
     chunks = []
     pid = ehr["patient_id"]
     for allergy in ehr.get("allergies", []):
-        # Coerce null / "unknown" to Vietnamese placeholders — never surface "None"/"unknown".
-        substance = allergy.get("substance") or "không rõ"
-        reaction  = allergy.get("reaction") or "chưa rõ"
+        # Coerce null / "unknown" to natural Vietnamese — omit unknown fields rather than
+        # listing them, so the sentence reads naturally instead of as a field dump.
+        substance = allergy.get("substance") or "không rõ dị nguyên"
+        reaction_raw = allergy.get("reaction")
+        reaction  = None if not reaction_raw or reaction_raw == "unknown" else reaction_raw
         severity_raw = allergy.get("severity")
-        severity  = "chưa xác định" if not severity_raw or severity_raw == "unknown" else severity_raw
+        severity  = None if not severity_raw or severity_raw == "unknown" else severity_raw
         status_raw = allergy.get("status")
-        status    = "chưa xác nhận" if not status_raw or status_raw == "unknown" else status_raw
+        status    = None if not status_raw or status_raw == "unknown" else status_raw
         note      = allergy.get("source_text", "")
         needs_confirm = allergy.get("needs_patient_confirmation", False)
 
-        text = f"Dị ứng: {substance}. Phản ứng: {reaction}. Mức độ: {severity}. Trạng thái: {status}."
+        text = f"Dị ứng {substance}"
+        details = []
+        if reaction:
+            details.append(f"biểu hiện {reaction}")
+        if severity:
+            details.append(f"mức độ {severity}")
+        if status:
+            details.append(f"trạng thái ghi nhận: {status}")
+        if details:
+            text += ", " + ", ".join(details) + "."
+        else:
+            text += " (chưa ghi nhận chi tiết phản ứng/mức độ)."
+
         if needs_confirm:
-            text += " [CẦN XÁC NHẬN VỚI BỆNH NHÂN]"
+            text += " Cần xác nhận lại thông tin này với bệnh nhân."
         if note:
             text += f" Ghi chú: {note}"
 

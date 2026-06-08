@@ -173,13 +173,22 @@ SECTION_GUIDELINES = {
     ),
 
     "allergies": (
-        "Liệt kê tất cả dị ứng đã biết từ context. "
-        "Format mỗi dòng:\n"
-        "- Dị ứng: [tác nhân]; phản ứng: [phản ứng nếu có]; mức độ: [mức độ nếu có]; trạng thái: [trạng thái nếu có].\n"
-        "Nếu một trường thiếu dữ liệu, ghi 'chưa rõ' hoặc 'chưa xác định'. KHÔNG in 'None'/'unknown'/'null'. "
-        "Nếu không có dữ liệu dị ứng, ghi: 'Chưa thấy ghi nhận dị ứng trong dữ liệu được cung cấp.' "
-        "Nếu dị ứng cần bệnh nhân hoặc bác sĩ xác nhận, ghi rõ 'Cần xác nhận'. "
-        "Nếu context có đầy đủ tác nhân, phản ứng, mức độ và trạng thái thì không tự đánh dấu cần xác nhận."
+        "Liệt kê tất cả dị ứng đã biết từ context, mỗi dị ứng viết thành MỘT câu văn tự nhiên. "
+        "TUYỆT ĐỐI KHÔNG dùng định dạng liệt kê trường kiểu 'Dị ứng: X; phản ứng: Y; mức độ: Z; trạng thái: W' — "
+        "đây là lỗi thường gặp cần tránh.\n"
+        "QUY TẮC QUAN TRỌNG NHẤT: chỉ nhắc tới trường nào THỰC SỰ có dữ liệu trong context. "
+        "Nếu một trường (phản ứng/mức độ/trạng thái) không có dữ liệu hoặc là 'unknown', "
+        "thì KHÔNG được viết tên trường đó ra kèm 'chưa rõ' — hãy bỏ hẳn trường đó khỏi câu, "
+        "như thể nó không tồn tại. KHÔNG bao giờ in 'None'/'unknown'/'null'.\n"
+        "Ví dụ — đầy đủ dữ liệu: 'Dị ứng Penicillin, biểu hiện nổi mề đay toàn thân, mức độ trung bình, "
+        "trạng thái đang theo dõi.'\n"
+        "Ví dụ — chỉ có tác nhân và trạng thái (không rõ phản ứng/mức độ): "
+        "'Dị ứng Sulfonamide, trạng thái đang theo dõi. Cần xác nhận lại thông tin này với bệnh nhân.'\n"
+        "Ví dụ — chỉ có tác nhân, không rõ gì khác: 'Dị ứng thuốc (chưa xác định loại). "
+        "Cần xác nhận lại thông tin này với bệnh nhân.'\n"
+        "Nếu không có dữ liệu dị ứng nào, ghi đúng: 'Chưa thấy ghi nhận dị ứng trong dữ liệu được cung cấp.' "
+        "Chỉ thêm câu 'Cần xác nhận lại thông tin này với bệnh nhân.' khi dị ứng còn thiếu thông tin "
+        "hoặc cần xác nhận; nếu context đã có đầy đủ tác nhân, phản ứng, mức độ và trạng thái thì không thêm câu này."
     ),
 
     "abnormal_labs": (
