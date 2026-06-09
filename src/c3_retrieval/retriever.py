@@ -3,6 +3,10 @@ C3 — Section-wise Retrieval.
 Filters SourceChunks to only the types relevant for each summary section,
 then applies special filters (is_abnormal, is_current, recency) and sort order.
 
+Supports two modes:
+  - Rule-based only (default, no vector store needed)
+  - Hybrid: rule-based hard filter → vector re-rank (when VectorStore provided)
+
 Key principle:
   - Sections showing *current state* (clinical_alerts, abnormal_labs,
     current_medications, reason_for_visit, diagnoses) → latest encounter only.
@@ -11,7 +15,11 @@ Key principle:
 """
 
 from __future__ import annotations
+from typing import Optional, TYPE_CHECKING
 from src.schemas import SourceChunk
+
+if TYPE_CHECKING:
+    from src.c3_retrieval.vector_store import VectorStore
 
 
 # ---------------------------------------------------------------------------
@@ -121,10 +129,24 @@ def _filter_latest_n_encounters(chunks: list[SourceChunk], n: int = 2) -> list[S
 # Public API
 # ---------------------------------------------------------------------------
 
+SECTION_QUERY: dict[str, str] = {
+    "overview":            "thông tin nhân khẩu học bệnh nhân, tuổi, giới tính, chẩn đoán chính, sinh hiệu",
+    "reason_for_visit":    "lý do khám bệnh, triệu chứng chính, bệnh sử hiện tại",
+    "medical_history":     "tiền sử bệnh, tiền sử gia đình, bệnh nền, phẫu thuật trước đó",
+    "current_medications": "thuốc đang dùng hiện tại, liều lượng, tần suất uống thuốc",
+    "allergies":           "dị ứng thuốc, dị ứng thức ăn, phản ứng dị ứng, mức độ nghiêm trọng",
+    "abnormal_labs":       "xét nghiệm bất thường, HbA1c, glucose, creatinine, cholesterol",
+    "diagnoses":           "chẩn đoán bệnh, mã ICD-10, bệnh chính, bệnh kèm, biến chứng",
+    "treatment_timeline":  "diễn biến điều trị, thay đổi thuốc, kết quả xét nghiệm theo thời gian",
+    "clinical_alerts":     "cảnh báo lâm sàng, dị ứng nghiêm trọng, xét nghiệm nguy hiểm, tương tác thuốc",
+}
+
+
 def retrieve_for_section(
     chunks: list[SourceChunk],
     section_id: str,
     max_chunks: int = 15,
+    vector_store: Optional["VectorStore"] = None,
 ) -> list[SourceChunk]:
     """
     Return up to max_chunks SourceChunks relevant for section_id.
@@ -133,7 +155,7 @@ def retrieve_for_section(
       1. source_type whitelist per section
       2. Domain-specific filters (is_abnormal, is_current)
       3. Latest-encounter filter for current-state sections
-      4. Sort (recency-first or chronological)
+      4. Sort: vector re-rank if vector_store provided, else recency/chronological
     """
     allowed = SECTION_SOURCE_TYPES.get(section_id)
     if allowed is None:
@@ -178,11 +200,12 @@ def retrieve_for_section(
         ]
         filtered = time_sensitive + always_relevant
 
-    # ── Sort ───────────────────────────────────────────────────────────────
-    if section_id in _CHRONOLOGICAL:
+    # ── Sort / Re-rank ────────────────────────────────────────────────────
+    if vector_store is not None and section_id in SECTION_QUERY and filtered:
+        filtered = _hybrid_rerank(filtered, section_id, vector_store, max_chunks)
+    elif section_id in _CHRONOLOGICAL:
         filtered = sorted(filtered, key=lambda c: c.date or "")
     elif section_id == "allergies":
-        # Allergy-type chunks first (primary source), then clinical_notes by recency
         allergy_chunks = [c for c in filtered if c.source_type == "allergies"]
         other_chunks = sorted(
             [c for c in filtered if c.source_type != "allergies"],
@@ -190,7 +213,6 @@ def retrieve_for_section(
         )
         filtered = allergy_chunks + other_chunks
     else:
-        # Default: most-recent first, but patient-level chunks always first
         filtered = sorted(
             filtered,
             key=lambda c: ("0" if _is_patient_level(c) else "1", c.date or ""),
@@ -198,3 +220,40 @@ def retrieve_for_section(
         )
 
     return filtered[:max_chunks]
+
+
+def _hybrid_rerank(
+    rule_filtered: list[SourceChunk],
+    section_id: str,
+    vector_store: "VectorStore",
+    max_chunks: int,
+) -> list[SourceChunk]:
+    """Re-rank rule-filtered chunks using vector similarity scores."""
+    query = SECTION_QUERY[section_id]
+    allowed_types = [c.source_type for c in rule_filtered]
+    vs_results = vector_store.search(query, top_k=max_chunks * 3, allowed_source_types=allowed_types)
+
+    rule_ids = {c.source_id for c in rule_filtered}
+    scored: dict[str, float] = {}
+    for chunk, score in vs_results:
+        if chunk.source_id in rule_ids:
+            scored[chunk.source_id] = score
+
+    # Chunks that passed rule filter but weren't in vector results get score 0
+    for c in rule_filtered:
+        scored.setdefault(c.source_id, 0.0)
+
+    chunk_map = {c.source_id: c for c in rule_filtered}
+
+    if section_id in _CHRONOLOGICAL:
+        return sorted(
+            rule_filtered,
+            key=lambda c: (c.date or "", scored.get(c.source_id, 0.0)),
+        )
+    else:
+        # patient_info always first, then patient-level, then rest — within tiers, rank by score
+        def _rank_key(c: SourceChunk) -> tuple:
+            tier = 2 if c.source_type == "patient_info" else (1 if _is_patient_level(c) else 0)
+            return (tier, scored.get(c.source_id, 0.0))
+
+        return sorted(rule_filtered, key=_rank_key, reverse=True)

@@ -8,6 +8,7 @@ Usage:
     python -m poc.poc_pipeline --patient P001
     python -m poc.poc_pipeline --patient P001 --model gpt-4o-mini
     python -m poc.poc_pipeline --all-patients
+    python -m poc.poc_pipeline --patient P001 --vector   # enable hybrid retrieval
 """
 
 from __future__ import annotations
@@ -28,6 +29,7 @@ from src.c1_emr.pipeline import load_and_process, C1ProcessingError
 from src.c2_chunking.chunker import chunk_ehr
 from src.c2_chunking.store_builder import build_structured_store, save_structured_store
 from src.c3_retrieval.retriever import retrieve_for_section
+from src.c3_retrieval.vector_store import VectorStore
 from src.c6_verifier.verifier import verify_section, check_internal_consistency
 from src.schemas import SourceChunk, CitedClaim, FinalSummary, SummarySection, SummaryMetrics
 
@@ -38,6 +40,7 @@ DATA_DIR      = ROOT / "data" / "processed"
 ASSEMBLED_DIR = DATA_DIR / "assembled"
 STORE_DIR     = DATA_DIR / "stores"
 OUTPUT_DIR    = DATA_DIR / "outputs"
+VECTOR_DIR    = DATA_DIR / "vector_store"
 
 # ---------------------------------------------------------------------------
 # Section definitions — English IDs, Vietnamese display labels
@@ -429,6 +432,7 @@ def run_poc(
     model: str = "gpt-4o-mini",
     max_context_chunks: int = 60,
     verbose: bool = True,
+    use_vector_store: bool = False,
 ) -> FinalSummary:
     t_start = time.time()
     if verbose:
@@ -463,6 +467,24 @@ def run_poc(
             type_counts[c.source_type] = type_counts.get(c.source_type, 0) + 1
         print(f"[C2] {len(chunks)} chunks: {type_counts}")
 
+    # C3-prep: Build or load vector store for hybrid retrieval
+    vs: VectorStore | None = None
+    if use_vector_store:
+        vs_path = VECTOR_DIR / patient_id
+        if vs_path.exists() and (vs_path / "index.faiss").exists():
+            if verbose:
+                print(f"[C3] Loading vector store from {vs_path}...")
+            vs = VectorStore()
+            vs.load(vs_path)
+        else:
+            if verbose:
+                print(f"[C3] Building vector store ({len(chunks)} chunks)...", end=" ", flush=True)
+            vs = VectorStore()
+            vs.build(chunks)
+            vs.save(vs_path)
+            if verbose:
+                print("OK")
+
     # ──────────────────────────────────────────────────────────────────────────
     # C3 + C4 (LLM): Generate draft sections, store per-section chunks
     # ──────────────────────────────────────────────────────────────────────────
@@ -474,9 +496,9 @@ def run_poc(
         if verbose:
             print(f"[C3→LLM] {section_id}...", end=" ", flush=True)
 
-        # C3: retrieve relevant chunks with per-section budget
+        # C3: retrieve relevant chunks with per-section budget (hybrid if vector store available)
         top_k = TOP_K_PER_SECTION.get(section_id, 15)
-        section_chunks = retrieve_for_section(chunks, section_id, max_chunks=top_k)
+        section_chunks = retrieve_for_section(chunks, section_id, max_chunks=top_k, vector_store=vs)
         section_chunks_map[section_id] = section_chunks
 
         # Format context (timeline uses encounter-grouped format)
@@ -603,6 +625,7 @@ def main():
     parser.add_argument("--all-patients", action="store_true")
     parser.add_argument("--model", default="gpt-4o-mini")
     parser.add_argument("--max-chunks", type=int, default=60)
+    parser.add_argument("--vector", action="store_true", help="Enable vector store hybrid retrieval (default: rule-based only)")
     args = parser.parse_args()
 
     api_key = os.getenv("OPENAI_API_KEY")
@@ -612,16 +635,18 @@ def main():
 
     client = OpenAI(api_key=api_key)
 
+    use_vs = args.vector
+
     if args.all_patients:
         patient_ids = sorted(p.stem for p in ASSEMBLED_DIR.glob("*.json"))
-        print(f"Running PoC | {len(patient_ids)} patients | model: {args.model}")
+        print(f"Running PoC | {len(patient_ids)} patients | model: {args.model} | vector: {use_vs}")
         for pid in patient_ids:
             try:
-                run_poc(pid, client, args.model, args.max_chunks)
+                run_poc(pid, client, args.model, args.max_chunks, use_vector_store=use_vs)
             except Exception as e:
                 print(f"[ERROR] {pid}: {e}")
     else:
-        run_poc(args.patient, client, args.model, args.max_chunks)
+        run_poc(args.patient, client, args.model, args.max_chunks, use_vector_store=use_vs)
 
 
 if __name__ == "__main__":

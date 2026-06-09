@@ -91,8 +91,13 @@ def extract_claims(section: SummarySection) -> list[CitedClaim]:
     Returns [] for empty / error sections.
     """
     content = (section.content or "").strip()
-    if not content or any(m in content for m in _EMPTY_MARKERS):
+    if not content:
         return []
+    # Only skip if the entire content is a single short line starting with an empty/error marker
+    first_line = content.split("\n")[0].strip()
+    if len(content.split("\n")) <= 1 or content.strip() == first_line:
+        if any(first_line.startswith(m) for m in _EMPTY_MARKERS):
+            return []
 
     sentences = _split_sentences(content)
 
