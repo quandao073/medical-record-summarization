@@ -1564,5 +1564,22 @@
     "source_system": "LIS",
     "is_abnormal": true,
     "is_critical": false
-  }
+  },
+  {
+  "lab_id": "P006-E001-LAB009",
+  "patient_id": "P006",
+  "encounter_id": "P006-E001",
+  "sample_date": "2024-03-10",
+  "result_date": "2024-03-10",
+  "test_code": "HGB",
+  "test_name": "Hemoglobin",
+  "value": 10.8,
+  "unit": "g/dL",
+  "reference_range": "12.0 - 16.0",
+  "interpretation": "low",
+  "comment": "Thiếu máu nhẹ, có thể liên quan CKD. Cần đánh giá thêm ferritin/TSAT.",
+  "source_system": "LIS",
+  "is_abnormal": true,
+  "is_critical": false
+}
 ]

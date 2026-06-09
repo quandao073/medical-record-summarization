@@ -1371,7 +1371,7 @@
     "dose": "20 IU",
     "route": "subcutaneous",
     "frequency": "1 lần/ngày trước ngủ",
-    "instruction": "Tiêm dưới da vùng bụng hoặc đùi. Metformin chống chỉ định (eGFR <45).",
+    "instruction": "Tiêm dưới da vùng bụng hoặc đùi. Chuyển từ Metformin sang insulin do CKD G3b, eGFR 38.",
     "duration_days": 180,
     "is_current": true,
     "source_system": "HIS-Pharmacy",
