@@ -126,6 +126,8 @@ class SummaryMetrics(BaseModel):
     contradiction_count: int = 0           # claims marked CONTRADICTED (internal/source conflict)
     duplicate_claim_count: int = 0         # duplicate claim_texts dropped during extraction
     need_review_count: int = 0             # claims needing clinician confirmation
+    citation_precision: float = 0.0        # SUPPORTED with correct source_id / total SUPPORTED
+    citation_recall: float = 0.0           # gold claims matched in output / total gold claims
     latency_seconds: float = 0.0
     token_count: int = 0
 

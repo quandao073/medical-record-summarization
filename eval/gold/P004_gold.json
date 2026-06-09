@@ -1,0 +1,224 @@
+{
+  "patient_id": "P004",
+  "sections": [
+    {
+      "section_id": "overview",
+      "expected_claims": [
+        {
+          "claim_pattern": "Phạm Thị Dung.*68 tuổi.*nữ",
+          "expected_source_ids": [
+            "P004-PATIENT-INFO",
+            "P004-E003-DX-E11.9",
+            "P004-E003-DX-I10"
+          ],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "BMI.*28\\.1",
+          "expected_source_ids": ["P004-E003-VIT-VIT001"],
+          "is_critical": false
+        }
+      ]
+    },
+    {
+      "section_id": "reason_for_visit",
+      "expected_claims": [
+        {
+          "claim_pattern": "vã mồ hôi.*run tay|run tay.*choáng|hạ đường huyết.*triệu chứng|triệu chứng hạ đường huyết",
+          "expected_source_ids": ["P004-E003-NOTE-NOTE001"],
+          "is_critical": true,
+          "note": "Claim triệu chứng lâm sàng — pattern không dùng 'glucose.*2.5' để tránh conflict với claim lab bên dưới."
+        },
+        {
+          "claim_pattern": "Xét nghiệm glucose đói.*2\\.5|glucose đói tại phòng khám",
+          "expected_source_ids": ["P004-E003-LAB-FPG", "P004-E003-NOTE-NOTE001"],
+          "is_critical": true
+        }
+      ]
+    },
+    {
+      "section_id": "medical_history",
+      "expected_claims": [
+        {
+          "claim_pattern": "Đái tháo đường type 2.*phát hiện.*2019|ĐTĐ.*2019",
+          "expected_source_ids": ["P004-E001-DX-E11", "P004-E002-DX-E11"],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "Tăng huyết áp.*phát hiện.*2016|THA.*2016",
+          "expected_source_ids": [
+            "P004-E001-NOTE-NOTE001",
+            "P004-E001-NOTE-NOTE002",
+            "P004-E003-NOTE-NOTE002"
+          ],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "Tiền sử gia đình.*mẹ.*đái tháo đường|mẹ.*ĐTĐ",
+          "expected_source_ids": ["P004-E001-NOTE-NOTE002"],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "Không hút thuốc.*không uống rượu",
+          "expected_source_ids": ["P004-E001-NOTE-NOTE001"],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "Không vận động|ít vận động",
+          "expected_source_ids": ["P004-E001-NOTE-NOTE001"],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "Chế độ ăn không kiểm soát|ăn uống không kiểm soát",
+          "expected_source_ids": ["P004-E001-NOTE-NOTE001"],
+          "is_critical": false
+        }
+      ]
+    },
+    {
+      "section_id": "current_medications",
+      "expected_claims": [
+        {
+          "claim_pattern": "Metformin.*500.*mg",
+          "expected_source_ids": ["P004-E003-MED-METFORMIN"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Giảm xuống 1 lần/ngày|giảm liều.*tránh hạ đường huyết|1 lần/ngày.*buổi tối",
+          "expected_source_ids": ["P004-E003-MED-METFORMIN"],
+          "is_critical": true,
+          "note": "Sub-claim về cách dùng Metformin sau khi giảm liều."
+        },
+        {
+          "claim_pattern": "Amlodipine.*5.*mg",
+          "expected_source_ids": ["P004-E003-MED-AMLODIPINE"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Uống buổi sáng",
+          "expected_source_ids": ["P004-E003-MED-AMLODIPINE", "P004-E003-MED-LOSARTAN"],
+          "is_critical": false,
+          "note": "Sub-claim hướng dẫn dùng thuốc chung cho Amlodipine và Losartan."
+        },
+        {
+          "claim_pattern": "Losartan.*50.*mg",
+          "expected_source_ids": ["P004-E003-MED-LOSARTAN"],
+          "is_critical": true
+        }
+      ]
+    },
+    {
+      "section_id": "allergies",
+      "expected_claims": [
+        {
+          "claim_pattern": "dị ứng thuốc.*chưa xác định|thuốc.*không rõ loại",
+          "expected_source_ids": ["P004-PATIENT-ALLERGY-THUỐC_(KHÔNG_RÕ"],
+          "is_critical": true,
+          "note": "Claim có status NEED_REVIEW vì chưa xác nhận. Không phải SUPPORTED → recall khó đạt."
+        }
+      ]
+    },
+    {
+      "section_id": "abnormal_labs",
+      "expected_claims": [
+        {
+          "claim_pattern": "Glucose.*2\\.5.*mmol|glucose.*2\\.5.*thấp",
+          "expected_source_ids": ["P004-E003-LAB-FPG", "P004-E001-LAB-LDL"],
+          "is_critical": true,
+          "note": "Pipeline đôi khi cite LDL cùng với FPG do multi-section retrieval. Cả hai đều chấp nhận."
+        },
+        {
+          "claim_pattern": "HbA1c.*7\\.5.*%.*cao",
+          "expected_source_ids": ["P004-E003-LAB-HBA1C"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "7\\.8.*7\\.5|HbA1c.*giảm.*7\\.8.*7\\.5",
+          "expected_source_ids": ["P004-E003-LAB-HBA1C", "P004-E001-LAB-HBA1C"],
+          "is_critical": false,
+          "note": "Trend claim. Pipeline cite E003 + E001 là đúng."
+        },
+        {
+          "claim_pattern": "Glucose.*8\\.2.*mmol.*cao.*2024-03",
+          "expected_source_ids": ["P004-E001-LAB-FPG"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "LDL.*3\\.0.*mmol.*cao",
+          "expected_source_ids": ["P004-E001-LAB-LDL"],
+          "is_critical": true
+        }
+      ]
+    },
+    {
+      "section_id": "diagnoses",
+      "expected_claims": [
+        {
+          "claim_pattern": "Đái tháo đường type 2.*E11",
+          "expected_source_ids": ["P004-E003-DX-E11.9"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Tăng huyết áp.*I10",
+          "expected_source_ids": ["P004-E003-DX-I10"],
+          "is_critical": true
+        }
+      ]
+    },
+    {
+      "section_id": "treatment_timeline",
+      "expected_claims": [
+        {
+          "claim_pattern": "2024-03-05.*HbA1c.*7\\.8.*142/90.*glucose.*8\\.2.*Metformin.*Amlodipine.*Losartan",
+          "expected_source_ids": [
+            "P004-E001-LAB-HBA1C",
+            "P004-E001-LAB-FPG",
+            "P004-E001-LAB-LDL"
+          ],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "2024-09-05.*HbA1c.*7\\.5.*glucose.*2\\.5.*136/86.*ngưng Gliclazide.*giảm.*Metformin",
+          "expected_source_ids": [
+            "P004-E003-LAB-HBA1C",
+            "P004-E003-LAB-FPG"
+          ],
+          "is_critical": true
+        }
+      ]
+    },
+    {
+      "section_id": "clinical_alerts",
+      "expected_claims": [
+        {
+          "claim_pattern": "hạ đường huyết.*glucose.*2\\.5",
+          "expected_source_ids": ["P004-E003-LAB-FPG"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Đái tháo đường type 2.*không biến chứng.*theo dõi",
+          "expected_source_ids": [
+            "P004-E003-DX-E11.9",
+            "P004-E002-DX-E11",
+            "P004-E001-DX-E11"
+          ],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Tăng huyết áp.*136/86|huyết áp.*136/86",
+          "expected_source_ids": [
+            "P004-E003-VIT-VIT001",
+            "P004-E003-DX-I10"
+          ],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "HbA1c.*7\\.8.*7\\.5.*cải thiện",
+          "expected_source_ids": ["P004-E003-LAB-HBA1C"],
+          "is_critical": false,
+          "note": "Pipeline cite E003. Baseline 7.8% đã có trong E001-LAB-HBA1C nhưng pipeline không luôn cite."
+        }
+      ]
+    }
+  ]
+}

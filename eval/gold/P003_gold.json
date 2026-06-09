@@ -1,0 +1,231 @@
+{
+  "patient_id": "P003",
+  "sections": [
+    {
+      "section_id": "overview",
+      "expected_claims": [
+        {
+          "claim_pattern": "Lê Minh Cường.*62 tuổi.*nam",
+          "expected_source_ids": ["P003-PATIENT-INFO", "P003-E005-DX-I10", "P003-E005-DX-E11.9"],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "BMI.*29\\.1",
+          "expected_source_ids": ["P003-E005-VIT-VIT001"],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "rối loạn.*lipid|RLLPM",
+          "expected_source_ids": ["P003-E005-DX-E78.5"],
+          "is_critical": false
+        }
+      ]
+    },
+    {
+      "section_id": "reason_for_visit",
+      "expected_claims": [
+        {
+          "claim_pattern": "tái khám.*xuất viện.*4 tháng|tuân thủ.*tốt",
+          "expected_source_ids": ["P003-E005-NOTE-NOTE001"],
+          "is_critical": false
+        }
+      ]
+    },
+    {
+      "section_id": "medical_history",
+      "expected_claims": [
+        {
+          "claim_pattern": "Tăng huyết áp.*phát hiện.*2013|THA.*2013",
+          "expected_source_ids": [
+            "P003-E001-NOTE-NOTE002",
+            "P003-E001-DX-I10",
+            "P003-E003-NOTE-NOTE002"
+          ],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "Rối loạn lipid.*phát hiện.*2018|RLLPM.*2018",
+          "expected_source_ids": ["P003-E001-NOTE-NOTE002", "P003-E003-NOTE-NOTE002"],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "Đái tháo đường type 2.*chẩn đoán.*2024|ĐTĐ.*02/2024",
+          "expected_source_ids": ["P003-E003-NOTE-NOTE001", "P003-E003-NOTE-NOTE002"],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "Không hút thuốc.*uống bia|bia.*1-2 lon",
+          "expected_source_ids": ["P003-E001-NOTE-NOTE001"],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "Ít vận động",
+          "expected_source_ids": ["P003-E001-NOTE-NOTE001"],
+          "is_critical": false
+        }
+      ]
+    },
+    {
+      "section_id": "current_medications",
+      "expected_claims": [
+        {
+          "claim_pattern": "Valsartan.*320.*mg",
+          "expected_source_ids": ["P003-E005-MED-VALSARTAN"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Amlodipine.*10.*mg",
+          "expected_source_ids": ["P003-E005-MED-AMLODIPINE"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Bisoprolol.*5.*mg",
+          "expected_source_ids": ["P003-E005-MED-BISOPROLOL"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Spironolactone.*25.*mg",
+          "expected_source_ids": ["P003-E005-MED-SPIRONOLACTONE"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Metformin.*1000.*mg",
+          "expected_source_ids": ["P003-E005-MED-METFORMIN"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Atorvastatin.*40.*mg",
+          "expected_source_ids": ["P003-E005-MED-ATORVASTATIN"],
+          "is_critical": true
+        }
+      ]
+    },
+    {
+      "section_id": "allergies",
+      "expected_claims": [
+        {
+          "claim_pattern": "Sulfonamide",
+          "expected_source_ids": ["P003-PATIENT-ALLERGY-SULFONAMIDE_(CO"],
+          "is_critical": true,
+          "note": "Claim có status NEED_REVIEW (thiếu mức độ phản ứng), không phải SUPPORTED → recall có thể không đạt."
+        }
+      ]
+    },
+    {
+      "section_id": "abnormal_labs",
+      "expected_claims": [
+        {
+          "claim_pattern": "HbA1c.*7\\.2.*%",
+          "expected_source_ids": ["P003-E005-LAB-HBA1C"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "7\\.8.*7\\.2|HbA1c.*giảm.*7\\.8.*7\\.2",
+          "expected_source_ids": ["P003-E005-LAB-HBA1C", "P003-E004-LAB-HBA1C"],
+          "is_critical": false,
+          "note": "Trend claim cần cả 2 mốc. Pipeline thường cite đúng cả E005 và E004 cho P003."
+        },
+        {
+          "claim_pattern": "Glucose.*7\\.0.*mmol",
+          "expected_source_ids": ["P003-E005-LAB-FPG"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "LDL.*2\\.7.*mmol",
+          "expected_source_ids": ["P003-E005-LAB-LDL"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "ALT.*42.*U/L",
+          "expected_source_ids": ["P003-E005-LAB-ALT"],
+          "is_critical": true
+        }
+      ]
+    },
+    {
+      "section_id": "diagnoses",
+      "expected_claims": [
+        {
+          "claim_pattern": "Tăng huyết áp.*I10",
+          "expected_source_ids": ["P003-E005-DX-I10"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Đái tháo đường type 2.*E11",
+          "expected_source_ids": ["P003-E005-DX-E11.9"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "lipid.*E78|rối loạn chuyển hóa lipid",
+          "expected_source_ids": ["P003-E005-DX-E78.5"],
+          "is_critical": true
+        }
+      ]
+    },
+    {
+      "section_id": "treatment_timeline",
+      "expected_claims": [
+        {
+          "claim_pattern": "2023-06-10.*158/98.*LDL.*4\\.1.*Amlodipine.*Valsartan.*Atorvastatin",
+          "expected_source_ids": ["P003-E001-LAB-LDL", "P003-E003-LAB-TC"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "2023-10-10.*152/94.*LDL.*3\\.2.*Atorvastatin.*40.*Spironolactone",
+          "expected_source_ids": ["P003-E002-LAB-LDL", "P003-E003-LAB-TC"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "2024-02-10.*148/92.*HbA1c.*6\\.9.*Metformin.*đái tháo đường",
+          "expected_source_ids": [
+            "P003-E003-DX-E11.9",
+            "P003-E003-LAB-HBA1C",
+            "P003-E004-DX-E11.9"
+          ],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "2024-06-10.*178/108.*Metformin.*nhập viện|kiểm soát kém",
+          "expected_source_ids": ["P003-E004-NOTE-NOTE001"],
+          "is_critical": true
+        }
+      ]
+    },
+    {
+      "section_id": "clinical_alerts",
+      "expected_claims": [
+        {
+          "claim_pattern": "huyết áp.*142/88.*chưa đạt",
+          "expected_source_ids": ["P003-E005-VIT-VIT001"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "HbA1c.*7\\.2.*cao.*theo dõi",
+          "expected_source_ids": ["P003-E005-LAB-HBA1C"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Glucose.*7\\.0.*mmol.*cao",
+          "expected_source_ids": ["P003-E005-LAB-FPG"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "LDL.*2\\.7.*mmol.*cao",
+          "expected_source_ids": ["P003-E005-LAB-LDL", "P003-E005-LAB-FPG"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "HbA1c.*7\\.8.*7\\.2.*cải thiện",
+          "expected_source_ids": ["P003-E005-LAB-HBA1C"],
+          "is_critical": false,
+          "note": "Pipeline cite chỉ E005. Baseline 7.8% không cần source riêng nếu context rõ."
+        },
+        {
+          "claim_pattern": "ALT.*42.*ổn định",
+          "expected_source_ids": ["P003-E005-LAB-ALT"],
+          "is_critical": false
+        }
+      ]
+    }
+  ]
+}

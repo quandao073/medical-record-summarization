@@ -42,5 +42,47 @@
     "source_system": "EMR-Allergy",
     "data_note": "EC-03: substance không rõ, reaction = null. Bệnh nhân P004 không cung cấp được thông tin dị ứng đầy đủ. Dùng để test pipeline xử lý dị ứng không rõ.",
     "language": "vi"
+  },
+  {
+    "allergy_id": "P006-ALLERGY001",
+    "patient_id": "P006",
+    "encounter_id": null,
+    "recorded_date": "2020-05-10",
+    "substance": "Penicillin",
+    "reaction": "Nổi mề đay toàn thân",
+    "severity": "moderate",
+    "status": "active",
+    "source_text": "BN báo dị ứng Penicillin năm 2020 — nổi mề đay toàn thân sau dùng Amoxicillin. Đã xác nhận.",
+    "needs_patient_confirmation": false,
+    "source_system": "EMR-Allergy",
+    "language": "vi"
+  },
+  {
+    "allergy_id": "P006-ALLERGY002",
+    "patient_id": "P006",
+    "encounter_id": null,
+    "recorded_date": "2022-08-20",
+    "substance": "NSAIDs (Ibuprofen)",
+    "reaction": "Phù mạch, khó thở",
+    "severity": "severe",
+    "status": "active",
+    "source_text": "BN dùng Ibuprofen 400mg giảm đau đầu — xuất hiện phù mạch mặt, khó thở sau 30 phút. Cấp cứu tại BV. Xác nhận dị ứng NSAIDs mức nặng.",
+    "needs_patient_confirmation": false,
+    "source_system": "EMR-Allergy",
+    "language": "vi"
+  },
+  {
+    "allergy_id": "P006-ALLERGY003",
+    "patient_id": "P006",
+    "encounter_id": null,
+    "recorded_date": "2023-01-15",
+    "substance": "Sulfonamide",
+    "reaction": null,
+    "severity": "unknown",
+    "status": "active",
+    "source_text": "BN báo dị ứng Sulfonamide nhưng không nhớ rõ phản ứng cụ thể. Cần xác nhận.",
+    "needs_patient_confirmation": true,
+    "source_system": "EMR-Allergy",
+    "language": "vi"
   }
 ]

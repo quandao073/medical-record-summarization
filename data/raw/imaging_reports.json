@@ -167,5 +167,57 @@
     "source_system": "HIS-Imaging",
     "findings": "Siêu âm bụng: Gan kích thước bình thường, nhu mô gan đồng đều. Không có ổ tổn thương. Túi mật không sỏi. Tụy và lách bình thường. Thận hai bên kích thước bình thường, nhu mô bình thường.",
     "language": "vi"
+  },
+  {
+    "imaging_id": "P005-E001-IMG001",
+    "patient_id": "P005",
+    "encounter_id": "P005-E001",
+    "study_date": "2024-01-15",
+    "modality": "X-quang",
+    "body_part": "Ngực",
+    "findings": "X-quang ngực PA: Phổi tăng sáng 2 bên, cơ hoành dẹt, khoang liên sườn giãn rộng — phù hợp COPD khí phế thũng. Bóng tim to sang phải (RV enlargement). Chỉ số tim-ngực 0.58 (tăng). Không thâm nhiễm phổi rõ.",
+    "impression": "COPD khí phế thũng. Tim to phải, nghi tim phổi mạn. Không viêm phổi.",
+    "radiologist_or_reader": "BS. Trần Minh Khoa",
+    "source_system": "HIS-Imaging",
+    "language": "vi"
+  },
+  {
+    "imaging_id": "P005-E002-IMG001",
+    "patient_id": "P005",
+    "encounter_id": "P005-E002",
+    "study_date": "2024-07-15",
+    "modality": "Siêu âm tim",
+    "body_part": "Tim",
+    "findings": "Siêu âm tim qua thành ngực: Thất trái không giãn, vách liên thất bình thường. EF Simpson 35%. Thất phải giãn (TAPSE 14mm). Áp lực ĐMP ước tính 48 mmHg (tăng). Van 3 lá hở nhẹ (do giãn vòng van). Không tràn dịch màng tim.",
+    "impression": "EF 35% (giảm). Suy tim phải do tăng áp phổi. Áp lực ĐMP 48 mmHg.",
+    "radiologist_or_reader": "BS. Lê Thị Ngọc",
+    "source_system": "HIS-Cardiology",
+    "language": "vi"
+  },
+  {
+    "imaging_id": "P006-E001-IMG001",
+    "patient_id": "P006",
+    "encounter_id": "P006-E001",
+    "study_date": "2024-03-10",
+    "modality": "Siêu âm",
+    "body_part": "Thận",
+    "findings": "Siêu âm thận 2 bên: Thận phải 9.8 cm, thận trái 9.5 cm (kích thước nhỏ hơn bình thường). Nhu mô thận tăng âm, ranh giới vỏ-tủy mờ. Vỏ thận mỏng 2 bên. Không sỏi, không ứ nước. Bàng quang bình thường.",
+    "impression": "Thận teo nhỏ 2 bên, nhu mô tăng âm. Phù hợp bệnh thận mạn.",
+    "radiologist_or_reader": "BS. Phạm Quang Hưng",
+    "source_system": "HIS-Imaging",
+    "language": "vi"
+  },
+  {
+    "imaging_id": "P006-E002-IMG001",
+    "patient_id": "P006",
+    "encounter_id": "P006-E002",
+    "study_date": "2024-09-10",
+    "modality": "Soi đáy mắt",
+    "body_part": "Mắt",
+    "findings": "Soi đáy mắt 2 mắt: Vi phình mạch rải rác, xuất huyết chấm nhỏ, xuất tiết cứng. Không có tân mạch. Hoàng điểm bình thường.",
+    "impression": "Bệnh võng mạc ĐTĐ không tăng sinh độ II 2 mắt. Không có tân mạch.",
+    "radiologist_or_reader": "BS. Nguyễn Thị Mai",
+    "source_system": "HIS-Imaging",
+    "language": "vi"
   }
 ]

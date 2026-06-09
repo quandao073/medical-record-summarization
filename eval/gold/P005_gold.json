@@ -1,0 +1,212 @@
+{
+  "patient_id": "P005",
+  "sections": [
+    {
+      "section_id": "overview",
+      "expected_claims": [
+        {
+          "claim_pattern": "70 tuổi.*nam.*COPD.*suy tim|COPD.*suy tim.*70 tuổi",
+          "expected_source_ids": ["P005-E003-DX-J44.0", "P005-E003-DX-I50.1"],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "BMI.*24\\.8",
+          "expected_source_ids": ["P005-E003-VIT-VIT001"],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "tăng huyết áp nguyên phát",
+          "expected_source_ids": ["P005-E003-DX-I10"],
+          "is_critical": false
+        }
+      ]
+    },
+    {
+      "section_id": "reason_for_visit",
+      "expected_claims": [
+        {
+          "claim_pattern": "phù mắt cá.*tăng.*2 tuần|khó thở.*leo cầu thang",
+          "expected_source_ids": ["P005-E003-NOTE-NOTE001"],
+          "is_critical": false
+        }
+      ]
+    },
+    {
+      "section_id": "medical_history",
+      "expected_claims": [
+        {
+          "claim_pattern": "COPD Gold III.*phát hiện.*2019",
+          "expected_source_ids": ["P005-E001-NOTE-NOTE001"],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "Tăng huyết áp.*10 năm",
+          "expected_source_ids": ["P005-E001-NOTE-NOTE001"],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "Bố.*ung thư phổi.*65 tuổi|tiền sử gia đình.*ung thư phổi",
+          "expected_source_ids": ["P005-E001-NOTE-NOTE001"],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "Hút thuốc lá.*40 gói-năm",
+          "expected_source_ids": [
+            "P005-E001-NOTE-NOTE001",
+            "P005-E002-NOTE-NOTE001",
+            "P005-E002-NOTE-NOTE002"
+          ],
+          "is_critical": true,
+          "note": "Yếu tố nguy cơ quan trọng. PARTIALLY_SUPPORTED là acceptable."
+        }
+      ]
+    },
+    {
+      "section_id": "current_medications",
+      "expected_claims": [
+        {
+          "claim_pattern": "Tiotropium.*18.*mcg",
+          "expected_source_ids": ["P005-E003-MED-TIOTROPIUM"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Fluticasone.*Salmeterol.*500/50",
+          "expected_source_ids": ["P005-E003-MED-FLUTICASONE_SALMETER"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Furosemide.*40.*mg",
+          "expected_source_ids": ["P005-E003-MED-FUROSEMIDE"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Carvedilol.*12\\.5.*mg",
+          "expected_source_ids": ["P005-E003-MED-CARVEDILOL"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Enalapril.*10.*mg",
+          "expected_source_ids": ["P005-E003-MED-ENALAPRIL"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Amlodipine.*5.*mg",
+          "expected_source_ids": ["P005-E003-MED-AMLODIPINE"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Spironolactone.*25.*mg",
+          "expected_source_ids": ["P005-E003-MED-SPIRONOLACTONE"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Kháng aldosterone.*suy tim|theo dõi kali",
+          "expected_source_ids": ["P005-E003-MED-SPIRONOLACTONE"],
+          "is_critical": false
+        }
+      ]
+    },
+    {
+      "section_id": "abnormal_labs",
+      "expected_claims": [
+        {
+          "claim_pattern": "BNP.*380.*pg/mL.*cao",
+          "expected_source_ids": ["P005-E003-LAB-BNP"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "680.*420.*380|BNP.*giảm.*680.*380|xu hướng.*680.*420.*380",
+          "expected_source_ids": ["P005-E003-LAB-BNP"],
+          "is_critical": false,
+          "note": "Trend BNP 3 mốc. Pipeline cite E003-LAB-BNP đơn là chấp nhận được."
+        },
+        {
+          "claim_pattern": "FEV1.*42.*%.*thấp",
+          "expected_source_ids": ["P005-E002-LAB-FEV1"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "SpO2.*88.*%.*thấp",
+          "expected_source_ids": ["P005-E002-LAB-SPO2REST"],
+          "is_critical": true
+        }
+      ]
+    },
+    {
+      "section_id": "diagnoses",
+      "expected_claims": [
+        {
+          "claim_pattern": "COPD.*ổn định.*J44\\.0",
+          "expected_source_ids": ["P005-E003-DX-J44.0"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Suy tim.*phân suất tống máu giảm.*I50\\.1",
+          "expected_source_ids": ["P005-E003-DX-I50.1"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Tăng huyết áp.*I10",
+          "expected_source_ids": ["P005-E003-DX-I10"],
+          "is_critical": true
+        }
+      ]
+    },
+    {
+      "section_id": "treatment_timeline",
+      "expected_claims": [
+        {
+          "claim_pattern": "2024-01-15.*SpO2.*84.*BNP.*680.*Methylprednisolone.*Tiotropium.*Furosemide",
+          "expected_source_ids": [
+            "P005-E001-LAB-BNP",
+            "P005-E001-MED-METHYLPREDNISOLONE",
+            "P005-E001-MED-FUROSEMIDE",
+            "P005-E002-MED-FUROSEMIDE",
+            "P005-E003-MED-FUROSEMIDE"
+          ],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "2024-07-15.*SpO2.*88.*BNP.*420.*Fluticasone.*Carvedilol.*12\\.5.*Enalapril.*10",
+          "expected_source_ids": [
+            "P005-E002-LAB-BNP",
+            "P005-E002-MED-CARVEDILOL",
+            "P005-E002-MED-ENALAPRIL",
+            "P005-E001-MED-ENALAPRIL"
+          ],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "2024-10-15.*BNP.*380.*Spironolactone.*25.*COPD.*suy tim",
+          "expected_source_ids": [
+            "P005-E003-LAB-BNP",
+            "P005-E003-MED-SPIRONOLACTONE",
+            "P005-E002-DX-J44.0",
+            "P005-E003-DX-J44.0"
+          ],
+          "is_critical": true
+        }
+      ]
+    },
+    {
+      "section_id": "clinical_alerts",
+      "expected_claims": [
+        {
+          "claim_pattern": "BNP.*380.*vẫn cao|BNP.*380.*cao",
+          "expected_source_ids": ["P005-E003-LAB-BNP"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "BNP.*680.*380.*cải thiện|BNP.*xu hướng cải thiện",
+          "expected_source_ids": ["P005-E003-LAB-BNP"],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "Huyết áp.*135/82|138/85.*135/82.*ổn định",
+          "expected_source_ids": ["P005-E003-VIT-VIT001"],
+          "is_critical": false
+        }
+      ]
+    }
+  ]
+}

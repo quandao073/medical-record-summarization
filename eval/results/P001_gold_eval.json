@@ -1,0 +1,634 @@
+{
+  "patient_id": "P001",
+  "evaluation_mode": "loose",
+  "citation_precision": 0.9736842105263158,
+  "citation_recall": 0.9743589743589743,
+  "critical_precision": 1.0,
+  "total_supported": 38,
+  "precision_correct": 37,
+  "total_gold": 39,
+  "gold_matched": 38,
+  "sections": [
+    {
+      "section_id": "overview",
+      "total_claims": 3,
+      "supported_claims": 2,
+      "precision_correct": 2,
+      "gold_matched": 2,
+      "gold_total": 3,
+      "claim_evals": [
+        {
+          "claim_text": "Bệnh nhân Nguyễn Văn An, 55 tuổi, nam giới, có bệnh nền chính là đái tháo đường type 2.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P001-E004-DX-E11"
+          ],
+          "matched_gold_pattern": "Nguyễn Văn An.*55 tuổi.*nam.*đái tháo đường",
+          "expected_source_ids": [
+            "P001-PATIENT-INFO",
+            "P001-E004-DX-E11"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        },
+        {
+          "claim_text": "Bệnh nhân có BMI 28.0, thuộc nhóm thừa cân.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P001-E004-VIT-VIT001"
+          ],
+          "matched_gold_pattern": "BMI.*28",
+          "expected_source_ids": [
+            "P001-E004-VIT-VIT001"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        },
+        {
+          "claim_text": "Hiện tại đang theo dõi biến chứng microalbuminuria.",
+          "status": "UNSUPPORTED",
+          "citations": [],
+          "matched_gold_pattern": null,
+          "expected_source_ids": [],
+          "has_correct_citation": false,
+          "is_critical": false
+        }
+      ]
+    },
+    {
+      "section_id": "reason_for_visit",
+      "total_claims": 1,
+      "supported_claims": 1,
+      "precision_correct": 1,
+      "gold_matched": 1,
+      "gold_total": 1,
+      "claim_evals": [
+        {
+          "claim_text": "Bệnh nhân tái khám lần 4 sau 9 tháng điều trị, ổn định, không phàn nàn.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P001-E004-NOTE-NOTE001"
+          ],
+          "matched_gold_pattern": "tái khám.*lần 4|9 tháng",
+          "expected_source_ids": [
+            "P001-E004-NOTE-NOTE001"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        }
+      ]
+    },
+    {
+      "section_id": "medical_history",
+      "total_claims": 9,
+      "supported_claims": 9,
+      "precision_correct": 8,
+      "gold_matched": 9,
+      "gold_total": 9,
+      "claim_evals": [
+        {
+          "claim_text": "Đái tháo đường type 2, phát hiện năm 2021.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P001-E001-DX-E11",
+            "P001-E002-DX-E11"
+          ],
+          "matched_gold_pattern": "Đái tháo đường type 2.*phát hiện.*2021|ĐTĐ type 2.*phát hiện.*2021",
+          "expected_source_ids": [
+            "P001-E001-DX-E11",
+            "P001-E001-NOTE-NOTE002"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        },
+        {
+          "claim_text": "Tăng huyết áp, phát hiện năm 2019.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P001-E001-NOTE-NOTE001",
+            "P001-E001-NOTE-NOTE002"
+          ],
+          "matched_gold_pattern": "Tăng huyết áp.*phát hiện.*2019|THA.*phát hiện.*2019",
+          "expected_source_ids": [
+            "P001-E001-NOTE-NOTE002"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        },
+        {
+          "claim_text": "Rối loạn lipid máu, phát hiện năm 2020.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P001-E001-NOTE-NOTE001",
+            "P001-E001-NOTE-NOTE002"
+          ],
+          "matched_gold_pattern": "Rối loạn lipid.*phát hiện.*2020|RLLPM.*phát hiện.*2020|Rối loạn lipid máu.*2020",
+          "expected_source_ids": [
+            "P001-E001-NOTE-NOTE002"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        },
+        {
+          "claim_text": "Cha mắc đái tháo đường type 2, mất năm 2018 do nhồi máu cơ tim.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P001-E001-DX-E11",
+            "P001-E002-DX-E11"
+          ],
+          "matched_gold_pattern": "Cha.*(đái tháo đường type 2|ĐTĐ type 2).*2018.*(nhồi máu cơ tim|NMCT)",
+          "expected_source_ids": [
+            "P001-E001-NOTE-NOTE004",
+            "P001-E001-NOTE-NOTE001",
+            "P001-E001-NOTE-NOTE002"
+          ],
+          "has_correct_citation": false,
+          "is_critical": false
+        },
+        {
+          "claim_text": "Mẹ tăng huyết áp, đang điều trị.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P001-E001-NOTE-NOTE001",
+            "P001-E001-NOTE-NOTE004"
+          ],
+          "matched_gold_pattern": "Mẹ.*(tăng huyết áp|THA).*đang điều trị",
+          "expected_source_ids": [
+            "P001-E001-NOTE-NOTE004"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        },
+        {
+          "claim_text": "Anh trai tăng huyết áp và rối loạn lipid máu.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P001-E001-NOTE-NOTE001",
+            "P001-E001-NOTE-NOTE002",
+            "P001-E001-NOTE-NOTE004"
+          ],
+          "matched_gold_pattern": "Anh trai.*(tăng huyết áp|THA).*(rối loạn lipid máu|RLLPM)",
+          "expected_source_ids": [
+            "P001-E001-NOTE-NOTE004"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        },
+        {
+          "claim_text": "Hút thuốc lá 15 gói-năm, đã bỏ 2 năm nay.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P001-E001-NOTE-NOTE002"
+          ],
+          "matched_gold_pattern": "Hút thuốc.*15.*gói-năm.*bỏ.*2 năm",
+          "expected_source_ids": [
+            "P001-E001-NOTE-NOTE002"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        },
+        {
+          "claim_text": "Chế độ ăn chưa kiểm soát tốt (nhiều cơm trắng, ít rau).",
+          "status": "SUPPORTED",
+          "citations": [
+            "P001-E001-NOTE-NOTE001"
+          ],
+          "matched_gold_pattern": "Chế độ ăn.*(chưa kiểm soát|nhiều cơm trắng|ít rau)",
+          "expected_source_ids": [
+            "P001-E001-NOTE-NOTE001"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        },
+        {
+          "claim_text": "Ít vận động thể lực.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P001-E001-NOTE-NOTE001"
+          ],
+          "matched_gold_pattern": "Ít vận động",
+          "expected_source_ids": [
+            "P001-E001-NOTE-NOTE001"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        }
+      ]
+    },
+    {
+      "section_id": "current_medications",
+      "total_claims": 5,
+      "supported_claims": 5,
+      "precision_correct": 5,
+      "gold_matched": 5,
+      "gold_total": 5,
+      "claim_evals": [
+        {
+          "claim_text": "Metformin 1000 mg — liều: 1 viên, tần suất: 2 lần/ngày, Uống sau ăn sáng và tối.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P001-E004-MED-METFORMIN"
+          ],
+          "matched_gold_pattern": "Metformin.*1000.*mg",
+          "expected_source_ids": [
+            "P001-E004-MED-METFORMIN"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        },
+        {
+          "claim_text": "Empagliflozin 10 mg — liều: 1 viên, tần suất: 1 lần/ngày (sáng), Uống buổi sáng.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P001-E004-MED-EMPAGLIFLOZIN"
+          ],
+          "matched_gold_pattern": "Empagliflozin.*10.*mg",
+          "expected_source_ids": [
+            "P001-E004-MED-EMPAGLIFLOZIN"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        },
+        {
+          "claim_text": "Amlodipine 5 mg — liều: 1 viên, tần suất: 1 lần/ngày, Uống buổi sáng.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P001-E004-MED-AMLODIPINE"
+          ],
+          "matched_gold_pattern": "Amlodipine.*5.*mg",
+          "expected_source_ids": [
+            "P001-E004-MED-AMLODIPINE"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        },
+        {
+          "claim_text": "Perindopril 5 mg — liều: 1 viên, tần suất: 1 lần/ngày, Uống buổi sáng trước ăn.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P001-E004-MED-PERINDOPRIL"
+          ],
+          "matched_gold_pattern": "Perindopril.*5.*mg",
+          "expected_source_ids": [
+            "P001-E004-MED-PERINDOPRIL"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        },
+        {
+          "claim_text": "Atorvastatin 40 mg — liều: 1 viên, tần suất: 1 lần/ngày (tối), Uống buổi tối.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P001-E004-MED-ATORVASTATIN"
+          ],
+          "matched_gold_pattern": "Atorvastatin.*40.*mg",
+          "expected_source_ids": [
+            "P001-E004-MED-ATORVASTATIN"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        }
+      ]
+    },
+    {
+      "section_id": "allergies",
+      "total_claims": 1,
+      "supported_claims": 1,
+      "precision_correct": 1,
+      "gold_matched": 1,
+      "gold_total": 1,
+      "claim_evals": [
+        {
+          "claim_text": "Dị ứng Penicillin, biểu hiện nổi mề đay toàn thân, mức độ moderate, trạng thái đang theo dõi.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P001-PATIENT-ALLERGY-PENICILLIN"
+          ],
+          "matched_gold_pattern": "Penicillin.*mề đay",
+          "expected_source_ids": [
+            "P001-PATIENT-ALLERGY-PENICILLIN"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        }
+      ]
+    },
+    {
+      "section_id": "abnormal_labs",
+      "total_claims": 9,
+      "supported_claims": 9,
+      "precision_correct": 9,
+      "gold_matched": 9,
+      "gold_total": 9,
+      "claim_evals": [
+        {
+          "claim_text": "HbA1c: 7.1%, cao, tham chiếu: <5.6%, ngày: 2024-10-10.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P001-E004-LAB-HBA1C"
+          ],
+          "matched_gold_pattern": "HbA1c.*7\\.1.*%",
+          "expected_source_ids": [
+            "P001-E004-LAB-HBA1C"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        },
+        {
+          "claim_text": "Xu hướng: 9.2% xuống 7.1%, cải thiện.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P001-E004-LAB-HBA1C"
+          ],
+          "matched_gold_pattern": "(9\\.2.*7\\.1|9\\.2%.*xuống.*7\\.1|HbA1c.*giảm.*9\\.2.*7\\.1)",
+          "expected_source_ids": [
+            "P001-E004-NOTE-NOTE002",
+            "P001-E004-LAB-HBA1C",
+            "P001-E001-LAB-HBA1C"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        },
+        {
+          "claim_text": "Glucose huyết tương lúc đói: 6.2 mmol/L, cao, tham chiếu: 3.9 - 6.1, ngày: 2024-10-10.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P001-E004-LAB-FPG"
+          ],
+          "matched_gold_pattern": "Glucose.*6\\.2.*mmol",
+          "expected_source_ids": [
+            "P001-E004-LAB-FPG"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        },
+        {
+          "claim_text": "Microalbumin/Creatinine ratio: 32 mg/g, cao, tham chiếu: <30, ngày: 2024-10-10.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P001-E004-LAB-UACR"
+          ],
+          "matched_gold_pattern": "Microalbumin.*32.*mg",
+          "expected_source_ids": [
+            "P001-E004-LAB-UACR"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        },
+        {
+          "claim_text": "Xu hướng: 42 xuống 32 mg/g, giảm.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P001-E004-LAB-UACR"
+          ],
+          "matched_gold_pattern": "(42.*32.*mg/g|Microalbumin.*42.*32)",
+          "expected_source_ids": [
+            "P001-E004-LAB-UACR",
+            "P001-E004-NOTE-NOTE002"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        },
+        {
+          "claim_text": "Glucose huyết tương lúc đói: 6.8 mmol/L, cao, tham chiếu: 3.9 - 6.1, ngày: 2024-07-10.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P001-E003-LAB-FPG"
+          ],
+          "matched_gold_pattern": "Glucose.*6\\.8.*mmol",
+          "expected_source_ids": [
+            "P001-E003-LAB-FPG"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        },
+        {
+          "claim_text": "LDL-Cholesterol: 2.8 mmol/L, cao, tham chiếu: <2.6, ngày: 2024-07-10.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P001-E003-LAB-LDL"
+          ],
+          "matched_gold_pattern": "LDL.*2\\.8.*mmol",
+          "expected_source_ids": [
+            "P001-E003-LAB-LDL"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        },
+        {
+          "claim_text": "Microalbumin/Creatinine ratio: 35 mg/g, cao, tham chiếu: <30, ngày: 2024-07-10.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P001-E003-LAB-UACR"
+          ],
+          "matched_gold_pattern": "Microalbumin.*35.*mg",
+          "expected_source_ids": [
+            "P001-E003-LAB-UACR"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        },
+        {
+          "claim_text": "Xu hướng: 42 xuống 35 mg/g, giảm.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P001-E003-LAB-UACR"
+          ],
+          "matched_gold_pattern": "(42.*35.*mg/g|Microalbumin.*42.*35)",
+          "expected_source_ids": [
+            "P001-E003-LAB-UACR"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        }
+      ]
+    },
+    {
+      "section_id": "diagnoses",
+      "total_claims": 4,
+      "supported_claims": 4,
+      "precision_correct": 4,
+      "gold_matched": 4,
+      "gold_total": 4,
+      "claim_evals": [
+        {
+          "claim_text": "Chính: Đái tháo đường type 2 (E11)",
+          "status": "SUPPORTED",
+          "citations": [
+            "P001-E004-DX-E11"
+          ],
+          "matched_gold_pattern": "Đái tháo đường type 2.*E11",
+          "expected_source_ids": [
+            "P001-E004-DX-E11"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        },
+        {
+          "claim_text": "Bệnh kèm: Tăng huyết áp nguyên phát (I10)",
+          "status": "SUPPORTED",
+          "citations": [
+            "P001-E004-DX-I10"
+          ],
+          "matched_gold_pattern": "Tăng huyết áp.*I10",
+          "expected_source_ids": [
+            "P001-E004-DX-I10"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        },
+        {
+          "claim_text": "Bệnh kèm: Rối loạn chuyển hóa lipid hỗn hợp (E78.5)",
+          "status": "SUPPORTED",
+          "citations": [
+            "P001-E004-DX-E78.5"
+          ],
+          "matched_gold_pattern": "lipid.*E78",
+          "expected_source_ids": [
+            "P001-E004-DX-E78.5"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        },
+        {
+          "claim_text": "Biến chứng: Microalbuminuria trong ĐTĐ (N18.3)",
+          "status": "SUPPORTED",
+          "citations": [
+            "P001-E004-DX-N18.3"
+          ],
+          "matched_gold_pattern": "Microalbuminuria.*N18",
+          "expected_source_ids": [
+            "P001-E004-DX-N18.3"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        }
+      ]
+    },
+    {
+      "section_id": "treatment_timeline",
+      "total_claims": 3,
+      "supported_claims": 3,
+      "precision_correct": 3,
+      "gold_matched": 3,
+      "gold_total": 3,
+      "claim_evals": [
+        {
+          "claim_text": "2024-01-10: HbA1c 9.2%, huyết áp 148/92 mmHg, LDL 3.4 mmol/L — tăng Metformin, thêm Empagliflozin, thêm Perindopril — kiểm soát chưa đạt.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P001-E001-LAB-HBA1C",
+            "P001-E001-LAB-LDL"
+          ],
+          "matched_gold_pattern": "2024-01-10.*HbA1c.*9\\.2.*148/92.*LDL.*3\\.4.*Metformin.*Empagliflozin.*Perindopril",
+          "expected_source_ids": [
+            "P001-E001-NOTE-NOTE005",
+            "P001-E001-VIT-VIT001",
+            "P001-E001-LAB-HBA1C",
+            "P001-E001-LAB-LDL"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        },
+        {
+          "claim_text": "2024-04-10: HbA1c 8.1%, huyết áp 138/88 mmHg, LDL 3.1 mmol/L — giữ nguyên phác đồ — cải thiện nhưng chưa đạt mục tiêu.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P001-E002-LAB-HBA1C",
+            "P001-E002-LAB-LDL"
+          ],
+          "matched_gold_pattern": "2024-04-10.*HbA1c.*8\\.1.*138/88.*LDL.*3\\.1.*giữ nguyên",
+          "expected_source_ids": [
+            "P001-E002-NOTE-NOTE001",
+            "P001-E002-LAB-HBA1C",
+            "P001-E002-LAB-LDL"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        },
+        {
+          "claim_text": "2024-07-10: HbA1c 7.5%, huyết áp 132/82 mmHg, LDL 2.8 mmol/L — giữ nguyên phác đồ — gần đạt mục tiêu.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P001-E003-LAB-HBA1C",
+            "P001-E003-LAB-LDL",
+            "P001-E001-LAB-TG",
+            "P001-E002-LAB-FPG"
+          ],
+          "matched_gold_pattern": "2024-07-10.*HbA1c.*7\\.5.*132/82.*LDL.*2\\.8.*giữ nguyên",
+          "expected_source_ids": [
+            "P001-E003-NOTE-NOTE001",
+            "P001-E003-LAB-HBA1C",
+            "P001-E003-LAB-LDL"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        }
+      ]
+    },
+    {
+      "section_id": "clinical_alerts",
+      "total_claims": 8,
+      "supported_claims": 4,
+      "precision_correct": 4,
+      "gold_matched": 4,
+      "gold_total": 4,
+      "claim_evals": [
+        {
+          "claim_text": "Microalbuminuria với tỷ lệ 32 mg/g cần tiếp tục theo dõi.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P001-E004-LAB-UACR"
+          ],
+          "matched_gold_pattern": "Microalbuminuria.*32.*mg.*theo dõi|Microalbuminuria.*32.*mg",
+          "expected_source_ids": [
+            "P001-E004-LAB-UACR"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        },
+        {
+          "claim_text": "Glucose huyết tương lúc đói 6.2 mmol/L còn cao.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P001-E004-LAB-FPG"
+          ],
+          "matched_gold_pattern": "Glucose.*6\\.2.*mmol.*cao",
+          "expected_source_ids": [
+            "P001-E004-LAB-FPG"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        },
+        {
+          "claim_text": "Microalbuminuria giảm từ 42 mg/g sang 32 mg/g.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P001-E004-LAB-UACR"
+          ],
+          "matched_gold_pattern": "Microalbuminuria.*giảm.*42.*32|Microalbuminuria.*42.*32",
+          "expected_source_ids": [
+            "P001-E004-LAB-UACR",
+            "P001-E004-NOTE-NOTE002"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        },
+        {
+          "claim_text": "HbA1c giảm từ 7.5% sang 7.1%, đạt mục tiêu <7.5%.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P001-E004-LAB-HBA1C"
+          ],
+          "matched_gold_pattern": "HbA1c.*giảm.*7\\.5.*7\\.1|HbA1c.*7\\.5.*7\\.1",
+          "expected_source_ids": [
+            "P001-E003-LAB-HBA1C",
+            "P001-E004-LAB-HBA1C"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        }
+      ]
+    }
+  ]
+}

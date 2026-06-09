@@ -97,5 +97,38 @@
     "description": "Đo glucose mao mạch ngay khi bệnh nhân đến phòng khám với triệu chứng hạ đường huyết còn tồn dư (run tay nhẹ, vã mồ hôi đã giảm bớt). Dùng máy đo glucose cầm tay.",
     "result": "Glucose mao mạch lúc đo: 3.8 mmol/L (đã được bổ sung glucose tại nhà trước khi đến). XN glucose đói tại LIS sau đó: 2.5 mmol/L (critical). Xác nhận hạ đường huyết. Ngưng Gliclazide MR.",
     "language": "vi"
+  },
+  {
+    "procedure_id": "P005-E001-PROC001",
+    "patient_id": "P005",
+    "encounter_id": "P005-E001",
+    "procedure_date": "2024-01-15",
+    "procedure_name": "Đo chức năng hô hấp (Spirometry)",
+    "source_system": "EMR-Procedures",
+    "description": "Đo phế dung ký trước và sau giãn phế quản bằng Salbutamol 400 mcg. BN thực hiện 3 lần, lấy kết quả tốt nhất.",
+    "result": "FEV1/FVC 0.58 (giảm, <0.70 = tắc nghẽn). FEV1 42% dự đoán (GOLD III: 30-49%). Sau giãn phế quản: FEV1 tăng 80 mL (5%) — không đáp ứng đáng kể. Kết luận: Rối loạn thông khí tắc nghẽn nặng, không hồi phục.",
+    "language": "vi"
+  },
+  {
+    "procedure_id": "P005-E002-PROC001",
+    "patient_id": "P005",
+    "encounter_id": "P005-E002",
+    "procedure_date": "2024-07-15",
+    "procedure_name": "Đánh giá mMRC dyspnea scale",
+    "source_system": "EMR-Procedures",
+    "description": "Đánh giá mức độ khó thở theo thang mMRC (Modified Medical Research Council).",
+    "result": "mMRC grade 3 (khó thở khi đi bộ trên mặt phẳng khoảng 100m hoặc sau vài phút). Cải thiện so với lần trước (grade 4).",
+    "language": "vi"
+  },
+  {
+    "procedure_id": "P006-E001-PROC001",
+    "patient_id": "P006",
+    "encounter_id": "P006-E001",
+    "procedure_date": "2024-03-10",
+    "procedure_name": "Thu thập nước tiểu 24h — định lượng protein",
+    "source_system": "EMR-Procedures",
+    "description": "Thu thập nước tiểu 24 giờ để đo protein niệu toàn phần và creatinine clearance.",
+    "result": "Protein niệu 24h: 4.2 g/ngày (nặng, >3.5 g = hội chứng thận hư mức). Creatinine clearance: 40 mL/phút. Thể tích nước tiểu: 1800 mL/24h.",
+    "language": "vi"
   }
 ]

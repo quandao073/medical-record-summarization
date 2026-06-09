@@ -1,0 +1,547 @@
+{
+  "patient_id": "P005",
+  "evaluation_mode": "loose",
+  "citation_precision": 1.0,
+  "citation_recall": 0.9655172413793104,
+  "critical_precision": 1.0,
+  "total_supported": 29,
+  "precision_correct": 29,
+  "total_gold": 29,
+  "gold_matched": 28,
+  "sections": [
+    {
+      "section_id": "overview",
+      "total_claims": 3,
+      "supported_claims": 3,
+      "precision_correct": 3,
+      "gold_matched": 3,
+      "gold_total": 3,
+      "claim_evals": [
+        {
+          "claim_text": "Bệnh nhân 70 tuổi, nam, có bệnh nền chính là COPD ổn định và suy tim trái phân suất tống máu giảm.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P005-E003-DX-J44.0"
+          ],
+          "matched_gold_pattern": "70 tuổi.*nam.*COPD.*suy tim|COPD.*suy tim.*70 tuổi",
+          "expected_source_ids": [
+            "P005-E003-DX-J44.0",
+            "P005-E003-DX-I50.1"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        },
+        {
+          "claim_text": "Thể trạng BMI là 24.8.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P005-E003-VIT-VIT001"
+          ],
+          "matched_gold_pattern": "BMI.*24\\.8",
+          "expected_source_ids": [
+            "P005-E003-VIT-VIT001"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        },
+        {
+          "claim_text": "Bệnh nhân cũng đang theo dõi tăng huyết áp nguyên phát.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P005-E003-DX-I10"
+          ],
+          "matched_gold_pattern": "tăng huyết áp nguyên phát",
+          "expected_source_ids": [
+            "P005-E003-DX-I10"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        }
+      ]
+    },
+    {
+      "section_id": "reason_for_visit",
+      "total_claims": 1,
+      "supported_claims": 1,
+      "precision_correct": 1,
+      "gold_matched": 1,
+      "gold_total": 1,
+      "claim_evals": [
+        {
+          "claim_text": "Bệnh nhân than phù mắt cá tăng hơn 2 tuần nay, khó thở khi leo cầu thang.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P005-E003-NOTE-NOTE001"
+          ],
+          "matched_gold_pattern": "phù mắt cá.*tăng.*2 tuần|khó thở.*leo cầu thang",
+          "expected_source_ids": [
+            "P005-E003-NOTE-NOTE001"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        }
+      ]
+    },
+    {
+      "section_id": "medical_history",
+      "total_claims": 5,
+      "supported_claims": 3,
+      "precision_correct": 3,
+      "gold_matched": 3,
+      "gold_total": 4,
+      "claim_evals": [
+        {
+          "claim_text": "Tiền sử bệnh: COPD Gold III phát hiện năm 2019.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P005-E001-NOTE-NOTE001"
+          ],
+          "matched_gold_pattern": "COPD Gold III.*phát hiện.*2019",
+          "expected_source_ids": [
+            "P005-E001-NOTE-NOTE001"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        },
+        {
+          "claim_text": "Tiền sử bệnh: Tăng huyết áp 10 năm.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P005-E001-NOTE-NOTE001"
+          ],
+          "matched_gold_pattern": "Tăng huyết áp.*10 năm",
+          "expected_source_ids": [
+            "P005-E001-NOTE-NOTE001"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        },
+        {
+          "claim_text": "Tiền sử gia đình: Bố mất do ung thư phổi năm 65 tuổi.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P005-E001-NOTE-NOTE001"
+          ],
+          "matched_gold_pattern": "Bố.*ung thư phổi.*65 tuổi|tiền sử gia đình.*ung thư phổi",
+          "expected_source_ids": [
+            "P005-E001-NOTE-NOTE001"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        },
+        {
+          "claim_text": "Thói quen nguy cơ: Hút thuốc lá 40 gói-năm, chưa bỏ.",
+          "status": "PARTIALLY_SUPPORTED",
+          "citations": [
+            "P005-E001-NOTE-NOTE001",
+            "P005-E002-NOTE-NOTE001",
+            "P005-E002-NOTE-NOTE002"
+          ],
+          "matched_gold_pattern": null,
+          "expected_source_ids": [],
+          "has_correct_citation": false,
+          "is_critical": false
+        },
+        {
+          "claim_text": "Thói quen nguy cơ: Giảm hút thuốc từ 20 điếu/ngày xuống 10 điếu, hiện tại còn 5 điếu/ngày.",
+          "status": "PARTIALLY_SUPPORTED",
+          "citations": [
+            "P005-E001-NOTE-NOTE001",
+            "P005-E002-NOTE-NOTE001",
+            "P005-E003-NOTE-NOTE001"
+          ],
+          "matched_gold_pattern": null,
+          "expected_source_ids": [],
+          "has_correct_citation": false,
+          "is_critical": false
+        }
+      ]
+    },
+    {
+      "section_id": "current_medications",
+      "total_claims": 9,
+      "supported_claims": 9,
+      "precision_correct": 9,
+      "gold_matched": 8,
+      "gold_total": 8,
+      "claim_evals": [
+        {
+          "claim_text": "Tiotropium 18 mcg — liều: 1 nhát hít, tần suất: 1 lần/ngày buổi sáng.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P005-E003-MED-TIOTROPIUM"
+          ],
+          "matched_gold_pattern": "Tiotropium.*18.*mcg",
+          "expected_source_ids": [
+            "P005-E003-MED-TIOTROPIUM"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        },
+        {
+          "claim_text": "Fluticasone/Salmeterol 500/50 mcg — liều: 1 nhát hít, tần suất: 2 lần/ngày (sáng và tối).",
+          "status": "SUPPORTED",
+          "citations": [
+            "P005-E003-MED-FLUTICASONE_SALMETER"
+          ],
+          "matched_gold_pattern": "Fluticasone.*Salmeterol.*500/50",
+          "expected_source_ids": [
+            "P005-E003-MED-FLUTICASONE_SALMETER"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        },
+        {
+          "claim_text": "Furosemide 40 mg — liều: 1 viên, tần suất: 1 lần/ngày buổi sáng.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P005-E003-MED-FUROSEMIDE"
+          ],
+          "matched_gold_pattern": "Furosemide.*40.*mg",
+          "expected_source_ids": [
+            "P005-E003-MED-FUROSEMIDE"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        },
+        {
+          "claim_text": "Carvedilol 12.5 mg — liều: 1 viên, tần suất: 2 lần/ngày (sáng và tối).",
+          "status": "SUPPORTED",
+          "citations": [
+            "P005-E003-MED-CARVEDILOL"
+          ],
+          "matched_gold_pattern": "Carvedilol.*12\\.5.*mg",
+          "expected_source_ids": [
+            "P005-E003-MED-CARVEDILOL"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        },
+        {
+          "claim_text": "Enalapril 10 mg — liều: 1 viên, tần suất: 1 lần/ngày buổi sáng.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P005-E003-MED-ENALAPRIL"
+          ],
+          "matched_gold_pattern": "Enalapril.*10.*mg",
+          "expected_source_ids": [
+            "P005-E003-MED-ENALAPRIL"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        },
+        {
+          "claim_text": "Amlodipine 5 mg — liều: 1 viên, tần suất: 1 lần/ngày buổi sáng.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P005-E003-MED-AMLODIPINE"
+          ],
+          "matched_gold_pattern": "Amlodipine.*5.*mg",
+          "expected_source_ids": [
+            "P005-E003-MED-AMLODIPINE"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        },
+        {
+          "claim_text": "Spironolactone 25 mg — liều: 1 viên, tần suất: 1 lần/ngày buổi sáng.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P005-E003-MED-SPIRONOLACTONE"
+          ],
+          "matched_gold_pattern": "Spironolactone.*25.*mg",
+          "expected_source_ids": [
+            "P005-E003-MED-SPIRONOLACTONE"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        },
+        {
+          "claim_text": "Kháng aldosterone cho suy tim EF giảm.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P005-E003-MED-SPIRONOLACTONE"
+          ],
+          "matched_gold_pattern": "Kháng aldosterone.*suy tim|theo dõi kali",
+          "expected_source_ids": [
+            "P005-E003-MED-SPIRONOLACTONE"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        },
+        {
+          "claim_text": "Theo dõi kali.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P005-E003-MED-SPIRONOLACTONE"
+          ],
+          "matched_gold_pattern": "Kháng aldosterone.*suy tim|theo dõi kali",
+          "expected_source_ids": [
+            "P005-E003-MED-SPIRONOLACTONE"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        }
+      ]
+    },
+    {
+      "section_id": "allergies",
+      "total_claims": 0,
+      "supported_claims": 0,
+      "precision_correct": 0,
+      "gold_matched": 0,
+      "gold_total": 0,
+      "claim_evals": []
+    },
+    {
+      "section_id": "abnormal_labs",
+      "total_claims": 4,
+      "supported_claims": 4,
+      "precision_correct": 4,
+      "gold_matched": 4,
+      "gold_total": 4,
+      "claim_evals": [
+        {
+          "claim_text": "BNP: 380 pg/mL, cao, tham chiếu: < 100, ngày: 2024-10-15.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P005-E003-LAB-BNP"
+          ],
+          "matched_gold_pattern": "BNP.*380.*pg/mL.*cao",
+          "expected_source_ids": [
+            "P005-E003-LAB-BNP"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        },
+        {
+          "claim_text": "Xu hướng: 680 xuống 420 xuống 380, cải thiện.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P005-E003-LAB-BNP"
+          ],
+          "matched_gold_pattern": "680.*420.*380|BNP.*giảm.*680.*380|xu hướng.*680.*420.*380",
+          "expected_source_ids": [
+            "P005-E003-LAB-BNP"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        },
+        {
+          "claim_text": "FEV1 (% dự đoán): 42 %, thấp, tham chiếu: > 80, ngày: 2024-07-15.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P005-E002-LAB-FEV1"
+          ],
+          "matched_gold_pattern": "FEV1.*42.*%.*thấp",
+          "expected_source_ids": [
+            "P005-E002-LAB-FEV1"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        },
+        {
+          "claim_text": "SpO2 nghỉ ngơi: 88 %, thấp, tham chiếu: > 95, ngày: 2024-07-15.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P005-E002-LAB-SPO2REST"
+          ],
+          "matched_gold_pattern": "SpO2.*88.*%.*thấp",
+          "expected_source_ids": [
+            "P005-E002-LAB-SPO2REST"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        }
+      ]
+    },
+    {
+      "section_id": "diagnoses",
+      "total_claims": 3,
+      "supported_claims": 3,
+      "precision_correct": 3,
+      "gold_matched": 3,
+      "gold_total": 3,
+      "claim_evals": [
+        {
+          "claim_text": "Chính: COPD ổn định (J44.0)",
+          "status": "SUPPORTED",
+          "citations": [
+            "P005-E003-DX-J44.0"
+          ],
+          "matched_gold_pattern": "COPD.*ổn định.*J44\\.0",
+          "expected_source_ids": [
+            "P005-E003-DX-J44.0"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        },
+        {
+          "claim_text": "Bệnh kèm: Suy tim trái, phân suất tống máu giảm (I50.1)",
+          "status": "SUPPORTED",
+          "citations": [
+            "P005-E003-DX-I50.1"
+          ],
+          "matched_gold_pattern": "Suy tim.*phân suất tống máu giảm.*I50\\.1",
+          "expected_source_ids": [
+            "P005-E003-DX-I50.1"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        },
+        {
+          "claim_text": "Bệnh kèm: Tăng huyết áp nguyên phát (I10)",
+          "status": "SUPPORTED",
+          "citations": [
+            "P005-E003-DX-I10"
+          ],
+          "matched_gold_pattern": "Tăng huyết áp.*I10",
+          "expected_source_ids": [
+            "P005-E003-DX-I10"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        }
+      ]
+    },
+    {
+      "section_id": "treatment_timeline",
+      "total_claims": 3,
+      "supported_claims": 3,
+      "precision_correct": 3,
+      "gold_matched": 3,
+      "gold_total": 3,
+      "claim_evals": [
+        {
+          "claim_text": "2024-01-15: SpO2 84%, BNP 680 pg/mL — Methylprednisolone 40 mg, Tiotropium, Salbutamol, Furosemide, Carvedilol — đợt cấp COPD mức trung bình-nặng, suy tim mất bù.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P005-E001-LAB-BNP",
+            "P005-E001-MED-METHYLPREDNISOLONE",
+            "P005-E001-MED-FUROSEMIDE",
+            "P005-E002-MED-FUROSEMIDE",
+            "P005-E003-MED-FUROSEMIDE"
+          ],
+          "matched_gold_pattern": "2024-01-15.*SpO2.*84.*BNP.*680.*Methylprednisolone.*Tiotropium.*Furosemide",
+          "expected_source_ids": [
+            "P005-E001-LAB-BNP",
+            "P005-E001-MED-METHYLPREDNISOLONE",
+            "P005-E001-MED-FUROSEMIDE",
+            "P005-E002-MED-FUROSEMIDE",
+            "P005-E003-MED-FUROSEMIDE"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        },
+        {
+          "claim_text": "2024-07-15: SpO2 88%, BNP 420 pg/mL — thêm Fluticasone/Salmeterol, tăng Carvedilol 12.5 mg, Enalapril 10 mg — COPD ổn định, suy tim cải thiện.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P005-E001-MED-ENALAPRIL",
+            "P005-E002-DX-J44.0",
+            "P005-E002-LAB-BNP",
+            "P005-E002-MED-CARVEDILOL",
+            "P005-E002-MED-ENALAPRIL"
+          ],
+          "matched_gold_pattern": "2024-07-15.*SpO2.*88.*BNP.*420.*Fluticasone.*Carvedilol.*12\\.5.*Enalapril.*10",
+          "expected_source_ids": [
+            "P005-E002-LAB-BNP",
+            "P005-E002-MED-CARVEDILOL",
+            "P005-E002-MED-ENALAPRIL",
+            "P005-E001-MED-ENALAPRIL"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        },
+        {
+          "claim_text": "2024-10-15: BNP 380 pg/mL — thêm Spironolactone 25 mg — COPD ổn định, suy tim EF giảm, phù mắt cá tăng nhẹ.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P005-E002-DX-J44.0",
+            "P005-E003-DX-J44.0",
+            "P005-E003-LAB-BNP",
+            "P005-E003-MED-SPIRONOLACTONE"
+          ],
+          "matched_gold_pattern": "2024-10-15.*BNP.*380.*Spironolactone.*25.*COPD.*suy tim",
+          "expected_source_ids": [
+            "P005-E003-LAB-BNP",
+            "P005-E003-MED-SPIRONOLACTONE",
+            "P005-E002-DX-J44.0",
+            "P005-E003-DX-J44.0"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        }
+      ]
+    },
+    {
+      "section_id": "clinical_alerts",
+      "total_claims": 8,
+      "supported_claims": 3,
+      "precision_correct": 3,
+      "gold_matched": 3,
+      "gold_total": 3,
+      "claim_evals": [
+        {
+          "claim_text": "SpO2 90% còn thấp.",
+          "status": "PARTIALLY_SUPPORTED",
+          "citations": [
+            "P005-E003-VIT-VIT001"
+          ],
+          "matched_gold_pattern": null,
+          "expected_source_ids": [],
+          "has_correct_citation": false,
+          "is_critical": true
+        },
+        {
+          "claim_text": "BNP 380 pg/mL vẫn cao.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P005-E003-LAB-BNP"
+          ],
+          "matched_gold_pattern": "BNP.*380.*vẫn cao|BNP.*380.*cao",
+          "expected_source_ids": [
+            "P005-E003-LAB-BNP"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        },
+        {
+          "claim_text": "BNP 680 pg/mL sang 380 pg/mL, xu hướng cải thiện.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P005-E003-LAB-BNP"
+          ],
+          "matched_gold_pattern": "BNP.*680.*380.*cải thiện|BNP.*xu hướng cải thiện",
+          "expected_source_ids": [
+            "P005-E003-LAB-BNP"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        },
+        {
+          "claim_text": "Huyết áp 138/85 mmHg sang 135/82 mmHg, ổn định.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P005-E003-VIT-VIT001"
+          ],
+          "matched_gold_pattern": "Huyết áp.*135/82|138/85.*135/82.*ổn định",
+          "expected_source_ids": [
+            "P005-E003-VIT-VIT001"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        },
+        {
+          "claim_text": "Chưa rõ liều thuốc Spironolactone.",
+          "status": "UNSUPPORTED",
+          "citations": [],
+          "matched_gold_pattern": null,
+          "expected_source_ids": [],
+          "has_correct_citation": false,
+          "is_critical": false
+        }
+      ]
+    }
+  ]
+}

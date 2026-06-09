@@ -1,0 +1,346 @@
+{
+  "patient_id": "P001",
+  "sections": [
+    {
+      "section_id": "overview",
+      "expected_claims": [
+        {
+          "claim_pattern": "Nguyễn Văn An.*55 tuổi.*nam.*đái tháo đường",
+          "expected_source_ids": [
+            "P001-PATIENT-INFO",
+            "P001-E004-DX-E11"
+          ],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "BMI.*28",
+          "expected_source_ids": [
+            "P001-E004-VIT-VIT001"
+          ],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "theo dõi.*microalbuminuria|biến chứng.*microalbuminuria|microalbuminuria",
+          "expected_source_ids": [
+            "P001-E004-DX-N18.3",
+            "P001-E004-LAB-UACR",
+            "P001-E004-NOTE-NOTE001"
+          ],
+          "is_critical": true
+        }
+      ]
+    },
+    {
+      "section_id": "reason_for_visit",
+      "expected_claims": [
+        {
+          "claim_pattern": "tái khám.*lần 4|9 tháng",
+          "expected_source_ids": [
+            "P001-E004-NOTE-NOTE001"
+          ],
+          "is_critical": false
+        }
+      ]
+    },
+    {
+      "section_id": "medical_history",
+      "expected_claims": [
+        {
+          "claim_pattern": "Đái tháo đường type 2.*phát hiện.*2021|ĐTĐ type 2.*phát hiện.*2021",
+          "expected_source_ids": [
+            "P001-E001-DX-E11",
+            "P001-E001-NOTE-NOTE002"
+          ],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "Tăng huyết áp.*phát hiện.*2019|THA.*phát hiện.*2019",
+          "expected_source_ids": [
+            "P001-E001-NOTE-NOTE002"
+          ],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "Rối loạn lipid.*phát hiện.*2020|RLLPM.*phát hiện.*2020|Rối loạn lipid máu.*2020",
+          "expected_source_ids": [
+            "P001-E001-NOTE-NOTE002"
+          ],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "Cha.*(đái tháo đường type 2|ĐTĐ type 2).*2018.*(nhồi máu cơ tim|NMCT)",
+          "expected_source_ids": [
+            "P001-E001-NOTE-NOTE004",
+            "P001-E001-NOTE-NOTE001",
+            "P001-E001-NOTE-NOTE002"
+          ],
+          "is_critical": false,
+          "note": "Tiền sử gia đình ghi trong NOTE001/002/004. Pipeline có thể cite bất kỳ note nào của E001."
+        },
+        {
+          "claim_pattern": "Mẹ.*(tăng huyết áp|THA).*đang điều trị",
+          "expected_source_ids": [
+            "P001-E001-NOTE-NOTE004"
+          ],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "Anh trai.*(tăng huyết áp|THA).*(rối loạn lipid máu|RLLPM)",
+          "expected_source_ids": [
+            "P001-E001-NOTE-NOTE004"
+          ],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "Hút thuốc.*15.*gói-năm.*bỏ.*2 năm",
+          "expected_source_ids": [
+            "P001-E001-NOTE-NOTE002"
+          ],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "Chế độ ăn.*(chưa kiểm soát|nhiều cơm trắng|ít rau)",
+          "expected_source_ids": [
+            "P001-E001-NOTE-NOTE001"
+          ],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "Ít vận động",
+          "expected_source_ids": [
+            "P001-E001-NOTE-NOTE001"
+          ],
+          "is_critical": false
+        }
+      ]
+    },
+    {
+      "section_id": "current_medications",
+      "expected_claims": [
+        {
+          "claim_pattern": "Metformin.*1000.*mg",
+          "expected_source_ids": [
+            "P001-E004-MED-METFORMIN"
+          ],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Empagliflozin.*10.*mg",
+          "expected_source_ids": [
+            "P001-E004-MED-EMPAGLIFLOZIN"
+          ],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Amlodipine.*5.*mg",
+          "expected_source_ids": [
+            "P001-E004-MED-AMLODIPINE"
+          ],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Perindopril.*5.*mg",
+          "expected_source_ids": [
+            "P001-E004-MED-PERINDOPRIL"
+          ],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Atorvastatin.*40.*mg",
+          "expected_source_ids": [
+            "P001-E004-MED-ATORVASTATIN"
+          ],
+          "is_critical": true
+        }
+      ]
+    },
+    {
+      "section_id": "allergies",
+      "expected_claims": [
+        {
+          "claim_pattern": "Penicillin.*mề đay",
+          "expected_source_ids": [
+            "P001-PATIENT-ALLERGY-PENICILLIN"
+          ],
+          "is_critical": true
+        }
+      ]
+    },
+    {
+      "section_id": "abnormal_labs",
+      "expected_claims": [
+        {
+          "claim_pattern": "HbA1c.*7\\.1.*%",
+          "expected_source_ids": [
+            "P001-E004-LAB-HBA1C"
+          ],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "(9\\.2.*7\\.1|9\\.2%.*xuống.*7\\.1|HbA1c.*giảm.*9\\.2.*7\\.1)",
+          "expected_source_ids": [
+            "P001-E004-NOTE-NOTE002",
+            "P001-E004-LAB-HBA1C",
+            "P001-E001-LAB-HBA1C"
+          ],
+          "is_critical": false,
+          "note": "Trend claim. Pipeline thường cite E004-LAB-HBA1C đơn (chấp nhận được nếu context rõ)."
+        },
+        {
+          "claim_pattern": "Glucose.*6\\.2.*mmol",
+          "expected_source_ids": [
+            "P001-E004-LAB-FPG"
+          ],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Microalbumin.*32.*mg",
+          "expected_source_ids": [
+            "P001-E004-LAB-UACR"
+          ],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "(42.*32.*mg/g|Microalbumin.*42.*32)",
+          "expected_source_ids": [
+            "P001-E004-LAB-UACR",
+            "P001-E004-NOTE-NOTE002"
+          ],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Glucose.*6\\.8.*mmol",
+          "expected_source_ids": [
+            "P001-E003-LAB-FPG"
+          ],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "LDL.*2\\.8.*mmol",
+          "expected_source_ids": [
+            "P001-E003-LAB-LDL"
+          ],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Microalbumin.*35.*mg",
+          "expected_source_ids": [
+            "P001-E003-LAB-UACR"
+          ],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "(42.*35.*mg/g|Microalbumin.*42.*35)",
+          "expected_source_ids": [
+            "P001-E003-LAB-UACR"
+          ],
+          "is_critical": true
+        }
+      ]
+    },
+    {
+      "section_id": "diagnoses",
+      "expected_claims": [
+        {
+          "claim_pattern": "Đái tháo đường type 2.*E11",
+          "expected_source_ids": [
+            "P001-E004-DX-E11"
+          ],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Tăng huyết áp.*I10",
+          "expected_source_ids": [
+            "P001-E004-DX-I10"
+          ],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "lipid.*E78",
+          "expected_source_ids": [
+            "P001-E004-DX-E78.5"
+          ],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Microalbuminuria.*N18",
+          "expected_source_ids": [
+            "P001-E004-DX-N18.3"
+          ],
+          "is_critical": true
+        }
+      ]
+    },
+    {
+      "section_id": "treatment_timeline",
+      "expected_claims": [
+        {
+          "claim_pattern": "2024-01-10.*HbA1c.*9\\.2.*148/92.*LDL.*3\\.4.*Metformin.*Empagliflozin.*Perindopril",
+          "expected_source_ids": [
+            "P001-E001-NOTE-NOTE005",
+            "P001-E001-VIT-VIT001",
+            "P001-E001-LAB-HBA1C",
+            "P001-E001-LAB-LDL"
+          ],
+          "is_critical": true,
+          "note": "Timeline claim — chấp nhận cả lab và note source. Pipeline thường cite lab."
+        },
+        {
+          "claim_pattern": "2024-04-10.*HbA1c.*8\\.1.*138/88.*LDL.*3\\.1.*giữ nguyên",
+          "expected_source_ids": [
+            "P001-E002-NOTE-NOTE001",
+            "P001-E002-LAB-HBA1C",
+            "P001-E002-LAB-LDL"
+          ],
+          "is_critical": true,
+          "note": "Timeline claim — chấp nhận lab source."
+        },
+        {
+          "claim_pattern": "2024-07-10.*HbA1c.*7\\.5.*132/82.*LDL.*2\\.8.*giữ nguyên",
+          "expected_source_ids": [
+            "P001-E003-NOTE-NOTE001",
+            "P001-E003-LAB-HBA1C",
+            "P001-E003-LAB-LDL"
+          ],
+          "is_critical": true,
+          "note": "Timeline claim — chấp nhận lab source."
+        }
+      ]
+    },
+    {
+      "section_id": "clinical_alerts",
+      "expected_claims": [
+        {
+          "claim_pattern": "Microalbuminuria.*giảm.*42.*32|Microalbuminuria.*42.*32",
+          "expected_source_ids": [
+            "P001-E004-LAB-UACR",
+            "P001-E004-NOTE-NOTE002"
+          ],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Microalbuminuria.*32.*mg.*theo dõi|Microalbuminuria.*32.*mg",
+          "expected_source_ids": [
+            "P001-E004-LAB-UACR"
+          ],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Glucose.*6\\.2.*mmol.*cao",
+          "expected_source_ids": [
+            "P001-E004-LAB-FPG"
+          ],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "HbA1c.*giảm.*7\\.5.*7\\.1|HbA1c.*7\\.5.*7\\.1",
+          "expected_source_ids": [
+            "P001-E003-LAB-HBA1C",
+            "P001-E004-LAB-HBA1C"
+          ],
+          "is_critical": true
+        }
+      ]
+    }
+  ]
+}

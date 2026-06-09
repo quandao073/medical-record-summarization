@@ -1,0 +1,145 @@
+{
+  "patient_id": "P006",
+  "sections": [
+    {
+      "section_id": "overview",
+      "expected_claims": [
+        {
+          "claim_pattern": "Nguyễn Thị Phương.*45 tuổi.*nữ",
+          "expected_source_ids": ["P006-PATIENT-INFO"],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "CKD|bệnh thận mạn|thận mạn",
+          "expected_source_ids": ["P006-E001-DX-N18.3", "P006-E001-DX-E11.65"],
+          "is_critical": false
+        }
+      ]
+    },
+    {
+      "section_id": "current_medications",
+      "expected_claims": [
+        {
+          "claim_pattern": "Insulin Glargine.*24.*IU",
+          "expected_source_ids": ["P006-E002-MED-INSULIN_GLARGINE"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Losartan.*100.*mg",
+          "expected_source_ids": ["P006-E002-MED-LOSARTAN"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Amlodipine.*10.*mg",
+          "expected_source_ids": ["P006-E002-MED-AMLODIPINE"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Dapagliflozin.*10.*mg",
+          "expected_source_ids": ["P006-E002-MED-DAPAGLIFLOZIN"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Erythropoietin|EPO.*2000",
+          "expected_source_ids": ["P006-E002-MED-ERYTHROPOIETIN"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Calcitriol.*0\\.25",
+          "expected_source_ids": ["P006-E002-MED-CALCITRIOL"],
+          "is_critical": true
+        }
+      ]
+    },
+    {
+      "section_id": "allergies",
+      "expected_claims": [
+        {
+          "claim_pattern": "Penicillin.*mề đay",
+          "expected_source_ids": ["P006-PATIENT-ALLERGY-PENICILLIN"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "NSAIDs|Ibuprofen.*phù mạch|khó thở",
+          "expected_source_ids": ["P006-PATIENT-ALLERGY-NSAIDS_(IBUPRO"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Sulfonamide",
+          "expected_source_ids": ["P006-PATIENT-ALLERGY-SULFONAMIDE"],
+          "is_critical": true
+        }
+      ]
+    },
+    {
+      "section_id": "abnormal_labs",
+      "expected_claims": [
+        {
+          "claim_pattern": "HbA1c.*8\\.9|HbA1c.*9\\.8",
+          "expected_source_ids": ["P006-E002-LAB-HBA1C", "P006-E001-LAB-HBA1C"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Creatinine.*182|Creatinine.*175",
+          "expected_source_ids": ["P006-E002-LAB-CREAT", "P006-E001-LAB-CREAT"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "eGFR.*35|eGFR.*38",
+          "expected_source_ids": ["P006-E002-LAB-EGFR", "P006-E001-LAB-EGFR"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "UACR.*2200|UACR.*2800|Albumin.*Creatinine",
+          "expected_source_ids": ["P006-E002-LAB-UACR", "P006-E001-LAB-UACR"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Hemoglobin.*10\\.2|thiếu máu",
+          "expected_source_ids": ["P006-E002-LAB-HGB"],
+          "is_critical": true
+        }
+      ]
+    },
+    {
+      "section_id": "diagnoses",
+      "expected_claims": [
+        {
+          "claim_pattern": "ĐTĐ type 2.*E11|đái tháo đường.*E11",
+          "expected_source_ids": ["P006-E002-DX-E11.65", "P006-E001-DX-E11.65"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "thận mạn.*N18|CKD.*N18",
+          "expected_source_ids": ["P006-E002-DX-N18.3", "P006-E001-DX-N18.3"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Thiếu máu.*D63|thiếu máu.*CKD",
+          "expected_source_ids": ["P006-E002-DX-D63.1"],
+          "is_critical": true
+        }
+      ]
+    },
+    {
+      "section_id": "clinical_alerts",
+      "expected_claims": [
+        {
+          "claim_pattern": "eGFR.*35.*giảm|CKD.*tiến triển",
+          "expected_source_ids": ["P006-E002-LAB-EGFR", "P006-E002-DX-N18.3"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Penicillin|NSAIDs|dị ứng",
+          "expected_source_ids": ["P006-PATIENT-ALLERGY-PENICILLIN", "P006-PATIENT-ALLERGY-NSAIDS_(IBUPRO"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "HbA1c.*8\\.9|kiểm soát.*đường huyết",
+          "expected_source_ids": ["P006-E002-LAB-HBA1C"],
+          "is_critical": true
+        }
+      ]
+    }
+  ]
+}

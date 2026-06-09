@@ -62,5 +62,37 @@
     "data_note": "Profile D — Edge cases tập trung. EC-01 (thiếu dose), EC-02 (thiếu unit XN), EC-03 (dị ứng không rõ), EC-04 (ICD mismatch), EC-06 (không có XN E002), EC-09 (glucose critical low), EC-10 (nhiều viết tắt).",
     "date_of_birth": "1956-07-25",
     "is_synthetic": true
+  },
+  {
+    "patient_id": "P005",
+    "full_name": "Hoàng Văn Em",
+    "age": 70,
+    "gender": "male",
+    "occupation": "Thợ mỏ (đã nghỉ hưu)",
+    "address": "Phường Hà Lầm, Thành phố Hạ Long, Quảng Ninh",
+    "insurance_id": "5678901234",
+    "citizen_id": "022054567890",
+    "phone": "0934567890",
+    "created_at": "2024-01-15T08:00:00+07:00",
+    "updated_at": "2024-10-15T10:00:00+07:00",
+    "date_of_birth": "1954-03-20",
+    "is_synthetic": true,
+    "data_note": "Profile E — COPD Gold III + Suy tim EF giảm 35% + Tim phổi mạn + THA. 3 encounters. Hút thuốc 40 gói-năm. Khác nhóm bệnh chuyển hóa."
+  },
+  {
+    "patient_id": "P006",
+    "full_name": "Nguyễn Thị Phương",
+    "age": 45,
+    "gender": "female",
+    "occupation": "Kế toán viên",
+    "address": "Phường Nghĩa Đô, Quận Cầu Giấy, Thành phố Hà Nội",
+    "insurance_id": "6789012345",
+    "citizen_id": "001079678901",
+    "phone": "0978901234",
+    "created_at": "2024-03-10T08:00:00+07:00",
+    "updated_at": "2024-09-10T10:00:00+07:00",
+    "date_of_birth": "1979-08-15",
+    "is_synthetic": true,
+    "data_note": "Profile F — ĐTĐ type 2 biến chứng CKD G3b (eGFR 38) + THA + đa dị ứng (3 loại). 2 encounters. Metformin chống chỉ định, dùng Insulin."
   }
 ]

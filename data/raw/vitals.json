@@ -278,5 +278,97 @@
     "source_system": "EMR-Vitals",
     "temperature_celsius": 36.7,
     "spo2_percent": 97
+  },
+  {
+    "vital_id": "P005-E001-VIT001",
+    "patient_id": "P005",
+    "encounter_id": "P005-E001",
+    "measured_at": "2024-01-15T08:20:00+07:00",
+    "blood_pressure_systolic": 155,
+    "blood_pressure_diastolic": 95,
+    "heart_rate": 105,
+    "weight_kg": 65.0,
+    "height_cm": 165.0,
+    "bmi": 23.9,
+    "abnormal_flags": [
+      "low_spo2",
+      "high_heart_rate",
+      "high_blood_pressure"
+    ],
+    "source_system": "EMR-Vitals",
+    "temperature_celsius": 37.2,
+    "spo2_percent": 84
+  },
+  {
+    "vital_id": "P005-E002-VIT001",
+    "patient_id": "P005",
+    "encounter_id": "P005-E002",
+    "measured_at": "2024-07-15T08:15:00+07:00",
+    "blood_pressure_systolic": 138,
+    "blood_pressure_diastolic": 85,
+    "heart_rate": 82,
+    "weight_kg": 66.0,
+    "height_cm": 165.0,
+    "bmi": 24.2,
+    "abnormal_flags": [
+      "low_spo2"
+    ],
+    "source_system": "EMR-Vitals",
+    "temperature_celsius": 36.6,
+    "spo2_percent": 88
+  },
+  {
+    "vital_id": "P005-E003-VIT001",
+    "patient_id": "P005",
+    "encounter_id": "P005-E003",
+    "measured_at": "2024-10-15T08:10:00+07:00",
+    "blood_pressure_systolic": 135,
+    "blood_pressure_diastolic": 82,
+    "heart_rate": 78,
+    "weight_kg": 67.5,
+    "height_cm": 165.0,
+    "bmi": 24.8,
+    "abnormal_flags": [
+      "low_spo2"
+    ],
+    "source_system": "EMR-Vitals",
+    "temperature_celsius": 36.5,
+    "spo2_percent": 90
+  },
+  {
+    "vital_id": "P006-E001-VIT001",
+    "patient_id": "P006",
+    "encounter_id": "P006-E001",
+    "measured_at": "2024-03-10T08:30:00+07:00",
+    "blood_pressure_systolic": 162,
+    "blood_pressure_diastolic": 98,
+    "heart_rate": 88,
+    "weight_kg": 72.0,
+    "height_cm": 158.0,
+    "bmi": 28.8,
+    "abnormal_flags": [
+      "high_blood_pressure"
+    ],
+    "source_system": "EMR-Vitals",
+    "temperature_celsius": 36.6,
+    "spo2_percent": 97
+  },
+  {
+    "vital_id": "P006-E002-VIT001",
+    "patient_id": "P006",
+    "encounter_id": "P006-E002",
+    "measured_at": "2024-09-10T08:20:00+07:00",
+    "blood_pressure_systolic": 148,
+    "blood_pressure_diastolic": 88,
+    "heart_rate": 82,
+    "weight_kg": 74.0,
+    "height_cm": 158.0,
+    "bmi": 29.6,
+    "abnormal_flags": [
+      "high_blood_pressure"
+    ],
+    "source_system": "EMR-Vitals",
+    "temperature_celsius": 36.5,
+    "spo2_percent": 97
   }
 ]

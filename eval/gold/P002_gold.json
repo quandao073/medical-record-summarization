@@ -1,0 +1,155 @@
+{
+  "patient_id": "P002",
+  "sections": [
+    {
+      "section_id": "overview",
+      "expected_claims": [
+        {
+          "claim_pattern": "Trần Thị Bình.*50 tuổi.*nữ",
+          "expected_source_ids": ["P002-PATIENT-INFO"],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "đái tháo đường type 2",
+          "expected_source_ids": ["P002-E003-DX-E11.9"],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "BMI.*25\\.7",
+          "expected_source_ids": ["P002-E003-VIT-VIT001"],
+          "is_critical": false
+        }
+      ]
+    },
+    {
+      "section_id": "reason_for_visit",
+      "expected_claims": [
+        {
+          "claim_pattern": "tái khám.*6 tháng|ổn định|không phàn nàn",
+          "expected_source_ids": ["P002-E003-NOTE-NOTE001"],
+          "is_critical": false
+        }
+      ]
+    },
+    {
+      "section_id": "medical_history",
+      "expected_claims": [
+        {
+          "claim_pattern": "Đái tháo đường type 2.*phát hiện.*2020|ĐTĐ type 2.*2020",
+          "expected_source_ids": ["P002-E001-NOTE-NOTE001", "P002-E001-NOTE-NOTE002"],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "Tăng huyết áp.*phát hiện.*2018|THA.*2018",
+          "expected_source_ids": ["P002-E001-NOTE-NOTE001", "P002-E001-NOTE-NOTE002"],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "Không.*phẫu thuật|Không.*thủ thuật",
+          "expected_source_ids": ["P002-E001-NOTE-NOTE002"],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "Không hút thuốc.*không uống rượu",
+          "expected_source_ids": ["P002-E001-NOTE-NOTE001"],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "Tuân thủ tốt|uống thuốc đều|đi bộ 30 phút",
+          "expected_source_ids": ["P002-E001-NOTE-NOTE001"],
+          "is_critical": false
+        }
+      ]
+    },
+    {
+      "section_id": "current_medications",
+      "expected_claims": [
+        {
+          "claim_pattern": "Metformin.*500.*mg",
+          "expected_source_ids": ["P002-E003-MED-METFORMIN"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Losartan.*50.*mg",
+          "expected_source_ids": ["P002-E003-MED-LOSARTAN"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Amlodipine.*5.*mg",
+          "expected_source_ids": ["P002-E003-MED-AMLODIPINE"],
+          "is_critical": true
+        }
+      ]
+    },
+    {
+      "section_id": "abnormal_labs",
+      "expected_claims": [
+        {
+          "claim_pattern": "HbA1c.*6\\.8.*%",
+          "expected_source_ids": ["P002-E003-LAB-HBA1C"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Glucose.*6\\.2.*mmol",
+          "expected_source_ids": ["P002-E003-LAB-FPG"],
+          "is_critical": true
+        }
+      ]
+    },
+    {
+      "section_id": "diagnoses",
+      "expected_claims": [
+        {
+          "claim_pattern": "Đái tháo đường type 2.*E11",
+          "expected_source_ids": ["P002-E003-DX-E11.9"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Tăng huyết áp.*I10",
+          "expected_source_ids": ["P002-E003-DX-I10"],
+          "is_critical": true
+        }
+      ]
+    },
+    {
+      "section_id": "treatment_timeline",
+      "expected_claims": [
+        {
+          "claim_pattern": "2024-01-15.*HbA1c.*6\\.5.*135/85.*duy trì",
+          "expected_source_ids": ["P002-E001-LAB-HBA1C"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "2024-04-15.*HbA1c.*6\\.7.*132/82.*duy trì",
+          "expected_source_ids": ["P002-E002-LAB-HBA1C"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "2024-07-15.*HbA1c.*6\\.8.*128/80.*duy trì|đạt mục tiêu",
+          "expected_source_ids": ["P002-E003-LAB-HBA1C"],
+          "is_critical": true
+        }
+      ]
+    },
+    {
+      "section_id": "clinical_alerts",
+      "expected_claims": [
+        {
+          "claim_pattern": "HbA1c.*6\\.8.*cao",
+          "expected_source_ids": ["P002-E003-LAB-HBA1C"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Glucose.*6\\.2.*mmol.*cao",
+          "expected_source_ids": ["P002-E003-LAB-FPG"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Huyết áp.*128/80|đạt mục tiêu.*huyết áp",
+          "expected_source_ids": ["P002-E003-VIT-VIT001"],
+          "is_critical": false
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,440 @@
+{
+  "patient_id": "P002",
+  "evaluation_mode": "loose",
+  "citation_precision": 1.0,
+  "citation_recall": 1.0,
+  "critical_precision": 1.0,
+  "total_supported": 22,
+  "precision_correct": 22,
+  "total_gold": 22,
+  "gold_matched": 22,
+  "sections": [
+    {
+      "section_id": "overview",
+      "total_claims": 4,
+      "supported_claims": 3,
+      "precision_correct": 3,
+      "gold_matched": 3,
+      "gold_total": 3,
+      "claim_evals": [
+        {
+          "claim_text": "Bệnh nhân Trần Thị Bình, 50 tuổi, nữ.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P002-PATIENT-INFO"
+          ],
+          "matched_gold_pattern": "Trần Thị Bình.*50 tuổi.*nữ",
+          "expected_source_ids": [
+            "P002-PATIENT-INFO"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        },
+        {
+          "claim_text": "Bệnh nền chính là đái tháo đường type 2 không biến chứng.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P002-E003-DX-E11.9"
+          ],
+          "matched_gold_pattern": "đái tháo đường type 2",
+          "expected_source_ids": [
+            "P002-E003-DX-E11.9"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        },
+        {
+          "claim_text": "Thể trạng BMI là 25.7.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P002-E003-VIT-VIT001"
+          ],
+          "matched_gold_pattern": "BMI.*25\\.7",
+          "expected_source_ids": [
+            "P002-E003-VIT-VIT001"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        },
+        {
+          "claim_text": "Không có biến chứng mạn tính đang theo dõi.",
+          "status": "PARTIALLY_SUPPORTED",
+          "citations": [
+            "P002-E003-DX-E11.9"
+          ],
+          "matched_gold_pattern": null,
+          "expected_source_ids": [],
+          "has_correct_citation": false,
+          "is_critical": false
+        }
+      ]
+    },
+    {
+      "section_id": "reason_for_visit",
+      "total_claims": 2,
+      "supported_claims": 1,
+      "precision_correct": 1,
+      "gold_matched": 1,
+      "gold_total": 1,
+      "claim_evals": [
+        {
+          "claim_text": "Tái khám sau 6 tháng điều trị ổn định.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P002-E003-NOTE-NOTE001"
+          ],
+          "matched_gold_pattern": "tái khám.*6 tháng|ổn định|không phàn nàn",
+          "expected_source_ids": [
+            "P002-E003-NOTE-NOTE001"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        },
+        {
+          "claim_text": "Không có triệu chứng bất thường.",
+          "status": "PARTIALLY_SUPPORTED",
+          "citations": [
+            "P002-E003-NOTE-NOTE001",
+            "P002-E003-NOTE-NOTE002"
+          ],
+          "matched_gold_pattern": null,
+          "expected_source_ids": [],
+          "has_correct_citation": false,
+          "is_critical": false
+        }
+      ]
+    },
+    {
+      "section_id": "medical_history",
+      "total_claims": 6,
+      "supported_claims": 5,
+      "precision_correct": 5,
+      "gold_matched": 5,
+      "gold_total": 5,
+      "claim_evals": [
+        {
+          "claim_text": "Đái tháo đường type 2 phát hiện năm 2020.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P002-E001-NOTE-NOTE001",
+            "P002-E001-NOTE-NOTE002"
+          ],
+          "matched_gold_pattern": "Đái tháo đường type 2.*phát hiện.*2020|ĐTĐ type 2.*2020",
+          "expected_source_ids": [
+            "P002-E001-NOTE-NOTE001",
+            "P002-E001-NOTE-NOTE002"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        },
+        {
+          "claim_text": "Tăng huyết áp phát hiện năm 2018.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P002-E001-NOTE-NOTE001",
+            "P002-E001-NOTE-NOTE002"
+          ],
+          "matched_gold_pattern": "Tăng huyết áp.*phát hiện.*2018|THA.*2018",
+          "expected_source_ids": [
+            "P002-E001-NOTE-NOTE001",
+            "P002-E001-NOTE-NOTE002"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        },
+        {
+          "claim_text": "Không có tiền sử phẫu thuật hoặc thủ thuật.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P002-E001-NOTE-NOTE002"
+          ],
+          "matched_gold_pattern": "Không.*phẫu thuật|Không.*thủ thuật",
+          "expected_source_ids": [
+            "P002-E001-NOTE-NOTE002"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        },
+        {
+          "claim_text": "Không có thông tin về tiền sử gia đình.",
+          "status": "PARTIALLY_SUPPORTED",
+          "citations": [
+            "P002-E001-NOTE-NOTE001",
+            "P002-E001-NOTE-NOTE002"
+          ],
+          "matched_gold_pattern": null,
+          "expected_source_ids": [],
+          "has_correct_citation": false,
+          "is_critical": false
+        },
+        {
+          "claim_text": "Không hút thuốc, không uống rượu.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P002-E001-NOTE-NOTE001"
+          ],
+          "matched_gold_pattern": "Không hút thuốc.*không uống rượu",
+          "expected_source_ids": [
+            "P002-E001-NOTE-NOTE001"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        },
+        {
+          "claim_text": "Tuân thủ tốt: uống thuốc đều, ăn kiêng, đi bộ 30 phút mỗi ngày.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P002-E001-NOTE-NOTE001"
+          ],
+          "matched_gold_pattern": "Tuân thủ tốt|uống thuốc đều|đi bộ 30 phút",
+          "expected_source_ids": [
+            "P002-E001-NOTE-NOTE001"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        }
+      ]
+    },
+    {
+      "section_id": "current_medications",
+      "total_claims": 3,
+      "supported_claims": 3,
+      "precision_correct": 3,
+      "gold_matched": 3,
+      "gold_total": 3,
+      "claim_evals": [
+        {
+          "claim_text": "Metformin 500 mg — 1 viên, 2 lần/ngày, Uống sau ăn.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P002-E003-MED-METFORMIN"
+          ],
+          "matched_gold_pattern": "Metformin.*500.*mg",
+          "expected_source_ids": [
+            "P002-E003-MED-METFORMIN"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        },
+        {
+          "claim_text": "Losartan 50 mg — 1 viên, 1 lần/ngày, Uống buổi sáng.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P002-E003-MED-LOSARTAN"
+          ],
+          "matched_gold_pattern": "Losartan.*50.*mg",
+          "expected_source_ids": [
+            "P002-E003-MED-LOSARTAN"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        },
+        {
+          "claim_text": "Amlodipine 5 mg — 1 viên, 1 lần/ngày, Uống buổi sáng.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P002-E003-MED-AMLODIPINE"
+          ],
+          "matched_gold_pattern": "Amlodipine.*5.*mg",
+          "expected_source_ids": [
+            "P002-E003-MED-AMLODIPINE"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        }
+      ]
+    },
+    {
+      "section_id": "allergies",
+      "total_claims": 0,
+      "supported_claims": 0,
+      "precision_correct": 0,
+      "gold_matched": 0,
+      "gold_total": 0,
+      "claim_evals": []
+    },
+    {
+      "section_id": "abnormal_labs",
+      "total_claims": 2,
+      "supported_claims": 2,
+      "precision_correct": 2,
+      "gold_matched": 2,
+      "gold_total": 2,
+      "claim_evals": [
+        {
+          "claim_text": "HbA1c: 6.8 %, cao, tham chiếu: 4.0 - 5.6, ngày: 2024-07-15.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P002-E003-LAB-HBA1C"
+          ],
+          "matched_gold_pattern": "HbA1c.*6\\.8.*%",
+          "expected_source_ids": [
+            "P002-E003-LAB-HBA1C"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        },
+        {
+          "claim_text": "Glucose huyết tương lúc đói: 6.2 mmol/L, cao, tham chiếu: 3.9 - 6.1, ngày: 2024-07-15.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P002-E003-LAB-FPG"
+          ],
+          "matched_gold_pattern": "Glucose.*6\\.2.*mmol",
+          "expected_source_ids": [
+            "P002-E003-LAB-FPG"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        }
+      ]
+    },
+    {
+      "section_id": "diagnoses",
+      "total_claims": 2,
+      "supported_claims": 2,
+      "precision_correct": 2,
+      "gold_matched": 2,
+      "gold_total": 2,
+      "claim_evals": [
+        {
+          "claim_text": "Chính: Đái tháo đường type 2 không biến chứng (E11.9)",
+          "status": "SUPPORTED",
+          "citations": [
+            "P002-E003-DX-E11.9"
+          ],
+          "matched_gold_pattern": "Đái tháo đường type 2.*E11",
+          "expected_source_ids": [
+            "P002-E003-DX-E11.9"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        },
+        {
+          "claim_text": "Bệnh kèm: Tăng huyết áp nguyên phát (I10)",
+          "status": "SUPPORTED",
+          "citations": [
+            "P002-E003-DX-I10"
+          ],
+          "matched_gold_pattern": "Tăng huyết áp.*I10",
+          "expected_source_ids": [
+            "P002-E003-DX-I10"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        }
+      ]
+    },
+    {
+      "section_id": "treatment_timeline",
+      "total_claims": 3,
+      "supported_claims": 3,
+      "precision_correct": 3,
+      "gold_matched": 3,
+      "gold_total": 3,
+      "claim_evals": [
+        {
+          "claim_text": "2024-01-15: HbA1c 6.5%, huyết áp 135/85 mmHg — duy trì phác đồ — kiểm soát tốt.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P002-E001-LAB-HBA1C"
+          ],
+          "matched_gold_pattern": "2024-01-15.*HbA1c.*6\\.5.*135/85.*duy trì",
+          "expected_source_ids": [
+            "P002-E001-LAB-HBA1C"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        },
+        {
+          "claim_text": "2024-04-15: HbA1c 6.7%, huyết áp 132/82 mmHg — duy trì phác đồ — ổn định.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P002-E002-LAB-HBA1C"
+          ],
+          "matched_gold_pattern": "2024-04-15.*HbA1c.*6\\.7.*132/82.*duy trì",
+          "expected_source_ids": [
+            "P002-E002-LAB-HBA1C"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        },
+        {
+          "claim_text": "2024-07-15: HbA1c 6.8%, huyết áp 128/80 mmHg — duy trì phác đồ — đạt mục tiêu.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P002-E003-LAB-HBA1C"
+          ],
+          "matched_gold_pattern": "2024-07-15.*HbA1c.*6\\.8.*128/80.*duy trì|đạt mục tiêu",
+          "expected_source_ids": [
+            "P002-E003-LAB-HBA1C"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        }
+      ]
+    },
+    {
+      "section_id": "clinical_alerts",
+      "total_claims": 7,
+      "supported_claims": 3,
+      "precision_correct": 3,
+      "gold_matched": 3,
+      "gold_total": 3,
+      "claim_evals": [
+        {
+          "claim_text": "HbA1c 6.8% vẫn cao hơn mức bình thường.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P002-E003-LAB-HBA1C"
+          ],
+          "matched_gold_pattern": "HbA1c.*6\\.8.*cao",
+          "expected_source_ids": [
+            "P002-E003-LAB-HBA1C"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        },
+        {
+          "claim_text": "Glucose huyết tương lúc đói 6.2 mmol/L vẫn cao hơn mức bình thường.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P002-E003-LAB-FPG"
+          ],
+          "matched_gold_pattern": "Glucose.*6\\.2.*mmol.*cao",
+          "expected_source_ids": [
+            "P002-E003-LAB-FPG"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        },
+        {
+          "claim_text": "Huyết áp giảm từ 132/82 mmHg xuống 128/80 mmHg, đạt mục tiêu.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P002-E003-VIT-VIT001"
+          ],
+          "matched_gold_pattern": "Huyết áp.*128/80|đạt mục tiêu.*huyết áp",
+          "expected_source_ids": [
+            "P002-E003-VIT-VIT001"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        },
+        {
+          "claim_text": "Chưa rõ thông tin về biến chứng của đái tháo đường.",
+          "status": "PARTIALLY_SUPPORTED",
+          "citations": [
+            "P002-E003-DX-E11.9",
+            "P002-E002-DX-E11.9",
+            "P002-E001-DX-E11.9"
+          ],
+          "matched_gold_pattern": null,
+          "expected_source_ids": [],
+          "has_correct_citation": false,
+          "is_critical": false
+        }
+      ]
+    }
+  ]
+}
