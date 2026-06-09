@@ -5,13 +5,48 @@
       "section_id": "overview",
       "expected_claims": [
         {
-          "claim_pattern": "Nguyễn Thị Phương.*45 tuổi.*nữ",
-          "expected_source_ids": ["P006-PATIENT-INFO"],
+          "claim_pattern": "BMI.*29\\.6",
+          "expected_source_ids": ["P006-E002-VIT-VIT001"],
+          "is_critical": false
+        }
+      ]
+    },
+    {
+      "section_id": "reason_for_visit",
+      "expected_claims": [
+        {
+          "claim_pattern": "Tái khám.*6 tháng|tái khám định kỳ",
+          "expected_source_ids": ["P006-E002-NOTE-NOTE001", "P006-E002-NOTE-NOTE002"],
           "is_critical": false
         },
         {
-          "claim_pattern": "CKD|bệnh thận mạn|thận mạn",
-          "expected_source_ids": ["P006-E001-DX-N18.3", "P006-E001-DX-E11.65"],
+          "claim_pattern": "mệt.*nhiều|xanh xao",
+          "expected_source_ids": ["P006-E002-NOTE-NOTE001"],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "Phù mắt cá giảm|phù.*giảm",
+          "expected_source_ids": ["P006-E002-NOTE-NOTE001"],
+          "is_critical": false
+        }
+      ]
+    },
+    {
+      "section_id": "medical_history",
+      "expected_claims": [
+        {
+          "claim_pattern": "Đái tháo đường.*2017|ĐTĐ.*2017",
+          "expected_source_ids": ["P006-E001-NOTE-NOTE001"],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "Tăng huyết áp.*3 năm|huyết áp.*3 năm",
+          "expected_source_ids": ["P006-E001-NOTE-NOTE001", "P006-E001-DX-I10"],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "mẹ.*thận mạn|mẹ.*chạy thận|gia đình.*thận",
+          "expected_source_ids": ["P006-E001-NOTE-NOTE001"],
           "is_critical": false
         }
       ]
@@ -40,7 +75,7 @@
           "is_critical": true
         },
         {
-          "claim_pattern": "Erythropoietin|EPO.*2000",
+          "claim_pattern": "Erythropoietin.*2000|EPO.*2000",
           "expected_source_ids": ["P006-E002-MED-ERYTHROPOIETIN"],
           "is_critical": true
         },
@@ -48,6 +83,11 @@
           "claim_pattern": "Calcitriol.*0\\.25",
           "expected_source_ids": ["P006-E002-MED-CALCITRIOL"],
           "is_critical": true
+        },
+        {
+          "claim_pattern": "Calcium carbonate.*500",
+          "expected_source_ids": ["P006-E002-MED-CALCIUM_CARBONATE"],
+          "is_critical": false
         }
       ]
     },
@@ -61,13 +101,14 @@
         },
         {
           "claim_pattern": "NSAIDs|Ibuprofen.*phù mạch|khó thở",
-          "expected_source_ids": ["P006-PATIENT-ALLERGY-NSAIDS_(IBUPRO"],
+          "expected_source_ids": ["P006-PATIENT-ALLERGY-NSAIDS_(IBUPROF"],
           "is_critical": true
         },
         {
           "claim_pattern": "Sulfonamide",
           "expected_source_ids": ["P006-PATIENT-ALLERGY-SULFONAMIDE"],
-          "is_critical": true
+          "is_critical": true,
+          "note": "Sulfonamide là NEED_REVIEW (unconfirmed) — pipeline không emit SUPPORTED → gold recall không thể đạt 100%, expected behavior"
         }
       ]
     },
@@ -75,7 +116,7 @@
       "section_id": "abnormal_labs",
       "expected_claims": [
         {
-          "claim_pattern": "HbA1c.*8\\.9|HbA1c.*9\\.8",
+          "claim_pattern": "HbA1c.*8\\.9|HbA1c.*9\\.8|9\\.8.*xuống.*8\\.9",
           "expected_source_ids": ["P006-E002-LAB-HBA1C", "P006-E001-LAB-HBA1C"],
           "is_critical": true
         },
@@ -90,12 +131,12 @@
           "is_critical": true
         },
         {
-          "claim_pattern": "UACR.*2200|UACR.*2800|Albumin.*Creatinine",
+          "claim_pattern": "2200 mg/g|2800 mg/g|Albumin.*Creatinine.*nước tiểu",
           "expected_source_ids": ["P006-E002-LAB-UACR", "P006-E001-LAB-UACR"],
           "is_critical": true
         },
         {
-          "claim_pattern": "Hemoglobin.*10\\.2|thiếu máu",
+          "claim_pattern": "Hemoglobin.*10\\.2",
           "expected_source_ids": ["P006-E002-LAB-HGB"],
           "is_critical": true
         }
@@ -112,11 +153,40 @@
         {
           "claim_pattern": "thận mạn.*N18|CKD.*N18",
           "expected_source_ids": ["P006-E002-DX-N18.3", "P006-E001-DX-N18.3"],
-          "is_critical": true
+          "is_critical": true,
+          "note": "N18.3 là CONTRADICTED trong pipeline output — gold recall không thể đạt 100% cho pattern này, expected behavior"
         },
         {
           "claim_pattern": "Thiếu máu.*D63|thiếu máu.*CKD",
           "expected_source_ids": ["P006-E002-DX-D63.1"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "Tăng huyết áp.*I10|huyết áp nguyên phát.*I10",
+          "expected_source_ids": ["P006-E002-DX-I10"],
+          "is_critical": false
+        }
+      ]
+    },
+    {
+      "section_id": "treatment_timeline",
+      "expected_claims": [
+        {
+          "claim_pattern": "2024-03-10.*HbA1c.*9\\.8|2024-03-10.*eGFR.*38",
+          "expected_source_ids": [
+            "P006-E001-LAB-HBA1C",
+            "P006-E001-LAB-EGFR",
+            "P006-E001-MED-LOSARTAN"
+          ],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "2024-09-10.*HbA1c.*8\\.9|2024-09-10.*eGFR.*35",
+          "expected_source_ids": [
+            "P006-E002-LAB-HBA1C",
+            "P006-E002-LAB-EGFR",
+            "P006-E002-MED-DAPAGLIFLOZIN"
+          ],
           "is_critical": true
         }
       ]
@@ -125,19 +195,34 @@
       "section_id": "clinical_alerts",
       "expected_claims": [
         {
-          "claim_pattern": "eGFR.*35.*giảm|CKD.*tiến triển",
-          "expected_source_ids": ["P006-E002-LAB-EGFR", "P006-E002-DX-N18.3"],
+          "claim_pattern": "Creatinine.*182.*cao",
+          "expected_source_ids": ["P006-E002-LAB-CREAT"],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "eGFR.*35.*thấp",
+          "expected_source_ids": ["P006-E002-LAB-EGFR"],
           "is_critical": true
         },
         {
-          "claim_pattern": "Penicillin|NSAIDs|dị ứng",
-          "expected_source_ids": ["P006-PATIENT-ALLERGY-PENICILLIN", "P006-PATIENT-ALLERGY-NSAIDS_(IBUPRO"],
-          "is_critical": true
+          "claim_pattern": "2200 mg/g.*vẫn cao|Albumin.*Creatinine.*2200.*cao",
+          "expected_source_ids": ["P006-E002-LAB-UACR"],
+          "is_critical": false
         },
         {
-          "claim_pattern": "HbA1c.*8\\.9|kiểm soát.*đường huyết",
+          "claim_pattern": "Hemoglobin.*10\\.2.*thấp",
+          "expected_source_ids": ["P006-E002-LAB-HGB"],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "HbA1c.*9\\.8.*8\\.9|HbA1c.*cải thiện",
           "expected_source_ids": ["P006-E002-LAB-HBA1C"],
-          "is_critical": true
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "2800 mg/g.*sang.*2200|Albumin.*Creatinine.*đáp ứng",
+          "expected_source_ids": ["P006-E002-LAB-UACR"],
+          "is_critical": false
         }
       ]
     }

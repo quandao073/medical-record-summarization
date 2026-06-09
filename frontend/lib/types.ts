@@ -34,6 +34,11 @@ export interface SummaryMetrics {
   hallucination_rate: number;
   missing_section_rate: number;
   total_claims: number;
+  contradiction_count: number;
+  duplicate_claim_count: number;
+  need_review_count: number;
+  citation_precision: number;
+  citation_recall: number;
   latency_seconds: number;
   token_count: number;
 }
