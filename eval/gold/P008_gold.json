@@ -1,0 +1,163 @@
+{
+  "patient_id": "P008",
+  "sections": [
+    {
+      "section_id": "overview",
+      "expected_claims": [
+        {
+          "claim_pattern": "48 tuổi.*nam|nam.*48 tuổi",
+          "expected_source_ids": ["P008-PATIENT-INFO"],
+          "is_critical": false,
+          "note": "Claim demographic này thường ở status PARTIALLY_SUPPORTED (không phải SUPPORTED) nên không được matcher xét — recall không đạt 100% cho pattern này là expected behavior"
+        },
+        {
+          "claim_pattern": "BMI.*23\\.9",
+          "expected_source_ids": ["P008-E002-VIT-VIT001"],
+          "is_critical": false
+        }
+      ]
+    },
+    {
+      "section_id": "reason_for_visit",
+      "expected_claims": [
+        {
+          "claim_pattern": "Tái khám.*2 tháng|tái khám sau 2 tháng",
+          "expected_source_ids": ["P008-E002-NOTE-NOTE001", "P008-E002-NOTE-NOTE002"],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "giảm đau thượng vị|đỡ đau thượng vị|không còn đau về đêm",
+          "expected_source_ids": ["P008-E002-NOTE-NOTE001"],
+          "is_critical": false
+        }
+      ]
+    },
+    {
+      "section_id": "medical_history",
+      "expected_claims": [
+        {
+          "claim_pattern": "[Hh]út thuốc.*20 năm|1 gói.*20 năm",
+          "expected_source_ids": ["P008-E001-NOTE-NOTE001"],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "rượu bia.*3-4 lần|uống rượu bia thường xuyên",
+          "expected_source_ids": ["P008-E001-NOTE-NOTE001"],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "[Ăă]n uống thất thường|bỏ bữa sáng",
+          "expected_source_ids": ["P008-E001-NOTE-NOTE001"],
+          "is_critical": false
+        }
+      ]
+    },
+    {
+      "section_id": "current_medications",
+      "expected_claims": [
+        {
+          "claim_pattern": "Esomeprazole.*20 ?mg",
+          "expected_source_ids": ["P008-E002-MED-ESOMEPRAZOLE"],
+          "is_critical": true
+        }
+      ]
+    },
+    {
+      "section_id": "diagnoses",
+      "expected_claims": [
+        {
+          "claim_pattern": "K25\\.7|[Ll]oét dạ dày",
+          "expected_source_ids": ["P008-E002-DX-K25.7", "P008-E001-DX-K25.7"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "K21\\.0|GERD|[Tt]rào ngược",
+          "expected_source_ids": ["P008-E002-DX-K21.0", "P008-E001-DX-K21.0"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "B98\\.0|H\\. ?pylori|Helicobacter|CLO.*dương tính",
+          "expected_source_ids": ["P008-E001-DX-B98.0"],
+          "acceptable_source_groups": [
+            ["P008-E001-DX-B98.0"],
+            ["P008-E001-PROC-PROC002"],
+            ["P008-E001-NOTE-NOTE002"]
+          ],
+          "is_critical": false,
+          "note": "Pipeline diagnoses section chỉ sinh K25.7 + K21.0 từ encounter mới nhất, B98.0 chỉ ở E001 nên không xuất hiện — recall miss là expected behavior"
+        },
+        {
+          "claim_pattern": "H\\. ?pylori.*diệt thành công|UBT.*âm tính|Urea.*âm tính|không còn nhiễm H\\. ?pylori",
+          "expected_source_ids": [
+            "P008-E002-PROC-PROC001",
+            "P008-E002-DX-K25.7"
+          ],
+          "acceptable_source_groups": [
+            ["P008-E002-PROC-PROC001"],
+            ["P008-E002-DX-K25.7"],
+            ["P008-E002-NOTE-NOTE002"]
+          ],
+          "is_critical": false,
+          "note": "Pipeline diagnoses section không sinh eradication claim — đã cover ở clinical_alerts section"
+        }
+      ]
+    },
+    {
+      "section_id": "treatment_timeline",
+      "expected_claims": [
+        {
+          "claim_pattern": "2024-04-12.*[Hh]\\.?[Pp]ylori|2024-04-12.*CLO.*dương tính|2024-04-12.*loét.*0\\.8|2024-04-12.*Esomeprazole|2024-04-12.*Hb.*13\\.8|2024-04-12.*Hemoglobin.*13\\.8",
+          "expected_source_ids": [
+            "P008-E001-PROC-PROC001",
+            "P008-E001-PROC-PROC002",
+            "P008-E001-DX-K25.7",
+            "P008-E001-DX-B98.0",
+            "P008-E001-LAB-HGB",
+            "P008-E001-MED-ESOMEPRAZOLE"
+          ],
+          "acceptable_source_groups": [
+            ["P008-E001-NOTE-NOTE002"],
+            ["P008-E001-PROC-PROC001", "P008-E001-PROC-PROC002", "P008-E001-MED-ESOMEPRAZOLE"],
+            ["P008-E001-DX-K25.7", "P008-E001-DX-B98.0", "P008-E001-MED-ESOMEPRAZOLE"]
+          ],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "2024-06-10.*Esomeprazole.*20|2024-06-10.*Hb.*14\\.1|2024-06-10.*Hemoglobin.*14\\.1",
+          "expected_source_ids": ["P008-E002-MED-ESOMEPRAZOLE", "P008-E002-LAB-HGB"],
+          "is_critical": true
+        }
+      ]
+    },
+    {
+      "section_id": "clinical_alerts",
+      "expected_claims": [
+        {
+          "claim_pattern": "ợ chua.*ăn no|ợ chua nhẹ",
+          "expected_source_ids": ["P008-E002-DX-K21.0"],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "[Ll]oét dạ dày.*hồi phục|đáp ứng tốt với điều trị",
+          "expected_source_ids": ["P008-E002-DX-K25.7"],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "[Hh]\\.?[Pp]ylori.*diệt|Helicobacter.*diệt thành công|Urea.*âm tính|UBT.*âm tính",
+          "expected_source_ids": [
+            "P008-E002-PROC-PROC001",
+            "P008-E002-DX-K25.7",
+            "P008-E001-DX-B98.0"
+          ],
+          "acceptable_source_groups": [
+            ["P008-E002-PROC-PROC001"],
+            ["P008-E002-DX-K25.7"],
+            ["P008-E001-DX-B98.0"],
+            ["P008-E002-NOTE-NOTE002"]
+          ],
+          "is_critical": false
+        }
+      ]
+    }
+  ]
+}

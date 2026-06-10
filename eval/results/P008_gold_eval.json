@@ -1,0 +1,321 @@
+{
+  "patient_id": "P008",
+  "evaluation_mode": "loose",
+  "citation_precision": 1.0,
+  "citation_recall": 0.8235294117647058,
+  "critical_precision": 1.0,
+  "total_supported": 14,
+  "precision_correct": 14,
+  "total_gold": 17,
+  "gold_matched": 14,
+  "sections": [
+    {
+      "section_id": "overview",
+      "total_claims": 3,
+      "supported_claims": 1,
+      "precision_correct": 1,
+      "gold_matched": 1,
+      "gold_total": 2,
+      "claim_evals": [
+        {
+          "claim_text": "Bệnh nhân Lê Văn Tùng, 48 tuổi, nam giới, có bệnh nền chính là loét dạ dày mạn tính và trào ngược dạ dày - thực quản.",
+          "status": "PARTIALLY_SUPPORTED",
+          "citations": [
+            "P008-E002-DX-K25.7",
+            "P008-E002-DX-K21.0",
+            "P008-PATIENT-INFO"
+          ],
+          "matched_gold_pattern": null,
+          "expected_source_ids": [],
+          "has_correct_citation": false,
+          "is_critical": false
+        },
+        {
+          "claim_text": "Thể trạng BMI là 23.9.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P008-E002-VIT-VIT001"
+          ],
+          "matched_gold_pattern": "BMI.*23\\.9",
+          "expected_source_ids": [
+            "P008-E002-VIT-VIT001"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        },
+        {
+          "claim_text": "Bệnh nhân đang theo dõi tình trạng cải thiện của các triệu chứng liên quan.",
+          "status": "PARTIALLY_SUPPORTED",
+          "citations": [
+            "P008-E002-DX-K21.0",
+            "P008-PATIENT-INFO"
+          ],
+          "matched_gold_pattern": null,
+          "expected_source_ids": [],
+          "has_correct_citation": false,
+          "is_critical": false
+        }
+      ]
+    },
+    {
+      "section_id": "reason_for_visit",
+      "total_claims": 2,
+      "supported_claims": 2,
+      "precision_correct": 2,
+      "gold_matched": 2,
+      "gold_total": 2,
+      "claim_evals": [
+        {
+          "claim_text": "Tái khám sau 2 tháng.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P008-E002-NOTE-NOTE001",
+            "P008-E002-NOTE-NOTE002"
+          ],
+          "matched_gold_pattern": "Tái khám.*2 tháng|tái khám sau 2 tháng",
+          "expected_source_ids": [
+            "P008-E002-NOTE-NOTE001",
+            "P008-E002-NOTE-NOTE002"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        },
+        {
+          "claim_text": "Bệnh nhân giảm đau thượng vị rõ rệt, không còn đau về đêm, vẫn còn ợ chua nhẹ khi ăn no hoặc nằm sớm sau ăn.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P008-E002-NOTE-NOTE001"
+          ],
+          "matched_gold_pattern": "giảm đau thượng vị|đỡ đau thượng vị|không còn đau về đêm",
+          "expected_source_ids": [
+            "P008-E002-NOTE-NOTE001"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        }
+      ]
+    },
+    {
+      "section_id": "medical_history",
+      "total_claims": 3,
+      "supported_claims": 3,
+      "precision_correct": 3,
+      "gold_matched": 3,
+      "gold_total": 3,
+      "claim_evals": [
+        {
+          "claim_text": "Hút thuốc 1 gói/ngày x 20 năm.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P008-E001-NOTE-NOTE001"
+          ],
+          "matched_gold_pattern": "[Hh]út thuốc.*20 năm|1 gói.*20 năm",
+          "expected_source_ids": [
+            "P008-E001-NOTE-NOTE001"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        },
+        {
+          "claim_text": "Uống rượu bia thường xuyên (3-4 lần/tuần do đặc thù công việc).",
+          "status": "SUPPORTED",
+          "citations": [
+            "P008-E001-NOTE-NOTE001"
+          ],
+          "matched_gold_pattern": "rượu bia.*3-4 lần|uống rượu bia thường xuyên",
+          "expected_source_ids": [
+            "P008-E001-NOTE-NOTE001"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        },
+        {
+          "claim_text": "Ăn uống thất thường, hay bỏ bữa sáng.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P008-E001-NOTE-NOTE001"
+          ],
+          "matched_gold_pattern": "[Ăă]n uống thất thường|bỏ bữa sáng",
+          "expected_source_ids": [
+            "P008-E001-NOTE-NOTE001"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        }
+      ]
+    },
+    {
+      "section_id": "current_medications",
+      "total_claims": 1,
+      "supported_claims": 1,
+      "precision_correct": 1,
+      "gold_matched": 1,
+      "gold_total": 1,
+      "claim_evals": [
+        {
+          "claim_text": "Esomeprazole 20 mg — 20 mg, 1 lần/ngày, trước ăn sáng.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P008-E002-MED-ESOMEPRAZOLE"
+          ],
+          "matched_gold_pattern": "Esomeprazole.*20 ?mg",
+          "expected_source_ids": [
+            "P008-E002-MED-ESOMEPRAZOLE"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        }
+      ]
+    },
+    {
+      "section_id": "allergies",
+      "total_claims": 0,
+      "supported_claims": 0,
+      "precision_correct": 0,
+      "gold_matched": 0,
+      "gold_total": 0,
+      "claim_evals": []
+    },
+    {
+      "section_id": "abnormal_labs",
+      "total_claims": 0,
+      "supported_claims": 0,
+      "precision_correct": 0,
+      "gold_matched": 0,
+      "gold_total": 0,
+      "claim_evals": []
+    },
+    {
+      "section_id": "diagnoses",
+      "total_claims": 2,
+      "supported_claims": 2,
+      "precision_correct": 2,
+      "gold_matched": 2,
+      "gold_total": 4,
+      "claim_evals": [
+        {
+          "claim_text": "Chính: Loét dạ dày mạn tính, đang hồi phục (K25.7)",
+          "status": "SUPPORTED",
+          "citations": [
+            "P008-E002-DX-K25.7"
+          ],
+          "matched_gold_pattern": "K25\\.7|[Ll]oét dạ dày",
+          "expected_source_ids": [
+            "P008-E002-DX-K25.7",
+            "P008-E001-DX-K25.7"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        },
+        {
+          "claim_text": "Bệnh kèm: Trào ngược dạ dày - thực quản, cải thiện (K21.0)",
+          "status": "SUPPORTED",
+          "citations": [
+            "P008-E002-DX-K21.0"
+          ],
+          "matched_gold_pattern": "K21\\.0|GERD|[Tt]rào ngược",
+          "expected_source_ids": [
+            "P008-E002-DX-K21.0",
+            "P008-E001-DX-K21.0"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        }
+      ]
+    },
+    {
+      "section_id": "treatment_timeline",
+      "total_claims": 2,
+      "supported_claims": 2,
+      "precision_correct": 2,
+      "gold_matched": 2,
+      "gold_total": 2,
+      "claim_evals": [
+        {
+          "claim_text": "2024-04-12: Hemoglobin 13.8 g/dL — bắt đầu phác đồ diệt H.pylori 14 ngày với Esomeprazole, Amoxicillin, Clarithromycin — triệu chứng đau thượng vị và GERD chưa cải thiện.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P008-E001-LAB-HGB"
+          ],
+          "matched_gold_pattern": "2024-04-12.*[Hh]\\.?[Pp]ylori|2024-04-12.*CLO.*dương tính|2024-04-12.*loét.*0\\.8|2024-04-12.*Esomeprazole|2024-04-12.*Hb.*13\\.8|2024-04-12.*Hemoglobin.*13\\.8",
+          "expected_source_ids": [
+            "P008-E001-PROC-PROC001",
+            "P008-E001-PROC-PROC002",
+            "P008-E001-DX-K25.7",
+            "P008-E001-DX-B98.0",
+            "P008-E001-LAB-HGB",
+            "P008-E001-MED-ESOMEPRAZOLE"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        },
+        {
+          "claim_text": "2024-06-10: Hemoglobin 14.1 g/dL — giảm liều Esomeprazole xuống 20 mg/ngày — triệu chứng đau thượng vị cải thiện rõ, GERD còn nhẹ.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P008-E002-LAB-HGB",
+            "P008-E002-MED-ESOMEPRAZOLE"
+          ],
+          "matched_gold_pattern": "2024-06-10.*Esomeprazole.*20|2024-06-10.*Hb.*14\\.1|2024-06-10.*Hemoglobin.*14\\.1",
+          "expected_source_ids": [
+            "P008-E002-MED-ESOMEPRAZOLE",
+            "P008-E002-LAB-HGB"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        }
+      ]
+    },
+    {
+      "section_id": "clinical_alerts",
+      "total_claims": 7,
+      "supported_claims": 3,
+      "precision_correct": 3,
+      "gold_matched": 3,
+      "gold_total": 3,
+      "claim_evals": [
+        {
+          "claim_text": "Ợ chua nhẹ khi ăn no hoặc nằm sớm sau ăn vẫn còn.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P008-E002-DX-K21.0"
+          ],
+          "matched_gold_pattern": "ợ chua.*ăn no|ợ chua nhẹ",
+          "expected_source_ids": [
+            "P008-E002-DX-K21.0"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        },
+        {
+          "claim_text": "Loét dạ dày mạn tính từ không chảy máu sang đang hồi phục, đáp ứng tốt với điều trị.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P008-E002-DX-K25.7"
+          ],
+          "matched_gold_pattern": "[Ll]oét dạ dày.*hồi phục|đáp ứng tốt với điều trị",
+          "expected_source_ids": [
+            "P008-E002-DX-K25.7"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        },
+        {
+          "claim_text": "Nhiễm Helicobacter pylori đã được diệt thành công với test hơi thở Urea âm tính.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P008-E001-DX-B98.0"
+          ],
+          "matched_gold_pattern": "[Hh]\\.?[Pp]ylori.*diệt|Helicobacter.*diệt thành công|Urea.*âm tính|UBT.*âm tính",
+          "expected_source_ids": [
+            "P008-E002-PROC-PROC001",
+            "P008-E002-DX-K25.7",
+            "P008-E001-DX-B98.0"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        }
+      ]
+    }
+  ]
+}

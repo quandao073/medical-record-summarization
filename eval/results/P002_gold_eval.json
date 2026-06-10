@@ -1,46 +1,33 @@
 {
   "patient_id": "P002",
   "evaluation_mode": "loose",
-  "citation_precision": 1.0,
-  "citation_recall": 1.0,
+  "citation_precision": 0.8636363636363636,
+  "citation_recall": 0.9090909090909091,
   "critical_precision": 1.0,
   "total_supported": 22,
-  "precision_correct": 22,
+  "precision_correct": 19,
   "total_gold": 22,
-  "gold_matched": 22,
+  "gold_matched": 20,
   "sections": [
     {
       "section_id": "overview",
-      "total_claims": 4,
+      "total_claims": 3,
       "supported_claims": 3,
-      "precision_correct": 3,
-      "gold_matched": 3,
+      "precision_correct": 1,
+      "gold_matched": 2,
       "gold_total": 3,
       "claim_evals": [
         {
-          "claim_text": "Bệnh nhân Trần Thị Bình, 50 tuổi, nữ.",
+          "claim_text": "Bệnh nhân Trần Thị Bình, 50 tuổi, nữ, mắc đái tháo đường type 2 không biến chứng.",
           "status": "SUPPORTED",
           "citations": [
-            "P002-PATIENT-INFO"
+            "P002-E003-DX-E11.9"
           ],
           "matched_gold_pattern": "Trần Thị Bình.*50 tuổi.*nữ",
           "expected_source_ids": [
             "P002-PATIENT-INFO"
           ],
-          "has_correct_citation": true,
-          "is_critical": false
-        },
-        {
-          "claim_text": "Bệnh nền chính là đái tháo đường type 2 không biến chứng.",
-          "status": "SUPPORTED",
-          "citations": [
-            "P002-E003-DX-E11.9"
-          ],
-          "matched_gold_pattern": "đái tháo đường type 2",
-          "expected_source_ids": [
-            "P002-E003-DX-E11.9"
-          ],
-          "has_correct_citation": true,
+          "has_correct_citation": false,
           "is_critical": false
         },
         {
@@ -57,10 +44,10 @@
           "is_critical": false
         },
         {
-          "claim_text": "Không có biến chứng mạn tính đang theo dõi.",
-          "status": "PARTIALLY_SUPPORTED",
+          "claim_text": "Bệnh nhân cũng có tăng huyết áp nguyên phát đạt mục tiêu.",
+          "status": "SUPPORTED",
           "citations": [
-            "P002-E003-DX-E11.9"
+            "P002-E003-DX-I10"
           ],
           "matched_gold_pattern": null,
           "expected_source_ids": [],
@@ -71,7 +58,7 @@
     },
     {
       "section_id": "reason_for_visit",
-      "total_claims": 2,
+      "total_claims": 1,
       "supported_claims": 1,
       "precision_correct": 1,
       "gold_matched": 1,
@@ -89,27 +76,15 @@
           ],
           "has_correct_citation": true,
           "is_critical": false
-        },
-        {
-          "claim_text": "Không có triệu chứng bất thường.",
-          "status": "PARTIALLY_SUPPORTED",
-          "citations": [
-            "P002-E003-NOTE-NOTE001",
-            "P002-E003-NOTE-NOTE002"
-          ],
-          "matched_gold_pattern": null,
-          "expected_source_ids": [],
-          "has_correct_citation": false,
-          "is_critical": false
         }
       ]
     },
     {
       "section_id": "medical_history",
       "total_claims": 6,
-      "supported_claims": 5,
-      "precision_correct": 5,
-      "gold_matched": 5,
+      "supported_claims": 4,
+      "precision_correct": 4,
+      "gold_matched": 4,
       "gold_total": 5,
       "claim_evals": [
         {
@@ -156,11 +131,12 @@
           "is_critical": false
         },
         {
-          "claim_text": "Không có thông tin về tiền sử gia đình.",
+          "claim_text": "Không có tiền sử bệnh tim mạch, ung thư trong gia đình.",
           "status": "PARTIALLY_SUPPORTED",
           "citations": [
             "P002-E001-NOTE-NOTE001",
-            "P002-E001-NOTE-NOTE002"
+            "P002-E001-NOTE-NOTE002",
+            "P002-E001-NOTE-NOTE003"
           ],
           "matched_gold_pattern": null,
           "expected_source_ids": [],
@@ -181,16 +157,16 @@
           "is_critical": false
         },
         {
-          "claim_text": "Tuân thủ tốt: uống thuốc đều, ăn kiêng, đi bộ 30 phút mỗi ngày.",
-          "status": "SUPPORTED",
+          "claim_text": "Tuân thủ tốt chế độ ăn kiêng và vận động 30 phút mỗi ngày.",
+          "status": "PARTIALLY_SUPPORTED",
           "citations": [
-            "P002-E001-NOTE-NOTE001"
+            "P002-E001-NOTE-NOTE001",
+            "P002-E001-NOTE-NOTE003",
+            "P002-E002-NOTE-NOTE001"
           ],
-          "matched_gold_pattern": "Tuân thủ tốt|uống thuốc đều|đi bộ 30 phút",
-          "expected_source_ids": [
-            "P002-E001-NOTE-NOTE001"
-          ],
-          "has_correct_citation": true,
+          "matched_gold_pattern": null,
+          "expected_source_ids": [],
+          "has_correct_citation": false,
           "is_critical": false
         }
       ]
@@ -255,8 +231,8 @@
     },
     {
       "section_id": "abnormal_labs",
-      "total_claims": 2,
-      "supported_claims": 2,
+      "total_claims": 3,
+      "supported_claims": 3,
       "precision_correct": 2,
       "gold_matched": 2,
       "gold_total": 2,
@@ -273,6 +249,18 @@
           ],
           "has_correct_citation": true,
           "is_critical": true
+        },
+        {
+          "claim_text": "Xu hướng: 6.7% lên 6.8%, ổn định.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P002-E003-LAB-HBA1C",
+            "P002-E002-LAB-HBA1C"
+          ],
+          "matched_gold_pattern": null,
+          "expected_source_ids": [],
+          "has_correct_citation": false,
+          "is_critical": false
         },
         {
           "claim_text": "Glucose huyết tương lúc đói: 6.2 mmol/L, cao, tham chiếu: 3.9 - 6.1, ngày: 2024-07-15.",
@@ -422,13 +410,9 @@
           "is_critical": false
         },
         {
-          "claim_text": "Chưa rõ thông tin về biến chứng của đái tháo đường.",
-          "status": "PARTIALLY_SUPPORTED",
-          "citations": [
-            "P002-E003-DX-E11.9",
-            "P002-E002-DX-E11.9",
-            "P002-E001-DX-E11.9"
-          ],
+          "claim_text": "Chưa rõ về liều thuốc điều trị hiện tại.",
+          "status": "UNSUPPORTED",
+          "citations": [],
           "matched_gold_pattern": null,
           "expected_source_ids": [],
           "has_correct_citation": false,

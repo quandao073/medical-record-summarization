@@ -1,0 +1,190 @@
+{
+  "patient_id": "P007",
+  "sections": [
+    {
+      "section_id": "overview",
+      "expected_claims": [
+        {
+          "claim_pattern": "32 tuổi.*nữ|nữ.*32 tuổi",
+          "expected_source_ids": ["P007-PATIENT-INFO"],
+          "acceptable_source_groups": [
+            ["P007-PATIENT-INFO"]
+          ],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "BMI.*20\\.8",
+          "expected_source_ids": ["P007-E003-VIT-VIT001"],
+          "is_critical": false
+        }
+      ]
+    },
+    {
+      "section_id": "reason_for_visit",
+      "expected_claims": [
+        {
+          "claim_pattern": "Tái khám.*6 tháng|sau 6 tháng điều trị",
+          "expected_source_ids": ["P007-E003-NOTE-NOTE001", "P007-E003-NOTE-NOTE002"],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "hết hồi hộp|hết run tay",
+          "expected_source_ids": ["P007-E003-NOTE-NOTE001"],
+          "is_critical": false
+        }
+      ]
+    },
+    {
+      "section_id": "medical_history",
+      "expected_claims": [
+        {
+          "claim_pattern": "mẹ.*tuyến giáp|gia đình.*tuyến giáp",
+          "expected_source_ids": ["P007-E001-NOTE-NOTE001"],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "Không hút thuốc|không uống rượu",
+          "expected_source_ids": ["P007-E001-NOTE-NOTE001"],
+          "is_critical": false
+        }
+      ]
+    },
+    {
+      "section_id": "current_medications",
+      "expected_claims": [
+        {
+          "claim_pattern": "Methimazole.*5 ?mg",
+          "expected_source_ids": ["P007-E003-MED-METHIMAZOLE"],
+          "is_critical": true
+        }
+      ]
+    },
+    {
+      "section_id": "abnormal_labs",
+      "expected_claims": [
+        {
+          "claim_pattern": "TSH.*0\\.3|0\\.01.*0\\.3|TSH.*0\\.01",
+          "expected_source_ids": ["P007-E003-LAB-TSH", "P007-E002-LAB-TSH", "P007-E001-LAB-TSH"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "FT4.*45|FT4.*22\\.0.*pmol|45.*pmol.*22|FT4.*giảm|FT4.*về.*bình thường",
+          "expected_source_ids": [
+            "P007-E001-LAB-FT4",
+            "P007-E002-LAB-FT4",
+            "P007-E003-LAB-FT4"
+          ],
+          "acceptable_source_groups": [
+            ["P007-E001-LAB-FT4"],
+            ["P007-E001-LAB-FT4", "P007-E002-LAB-FT4"],
+            ["P007-E001-LAB-FT4", "P007-E003-LAB-FT4"],
+            ["P007-E003-NOTE-NOTE002"]
+          ],
+          "is_critical": true,
+          "note": "FT4 E002 = 22 pmol/L không còn được xem là high nếu reference_range là 10.0 - 25.0; chỉ dùng như mốc xu hướng cải thiện."
+        },
+        {
+          "claim_pattern": "FT3.*6\\.8|12.*6\\.8|FT3.*12",
+          "expected_source_ids": ["P007-E002-LAB-FT3", "P007-E001-LAB-FT3"],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "TRAb.*8\\.5|TRAB.*8\\.5",
+          "expected_source_ids": ["P007-E001-LAB-TRAB"],
+          "is_critical": false,
+          "note": "TRAb chỉ đo ở E001, top_k retrieval cho abnormal_labs consistently không lấy chunk này — recall miss là expected behavior do retrieval limitation"
+        }
+      ]
+    },
+    {
+      "section_id": "diagnoses",
+      "expected_claims": [
+        {
+          "claim_pattern": "E05\\.0|Basedow|Cường giáp",
+          "expected_source_ids": ["P007-E003-DX-E05.0", "P007-E001-DX-E05.0"],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "H06\\.2|lồi mắt|Graves",
+          "expected_source_ids": ["P007-E001-DX-H06.2"],
+          "acceptable_source_groups": [
+            ["P007-E001-DX-H06.2"],
+            ["P007-E001-NOTE-NOTE002"]
+          ],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "R00\\.0|nhịp tim nhanh xoang|nhịp nhanh xoang",
+          "expected_source_ids": ["P007-E001-DX-R00.0"],
+          "acceptable_source_groups": [
+            ["P007-E001-DX-R00.0"],
+            ["P007-E001-PROC-PROC001"],
+            ["P007-E001-NOTE-NOTE002"]
+          ],
+          "is_critical": false
+        }
+      ]
+    },
+    {
+      "section_id": "treatment_timeline",
+      "expected_claims": [
+        {
+          "claim_pattern": "2024-02-05.*TSH.*0\\.01|2024-02-05.*Methimazole|2024-02-05.*FT4.*45",
+          "expected_source_ids": [
+            "P007-E001-LAB-TSH",
+            "P007-E001-LAB-FT4",
+            "P007-E001-MED-METHIMAZOLE"
+          ],
+          "acceptable_source_groups": [
+            ["P007-E001-NOTE-NOTE002"],
+            ["P007-E001-LAB-TSH", "P007-E001-LAB-FT4", "P007-E001-MED-METHIMAZOLE"]
+          ],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "2024-05-05.*TSH.*0\\.01|2024-05-05.*FT4.*22|2024-05-05.*Methimazole.*10",
+          "expected_source_ids": [
+            "P007-E002-LAB-TSH",
+            "P007-E002-LAB-FT4",
+            "P007-E002-LAB-FT3",
+            "P007-E002-MED-METHIMAZOLE"
+          ],
+          "acceptable_source_groups": [
+            ["P007-E002-NOTE-NOTE002"],
+            ["P007-E002-LAB-TSH", "P007-E002-LAB-FT4", "P007-E002-MED-METHIMAZOLE"]
+          ],
+          "is_critical": true
+        },
+        {
+          "claim_pattern": "2024-08-05.*Methimazole.*5|2024-08-05.*TSH.*0\\.3|2024-08-05.*FT4.*14",
+          "expected_source_ids": [
+            "P007-E003-LAB-TSH",
+            "P007-E003-LAB-FT4",
+            "P007-E003-MED-METHIMAZOLE"
+          ],
+          "acceptable_source_groups": [
+            ["P007-E003-NOTE-NOTE002"],
+            ["P007-E003-LAB-TSH", "P007-E003-LAB-FT4", "P007-E003-MED-METHIMAZOLE"]
+          ],
+          "is_critical": true
+        }
+      ]
+    },
+    {
+      "section_id": "clinical_alerts",
+      "expected_claims": [
+        {
+          "claim_pattern": "TSH.*0\\.3.*thấp|TSH.*thấp",
+          "expected_source_ids": ["P007-E003-LAB-TSH"],
+          "is_critical": false
+        },
+        {
+          "claim_pattern": "FT4.*45.*14|FT4.*về bình thường|FT4.*giảm",
+          "expected_source_ids": ["P007-E003-LAB-FT4", "P007-E002-LAB-FT4", "P007-E002-DX-E05.0", "P007-E001-LAB-FT4"],
+          "is_critical": false,
+          "note": "Model có thể cite lab FT4 hoặc DX-E05.0 (liên quan tuyến giáp); claim này cũng có thể ở PARTIALLY_SUPPORTED nên recall miss là expected"
+        }
+      ]
+    }
+  ]
+}

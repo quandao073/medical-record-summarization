@@ -1,17 +1,17 @@
 {
   "patient_id": "P004",
   "evaluation_mode": "loose",
-  "citation_precision": 1.0,
-  "citation_recall": 0.9655172413793104,
-  "critical_precision": 1.0,
-  "total_supported": 29,
-  "precision_correct": 29,
+  "citation_precision": 0.9629629629629629,
+  "citation_recall": 0.896551724137931,
+  "critical_precision": 0.9333333333333333,
+  "total_supported": 27,
+  "precision_correct": 26,
   "total_gold": 29,
-  "gold_matched": 28,
+  "gold_matched": 26,
   "sections": [
     {
       "section_id": "overview",
-      "total_claims": 2,
+      "total_claims": 3,
       "supported_claims": 2,
       "precision_correct": 2,
       "gold_matched": 2,
@@ -45,6 +45,18 @@
           ],
           "has_correct_citation": true,
           "is_critical": false
+        },
+        {
+          "claim_text": "Bệnh nhân đang theo dõi hạ đường huyết do Gliclazide.",
+          "status": "PARTIALLY_SUPPORTED",
+          "citations": [
+            "P004-E003-DX-E11.9",
+            "P004-PATIENT-INFO"
+          ],
+          "matched_gold_pattern": null,
+          "expected_source_ids": [],
+          "has_correct_citation": false,
+          "is_critical": false
         }
       ]
     },
@@ -57,7 +69,7 @@
       "gold_total": 2,
       "claim_evals": [
         {
-          "claim_text": "Bệnh nhân đái tháo đường type 2 tái khám sau 3 tháng với triệu chứng hạ đường huyết rõ rệt: vã mồ hôi, run tay, choáng váng.",
+          "claim_text": "Bệnh nhân đái tháo đường type 2 tái khám sau 3 tháng, báo cáo hạ đường huyết tại nhà với triệu chứng vã mồ hôi, run tay, choáng váng.",
           "status": "SUPPORTED",
           "citations": [
             "P004-E003-NOTE-NOTE001"
@@ -70,7 +82,7 @@
           "is_critical": false
         },
         {
-          "claim_text": "Xét nghiệm glucose đói tại phòng khám: 2.5 mmol/L (hạ đường huyết nặng).",
+          "claim_text": "Xét nghiệm glucose đói tại phòng khám cho kết quả 2.5 mmol/L (hạ đường huyết nặng).",
           "status": "SUPPORTED",
           "citations": [
             "P004-E003-NOTE-NOTE001"
@@ -181,14 +193,14 @@
     },
     {
       "section_id": "current_medications",
-      "total_claims": 6,
-      "supported_claims": 6,
-      "precision_correct": 6,
+      "total_claims": 5,
+      "supported_claims": 5,
+      "precision_correct": 5,
       "gold_matched": 5,
       "gold_total": 5,
       "claim_evals": [
         {
-          "claim_text": "Metformin 500 mg — liều: 1 viên, tần suất: 1 lần/ngày (tối).",
+          "claim_text": "Metformin 500 mg — 1 viên, 1 lần/ngày (tối).",
           "status": "SUPPORTED",
           "citations": [
             "P004-E003-MED-METFORMIN"
@@ -199,19 +211,6 @@
           ],
           "has_correct_citation": true,
           "is_critical": true
-        },
-        {
-          "claim_text": "Giảm xuống 1 lần/ngày buổi tối sau ăn.",
-          "status": "SUPPORTED",
-          "citations": [
-            "P004-E003-MED-METFORMIN"
-          ],
-          "matched_gold_pattern": "Giảm xuống 1 lần/ngày|giảm liều.*tránh hạ đường huyết|1 lần/ngày.*buổi tối",
-          "expected_source_ids": [
-            "P004-E003-MED-METFORMIN"
-          ],
-          "has_correct_citation": true,
-          "is_critical": false
         },
         {
           "claim_text": "Giảm liều để tránh hạ đường huyết.",
@@ -227,7 +226,7 @@
           "is_critical": false
         },
         {
-          "claim_text": "Amlodipine 5 mg — liều: 1 viên, tần suất: 1 lần/ngày.",
+          "claim_text": "Amlodipine 5 mg — 1 viên, 1 lần/ngày.",
           "status": "SUPPORTED",
           "citations": [
             "P004-E003-MED-AMLODIPINE"
@@ -255,7 +254,7 @@
           "is_critical": false
         },
         {
-          "claim_text": "Losartan 50 mg — liều: 1 viên, tần suất: 1 lần/ngày.",
+          "claim_text": "Losartan 50 mg — 1 viên, 1 lần/ngày.",
           "status": "SUPPORTED",
           "citations": [
             "P004-E003-MED-LOSARTAN"
@@ -327,7 +326,7 @@
           "is_critical": true
         },
         {
-          "claim_text": "HbA1c: 7.5%, cao, tham chiếu: 4.0 - 5.6, ngày: 2024-09-05.",
+          "claim_text": "HbA1c: 7.5 %, cao, tham chiếu: 4.0 - 5.6, ngày: 2024-09-05.",
           "status": "SUPPORTED",
           "citations": [
             "P004-E003-LAB-HBA1C"
@@ -477,50 +476,39 @@
     },
     {
       "section_id": "clinical_alerts",
-      "total_claims": 9,
-      "supported_claims": 4,
-      "precision_correct": 4,
-      "gold_matched": 4,
+      "total_claims": 8,
+      "supported_claims": 3,
+      "precision_correct": 2,
+      "gold_matched": 2,
       "gold_total": 4,
       "claim_evals": [
         {
-          "claim_text": "Hạ đường huyết với glucose huyết tương lúc đói 2.5 mmol/L.",
+          "claim_text": "Glucose huyết tương lúc đói 2.5 mmol/L, hạ đường huyết CRITICAL.",
           "status": "SUPPORTED",
           "citations": [
             "P004-E003-LAB-FPG"
           ],
-          "matched_gold_pattern": "hạ đường huyết.*glucose.*2\\.5",
-          "expected_source_ids": [
-            "P004-E003-LAB-FPG"
-          ],
-          "has_correct_citation": true,
+          "matched_gold_pattern": null,
+          "expected_source_ids": [],
+          "has_correct_citation": false,
           "is_critical": true
         },
         {
-          "claim_text": "Đái tháo đường type 2 không biến chứng cần theo dõi.",
-          "status": "SUPPORTED",
+          "claim_text": "Dị ứng thuốc (không rõ loại) cần xác nhận lại thông tin.",
+          "status": "NEED_REVIEW",
           "citations": [
-            "P004-E003-DX-E11.9",
-            "P004-E002-DX-E11",
-            "P004-E001-DX-E11"
+            "P004-PATIENT-ALLERGY-THUỐC_(KHÔNG_RÕ"
           ],
-          "matched_gold_pattern": "Đái tháo đường type 2.*không biến chứng.*theo dõi",
-          "expected_source_ids": [
-            "P004-E003-DX-E11.9",
-            "P004-E002-DX-E11",
-            "P004-E001-DX-E11"
-          ],
-          "has_correct_citation": true,
-          "is_critical": false
+          "matched_gold_pattern": null,
+          "expected_source_ids": [],
+          "has_correct_citation": false,
+          "is_critical": true
         },
         {
-          "claim_text": "Tăng huyết áp nguyên phát với huyết áp 136/86 mmHg.",
+          "claim_text": "Huyết áp 138/88 mmHg sang 136/86 mmHg, huyết áp ổn định.",
           "status": "SUPPORTED",
           "citations": [
-            "P004-E003-VIT-VIT001",
-            "P004-E003-DX-I10",
-            "P004-E002-DX-I10",
-            "P004-E001-DX-I10"
+            "P004-E003-VIT-VIT001"
           ],
           "matched_gold_pattern": "Tăng huyết áp.*136/86|huyết áp.*136/86",
           "expected_source_ids": [
@@ -531,7 +519,7 @@
           "is_critical": true
         },
         {
-          "claim_text": "HbA1c 7.8% sang 7.5% cho thấy có sự cải thiện trong kiểm soát đường huyết.",
+          "claim_text": "HbA1c 7.8% sang 7.5%, cải thiện kiểm soát đường huyết.",
           "status": "SUPPORTED",
           "citations": [
             "P004-E003-LAB-HBA1C"
@@ -544,7 +532,7 @@
           "is_critical": true
         },
         {
-          "claim_text": "Dị ứng thuốc chưa xác nhận rõ loại và phản ứng.",
+          "claim_text": "Dị ứng thuốc chưa xác nhận chi tiết phản ứng/mức độ.",
           "status": "NEED_REVIEW",
           "citations": [
             "P004-PATIENT-ALLERGY-THUỐC_(KHÔNG_RÕ"
@@ -553,17 +541,6 @@
           "expected_source_ids": [],
           "has_correct_citation": false,
           "is_critical": true
-        },
-        {
-          "claim_text": "Thông tin về liều thuốc Metformin chưa rõ ràng.",
-          "status": "NEED_REVIEW",
-          "citations": [
-            "P004-PATIENT-ALLERGY-THUỐC_(KHÔNG_RÕ"
-          ],
-          "matched_gold_pattern": null,
-          "expected_source_ids": [],
-          "has_correct_citation": false,
-          "is_critical": false
         }
       ]
     }

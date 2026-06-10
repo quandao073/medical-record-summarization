@@ -1,13 +1,13 @@
 {
   "patient_id": "P003",
   "evaluation_mode": "loose",
-  "citation_precision": 1.0,
-  "citation_recall": 0.9705882352941176,
-  "critical_precision": 1.0,
+  "citation_precision": 0.9393939393939394,
+  "citation_recall": 0.9117647058823529,
+  "critical_precision": 0.9545454545454546,
   "total_supported": 33,
-  "precision_correct": 33,
+  "precision_correct": 31,
   "total_gold": 34,
-  "gold_matched": 33,
+  "gold_matched": 31,
   "sections": [
     {
       "section_id": "overview",
@@ -86,8 +86,8 @@
     },
     {
       "section_id": "medical_history",
-      "total_claims": 5,
-      "supported_claims": 5,
+      "total_claims": 6,
+      "supported_claims": 6,
       "precision_correct": 5,
       "gold_matched": 5,
       "gold_total": 5,
@@ -164,6 +164,18 @@
           ],
           "has_correct_citation": true,
           "is_critical": false
+        },
+        {
+          "claim_text": "Ngưng Indapamide tháng 10/2023 do tăng acid uric.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P003-E002-NOTE-NOTE001",
+            "P003-E003-NOTE-NOTE002"
+          ],
+          "matched_gold_pattern": null,
+          "expected_source_ids": [],
+          "has_correct_citation": false,
+          "is_critical": false
         }
       ]
     },
@@ -176,7 +188,7 @@
       "gold_total": 6,
       "claim_evals": [
         {
-          "claim_text": "Valsartan 320 mg — 1 viên, 1 lần/ngày, Uống buổi sáng.",
+          "claim_text": "Valsartan 320 mg — liều: 1 viên, tần suất: 1 lần/ngày, Uống buổi sáng.",
           "status": "SUPPORTED",
           "citations": [
             "P003-E005-MED-VALSARTAN"
@@ -189,7 +201,7 @@
           "is_critical": true
         },
         {
-          "claim_text": "Amlodipine 10 mg — 1 viên, 1 lần/ngày, Uống buổi sáng.",
+          "claim_text": "Amlodipine 10 mg — liều: 1 viên, tần suất: 1 lần/ngày, Uống buổi sáng.",
           "status": "SUPPORTED",
           "citations": [
             "P003-E005-MED-AMLODIPINE"
@@ -202,7 +214,7 @@
           "is_critical": true
         },
         {
-          "claim_text": "Bisoprolol 5 mg — 1 viên, 1 lần/ngày, Uống buổi sáng.",
+          "claim_text": "Bisoprolol 5 mg — liều: 1 viên, tần suất: 1 lần/ngày, Uống buổi sáng.",
           "status": "SUPPORTED",
           "citations": [
             "P003-E005-MED-BISOPROLOL"
@@ -215,7 +227,7 @@
           "is_critical": true
         },
         {
-          "claim_text": "Spironolactone 25 mg — 1 viên, 1 lần/ngày, Uống buổi sáng.",
+          "claim_text": "Spironolactone 25 mg — liều: 1 viên, tần suất: 1 lần/ngày, Uống buổi sáng.",
           "status": "SUPPORTED",
           "citations": [
             "P003-E005-MED-SPIRONOLACTONE"
@@ -228,7 +240,7 @@
           "is_critical": true
         },
         {
-          "claim_text": "Metformin 1000 mg — 1 viên, 2 lần/ngày, Uống sau ăn sáng và tối.",
+          "claim_text": "Metformin 1000 mg — liều: 1 viên, tần suất: 2 lần/ngày, Uống sau ăn sáng và tối.",
           "status": "SUPPORTED",
           "citations": [
             "P003-E005-MED-METFORMIN"
@@ -241,7 +253,7 @@
           "is_critical": true
         },
         {
-          "claim_text": "Atorvastatin 40 mg — 1 viên, 1 lần/ngày, Uống buổi tối.",
+          "claim_text": "Atorvastatin 40 mg — liều: 1 viên, tần suất: 1 lần/ngày (tối), Uống buổi tối.",
           "status": "SUPPORTED",
           "citations": [
             "P003-E005-MED-ATORVASTATIN"
@@ -451,7 +463,7 @@
           "is_critical": true
         },
         {
-          "claim_text": "2023-10-10: huyết áp 152/94 mmHg, LDL 3.2 mmol/L — tăng Atorvastatin lên 40mg, thêm Spironolactone 25mg — cải thiện nhẹ lipid nhưng huyết áp chưa đạt.",
+          "claim_text": "2023-10-10: huyết áp 152/94 mmHg, LDL 3.2 mmol/L — tăng Atorvastatin 20→40mg, thêm Spironolactone 25mg — cải thiện nhẹ lipid nhưng huyết áp chưa đạt.",
           "status": "SUPPORTED",
           "citations": [
             "P003-E002-LAB-LDL",
@@ -483,7 +495,7 @@
           "is_critical": true
         },
         {
-          "claim_text": "2024-06-10: huyết áp 178/108 mmHg — tăng Metformin — kiểm soát kém trong nhập viện.",
+          "claim_text": "2024-06-10: huyết áp 178/108 mmHg — tăng Metformin — kiểm soát kém, nhập viện cấp cứu.",
           "status": "SUPPORTED",
           "citations": [
             "P003-E004-NOTE-NOTE001"
@@ -499,10 +511,10 @@
     },
     {
       "section_id": "clinical_alerts",
-      "total_claims": 10,
-      "supported_claims": 6,
-      "precision_correct": 6,
-      "gold_matched": 6,
+      "total_claims": 9,
+      "supported_claims": 5,
+      "precision_correct": 4,
+      "gold_matched": 4,
       "gold_total": 6,
       "claim_evals": [
         {
@@ -519,7 +531,7 @@
           "is_critical": true
         },
         {
-          "claim_text": "HbA1c 7.2% vẫn cao, cần theo dõi tiếp.",
+          "claim_text": "HbA1c 7.2% vẫn cao, cần theo dõi đái tháo đường.",
           "status": "SUPPORTED",
           "citations": [
             "P003-E005-LAB-HBA1C"
@@ -532,20 +544,7 @@
           "is_critical": true
         },
         {
-          "claim_text": "Glucose huyết tương lúc đói 7.0 mmol/L vẫn cao.",
-          "status": "SUPPORTED",
-          "citations": [
-            "P003-E005-LAB-FPG"
-          ],
-          "matched_gold_pattern": "Glucose.*7\\.0.*mmol.*cao",
-          "expected_source_ids": [
-            "P003-E005-LAB-FPG"
-          ],
-          "has_correct_citation": true,
-          "is_critical": true
-        },
-        {
-          "claim_text": "LDL-Cholesterol 2.7 mmol/L vẫn cao.",
+          "claim_text": "LDL-Cholesterol 2.7 mmol/L vẫn cao, gần đạt mục tiêu.",
           "status": "SUPPORTED",
           "citations": [
             "P003-E005-LAB-LDL",
@@ -560,7 +559,18 @@
           "is_critical": true
         },
         {
-          "claim_text": "HbA1c 7.8% sang 7.2% - cải thiện.",
+          "claim_text": "ALT 42 U/L vẫn cao, cần theo dõi chức năng gan.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P003-E005-LAB-ALT"
+          ],
+          "matched_gold_pattern": null,
+          "expected_source_ids": [],
+          "has_correct_citation": false,
+          "is_critical": true
+        },
+        {
+          "claim_text": "HbA1c 7.8% sang 7.2% - cải thiện từ lần khám trước.",
           "status": "SUPPORTED",
           "citations": [
             "P003-E005-LAB-HBA1C"
@@ -568,19 +578,6 @@
           "matched_gold_pattern": "HbA1c.*7\\.8.*7\\.2.*cải thiện",
           "expected_source_ids": [
             "P003-E005-LAB-HBA1C"
-          ],
-          "has_correct_citation": true,
-          "is_critical": true
-        },
-        {
-          "claim_text": "ALT 42 U/L sang 42 U/L - ổn định.",
-          "status": "SUPPORTED",
-          "citations": [
-            "P003-E005-LAB-ALT"
-          ],
-          "matched_gold_pattern": "ALT.*42.*ổn định",
-          "expected_source_ids": [
-            "P003-E005-LAB-ALT"
           ],
           "has_correct_citation": true,
           "is_critical": true
