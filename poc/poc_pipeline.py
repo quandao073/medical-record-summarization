@@ -17,6 +17,7 @@ import json
 import os
 import sys
 import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
@@ -486,17 +487,12 @@ def run_poc(
                 print("OK")
 
     # ──────────────────────────────────────────────────────────────────────────
-    # C3 + C4 (LLM): Generate draft sections, store per-section chunks
+    # C3: retrieve chunks + build prompts for all sections (local, fast)
     # ──────────────────────────────────────────────────────────────────────────
-    draft_sections: list[SummarySection] = []
     section_chunks_map: dict[str, list[SourceChunk]] = {}
-    total_tokens = 0
+    section_prompts: dict[str, str] = {}
 
     for section_id in SECTIONS:
-        if verbose:
-            print(f"[C3→LLM] {section_id}...", end=" ", flush=True)
-
-        # C3: retrieve relevant chunks with per-section budget (hybrid if vector store available)
         top_k = TOP_K_PER_SECTION.get(section_id, 15)
         section_chunks = retrieve_for_section(chunks, section_id, max_chunks=top_k, vector_store=vs)
         section_chunks_map[section_id] = section_chunks
@@ -507,18 +503,42 @@ def run_poc(
         else:
             context = format_chunks_as_context(section_chunks, top_k)
 
-        prompt = build_section_prompt(section_id, context)
-        try:
-            raw_text, tokens = call_llm(prompt, client, model)
-            total_tokens += tokens
-        except Exception as e:
-            print(f"ERROR: {e}")
+        section_prompts[section_id] = build_section_prompt(section_id, context)
+
+    # ──────────────────────────────────────────────────────────────────────────
+    # C4 (LLM): Generate all section drafts concurrently
+    # ──────────────────────────────────────────────────────────────────────────
+    if verbose:
+        print(f"[C4→LLM] Generating {len(SECTIONS)} sections in parallel...")
+
+    draft_sections: list[SummarySection] = []
+    total_tokens = 0
+    llm_results: dict[str, tuple[str | None, int, Exception | None]] = {}
+
+    with ThreadPoolExecutor(max_workers=len(SECTIONS)) as pool:
+        future_to_section = {
+            pool.submit(call_llm, section_prompts[sid], client, model): sid
+            for sid in SECTIONS
+        }
+        for future in as_completed(future_to_section):
+            section_id = future_to_section[future]
+            try:
+                raw_text, tokens = future.result()
+                llm_results[section_id] = (raw_text, tokens, None)
+            except Exception as e:
+                llm_results[section_id] = (None, 0, e)
+
+    for section_id in SECTIONS:
+        raw_text, tokens, err = llm_results[section_id]
+        if err is not None:
+            print(f"[C4→LLM] {section_id}: ERROR: {err}")
             draft_sections.append(SummarySection(
                 section_id=section_id,
                 content="[LỖI: Không thể tạo section này]",
             ))
             continue
 
+        total_tokens += tokens
         parsed  = parse_section_response(raw_text, section_id)
         content = parsed.get("content", "Chưa thấy ghi nhận trong dữ liệu được cung cấp.")
         draft_sections.append(SummarySection(
@@ -528,7 +548,7 @@ def run_poc(
         ))
 
         if verbose:
-            print(f"OK ({tokens} tok, {len(section_chunks)} chunks)")
+            print(f"[C4→LLM] {section_id}: OK ({tokens} tok, {len(section_chunks_map[section_id])} chunks)")
 
     # ──────────────────────────────────────────────────────────────────────────
     # C5 (Claim Extraction + Evidence Matching) + C6 (Hallucination Verifier)
