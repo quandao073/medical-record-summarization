@@ -130,5 +130,49 @@
     "description": "Thu thập nước tiểu 24 giờ để đo protein niệu toàn phần và creatinine clearance.",
     "result": "Protein niệu 24h: 4.2 g/ngày (nặng, >3.5 g = hội chứng thận hư mức). Creatinine clearance: 40 mL/phút. Thể tích nước tiểu: 1800 mL/24h.",
     "language": "vi"
+  },
+  {
+    "procedure_id": "P007-E001-PROC001",
+    "patient_id": "P007",
+    "encounter_id": "P007-E001",
+    "procedure_date": "2024-02-05",
+    "procedure_name": "Điện tâm đồ (ECG) 12 chuyển đạo",
+    "source_system": "EMR-Procedures",
+    "description": "Đánh giá nhịp tim và loại trừ rối loạn nhịp do nhiễm độc giáp.",
+    "result": "Nhịp xoang nhanh, tần số 110 lần/phút. Trục điện tim bình thường. Không phát hiện rung nhĩ hay rối loạn dẫn truyền. Không dày thất.",
+    "language": "vi"
+  },
+  {
+    "procedure_id": "P008-E001-PROC001",
+    "patient_id": "P008",
+    "encounter_id": "P008-E001",
+    "procedure_date": "2024-04-12",
+    "procedure_name": "Nội soi dạ dày - tá tràng (EGD)",
+    "source_system": "EMR-Procedures",
+    "description": "Nội soi thực quản - dạ dày - tá tràng đánh giá nguyên nhân đau thượng vị mạn tính.",
+    "result": "Thực quản: viêm thực quản độ B (phân loại Los Angeles) ở 1/3 dưới. Dạ dày: niêm mạc hang vị viêm đỏ, có ổ loét kích thước 0.8cm, đáy sạch phủ giả mạc trắng, bờ đều, không chảy máu. Tá tràng: hành tá tràng không loét. Đã sinh thiết niêm mạc hang vị làm test CLO.",
+    "language": "vi"
+  },
+  {
+    "procedure_id": "P008-E001-PROC002",
+    "patient_id": "P008",
+    "encounter_id": "P008-E001",
+    "procedure_date": "2024-04-12",
+    "procedure_name": "Test CLO (Rapid Urease Test) - chẩn đoán H. pylori",
+    "source_system": "EMR-Procedures",
+    "description": "Sinh thiết niêm mạc hang vị trong lúc nội soi, thực hiện test urease nhanh để phát hiện H. pylori.",
+    "result": "Dương tính (chuyển màu đỏ sau 30 phút) → xác định nhiễm Helicobacter pylori.",
+    "language": "vi"
+  },
+  {
+    "procedure_id": "P008-E002-PROC001",
+    "patient_id": "P008",
+    "encounter_id": "P008-E002",
+    "procedure_date": "2024-06-10",
+    "procedure_name": "Test hơi thở Urea (Urea Breath Test - UBT)",
+    "source_system": "EMR-Procedures",
+    "description": "Đánh giá hiệu quả điều trị diệt H. pylori sau phác đồ kháng sinh 14 ngày. Test được thực hiện sau khi đã đủ thời gian ngừng kháng sinh và ngừng PPI theo quy trình trước xét nghiệm.",
+    "result": "Âm tính (DOB <4 phần nghìn) → diệt H. pylori thành công, không còn nhiễm H. pylori.",
+    "language": "vi"
   }
 ]

@@ -219,5 +219,31 @@
     "radiologist_or_reader": "BS. Nguyễn Thị Mai",
     "source_system": "HIS-Imaging",
     "language": "vi"
+  },
+  {
+    "imaging_id": "P007-E001-IMG001",
+    "patient_id": "P007",
+    "encounter_id": "P007-E001",
+    "study_date": "2024-02-05",
+    "modality": "Siêu âm",
+    "body_part": "Tuyến giáp",
+    "findings": "Tuyến giáp to lan tỏa 2 thùy (thể tích ước tính 35 mL, bình thường <18mL ở nữ), nhu mô giảm âm không đồng nhất, tăng sinh mạch máu rõ rệt trên Doppler màu (hình ảnh 'thyroid inferno'). Không thấy nhân giáp khu trú. Không hạch cổ bất thường.",
+    "impression": "Bướu giáp lan tỏa, tăng sinh mạch máu mạnh — phù hợp bệnh Basedow (Graves).",
+    "radiologist_or_reader": "BS. Đặng Thị Mai",
+    "source_system": "HIS-Imaging",
+    "language": "vi"
+  },
+  {
+    "imaging_id": "P008-E001-IMG001",
+    "patient_id": "P008",
+    "encounter_id": "P008-E001",
+    "study_date": "2024-04-12",
+    "modality": "Siêu âm",
+    "body_part": "Ổ bụng tổng quát",
+    "findings": "Gan, mật, tụy, lách, thận 2 bên kích thước và cấu trúc âm bình thường. Không sỏi mật, không giãn đường mật trong và ngoài gan. Không dịch tự do ổ bụng.",
+    "impression": "Siêu âm ổ bụng bình thường. Loại trừ nguyên nhân khác gây đau thượng vị (sỏi mật, viêm tụy).",
+    "radiologist_or_reader": "BS. Vũ Đình Phúc",
+    "source_system": "HIS-Imaging",
+    "language": "vi"
   }
 ]

@@ -94,5 +94,37 @@
     "date_of_birth": "1979-08-15",
     "is_synthetic": true,
     "data_note": "Profile F — ĐTĐ type 2 biến chứng CKD G3b (eGFR 38) + THA + đa dị ứng (3 loại). 2 encounters. Ngừng Metformin do CKD G3b/eGFR 38, chuyển sang Insulin."
+  },
+  {
+    "patient_id": "P007",
+    "full_name": "Trần Thị Hoa",
+    "age": 32,
+    "gender": "female",
+    "occupation": "Giáo viên tiểu học",
+    "address": "Phường Khương Đình, Quận Thanh Xuân, Thành phố Hà Nội",
+    "insurance_id": "7890123456",
+    "citizen_id": "001192078901",
+    "phone": "0989012345",
+    "created_at": "2024-02-05T08:00:00+07:00",
+    "updated_at": "2024-08-05T10:00:00+07:00",
+    "date_of_birth": "1992-01-20",
+    "is_synthetic": true,
+    "data_note": "Profile G — Cường giáp Basedow (E05.0), TRAb dương tính, bướu giáp lan tỏa độ II, lồi mắt nhẹ (bệnh mắt Graves). 3 encounters theo dõi đáp ứng điều trị Methimazole. Không dị ứng."
+  },
+  {
+    "patient_id": "P008",
+    "full_name": "Lê Văn Tùng",
+    "age": 48,
+    "gender": "male",
+    "occupation": "Lái xe đường dài",
+    "address": "Phường Đông Hải, Quận Hải An, Thành phố Hải Phòng",
+    "insurance_id": "8901234567",
+    "citizen_id": "031076890123",
+    "phone": "0990123456",
+    "created_at": "2024-04-12T08:00:00+07:00",
+    "updated_at": "2024-06-10T10:00:00+07:00",
+    "date_of_birth": "1976-04-01",
+    "is_synthetic": true,
+    "data_note": "Profile H — Loét dạ dày mạn tính do H. pylori (K25.7) + GERD độ B (K21.0). 2 encounters: chẩn đoán + điều trị diệt HP, tái khám sau eradication thành công. Hút thuốc, uống rượu bia thường xuyên. Không dị ứng."
   }
 ]
