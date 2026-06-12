@@ -3,15 +3,14 @@
 from __future__ import annotations
 import asyncio
 import json
-import os
 from pathlib import Path
 from typing import Annotated
 
 from fastapi import APIRouter, HTTPException, Query
-from openai import OpenAI
 from dotenv import load_dotenv
 
 from poc.poc_pipeline import run_poc
+from api.dependencies import LLMClientDep
 from src.c2_chunking.store_builder import load_structured_store
 from src.c6_verifier.verifier import verify_summary
 from src.schemas import SourceChunk
@@ -26,18 +25,6 @@ STORE_DIR     = ROOT / "data" / "processed" / "stores"
 CACHE_DIR     = ROOT / "data" / "cache"
 CACHE_DIR.mkdir(parents=True, exist_ok=True)
 
-VALID_MODELS = ["gpt-4o-mini", "gpt-4o"]
-
-
-def _openai_client() -> OpenAI:
-    key = os.getenv("OPENAI_API_KEY")
-    if not key:
-        raise HTTPException(
-            status_code=503,
-            detail="OPENAI_API_KEY not configured. Add it to .env and restart the server.",
-        )
-    return OpenAI(api_key=key)
-
 
 @router.get("/patients")
 def list_patients():
@@ -51,16 +38,13 @@ def list_patients():
 @router.post("/summarize/{patient_id}")
 async def summarize(
     patient_id: str,
-    model: Annotated[str, Query(description="OpenAI model")] = "gpt-4o-mini",
+    client: LLMClientDep,
     force_refresh: Annotated[bool, Query(description="Skip cache")] = False,
 ):
     """
-    Run the full pipeline: C1 → C2 → C3 → LLM → C5/C6 verification.
+    Run the full pipeline: C1 → C2 → C3 → C4 → C5/C6 verification.
     Returns FinalSummary JSON.  Results are cached per patient.
     """
-    if model not in VALID_MODELS:
-        raise HTTPException(status_code=400, detail=f"Model must be one of {VALID_MODELS}")
-
     cache_path = CACHE_DIR / f"{patient_id}_latest.json"
 
     if cache_path.exists() and not force_refresh:
@@ -72,17 +56,14 @@ async def summarize(
     if not ehr_path.exists():
         raise HTTPException(status_code=404, detail=f"Patient {patient_id} not found")
 
-    client = _openai_client()
-
     try:
         summary = await asyncio.to_thread(
-            run_poc, patient_id, client, model, 60, False
+            run_poc, patient_id, client, None, 60, False
         )
     except Exception as exc:
         raise HTTPException(status_code=500, detail=f"Pipeline error: {exc}") from exc
 
     final = summary
-
 
     result = final.model_dump()
     result["_from_cache"] = False

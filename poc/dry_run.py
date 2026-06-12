@@ -13,7 +13,9 @@ from src.c1_emr.pipeline import load_and_process, C1ProcessingError
 from src.c1_emr.validator import validate_ehr
 from src.c2_chunking.chunker import chunk_ehr
 from src.c2_chunking.store_builder import build_structured_store, save_structured_store
-from poc.poc_pipeline import format_chunks_as_context, build_section_prompt, SECTIONS
+from src.c4_llm_draft import SECTIONS
+from src.c4_llm_draft.prompts import build_section_prompt
+from src.c4_llm_draft.summarizer import format_chunks_as_context
 
 ROOT = Path(__file__).parent.parent
 DATA_DIR = ROOT / "data" / "processed"
