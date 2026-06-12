@@ -231,7 +231,7 @@ def main():
     parser.add_argument("--provider", default=None, help="LLM provider: openai | anthropic | ollama (default: from config)")
     parser.add_argument("--model", default=None, help="Model name (default: from config)")
     parser.add_argument("--max-chunks", type=int, default=60)
-    parser.add_argument("--vector", action="store_true", help="Enable vector store hybrid retrieval (default: rule-based only)")
+    parser.add_argument("--vector", action="store_true", help="Enable vector store hybrid retrieval (default: disabled)")
     args = parser.parse_args()
 
     try:

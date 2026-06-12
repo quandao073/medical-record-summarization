@@ -7,11 +7,14 @@ Supports two modes:
   - Rule-based only (default, no vector store needed)
   - Hybrid: rule-based hard filter → vector re-rank (when VectorStore provided)
 
-Key principle:
-  - Sections showing *current state* (clinical_alerts, abnormal_labs,
-    current_medications, reason_for_visit, diagnoses) → latest encounter only.
+Key principles:
+  - Sections showing *current state* (current_medications, reason_for_visit)
+    → latest encounter only.
+  - Sections showing *cumulative clinical picture* (diagnoses, overview)
+    → all encounters, deduplicated by key.
+  - Sections showing *trends* (abnormal_labs)
+    → latest n encounters + one-time diagnostics.
   - Sections showing *history* (treatment_timeline, medical_history) → all encounters.
-  - Overview: latest vitals + diagnoses; patient_info always.
 """
 
 from __future__ import annotations
@@ -39,12 +42,9 @@ SECTION_SOURCE_TYPES: dict[str, list[str]] = {
 }
 
 # Sections requiring latest-encounter-only filter (current state view).
-# Note: abnormal_labs uses _filter_latest_n_encounters(n=2) instead (for trend)
 _LATEST_ENCOUNTER_SECTIONS = {
     "current_medications",
     "reason_for_visit",
-    "diagnoses",
-    "overview",
 }
 
 # Sections where chronological order matters (oldest → newest)
@@ -101,7 +101,6 @@ def _filter_latest_encounter(chunks: list[SourceChunk]) -> list[SourceChunk]:
 def _filter_latest_n_encounters(chunks: list[SourceChunk], n: int = 2) -> list[SourceChunk]:
     """
     Keep chunks from the n most recent distinct encounters.
-    Used for abnormal_labs to include current value + previous value for trend.
     Patient-level chunks are always kept.
     """
     if not chunks:
@@ -123,6 +122,51 @@ def _filter_latest_n_encounters(chunks: list[SourceChunk], n: int = 2) -> list[S
     )
     result = [c for c in chunks if _is_patient_level(c) or c.encounter_id in latest_n]
     return result if result else chunks
+
+
+def _dedup_diagnoses(chunks: list[SourceChunk]) -> list[SourceChunk]:
+    """
+    Deduplicate diagnosis chunks by ICD-10 code, keeping the latest encounter's
+    version of each diagnosis. Diagnoses only present in older encounters are
+    preserved (e.g. H06.2 from E001 when E003 only has E05.0).
+    """
+    if not chunks:
+        return chunks
+
+    by_icd: dict[str, SourceChunk] = {}
+    for c in sorted(chunks, key=lambda x: x.date or ""):
+        icd = c.metadata.get("icd10_code", c.source_id)
+        by_icd[icd] = c
+    return list(by_icd.values())
+
+
+def _dedup_labs_with_unique(
+    chunks: list[SourceChunk], n_encounters: int = 2,
+) -> list[SourceChunk]:
+    """
+    Keep labs from the latest n encounters for trend display, PLUS any abnormal
+    lab from older encounters whose test_name is not represented in the n set.
+    This catches one-time diagnostic tests (e.g. TRAb only at E001).
+    """
+    if not chunks:
+        return chunks
+
+    recent = _filter_latest_n_encounters(chunks, n=n_encounters)
+    recent_tests = {
+        c.metadata.get("test_name", "").lower()
+        for c in recent if not _is_patient_level(c)
+    }
+
+    recent_ids = {c.source_id for c in recent}
+    unique_old = [
+        c for c in chunks
+        if c.source_id not in recent_ids
+        and not _is_patient_level(c)
+        and c.metadata.get("test_name", "").lower() not in recent_tests
+        and (c.metadata.get("is_abnormal") or c.metadata.get("is_critical"))
+    ]
+
+    return recent + unique_old
 
 
 # ---------------------------------------------------------------------------
@@ -153,8 +197,8 @@ def retrieve_for_section(
 
     Filters applied in order:
       1. source_type whitelist per section
-      2. Domain-specific filters (is_abnormal, is_current)
-      3. Latest-encounter filter for current-state sections
+      2. Domain-specific filters (is_abnormal, is_current, dedup)
+      3. Encounter filter (latest / n-latest / cumulative by section)
       4. Sort: vector re-rank if vector_store provided, else recency/chronological
     """
     allowed = SECTION_SOURCE_TYPES.get(section_id)
@@ -171,17 +215,32 @@ def retrieve_for_section(
         ]
         if abnormal:
             filtered = abnormal
-        # Include last 2 encounters so LabsTable can show trend (current vs previous)
-        filtered = _filter_latest_n_encounters(filtered, n=2)
+        # Latest 2 encounters for trend + unique diagnostic tests from older encounters
+        filtered = _dedup_labs_with_unique(filtered, n_encounters=2)
 
     elif section_id == "current_medications":
         current = [c for c in filtered if c.metadata.get("is_current")]
         if current:
             filtered = current
 
-    # ── Latest-encounter filter (current-state sections) ───────────────────
+    elif section_id == "diagnoses":
+        # All encounters, deduplicated by ICD code (latest version wins)
+        filtered = _dedup_diagnoses(filtered)
+
+    # ── Encounter filter ─────────────────────────────────────────────────
     if section_id in _LATEST_ENCOUNTER_SECTIONS:
         filtered = _filter_latest_encounter(filtered)
+
+    elif section_id == "overview":
+        # Vitals: latest encounter only (current state)
+        # Diagnoses: all encounters, deduplicated by ICD code
+        # Patient_info: always included
+        vitals = [c for c in filtered if c.source_type == "vitals"]
+        diagnoses = [c for c in filtered if c.source_type == "diagnoses"]
+        other = [c for c in filtered if c.source_type not in ("vitals", "diagnoses")]
+        vitals = _filter_latest_encounter(vitals)
+        diagnoses = _dedup_diagnoses(diagnoses)
+        filtered = vitals + diagnoses + other
 
     elif section_id == "clinical_alerts":
         # Labs and vitals → latest encounter only (current state)

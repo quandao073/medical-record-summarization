@@ -7,6 +7,9 @@ from src.c3_retrieval.retriever import (
     SECTION_SOURCE_TYPES,
     _latest_encounter_ids,
     _filter_latest_encounter,
+    _filter_latest_n_encounters,
+    _dedup_diagnoses,
+    _dedup_labs_with_unique,
 )
 
 
@@ -247,7 +250,89 @@ class TestFilterLatestEncounter:
 
 
 # ---------------------------------------------------------------------------
-# Latest-encounter applied to sections
+# Deduplication helpers
+# ---------------------------------------------------------------------------
+
+class TestDedupDiagnoses:
+    def test_dedup_by_icd_keeps_latest(self):
+        chunks = [
+            _chunk("E001-DX-E11", "diagnoses", date="2024-01-10", icd10_code="E11"),
+            _chunk("E003-DX-E11", "diagnoses", date="2024-10-10", icd10_code="E11"),
+        ]
+        result = _dedup_diagnoses(chunks)
+        assert len(result) == 1
+        assert result[0].source_id == "E003-DX-E11"
+
+    def test_dedup_preserves_unique_old_diagnoses(self):
+        chunks = [
+            _chunk("E001-DX-E05", "diagnoses", date="2024-02-05", icd10_code="E05.0"),
+            _chunk("E001-DX-H06", "diagnoses", date="2024-02-05", icd10_code="H06.2"),
+            _chunk("E001-DX-R00", "diagnoses", date="2024-02-05", icd10_code="R00.0"),
+            _chunk("E003-DX-E05", "diagnoses", date="2024-08-05", icd10_code="E05.0"),
+        ]
+        result = _dedup_diagnoses(chunks)
+        icds = {c.metadata["icd10_code"] for c in result}
+        assert icds == {"E05.0", "H06.2", "R00.0"}
+        # E05.0 should be the latest version
+        e05 = [c for c in result if c.metadata["icd10_code"] == "E05.0"][0]
+        assert e05.source_id == "E003-DX-E05"
+
+    def test_dedup_empty(self):
+        assert _dedup_diagnoses([]) == []
+
+
+class TestDedupLabsWithUnique:
+    def test_keeps_latest_2_encounters(self):
+        chunks = [
+            _chunk("E001-TSH", "labs", date="2024-02-05", test_name="TSH", is_abnormal=True),
+            _chunk("E002-TSH", "labs", date="2024-05-05", test_name="TSH", is_abnormal=True),
+            _chunk("E003-TSH", "labs", date="2024-08-05", test_name="TSH", is_abnormal=True),
+        ]
+        for i, enc in enumerate(["E001", "E002", "E003"]):
+            chunks[i] = chunks[i].model_copy(update={"encounter_id": enc})
+
+        result = _dedup_labs_with_unique(chunks, n_encounters=2)
+        enc_ids = {c.encounter_id for c in result}
+        assert "E002" in enc_ids
+        assert "E003" in enc_ids
+        assert "E001" not in enc_ids  # TSH already in E002/E003
+
+    def test_preserves_unique_old_test(self):
+        """TRAb only at E001 — must be preserved even with n=2."""
+        chunks = [
+            _chunk("E001-TRAB", "labs", date="2024-02-05", test_name="TRAb", is_abnormal=True),
+            _chunk("E002-TSH", "labs", date="2024-05-05", test_name="TSH", is_abnormal=True),
+            _chunk("E003-TSH", "labs", date="2024-08-05", test_name="TSH", is_abnormal=True),
+        ]
+        for i, enc in enumerate(["E001", "E002", "E003"]):
+            chunks[i] = chunks[i].model_copy(update={"encounter_id": enc})
+
+        result = _dedup_labs_with_unique(chunks, n_encounters=2)
+        ids = {c.source_id for c in result}
+        assert "E001-TRAB" in ids, "TRAb from E001 must be preserved"
+        assert "E003-TSH" in ids
+        assert "E002-TSH" in ids
+
+    def test_does_not_preserve_normal_old_unique(self):
+        """Old unique test that is NOT abnormal should NOT be preserved."""
+        chunks = [
+            _chunk("E001-TRAB", "labs", date="2024-02-05", test_name="TRAb", is_abnormal=False),
+            _chunk("E002-TSH", "labs", date="2024-05-05", test_name="TSH", is_abnormal=True),
+            _chunk("E003-TSH", "labs", date="2024-08-05", test_name="TSH", is_abnormal=True),
+        ]
+        for i, enc in enumerate(["E001", "E002", "E003"]):
+            chunks[i] = chunks[i].model_copy(update={"encounter_id": enc})
+
+        result = _dedup_labs_with_unique(chunks, n_encounters=2)
+        ids = {c.source_id for c in result}
+        assert "E001-TRAB" not in ids, "Normal TRAb should not be preserved"
+
+    def test_empty(self):
+        assert _dedup_labs_with_unique([]) == []
+
+
+# ---------------------------------------------------------------------------
+# Section-level encounter filtering
 # ---------------------------------------------------------------------------
 
 class TestLatestEncounterSections:
@@ -280,26 +365,61 @@ class TestLatestEncounterSections:
         enc_ids = {c.encounter_id for c in result}
         assert enc_ids == {"E003"}, f"Expected only E003, got {enc_ids}"
 
-    def test_abnormal_labs_includes_last_2_encounters_for_trend(self):
-        """abnormal_labs uses n=2 encounters so LabsTable can show trend."""
+    def test_abnormal_labs_trend_plus_unique(self):
+        """abnormal_labs: n=2 encounters for trend + unique tests from older encounters."""
         chunks = self._multi_enc_labs()
         result = retrieve_for_section(chunks, "abnormal_labs")
         enc_ids = {c.encounter_id for c in result}
-        # Should include latest 2 (E002, E003), not the oldest (E001)
-        assert "E001" not in enc_ids, "Oldest encounter should be excluded"
+        # HbA1c at all 3 encounters → only latest 2 (E002, E003)
         assert "E003" in enc_ids, "Latest encounter must be included"
-        assert len(enc_ids) <= 2, f"At most 2 encounters, got {enc_ids}"
+        assert "E002" in enc_ids, "Previous encounter for trend"
+        assert "E001" not in enc_ids, "Oldest HbA1c excluded (already in E002/E003)"
 
-    def test_diagnoses_only_latest_encounter(self):
-        chunks = []
-        for enc, date in [("E001", "2024-01-10"), ("E003", "2024-10-10")]:
-            c = _chunk(f"P001-{enc}-DX-E11", "diagnoses", date=date,
-                       icd10_code="E11", diagnosis_name="ĐTĐ type 2")
-            c = c.model_copy(update={"encounter_id": enc})
-            chunks.append(c)
+    def test_abnormal_labs_includes_one_time_diagnostic_test(self):
+        """One-time diagnostic labs (e.g. TRAb at E001 only) must be retrieved."""
+        chunks = [
+            _chunk("E001-LAB-TRAB", "labs", date="2024-02-05",
+                   test_name="TRAb", value=8.5, is_abnormal=True, is_critical=False),
+            _chunk("E002-LAB-TSH", "labs", date="2024-05-05",
+                   test_name="TSH", value=0.01, is_abnormal=True, is_critical=False),
+            _chunk("E003-LAB-TSH", "labs", date="2024-08-05",
+                   test_name="TSH", value=0.3, is_abnormal=True, is_critical=False),
+        ]
+        for i, enc in enumerate(["E001", "E002", "E003"]):
+            chunks[i] = chunks[i].model_copy(update={"encounter_id": enc})
+
+        result = retrieve_for_section(chunks, "abnormal_labs")
+        ids = [c.source_id for c in result]
+        assert "E001-LAB-TRAB" in ids, "One-time TRAb from E001 must be retrieved"
+
+    def test_diagnoses_includes_all_unique_icd(self):
+        """Diagnoses are cumulative — deduplicated by ICD, includes all unique codes."""
+        chunks = [
+            _chunk("E001-DX-E05", "diagnoses", date="2024-02-05",
+                   icd10_code="E05.0", diagnosis_name="Basedow"),
+            _chunk("E001-DX-H06", "diagnoses", date="2024-02-05",
+                   icd10_code="H06.2", diagnosis_name="Exophthalmos"),
+            _chunk("E001-DX-R00", "diagnoses", date="2024-02-05",
+                   icd10_code="R00.0", diagnosis_name="Nhịp nhanh xoang"),
+            _chunk("E003-DX-E05", "diagnoses", date="2024-08-05",
+                   icd10_code="E05.0", diagnosis_name="Basedow"),
+        ]
         result = retrieve_for_section(chunks, "diagnoses")
-        enc_ids = {c.encounter_id for c in result}
-        assert enc_ids == {"E003"}
+        icds = {c.metadata["icd10_code"] for c in result}
+        assert icds == {"E05.0", "H06.2", "R00.0"}, f"All unique ICD codes, got {icds}"
+        assert len(result) == 3, "No duplicates"
+
+    def test_diagnoses_dedup_keeps_latest_version(self):
+        """When same ICD appears in multiple encounters, keep the latest."""
+        chunks = [
+            _chunk("E001-DX-E11", "diagnoses", date="2024-01-10", icd10_code="E11"),
+            _chunk("E003-DX-E11", "diagnoses", date="2024-10-10", icd10_code="E11"),
+        ]
+        for i, enc in enumerate(["E001", "E003"]):
+            chunks[i] = chunks[i].model_copy(update={"encounter_id": enc})
+        result = retrieve_for_section(chunks, "diagnoses")
+        assert len(result) == 1
+        assert result[0].date == "2024-10-10"
 
     def test_treatment_timeline_keeps_all_encounters(self):
         """treatment_timeline must have ALL encounters for historical view."""
@@ -312,6 +432,37 @@ class TestLatestEncounterSections:
         result = retrieve_for_section(chunks, "treatment_timeline")
         enc_ids = {c.encounter_id for c in result}
         assert enc_ids == {"E001", "E002", "E003"}
+
+    def test_overview_vitals_latest_only_diagnoses_all_deduped(self):
+        """Overview: vitals from latest encounter, diagnoses deduplicated."""
+        chunks = []
+        for enc, date in [("E001", "2024-01-10"), ("E003", "2024-10-10")]:
+            c = _chunk(f"P001-{enc}-VIT", "vitals", date=date)
+            c = c.model_copy(update={"encounter_id": enc})
+            chunks.append(c)
+        for enc, date in [("E001", "2024-01-10"), ("E003", "2024-10-10")]:
+            c = _chunk(f"P001-{enc}-DX-E11", "diagnoses", date=date, icd10_code="E11")
+            c = c.model_copy(update={"encounter_id": enc})
+            chunks.append(c)
+        # Add a unique old diagnosis
+        old_dx = _chunk("P001-E001-DX-H06", "diagnoses", date="2024-01-10", icd10_code="H06.2")
+        old_dx = old_dx.model_copy(update={"encounter_id": "E001"})
+        chunks.append(old_dx)
+        # Patient info
+        pi = _chunk("P001-PAT", "patient_info", date="2024-01-10")
+        pi = pi.model_copy(update={"encounter_id": None})
+        chunks.append(pi)
+
+        result = retrieve_for_section(chunks, "overview")
+        vitals = [c for c in result if c.source_type == "vitals"]
+        diags = [c for c in result if c.source_type == "diagnoses"]
+        pinfo = [c for c in result if c.source_type == "patient_info"]
+        assert {c.encounter_id for c in vitals} == {"E003"}
+        # E11 deduplicated (latest wins) + H06.2 unique → 2 diagnoses
+        assert len(diags) == 2
+        diag_icds = {c.metadata["icd10_code"] for c in diags}
+        assert diag_icds == {"E11", "H06.2"}
+        assert len(pinfo) == 1
 
     def test_clinical_alerts_labs_latest_only(self):
         """clinical_alerts: lab chunks should come from latest encounter only."""
@@ -340,3 +491,81 @@ class TestLatestEncounterSections:
         result = retrieve_for_section([allergy, lab_old, lab_new], "clinical_alerts")
         ids = [c.source_id for c in result]
         assert "ALLERGY-PEN" in ids
+
+
+# ---------------------------------------------------------------------------
+# Integration tests using real patient data
+# ---------------------------------------------------------------------------
+
+class TestRetrievalIntegration:
+    """Verify retrieval quality against known recall gaps from evaluation."""
+
+    @staticmethod
+    def _load_patient_chunks(patient_id: str) -> list[SourceChunk]:
+        import json
+        from pathlib import Path
+        store_path = Path(__file__).parent.parent / "data" / "processed" / "stores" / f"{patient_id}_store.json"
+        if not store_path.exists():
+            pytest.skip(f"Store file {store_path} not found")
+        raw = json.loads(store_path.read_text(encoding="utf-8"))
+        return [SourceChunk(**v) for v in raw.values()]
+
+    def test_p007_diagnoses_includes_secondary(self):
+        """P007 has H06.2 and R00.0 only at E001 — diagnoses must retrieve them."""
+        chunks = self._load_patient_chunks("P007")
+        result = retrieve_for_section(chunks, "diagnoses")
+        ids = {c.source_id for c in result}
+        assert "P007-E001-DX-H06.2" in ids, "Secondary: Exophthalmos from E001"
+        assert "P007-E001-DX-R00.0" in ids, "Secondary: Sinus tachycardia from E001"
+        assert "P007-E003-DX-E05.0" in ids, "Primary: Basedow from latest encounter"
+
+    def test_p007_diagnoses_deduped(self):
+        """P007 E05.0 appears in E001 and E003 — should be deduplicated."""
+        chunks = self._load_patient_chunks("P007")
+        result = retrieve_for_section(chunks, "diagnoses")
+        e05_chunks = [c for c in result if "E05" in c.source_id]
+        assert len(e05_chunks) == 1, f"E05.0 should appear once, got {[c.source_id for c in e05_chunks]}"
+        assert "E003" in e05_chunks[0].source_id, "Should keep latest E003 version"
+
+    def test_p007_abnormal_labs_includes_trab(self):
+        """P007 TRAb was only measured at E001 — must not be filtered out."""
+        chunks = self._load_patient_chunks("P007")
+        result = retrieve_for_section(chunks, "abnormal_labs")
+        ids = {c.source_id for c in result}
+        assert "P007-E001-LAB-TRAB" in ids, "TRAb from E001 must be retrieved"
+
+    def test_p007_abnormal_labs_still_has_trend_data(self):
+        """TSH/FT4/FT3 from E002 and E003 must still be present for trend display."""
+        chunks = self._load_patient_chunks("P007")
+        result = retrieve_for_section(chunks, "abnormal_labs")
+        ids = {c.source_id for c in result}
+        assert "P007-E003-LAB-TSH" in ids
+        assert "P007-E002-LAB-TSH" in ids
+
+    def test_p007_abnormal_labs_not_flooded(self):
+        """Should not include TSH/FT4/FT3 from E001 since they exist in E002/E003."""
+        chunks = self._load_patient_chunks("P007")
+        result = retrieve_for_section(chunks, "abnormal_labs")
+        ids = {c.source_id for c in result}
+        assert "P007-E001-LAB-TSH" not in ids, "TSH from E001 redundant (exists in E002/E003)"
+        assert "P007-E001-LAB-FT4" not in ids, "FT4 from E001 redundant"
+
+    def test_p008_diagnoses_includes_hpylori(self):
+        """P008 has B98.0 (H.pylori) only at E001 — diagnoses must retrieve it."""
+        chunks = self._load_patient_chunks("P008")
+        result = retrieve_for_section(chunks, "diagnoses")
+        ids = {c.source_id for c in result}
+        assert "P008-E001-DX-B98.0" in ids, "H.pylori diagnosis from E001"
+        assert "P008-E002-DX-K25.7" in ids, "Primary diagnosis from latest"
+        assert "P008-E002-DX-K21.0" in ids, "Comorbid from latest"
+
+    def test_p007_overview_has_latest_vitals_and_all_diagnoses(self):
+        """Overview: vitals from E003, diagnoses from all encounters deduped."""
+        chunks = self._load_patient_chunks("P007")
+        result = retrieve_for_section(chunks, "overview")
+        vitals = [c for c in result if c.source_type == "vitals"]
+        diags = [c for c in result if c.source_type == "diagnoses"]
+        assert all("E003" in c.encounter_id for c in vitals), \
+            f"Vitals should be from E003 only, got {[c.encounter_id for c in vitals]}"
+        diag_encounters = {c.encounter_id for c in diags}
+        assert "P007-E001" in diag_encounters, "E001 diagnoses should be in overview"
