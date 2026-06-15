@@ -74,7 +74,7 @@ export const SECTION_LABELS: Record<string, string> = {
   abnormal_labs:       "Xét nghiệm bất thường",
   diagnoses:           "Chẩn đoán",
   treatment_timeline:  "Diễn biến điều trị",
-  clinical_alerts:     "Cảnh báo lâm sàng",
+  clinical_alerts:     "Thông tin cần chú ý",
 };
 
 export const SECTION_ICONS: Record<string, string> = {
@@ -86,7 +86,7 @@ export const SECTION_ICONS: Record<string, string> = {
   abnormal_labs:       "🧪",
   diagnoses:           "🔬",
   treatment_timeline:  "📈",
-  clinical_alerts:     "🚨",
+  clinical_alerts:     "⚠️",
 };
 
 export const STATUS_COLORS: Record<ClaimStatus, string> = {
@@ -141,3 +141,30 @@ export const SOURCE_TYPE_LABELS: Record<string, string> = {
   procedures:     "Thủ thuật",
   patient_info:   "Thông tin bệnh nhân",
 };
+
+// ─── Review types ────────────────────────────────────────────────────────────
+
+export type ClaimReviewAction = "approved" | "edited" | "needs_review";
+
+export interface ClaimReview {
+  claim_id: string;
+  section_id: string;
+  claim_text: string;
+  action: ClaimReviewAction;
+  new_text: string | null;
+  reviewed_at: string;
+}
+
+export interface ReviewFeedback {
+  text: string;
+  submitted_at: string;
+}
+
+export interface ReviewState {
+  patient_id: string;
+  summary_status: "draft" | "confirmed";
+  confirmed_at: string | null;
+  reviewer: string | null;
+  claim_reviews: Record<string, ClaimReview>;
+  feedback: ReviewFeedback[];
+}

@@ -19,12 +19,18 @@ function stripClaimPrefix(text: string): string {
   return text;
 }
 
-function MetaRow({ label, value }: { label: string; value: unknown }) {
-  if (value === null || value === undefined || value === "" || value === false) return null;
+function MetaRow({ label, value, techMode }: { label: string; value: unknown; techMode?: boolean }) {
+  if (value === null || value === undefined || value === "") return null;
+  if (typeof value === "boolean" && !value && !techMode) return null;
+  if (!techMode && TECH_ONLY_KEYS.has(label)) return null;
+
+  const displayLabel = META_LABELS_VI[label] ?? (techMode ? label : null);
+  if (!displayLabel) return null;
+
   return (
     <div className="flex gap-2 text-sm">
-      <span className="text-gray-500 min-w-[130px] shrink-0">{label}</span>
-      <span className="text-gray-800 font-mono break-all">{String(value)}</span>
+      <span className="text-gray-500 min-w-[130px] shrink-0">{displayLabel}</span>
+      <span className="text-gray-800 break-all">{formatMetaValue(value)}</span>
     </div>
   );
 }
@@ -38,6 +44,55 @@ const STATUS_DOCTOR_LABELS: Record<string, { icon: string; text: string; cls: st
   CONTRADICTED:        { icon: "❌", text: "Có mâu thuẫn trong hồ sơ",   cls: "bg-red-50 text-red-700 border-red-300",        explanation: "Nguồn dữ liệu trong hồ sơ mâu thuẫn với thông tin này." },
   NEED_REVIEW:         { icon: "🔍", text: "Cần bác sĩ kiểm tra",       cls: "bg-purple-50 text-purple-700 border-purple-200", explanation: "Thông tin này cần bác sĩ xác nhận trước khi tin cậy." },
 };
+
+const META_LABELS_VI: Record<string, string> = {
+  test_code: "Mã xét nghiệm",
+  test_name: "Tên xét nghiệm",
+  value: "Giá trị",
+  unit: "Đơn vị",
+  reference_range: "Ngưỡng tham chiếu",
+  interpretation: "Đánh giá",
+  is_abnormal: "Bất thường",
+  is_critical: "Nguy hiểm",
+  drug_name: "Tên thuốc",
+  strength: "Hàm lượng",
+  dose: "Liều dùng",
+  frequency: "Tần suất",
+  instruction: "Hướng dẫn",
+  indication: "Mục đích",
+  is_current: "Đang sử dụng",
+  missing_dose: "Thiếu thông tin liều",
+  diagnosis_name: "Tên bệnh",
+  diagnosis_type: "Loại chẩn đoán",
+  icd10_code: "Mã ICD-10",
+  is_active: "Đang hoạt động",
+  substance: "Chất gây dị ứng",
+  reaction: "Phản ứng",
+  severity: "Mức độ",
+  status: "Trạng thái",
+  needs_patient_confirmation: "Cần xác nhận BN",
+  procedure_name: "Tên thủ thuật",
+  modality: "Phương pháp",
+  body_part: "Vùng cơ thể",
+  section: "Phần ghi chú",
+  note_type: "Loại ghi chú",
+  author: "Người viết",
+  blood_pressure: "Huyết áp",
+  abnormal_flags: "Bất thường",
+  bmi: "BMI",
+  age: "Tuổi",
+  gender: "Giới tính",
+};
+
+const TECH_ONLY_KEYS = new Set([
+  "is_current", "is_active", "note_type",
+]);
+
+function formatMetaValue(value: unknown): string {
+  if (typeof value === "boolean") return value ? "Có" : "Không";
+  if (Array.isArray(value)) return value.length > 0 ? value.join(", ") : "Không có";
+  return String(value);
+}
 
 const CONFIDENCE_LABELS: Record<string, string> = {};
 function confidenceLabel(score: number): string {
@@ -226,7 +281,7 @@ export default function SourcePanel({
                 </p>
                 <div className="space-y-1.5 bg-gray-50 rounded-lg p-3 border border-gray-200">
                   {Object.entries(chunk.metadata).map(([k, v]) => (
-                    <MetaRow key={k} label={k} value={v as unknown} />
+                    <MetaRow key={k} label={k} value={v as unknown} techMode={techMode} />
                   ))}
                 </div>
               </div>
@@ -248,9 +303,9 @@ export default function SourcePanel({
                 <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">
                   Thông tin kỹ thuật
                 </p>
-                <MetaRow label="source_id"    value={chunk.source_id} />
-                <MetaRow label="patient_id"   value={chunk.patient_id} />
-                <MetaRow label="encounter_id" value={chunk.encounter_id} />
+                <MetaRow label="source_id"    value={chunk.source_id} techMode />
+                <MetaRow label="patient_id"   value={chunk.patient_id} techMode />
+                <MetaRow label="encounter_id" value={chunk.encounter_id} techMode />
               </div>
             )}
           </>

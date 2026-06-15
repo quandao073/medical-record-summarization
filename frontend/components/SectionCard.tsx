@@ -22,7 +22,18 @@ export default function SectionCard({
 }: Props) {
   const label = SECTION_LABELS[section.section_id] ?? section.section_id;
   const icon  = SECTION_ICONS[section.section_id] ?? "📄";
-  const isAlert = section.section_id === "clinical_alerts";
+  const isClinicalAlerts = section.section_id === "clinical_alerts";
+  const hasHighRisk = section.cited_claims.some(c =>
+    !c.is_structural && (c.status === "CONTRADICTED" || c.status === "UNSUPPORTED") && c.is_critical
+  );
+  const alertStyle = isClinicalAlerts
+    ? hasHighRisk
+      ? "border-red-200 bg-red-50"
+      : "border-amber-200 bg-amber-50"
+    : "border-gray-200 bg-white hover:border-blue-200";
+  const alertTextStyle = isClinicalAlerts
+    ? hasHighRisk ? "text-red-700" : "text-amber-700"
+    : "text-gray-800";
 
   // Collect all unique citations from all claims
   const allCitations: Array<{ sourceId: string; status: string }> = [];
@@ -53,19 +64,13 @@ export default function SectionCard({
 
   return (
     <div
-      className={`rounded-xl border p-5 shadow-sm ${
-        isAlert
-          ? "border-red-200 bg-red-50"
-          : "border-gray-200 bg-white hover:border-blue-200"
-      }`}
+      className={`rounded-xl border p-5 shadow-sm ${alertStyle}`}
     >
       {/* Header */}
       <div className="flex items-center gap-2 mb-3">
         <span className="text-lg">{icon}</span>
         <h2
-          className={`font-semibold text-base ${
-            isAlert ? "text-red-700" : "text-gray-800"
-          }`}
+          className={`font-semibold text-base ${alertTextStyle}`}
         >
           {label}
         </h2>
