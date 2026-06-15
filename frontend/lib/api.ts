@@ -1,4 +1,4 @@
-import type { FinalSummary, SourceChunk } from "./types";
+import type { FinalSummary, SourceChunk, ReviewState, ClaimReviewAction } from "./types";
 
 const API_BASE =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
@@ -73,4 +73,56 @@ export async function checkHealth(): Promise<boolean> {
   } catch {
     return false;
   }
+}
+
+export async function getReviewState(patientId: string): Promise<ReviewState> {
+  const res = await fetch(`${API_BASE}/api/v1/review/${patientId}`);
+  return handleResponse<ReviewState>(res);
+}
+
+export async function submitClaimReview(
+  patientId: string,
+  claimId: string,
+  sectionId: string,
+  claimText: string,
+  action: ClaimReviewAction,
+  newText?: string,
+): Promise<void> {
+  const res = await fetch(`${API_BASE}/api/v1/review/${patientId}/claim`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      claim_id: claimId,
+      section_id: sectionId,
+      claim_text: claimText,
+      action,
+      new_text: newText ?? null,
+    }),
+  });
+  await handleResponse(res);
+}
+
+export async function submitSummaryStatus(
+  patientId: string,
+  status: "draft" | "confirmed",
+  reviewer?: string,
+): Promise<void> {
+  const res = await fetch(`${API_BASE}/api/v1/review/${patientId}/summary`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ status, reviewer }),
+  });
+  await handleResponse(res);
+}
+
+export async function submitFeedback(
+  patientId: string,
+  text: string,
+): Promise<void> {
+  const res = await fetch(`${API_BASE}/api/v1/review/${patientId}/feedback`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ text }),
+  });
+  await handleResponse(res);
 }
