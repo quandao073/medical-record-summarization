@@ -41,6 +41,7 @@ ENV/
 # =============================================================================
 data/processed/
 data/vietnamese-clinic-data-seeds/
+data/reviews/
 
 # MLflow
 mlruns/
