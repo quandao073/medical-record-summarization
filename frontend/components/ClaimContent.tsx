@@ -103,6 +103,7 @@ function ClaimSpan({
   const leaveTimer              = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const hasCitations = claim.citations.length > 0;
+  const isActive = activeSourceId !== null && claim.citations.includes(activeSourceId);
   const badge = CLAIM_BADGE[claim.status] ?? null;  // null for SUPPORTED
 
   // Strip any verifier prefix from claim_text before display
@@ -130,9 +131,10 @@ function ClaimSpan({
         onMouseEnter={handleEnter}
         onMouseLeave={handleLeave}
         className={`
-          rounded px-0.5 py-0.5 transition-colors duration-100 cursor-default
+          rounded px-0.5 py-0.5 transition-colors duration-200 cursor-default
           ${hasCitations ? "cursor-help" : ""}
-          ${hovered ? STATUS_HIGHLIGHT[claim.status] : ""}
+          ${isActive ? "ring-2 ring-blue-400 ring-offset-1 bg-blue-50" : ""}
+          ${hovered && !isActive ? STATUS_HIGHLIGHT[claim.status] : ""}
         `}
       >
         {/* Status-specific badge — only shown for non-SUPPORTED claims */}
