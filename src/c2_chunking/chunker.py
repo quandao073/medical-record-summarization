@@ -130,6 +130,54 @@ def _chunk_labs(enc: dict, pid: str) -> list[SourceChunk]:
     return chunks
 
 
+_DRUG_INDICATION: dict[str, str] = {
+    "metformin": "Đái tháo đường type 2",
+    "empagliflozin": "Đái tháo đường type 2",
+    "glimepiride": "Đái tháo đường type 2",
+    "gliclazide": "Đái tháo đường type 2",
+    "sitagliptin": "Đái tháo đường type 2",
+    "insulin": "Đái tháo đường",
+    "amlodipine": "Tăng huyết áp",
+    "perindopril": "Tăng huyết áp",
+    "losartan": "Tăng huyết áp",
+    "valsartan": "Tăng huyết áp",
+    "lisinopril": "Tăng huyết áp",
+    "hydrochlorothiazide": "Tăng huyết áp",
+    "atorvastatin": "Rối loạn lipid máu",
+    "rosuvastatin": "Rối loạn lipid máu",
+    "simvastatin": "Rối loạn lipid máu",
+    "aspirin": "Chống kết tập tiểu cầu",
+    "clopidogrel": "Chống kết tập tiểu cầu",
+    "warfarin": "Chống đông máu",
+    "omeprazole": "Bảo vệ dạ dày",
+    "esomeprazole": "Bảo vệ dạ dày",
+    "pantoprazole": "Bảo vệ dạ dày",
+    "lansoprazole": "Bảo vệ dạ dày",
+    "levothyroxine": "Suy giáp",
+    "methimazole": "Cường giáp",
+    "propylthiouracil": "Cường giáp",
+    "propranolol": "Cường giáp / Tăng huyết áp",
+    "amoxicillin": "Kháng sinh",
+    "clarithromycin": "Kháng sinh",
+    "metronidazole": "Kháng sinh",
+    "bismuth subsalicylate": "Bảo vệ dạ dày",
+    "prednisolone": "Kháng viêm",
+    "prednisone": "Kháng viêm",
+    "salbutamol": "Giãn phế quản",
+    "montelukast": "Hen phế quản",
+    "cetirizine": "Dị ứng",
+    "loratadine": "Dị ứng",
+}
+
+
+def _drug_indication(drug_name: str) -> str:
+    key = drug_name.lower().strip()
+    for k, v in _DRUG_INDICATION.items():
+        if k in key or key in k:
+            return v
+    return ""
+
+
 def _chunk_medications(enc: dict, pid: str) -> list[SourceChunk]:
     chunks = []
     for med in enc.get("medications", []):
@@ -166,6 +214,7 @@ def _chunk_medications(enc: dict, pid: str) -> list[SourceChunk]:
                 "strength": strength,
                 "dose": dose,
                 "frequency": freq,
+                "indication": _drug_indication(drug),
                 "is_current": med.get("is_current", True),
                 "missing_dose": not (med.get("dose") or med.get("strength")),
             },
