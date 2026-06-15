@@ -1,18 +1,22 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { CitedClaim, FinalSummary, SourceChunk } from "@/lib/types";
+import type { CitedClaim, ClaimReviewAction, FinalSummary, ReviewState, SourceChunk } from "@/lib/types";
 import {
   checkHealth,
   clearCache,
   getPatients,
+  getReviewState,
   getSource,
+  submitClaimReview,
   summarize,
 } from "@/lib/api";
 import MetricsBar from "@/components/MetricsBar";
 import NeedsReviewSection from "@/components/NeedsReviewSection";
 import SectionCard from "@/components/SectionCard";
 import SourcePanel from "@/components/SourcePanel";
+import SummaryActionBar from "@/components/SummaryActionBar";
+import { submitSummaryStatus, submitFeedback } from "@/lib/api";
 
 // ─── Loading skeleton ────────────────────────────────────────────────────────
 function SkeletonCard() {
@@ -59,6 +63,9 @@ export default function HomePage() {
 
   // ─ Technical mode toggle
   const [techMode, setTechMode] = useState(false);
+
+  // ─ Review state
+  const [reviewState, setReviewState] = useState<ReviewState | null>(null);
 
   // ─ Source panel
   const [activeId, setActiveId]       = useState<string | null>(null);
@@ -172,6 +179,7 @@ export default function HomePage() {
     try {
       const result = await summarize(pid, mdl, forceRefresh, abortRef.current.signal);
       setSummary(result);
+      getReviewState(pid).then(setReviewState).catch(() => {});
     } catch (e) {
       const err = e as Error;
       if (err.name === "AbortError") {
@@ -215,6 +223,45 @@ export default function HomePage() {
     setError(null);
     setAborted(false);
   };
+
+  // ─ Claim ID generation
+  function makeClaimId(patientId: string, sectionId: string, claimIndex: number, claimText: string): string {
+    const hash = Array.from(claimText).reduce((h, c) => ((h << 5) - h + c.charCodeAt(0)) | 0, 0);
+    const hashStr = Math.abs(hash).toString(16).slice(0, 5);
+    return `${patientId}-${sectionId}-${String(claimIndex).padStart(3, "0")}-${hashStr}`;
+  }
+
+  // ─ Claim review handler
+  const handleClaimReview = useCallback(async (action: ClaimReviewAction, newText?: string) => {
+    if (!summary || !claimContext || !activeId) return;
+    const section = summary.sections.find(s =>
+      s.cited_claims.some(c => c.citations.includes(activeId!))
+    );
+    if (!section) return;
+    const claimIndex = section.cited_claims.findIndex(c =>
+      c.claim_text === claimContext.claim_text && c.citations.includes(activeId!)
+    );
+    if (claimIndex < 0) return;
+    const claimId = makeClaimId(summary.patient_id, section.section_id, claimIndex, claimContext.claim_text);
+    await submitClaimReview(summary.patient_id, claimId, section.section_id, claimContext.claim_text, action, newText);
+    const updated = await getReviewState(summary.patient_id);
+    setReviewState(updated);
+  }, [summary, claimContext, activeId]);
+
+  // ─ Current claim's review lookup
+  const currentClaimReview = useMemo(() => {
+    if (!reviewState || !summary || !claimContext || !activeId) return null;
+    const section = summary.sections.find(s =>
+      s.cited_claims.some(c => c.citations.includes(activeId!))
+    );
+    if (!section) return null;
+    const claimIndex = section.cited_claims.findIndex(c =>
+      c.claim_text === claimContext.claim_text && c.citations.includes(activeId!)
+    );
+    if (claimIndex < 0) return null;
+    const claimId = makeClaimId(summary.patient_id, section.section_id, claimIndex, claimContext.claim_text);
+    return reviewState.claim_reviews[claimId] ?? null;
+  }, [reviewState, summary, claimContext, activeId]);
 
   // ─ Server offline banner
   if (serverOk === false) {
@@ -341,7 +388,7 @@ export default function HomePage() {
       </header>
 
       {/* ── Main content ────────────────────────────────────────────────────── */}
-      <main className="max-w-5xl mx-auto px-4 py-6 space-y-5">
+      <main className="max-w-5xl mx-auto px-4 py-6 pb-20 space-y-5">
 
         {/* Aborted — neutral, not an error */}
         {aborted && !loading && (
@@ -437,8 +484,15 @@ export default function HomePage() {
                 </p>
               </div>
               <div className="flex items-center gap-2">
-                <span className="px-3 py-1 bg-amber-50 text-amber-700 text-xs rounded-full border border-amber-200 font-medium">
-                  📝 Bản nháp AI — chưa được bác sĩ xác nhận
+                <span className={`px-3 py-1 text-xs rounded-full border font-medium ${
+                  reviewState?.summary_status === "confirmed"
+                    ? "bg-green-50 text-green-700 border-green-200"
+                    : "bg-amber-50 text-amber-700 border-amber-200"
+                }`}>
+                  {reviewState?.summary_status === "confirmed"
+                    ? "Đã được bác sĩ xác nhận"
+                    : "Bản nháp AI — chưa được bác sĩ xác nhận"
+                  }
                 </span>
                 {techMode && summary._from_cache && (
                   <span className="px-2 py-1 bg-gray-100 text-gray-500 text-xs rounded-full border border-gray-200">
@@ -566,7 +620,33 @@ export default function HomePage() {
         error={chunkError}
         onClose={() => { setActiveId(null); setChunk(null); setClaimContext(null); }}
         techMode={techMode}
+        claimReview={currentClaimReview}
+        onClaimReview={handleClaimReview}
+        onSourceSwitch={handleCitationClick}
       />
+
+      {/* ── Sticky action bar ─────────────────────────────────────────────── */}
+      {summary && !loading && (
+        <SummaryActionBar
+          summaryStatus={reviewState?.summary_status ?? "draft"}
+          confirmedAt={reviewState?.confirmed_at ?? null}
+          onSaveDraft={async () => {
+            await submitSummaryStatus(summary.patient_id, "draft");
+            const updated = await getReviewState(summary.patient_id);
+            setReviewState(updated);
+          }}
+          onConfirm={async () => {
+            await submitSummaryStatus(summary.patient_id, "confirmed", "Demo Doctor");
+            const updated = await getReviewState(summary.patient_id);
+            setReviewState(updated);
+          }}
+          onFeedback={async (text) => {
+            await submitFeedback(summary.patient_id, text);
+            const updated = await getReviewState(summary.patient_id);
+            setReviewState(updated);
+          }}
+        />
+      )}
     </div>
   );
 }

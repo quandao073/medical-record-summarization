@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import type { CitedClaim, ClaimStatus, SourceChunk } from "@/lib/types";
+import type { CitedClaim, ClaimStatus, SourceChunk, ClaimReview, ClaimReviewAction } from "@/lib/types";
 import { SOURCE_TYPE_LABELS, STATUS_TOOLTIPS } from "@/lib/types";
+import ClaimReviewButtons from "./ClaimReviewButtons";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -111,6 +112,9 @@ interface Props {
   error: string | null;
   onClose: () => void;
   techMode?: boolean;
+  claimReview?: ClaimReview | null;
+  onClaimReview?: (action: ClaimReviewAction, newText?: string) => Promise<void>;
+  onSourceSwitch?: (sourceId: string) => void;
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -123,6 +127,9 @@ export default function SourcePanel({
   error,
   onClose,
   techMode,
+  claimReview,
+  onClaimReview,
+  onSourceSwitch,
 }: Props) {
   const [showTechDetails, setShowTechDetails] = useState(false);
 
@@ -150,7 +157,7 @@ export default function SourcePanel({
         </button>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="flex-1 overflow-y-auto p-4 pb-20 space-y-4">
 
         {/* ── Claim context ─────────────────────────────────────────────────── */}
         {claimContext && statusInfo && (
@@ -211,20 +218,29 @@ export default function SourcePanel({
                 </p>
                 <div className="flex flex-wrap gap-1">
                   {claimContext.citations.map((sid) => (
-                    <span
+                    <button
                       key={sid}
-                      className={`text-xs px-2 py-0.5 rounded border ${
+                      onClick={() => sid !== sourceId && onSourceSwitch?.(sid)}
+                      className={`text-xs px-2 py-0.5 rounded border transition ${
                         sid === sourceId
                           ? "bg-blue-100 text-blue-700 border-blue-300 font-semibold"
-                          : "bg-gray-50 text-gray-500 border-gray-200"
+                          : "bg-gray-50 text-gray-500 border-gray-200 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 cursor-pointer"
                       }`}
                     >
                       {sid === sourceId ? "► " : ""}
                       {techMode ? sid.split("-").slice(-2).join("-") : `Nguồn ${claimContext.citations.indexOf(sid) + 1}`}
-                    </span>
+                    </button>
                   ))}
                 </div>
               </div>
+            )}
+
+            {/* Claim review buttons */}
+            {onClaimReview && (
+              <ClaimReviewButtons
+                currentReview={claimReview ?? null}
+                onReview={onClaimReview}
+              />
             )}
           </div>
         )}
