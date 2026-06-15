@@ -238,18 +238,53 @@ export default function ClaimContent({
     );
   }
 
-  // Custom renderer for treatment_timeline (Diễn biến điều trị)
+  // Custom renderer for treatment_timeline — grouped by date
   if (sectionId === "treatment_timeline") {
+    const datePattern = /^(\d{1,2}\/\d{1,2}\/\d{4}|\d{4}-\d{2}-\d{2})/;
+    const groups: Array<{ date: string; claims: Array<{ claim: CitedClaim; idx: number }> }> = [];
+    let currentGroup: typeof groups[number] | null = null;
+
+    citedClaims.forEach((claim, i) => {
+      const dateMatch = claim.claim_text.match(datePattern);
+      if (dateMatch || (claim.is_structural && claim.claim_text.trim().endsWith(":"))) {
+        const dateStr = dateMatch ? dateMatch[1] : claim.claim_text.replace(":", "").trim();
+        currentGroup = { date: dateStr, claims: [] };
+        groups.push(currentGroup);
+        if (!dateMatch) return;
+      }
+      if (currentGroup) {
+        currentGroup.claims.push({ claim, idx: i });
+      } else {
+        if (!currentGroup) {
+          currentGroup = { date: "", claims: [] };
+          groups.push(currentGroup);
+        }
+        currentGroup.claims.push({ claim, idx: i });
+      }
+    });
+
     return (
-      <div className="space-y-2 text-base leading-relaxed text-gray-700">
-        {citedClaims.map((claim, i) => (
-          <div key={i} className="flex items-start gap-2">
-            <span className="text-blue-500 shrink-0 select-none pt-0.5">•</span>
-            <ClaimSpan
-              claim={claim}
-              activeSourceId={activeSourceId}
-              onCitationClick={onCitationClick}
-            />
+      <div className="space-y-4">
+        {groups.map((group, gi) => (
+          <div key={gi} className="relative pl-6 border-l-2 border-blue-200">
+            {group.date && (
+              <div className="flex items-center gap-2 mb-1.5 -ml-[25px]">
+                <span className="w-3 h-3 rounded-full bg-blue-500 border-2 border-white shadow-sm shrink-0" />
+                <span className="text-sm font-semibold text-blue-700">{group.date}</span>
+              </div>
+            )}
+            <div className="space-y-1 text-base leading-relaxed text-gray-700">
+              {group.claims.map(({ claim, idx }) => (
+                <div key={idx} className="flex items-start gap-2">
+                  <span className="text-gray-400 shrink-0 select-none pt-0.5">•</span>
+                  <ClaimSpan
+                    claim={claim}
+                    activeSourceId={activeSourceId}
+                    onCitationClick={onCitationClick}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         ))}
       </div>

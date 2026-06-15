@@ -37,7 +37,7 @@ function InlineBadge({
 function SkeletonRow() {
   return (
     <tr>
-      {[40, 20, 30, 50, 25, 20].map((w, i) => (
+      {[40, 30, 35, 25, 18].map((w, i) => (
         <td key={i} className="px-3 py-2.5">
           <div className="skeleton h-3 rounded" style={{ width: `${w}%` }} />
         </td>
@@ -131,11 +131,10 @@ export default function MedsTable({ citedClaims, activeSourceId, onCitationClick
         <thead>
           <tr className="bg-gray-50 border-b border-gray-200 text-xs text-gray-500 uppercase tracking-wide">
             <th className="px-3 py-2 text-left font-medium">Tên thuốc</th>
-            <th className="px-3 py-2 text-left font-medium w-24">Hàm lượng</th>
-            <th className="px-3 py-2 text-left font-medium">Liều / Tần suất</th>
-            <th className="px-3 py-2 text-left font-medium">Hướng dẫn</th>
+            <th className="px-3 py-2 text-left font-medium">Liều dùng</th>
+            <th className="px-3 py-2 text-left font-medium">Mục đích</th>
             <th className="px-3 py-2 text-left font-medium w-28">Ngày kê</th>
-            <th className="px-3 py-2 text-center font-medium w-20">Nguồn</th>
+            <th className="px-3 py-2 text-center font-medium w-16">Nguồn</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-100">
@@ -147,27 +146,21 @@ export default function MedsTable({ citedClaims, activeSourceId, onCitationClick
                 const strength    = (m.strength as string | null)?.trim() || null;
                 const dose        = (m.dose as string | null)?.trim();
                 const frequency   = (m.frequency as string | null)?.trim();
-                const instruction = (m.instruction as string | null)?.trim() || null;
+                const indication  = (m.indication as string | null)?.trim() || null;
                 const stopped     = m.is_current === false || frequency === "NGƯNG";
                 const isActive    = activeSourceId === chunk.source_id;
 
-                // Liều / Tần suất: only dose + frequency (no strength)
-                let doseFreq = "(Thiếu thông tin liều)";
+                // Liều dùng: merge strength + dose + frequency
+                let dosageDisplay = "";
                 if (stopped) {
-                  doseFreq = "NGƯNG";
-                } else if (dose || frequency) {
+                  dosageDisplay = "NGƯNG";
+                } else {
                   const parts = [];
+                  if (strength) parts.push(strength);
                   if (dose && dose !== "0") parts.push(dose);
                   if (frequency) parts.push(frequency);
-                  doseFreq = parts.join(", ");
+                  dosageDisplay = parts.length > 0 ? parts.join(", ") : "(Thiếu thông tin liều)";
                 }
-
-                // Instruction: truncate to ~40 chars, full text in tooltip
-                const instrShort = instruction
-                  ? instruction.length > 45
-                    ? instruction.slice(0, 42) + "…"
-                    : instruction
-                  : null;
 
                 return (
                   <tr
@@ -182,26 +175,21 @@ export default function MedsTable({ citedClaims, activeSourceId, onCitationClick
                         {drugName}
                       </span>
                     </td>
-                    {/* Hàm lượng */}
-                    <td className="px-3 py-2.5 text-gray-600 font-mono text-xs">
-                      {strength ?? <span className="text-gray-300">—</span>}
-                    </td>
-                    {/* Liều / Tần suất */}
+                    {/* Liều dùng */}
                     <td className="px-3 py-2.5 text-gray-700 text-sm">
                       {stopped
                         ? <span className="text-red-500 font-medium text-xs">NGƯNG</span>
-                        : doseFreq}
+                        : dosageDisplay}
                     </td>
-                    {/* Hướng dẫn */}
-                    <td className="px-3 py-2.5 text-gray-500 text-xs"
-                        title={instruction ?? undefined}>
-                      {instrShort ?? <span className="text-gray-300">—</span>}
+                    {/* Mục đích */}
+                    <td className="px-3 py-2.5 text-gray-600 text-sm">
+                      {indication ?? <span className="text-gray-300 text-xs">—</span>}
                     </td>
                     {/* Ngày kê */}
                     <td className="px-3 py-2.5 text-gray-400 text-xs font-mono">
                       {chunk.date ?? "—"}
                     </td>
-                    {/* Nguồn + status */}
+                    {/* Nguồn */}
                     <td className="px-3 py-2.5 text-center">
                       <InlineBadge
                         sourceId={chunk.source_id}

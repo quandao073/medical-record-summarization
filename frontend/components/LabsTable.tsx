@@ -72,7 +72,7 @@ function InlineBadge({
 function SkeletonRow() {
   return (
     <tr>
-      {[50, 20, 18, 40, 25, 28, 18].map((w, i) => (
+      {[50, 20, 18, 40, 25, 28, 30, 18].map((w, i) => (
         <td key={i} className="px-3 py-2.5">
           <div className="skeleton h-3 rounded" style={{ width: `${w}%` }} />
         </td>
@@ -168,12 +168,13 @@ export default function LabsTable({ citedClaims, activeSourceId, onCitationClick
       <table className="w-full text-sm">
         <thead>
           <tr className="bg-gray-50 border-b border-gray-200 text-xs text-gray-500 uppercase tracking-wide">
-            <th className="px-3 py-2 text-left font-medium">Tên xét nghiệm</th>
+            <th className="px-3 py-2 text-left font-medium">Xét nghiệm</th>
             <th className="px-3 py-2 text-center font-medium w-28">Kết quả</th>
             <th className="px-3 py-2 text-left font-medium w-24">Đơn vị</th>
-            <th className="px-3 py-2 text-left font-medium">Khoảng tham chiếu</th>
+            <th className="px-3 py-2 text-left font-medium">Ngưỡng tham chiếu</th>
             <th className="px-3 py-2 text-left font-medium w-28">Ngày</th>
             <th className="px-3 py-2 text-left font-medium w-32">Xu hướng</th>
+            <th className="px-3 py-2 text-left font-medium w-36">Nhận xét</th>
             <th className="px-3 py-2 text-center font-medium w-16">Nguồn</th>
           </tr>
         </thead>
@@ -195,13 +196,28 @@ export default function LabsTable({ citedClaims, activeSourceId, onCitationClick
                   refRange = match ? match[1].trim() : null;
                 }
 
+                // Clinical interpretation note
+                let clinicalNote = "";
+                const interpLower = (interp ?? "").toString().toLowerCase();
+                if (interpLower === "critical") {
+                  clinicalNote = "Nguy hiểm";
+                } else if (interpLower === "high") {
+                  if (prevValue !== undefined && prevValue !== null && val !== null && val < prevValue) {
+                    clinicalNote = "Cao, đã cải thiện";
+                  } else {
+                    clinicalNote = "Cao, cần theo dõi";
+                  }
+                } else if (interpLower === "low") {
+                  clinicalNote = "Thấp, cần theo dõi";
+                } else if (interpLower === "normal") {
+                  clinicalNote = "Bình thường";
+                }
+
                 // Trend: compare current vs previous value
                 let trendNode: React.ReactNode = <span className="text-gray-300 text-xs">—</span>;
                 if (prevValue !== undefined && prevValue !== null && val !== null) {
                   const diff = val - prevValue;
-                  const improved = diff < 0; // lower is better for HbA1c, LDL, etc.
-                  // For HDL, higher is better — but we can't easily tell without a flag
-                  // Use a neutral arrow with the old value
+                  const improved = diff < 0;
                   const arrow = diff < 0 ? "↓" : diff > 0 ? "↑" : "→";
                   const color = diff === 0
                     ? "text-gray-500"
@@ -230,6 +246,20 @@ export default function LabsTable({ citedClaims, activeSourceId, onCitationClick
                     </td>
                     <td className="px-3 py-2.5 text-gray-500 text-xs">{chunk.date ?? "—"}</td>
                     <td className="px-3 py-2.5">{trendNode}</td>
+                    <td className="px-3 py-2.5">
+                      {clinicalNote ? (
+                        <span className={`text-xs font-medium ${
+                          interpLower === "critical" ? "text-red-700" :
+                          interpLower === "high" ? "text-orange-600" :
+                          interpLower === "low" ? "text-blue-600" :
+                          "text-green-600"
+                        }`}>
+                          {clinicalNote}
+                        </span>
+                      ) : (
+                        <span className="text-gray-300 text-xs">—</span>
+                      )}
+                    </td>
                     <td className="px-3 py-2.5 text-center">
                       <InlineBadge
                         sourceId={chunk.source_id}

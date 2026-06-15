@@ -10,6 +10,7 @@ import {
   summarize,
 } from "@/lib/api";
 import MetricsBar from "@/components/MetricsBar";
+import NeedsReviewSection from "@/components/NeedsReviewSection";
 import SectionCard from "@/components/SectionCard";
 import SourcePanel from "@/components/SourcePanel";
 
@@ -511,18 +512,47 @@ export default function HomePage() {
               Di chuột vào thông tin để xem nguồn tham chiếu. Màu xanh = có nguồn xác nhận, vàng = nguồn hỗ trợ một phần, đỏ = chưa tìm thấy nguồn.
             </p>
 
-            {/* Sections — clinical_alerts first, then rest */}
-            {[
-              ...summary.sections.filter((s) => s.section_id === "clinical_alerts"),
-              ...summary.sections.filter((s) => s.section_id !== "clinical_alerts"),
-            ].map((section) => (
-              <SectionCard
-                key={section.section_id}
-                section={section}
-                activeSourceId={activeId}
-                onCitationClick={handleCitationClick}
-              />
-            ))}
+            {/* Needs Review — always shown prominently */}
+            <NeedsReviewSection
+              sections={summary.sections}
+              onCitationClick={handleCitationClick}
+            />
+
+            {/* Sections — clinical order per plan:
+                1. clinical_alerts (cảnh báo)
+                2. overview (tổng quan)
+                3. current_medications (thuốc)
+                4. abnormal_labs (xét nghiệm)
+                5. diagnoses (chẩn đoán)
+                6. treatment_timeline (diễn biến)
+                7. medical_history (tiền sử)
+                8. reason_for_visit (lý do khám)
+                9. allergies (dị ứng)
+            */}
+            {(() => {
+              const ORDER = [
+                "clinical_alerts",
+                "overview",
+                "current_medications",
+                "abnormal_labs",
+                "diagnoses",
+                "treatment_timeline",
+                "medical_history",
+                "reason_for_visit",
+                "allergies",
+              ];
+              const byId = new Map(summary.sections.map((s) => [s.section_id, s]));
+              const ordered = ORDER.map((id) => byId.get(id)).filter(Boolean);
+              const rest = summary.sections.filter((s) => !ORDER.includes(s.section_id));
+              return [...ordered, ...rest].map((section) => (
+                <SectionCard
+                  key={section!.section_id}
+                  section={section!}
+                  activeSourceId={activeId}
+                  onCitationClick={handleCitationClick}
+                />
+              ));
+            })()}
           </>
         )}
       </main>

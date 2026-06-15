@@ -45,7 +45,7 @@ function InlineBadge({
 function SkeletonRow() {
   return (
     <tr>
-      {[18, 55, 15, 20].map((w, i) => (
+      {[18, 55, 15, 22, 18].map((w, i) => (
         <td key={i} className="px-3 py-2.5">
           <div className="skeleton h-3 rounded" style={{ width: `${w}%` }} />
         </td>
@@ -116,9 +116,10 @@ export default function DiagnosesTable({ citedClaims, activeSourceId, onCitation
         <thead>
           <tr className="bg-gray-50 border-b border-gray-200 text-xs text-gray-500 uppercase tracking-wide">
             <th className="px-3 py-2 text-left font-medium w-28">Loại</th>
-            <th className="px-3 py-2 text-left font-medium">Tên bệnh</th>
+            <th className="px-3 py-2 text-left font-medium">Chẩn đoán</th>
             <th className="px-3 py-2 text-left font-medium w-24">ICD-10</th>
-            <th className="px-3 py-2 text-center font-medium w-20">Nguồn</th>
+            <th className="px-3 py-2 text-left font-medium w-28">Ngày ghi nhận</th>
+            <th className="px-3 py-2 text-center font-medium w-16">Nguồn</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-100">
@@ -150,6 +151,10 @@ export default function DiagnosesTable({ citedClaims, activeSourceId, onCitation
                       <span className="font-mono text-xs bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded border border-indigo-200">
                         {icd}
                       </span>
+                    </td>
+                    {/* Ngày ghi nhận */}
+                    <td className="px-3 py-2.5 text-gray-500 text-xs">
+                      {chunk.date ?? <span className="text-gray-300">—</span>}
                     </td>
                     {/* Nguồn */}
                     <td className="px-3 py-2.5 text-center">
