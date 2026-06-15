@@ -100,16 +100,53 @@ def _classifier_values(text: str) -> set[str]:
     return set(_CLASSIFIER_RE.findall(text.lower()))
 
 
-def check_internal_consistency(
-    sections: list[SummarySection],
-    conservative: bool = True,
+# ---------------------------------------------------------------------------
+# Drug + dose extraction for contradiction detection
+# ---------------------------------------------------------------------------
+
+_DRUG_DOSE_RE = re.compile(
+    r"\b([A-Za-zÀ-ỹ]+(?:\s+[A-Za-zÀ-ỹ]+)?)\s+(\d+(?:[.,]\d+)?)\s*(mg|g|mcg|µg|ml|unit|units|đơn vị)\b",
+    re.IGNORECASE,
+)
+
+_LAB_VALUE_EXTRACT_RE = re.compile(
+    r"\b(HbA1c|TSH|FT4|FT3|LDL|HDL|ALT|AST|GFR|Glucose|Creatinine|Cholesterol|Triglyceride)"
+    r"\s*[:\-]?\s*(\d+(?:[.,]\d+)?)\s*(%|mmol/L|mg/dL|µmol/L|umol/L|U/L|IU/L|g/dL|ng/mL|pmol/L|mIU/L)",
+    re.IGNORECASE,
+)
+
+_TREND_SECTIONS = {"treatment_timeline"}
+
+
+def _extract_drug_doses(text: str) -> list[tuple[str, float, str]]:
+    results = []
+    for m in _DRUG_DOSE_RE.finditer(text):
+        drug = m.group(1).lower().strip()
+        try:
+            dose = float(m.group(2).replace(",", "."))
+        except ValueError:
+            continue
+        unit = m.group(3).lower()
+        results.append((drug, dose, unit))
+    return results
+
+
+def _extract_lab_values(text: str) -> list[tuple[str, float, str]]:
+    results = []
+    for m in _LAB_VALUE_EXTRACT_RE.finditer(text):
+        name = m.group(1).lower().strip()
+        try:
+            val = float(m.group(2).replace(",", "."))
+        except ValueError:
+            continue
+        unit = m.group(3).lower()
+        results.append((name, val, unit))
+    return results
+
+
+def _check_classifier_consistency(
+    sections: list[SummarySection], conservative: bool,
 ) -> tuple[list[SummarySection], int]:
-    """
-    Cross-section consistency: if claims disagree on a disease classifier
-    (e.g. diabetes 'type 2' vs 'type 1'), keep the majority value and mark the
-    minority claims CONTRADICTED. Returns (updated_sections, contradiction_count).
-    Acts only when there is a clear majority, to avoid false positives.
-    """
     counts: dict[str, int] = {}
     for sec in sections:
         for c in sec.cited_claims:
@@ -138,6 +175,126 @@ def check_internal_consistency(
             new_claims.append(c)
         new_sections.append(sec.model_copy(update={"cited_claims": new_claims}))
     return new_sections, added
+
+
+def _check_dose_consistency(
+    sections: list[SummarySection], conservative: bool,
+) -> tuple[list[SummarySection], int]:
+    drug_doses: dict[str, dict[float, int]] = {}
+    for sec in sections:
+        if sec.section_id in _TREND_SECTIONS:
+            continue
+        for c in sec.cited_claims:
+            if c.is_structural or c.status == "CONTRADICTED":
+                continue
+            for drug, dose, unit in _extract_drug_doses(c.claim_text):
+                key = f"{drug}_{unit}"
+                drug_doses.setdefault(key, {})
+                drug_doses[key][dose] = drug_doses[key].get(dose, 0) + 1
+
+    # Find drugs with conflicting doses
+    conflict_drugs: dict[str, float] = {}
+    for key, dose_counts in drug_doses.items():
+        if len(dose_counts) >= 2:
+            conflict_drugs[key] = max(dose_counts, key=dose_counts.__getitem__)
+
+    if not conflict_drugs:
+        return sections, 0
+
+    added = 0
+    new_sections: list[SummarySection] = []
+    for sec in sections:
+        if sec.section_id in _TREND_SECTIONS:
+            new_sections.append(sec)
+            continue
+        new_claims: list[CitedClaim] = []
+        for c in sec.cited_claims:
+            if not c.is_structural and c.status != "CONTRADICTED":
+                for drug, dose, unit in _extract_drug_doses(c.claim_text):
+                    key = f"{drug}_{unit}"
+                    if key in conflict_drugs and dose != conflict_drugs[key]:
+                        c = c.model_copy(update={
+                            "status": "CONTRADICTED",
+                            "verifier_action": decide(
+                                c.model_copy(update={"status": "CONTRADICTED"}), conservative),
+                        })
+                        added += 1
+                        break
+            new_claims.append(c)
+        new_sections.append(sec.model_copy(update={"cited_claims": new_claims}))
+    return new_sections, added
+
+
+def _check_lab_value_consistency(
+    sections: list[SummarySection], conservative: bool,
+) -> tuple[list[SummarySection], int]:
+    lab_vals: dict[str, dict[float, int]] = {}
+    for sec in sections:
+        if sec.section_id in _TREND_SECTIONS:
+            continue
+        for c in sec.cited_claims:
+            if c.is_structural or c.status == "CONTRADICTED":
+                continue
+            for name, val, unit in _extract_lab_values(c.claim_text):
+                key = f"{name}_{unit}"
+                lab_vals.setdefault(key, {})
+                lab_vals[key][val] = lab_vals[key].get(val, 0) + 1
+
+    conflict_labs: dict[str, float] = {}
+    for key, val_counts in lab_vals.items():
+        if len(val_counts) >= 2:
+            conflict_labs[key] = max(val_counts, key=val_counts.__getitem__)
+
+    if not conflict_labs:
+        return sections, 0
+
+    added = 0
+    new_sections: list[SummarySection] = []
+    for sec in sections:
+        if sec.section_id in _TREND_SECTIONS:
+            new_sections.append(sec)
+            continue
+        new_claims: list[CitedClaim] = []
+        for c in sec.cited_claims:
+            if not c.is_structural and c.status != "CONTRADICTED":
+                for name, val, unit in _extract_lab_values(c.claim_text):
+                    key = f"{name}_{unit}"
+                    if key in conflict_labs and val != conflict_labs[key]:
+                        c = c.model_copy(update={
+                            "status": "CONTRADICTED",
+                            "verifier_action": decide(
+                                c.model_copy(update={"status": "CONTRADICTED"}), conservative),
+                        })
+                        added += 1
+                        break
+            new_claims.append(c)
+        new_sections.append(sec.model_copy(update={"cited_claims": new_claims}))
+    return new_sections, added
+
+
+def check_internal_consistency(
+    sections: list[SummarySection],
+    conservative: bool = True,
+) -> tuple[list[SummarySection], int]:
+    """
+    Multi-layer cross-section consistency checks:
+      1. Disease classifier disagreement (e.g. "type 1" vs "type 2")
+      2. Drug dose contradictions (same drug, different dose across sections)
+      3. Lab value contradictions (same test, different value — excludes treatment_timeline)
+    Returns (updated_sections, total_contradiction_count).
+    """
+    total = 0
+
+    sections, n = _check_classifier_consistency(sections, conservative)
+    total += n
+
+    sections, n = _check_dose_consistency(sections, conservative)
+    total += n
+
+    sections, n = _check_lab_value_consistency(sections, conservative)
+    total += n
+
+    return sections, total
 
 
 def verify_summary(

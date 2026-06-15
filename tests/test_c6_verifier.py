@@ -334,3 +334,120 @@ class TestNewMetrics:
         assert hasattr(metrics, "duplicate_claim_count")
         assert metrics.contradiction_count >= 0
 
+
+# ---------------------------------------------------------------------------
+# 2.3: Extended contradiction detection
+# ---------------------------------------------------------------------------
+
+class TestDoseContradiction:
+    """Drug dose contradictions across sections are flagged."""
+
+    def test_different_dose_same_drug_flagged(self):
+        sections = [
+            SummarySection(section_id="overview", cited_claims=[
+                CitedClaim(claim_text="Metformin 500 mg uống ngày", status="SUPPORTED"),
+            ]),
+            SummarySection(section_id="current_medications", cited_claims=[
+                CitedClaim(claim_text="Metformin 1000 mg uống 2 lần/ngày", status="SUPPORTED"),
+            ]),
+        ]
+        updated, count = check_internal_consistency(sections)
+        assert count >= 1
+        # Minority dose should be CONTRADICTED
+        statuses = [c.status for s in updated for c in s.cited_claims]
+        assert "CONTRADICTED" in statuses
+
+    def test_same_dose_no_contradiction(self):
+        sections = [
+            SummarySection(section_id="overview", cited_claims=[
+                CitedClaim(claim_text="Metformin 1000 mg uống ngày", status="SUPPORTED"),
+            ]),
+            SummarySection(section_id="current_medications", cited_claims=[
+                CitedClaim(claim_text="Metformin 1000 mg uống 2 lần/ngày", status="SUPPORTED"),
+            ]),
+        ]
+        updated, count = check_internal_consistency(sections)
+        assert count == 0
+
+    def test_treatment_timeline_excluded_from_dose_check(self):
+        sections = [
+            SummarySection(section_id="current_medications", cited_claims=[
+                CitedClaim(claim_text="Metformin 1000 mg uống ngày", status="SUPPORTED"),
+            ]),
+            SummarySection(section_id="treatment_timeline", cited_claims=[
+                CitedClaim(claim_text="Metformin 500 mg ban đầu, sau tăng lên 1000 mg", status="SUPPORTED"),
+            ]),
+        ]
+        updated, count = check_internal_consistency(sections)
+        assert count == 0
+
+
+class TestLabValueContradiction:
+    """Lab value contradictions across sections are flagged."""
+
+    def test_different_hba1c_values_flagged(self):
+        sections = [
+            SummarySection(section_id="overview", cited_claims=[
+                CitedClaim(claim_text="HbA1c: 9.2% tăng cao", status="SUPPORTED"),
+            ]),
+            SummarySection(section_id="abnormal_labs", cited_claims=[
+                CitedClaim(claim_text="HbA1c: 7.8% cải thiện", status="SUPPORTED"),
+            ]),
+        ]
+        updated, count = check_internal_consistency(sections)
+        assert count >= 1
+        statuses = [c.status for s in updated for c in s.cited_claims]
+        assert "CONTRADICTED" in statuses
+
+    def test_same_lab_value_no_contradiction(self):
+        sections = [
+            SummarySection(section_id="overview", cited_claims=[
+                CitedClaim(claim_text="HbA1c: 9.2% tăng cao", status="SUPPORTED"),
+            ]),
+            SummarySection(section_id="abnormal_labs", cited_claims=[
+                CitedClaim(claim_text="HbA1c: 9.2% bất thường", status="SUPPORTED"),
+            ]),
+        ]
+        updated, count = check_internal_consistency(sections)
+        # No lab contradiction (same value) — classifier check also shouldn't fire
+        lab_contradiction = sum(
+            1 for s in updated for c in s.cited_claims
+            if c.status == "CONTRADICTED"
+        )
+        assert lab_contradiction == 0
+
+    def test_treatment_timeline_excluded_from_lab_check(self):
+        sections = [
+            SummarySection(section_id="abnormal_labs", cited_claims=[
+                CitedClaim(claim_text="HbA1c: 9.2% tăng cao", status="SUPPORTED"),
+            ]),
+            SummarySection(section_id="treatment_timeline", cited_claims=[
+                CitedClaim(claim_text="HbA1c: 7.8% → 7.2% cải thiện dần", status="SUPPORTED"),
+            ]),
+        ]
+        updated, count = check_internal_consistency(sections)
+        assert count == 0
+
+
+class TestMultiLayerContradictionCombined:
+    """All contradiction layers work together without interfering."""
+
+    def test_classifier_and_dose_both_detected(self):
+        sections = [
+            SummarySection(section_id="overview", cited_claims=[
+                CitedClaim(claim_text="ĐTĐ type 2, Metformin 500 mg", status="SUPPORTED"),
+            ]),
+            SummarySection(section_id="diagnoses", cited_claims=[
+                CitedClaim(claim_text="ĐTĐ type 2 (E11.9)", status="SUPPORTED"),
+            ]),
+            SummarySection(section_id="current_medications", cited_claims=[
+                CitedClaim(claim_text="Metformin 1000 mg uống 2 lần/ngày", status="SUPPORTED"),
+            ]),
+            SummarySection(section_id="reason_for_visit", cited_claims=[
+                CitedClaim(claim_text="ĐTĐ type 1 tái khám", status="SUPPORTED"),
+            ]),
+        ]
+        updated, count = check_internal_consistency(sections)
+        # Should detect: 1 classifier contradiction (type 1 vs type 2) + 1 dose contradiction (500 vs 1000)
+        assert count >= 2
+

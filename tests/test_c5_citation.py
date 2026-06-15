@@ -332,3 +332,126 @@ class TestNoDuplicateClaims:
         claims = extract_claims(_section(content))
         texts = [c.claim_text.strip().lower() for c in claims]
         assert len(texts) == len(set(texts))
+
+
+# ---------------------------------------------------------------------------
+# 2.1: Patient info exact match & source priority
+# ---------------------------------------------------------------------------
+
+class TestPatientInfoExactMatch:
+
+    def test_patient_name_matched(self):
+        chunk = _chunk("P001-PATIENT-INFO", "patient_info",
+                       "Nguyễn Văn An, 55 tuổi, nam",
+                       full_name="Nguyễn Văn An", age=55, gender="nam")
+        claim = CitedClaim(claim_text="Bệnh nhân Nguyễn Văn An, 55 tuổi, nam", is_critical=False)
+        result = match_claim(claim, [chunk])
+        assert result.status == "SUPPORTED"
+        assert "P001-PATIENT-INFO" in result.citations
+
+    def test_patient_age_matched(self):
+        chunk = _chunk("P001-PATIENT-INFO", "patient_info",
+                       "Nguyễn Văn An, 55 tuổi, nam",
+                       full_name="Nguyễn Văn An", age=55, gender="nam")
+        claim = CitedClaim(claim_text="Bệnh nhân 55 tuổi nhập viện", is_critical=False)
+        result = match_claim(claim, [chunk])
+        assert result.status == "SUPPORTED"
+        assert "P001-PATIENT-INFO" in result.citations
+
+    def test_patient_info_preferred_over_dx_for_demographics(self):
+        """When both patient_info and DX match, patient_info should be cited first."""
+        patient_chunk = _chunk("P002-PATIENT-INFO", "patient_info",
+                               "Trần Thị Bình, 50 tuổi, nữ",
+                               full_name="Trần Thị Bình", age=50, gender="nữ")
+        dx_chunk = _chunk("P002-E003-DX-E11.9", "diagnoses",
+                          "Đái tháo đường type 2 không biến chứng (E11.9)",
+                          icd10_code="E11.9", diagnosis_name="Đái tháo đường type 2")
+        claim = CitedClaim(
+            claim_text="Bệnh nhân Trần Thị Bình, 50 tuổi, nữ, mắc đái tháo đường type 2",
+            is_critical=False,
+        )
+        result = match_claim(claim, [patient_chunk, dx_chunk])
+        assert result.status == "SUPPORTED"
+        assert result.citations[0] == "P002-PATIENT-INFO"
+        assert "P002-E003-DX-E11.9" in result.citations
+
+    def test_patient_info_no_match_when_name_absent(self):
+        chunk = _chunk("P001-PATIENT-INFO", "patient_info",
+                       "Nguyễn Văn An, 55 tuổi",
+                       full_name="Nguyễn Văn An", age=55)
+        claim = CitedClaim(claim_text="Bệnh nhân tái khám theo hẹn", is_critical=False)
+        result = match_claim(claim, [chunk])
+        assert result.status != "SUPPORTED" or "P001-PATIENT-INFO" not in result.citations
+
+
+class TestSourcePriority:
+
+    def test_labs_ranked_before_clinical_notes(self):
+        lab = _chunk("LAB-1", "labs", "HbA1c: 9.2%",
+                     test_name="HbA1c", value=9.2, unit="%")
+        note = _chunk("NOTE-1", "clinical_notes", "HbA1c 9.2% bất thường")
+        claim = CitedClaim(claim_text="HbA1c: 9.2% tăng cao", is_critical=True)
+        result = match_claim(claim, [note, lab])
+        assert result.citations[0] == "LAB-1"
+
+    def test_meds_ranked_before_notes(self):
+        med = _chunk("MED-1", "medications", "Metformin 1000 mg",
+                     drug_name="Metformin", strength="1000 mg")
+        note = _chunk("NOTE-1", "clinical_notes", "Metformin 1000 mg uống sau ăn")
+        claim = CitedClaim(claim_text="Metformin 1000 mg uống 2 lần/ngày", is_critical=True)
+        result = match_claim(claim, [note, med])
+        assert result.citations[0] == "MED-1"
+
+
+# ---------------------------------------------------------------------------
+# 2.2: Semantic matching
+# ---------------------------------------------------------------------------
+
+class TestSemanticMatching:
+
+    def test_unit_normalization_g_to_mg(self):
+        """1g should match 1000mg."""
+        chunk = _chunk("MED-MET", "medications",
+                       "Metformin 1000 mg uống sau ăn",
+                       drug_name="Metformin", strength="1000 mg")
+        claim = CitedClaim(claim_text="Metformin liều 1g uống ngày 2 lần", is_critical=True)
+        result = match_claim(claim, [chunk])
+        assert result.status == "SUPPORTED"
+
+    def test_unit_normalization_mg_to_g(self):
+        chunk = _chunk("MED-AMO", "medications",
+                       "Amoxicillin 500 mg",
+                       drug_name="Amoxicillin", strength="500 mg")
+        claim = CitedClaim(claim_text="Amoxicillin 0.5g uống 3 lần/ngày", is_critical=True)
+        result = match_claim(claim, [chunk])
+        assert result.status == "SUPPORTED"
+
+    def test_drug_synonym_match(self):
+        from src.c5_citation.evidence_matcher import _canonical_drug
+        assert _canonical_drug("Glucophage") == "metformin"
+        assert _canonical_drug("Acetaminophen") == "paracetamol"
+
+    def test_abbreviation_expansion(self):
+        from src.c5_citation.evidence_matcher import _expand_abbreviations
+        expanded = _expand_abbreviations("ĐTĐ type 2")
+        assert "đái tháo đường" in expanded
+
+    def test_semantic_match_with_abbreviation_in_lab(self):
+        chunk = _chunk("LAB-TSH", "labs", "TSH: 0.01 mIU/L",
+                       test_name="TSH", value=0.01, unit="mIU/L")
+        claim = CitedClaim(
+            claim_text="TSH: 0.01 mIU/L (giảm nặng)",
+            is_critical=True,
+        )
+        result = match_claim(claim, [chunk])
+        assert result.status == "SUPPORTED"
+
+    def test_different_units_no_false_match(self):
+        """500mg should not match 500g."""
+        chunk = _chunk("MED-1", "medications", "Drug X 500 mg",
+                       drug_name="Drug X", strength="500 mg")
+        claim = CitedClaim(claim_text="Drug X 500g uống ngày", is_critical=True)
+        result = match_claim(claim, [chunk])
+        # 500g = 500000mg ≠ 500mg, should NOT be exact/semantic match
+        if result.status == "SUPPORTED":
+            assert result.confidence_score < 0.9  # at most keyword overlap

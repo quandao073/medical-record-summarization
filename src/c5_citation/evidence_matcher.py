@@ -118,6 +118,168 @@ def _exact_match(claim_text: str, chunk: SourceChunk) -> bool:
             if "bmi" in ct:
                 return True
 
+    elif stype == "patient_info":
+        name = _norm(meta.get("full_name", ""))
+        age = str(meta.get("age", ""))
+        gender = _norm(meta.get("gender", ""))
+        if name and len(name) > 3 and name in ct:
+            return True
+        if age and age in ct and ("tuổi" in ct or "age" in ct):
+            return True
+        if gender and gender in ct:
+            return True
+
+    return False
+
+
+# ---------------------------------------------------------------------------
+# Source priority — prefer the most clinically appropriate source type
+# ---------------------------------------------------------------------------
+
+_SOURCE_PRIORITY: dict[str, int] = {
+    "patient_info": 10,
+    "labs": 9,
+    "medications": 8,
+    "diagnoses": 7,
+    "vitals": 6,
+    "allergies": 5,
+    "clinical_notes": 3,
+}
+
+
+def _sort_by_source_priority(source_ids: list[str], chunks: list[SourceChunk]) -> list[str]:
+    chunk_map = {c.source_id: c for c in chunks}
+    return sorted(
+        source_ids,
+        key=lambda sid: _SOURCE_PRIORITY.get(
+            chunk_map[sid].source_type if sid in chunk_map else "", 0
+        ),
+        reverse=True,
+    )
+
+
+# ---------------------------------------------------------------------------
+# Semantic matching — unit normalization, drug synonyms, abbreviations
+# ---------------------------------------------------------------------------
+
+_UNIT_TO_MG: dict[str, float] = {
+    "g": 1000.0, "mg": 1.0, "mcg": 0.001, "µg": 0.001,
+}
+
+_UNIT_TO_ML: dict[str, float] = {
+    "l": 1000.0, "dl": 100.0, "ml": 1.0,
+}
+
+
+def _normalize_strength_mg(strength: str) -> float | None:
+    s = _norm(strength)
+    for unit, factor in sorted(_UNIT_TO_MG.items(), key=lambda x: -len(x[0])):
+        if s.endswith(unit):
+            try:
+                return float(s[: -len(unit)].strip().replace(",", ".")) * factor
+            except ValueError:
+                return None
+    return None
+
+
+_DRUG_SYNONYMS: dict[str, set[str]] = {
+    "aspirin": {"acetylsalicylic acid", "axit acetylsalicylic", "asa"},
+    "paracetamol": {"acetaminophen", "tylenol"},
+    "insulin nph": {"insulin isophane"},
+    "metformin": {"glucophage"},
+    "amlodipine": {"norvasc"},
+    "losartan": {"cozaar"},
+    "atorvastatin": {"lipitor"},
+    "omeprazole": {"prilosec"},
+    "pantoprazole": {"protonix"},
+    "esomeprazole": {"nexium"},
+    "amoxicillin": {"amoxil"},
+    "clarithromycin": {"biaxin"},
+}
+
+_SYNONYM_REVERSE: dict[str, str] = {}
+for _canonical, _alts in _DRUG_SYNONYMS.items():
+    for _alt in _alts:
+        _SYNONYM_REVERSE[_alt] = _canonical
+    _SYNONYM_REVERSE[_canonical] = _canonical
+
+
+def _canonical_drug(name: str) -> str:
+    n = _norm(name)
+    return _SYNONYM_REVERSE.get(n, n)
+
+
+_ABBREVIATIONS: dict[str, str] = {
+    "ha": "huyết áp",
+    "đtđ": "đái tháo đường",
+    "tha": "tăng huyết áp",
+    "rlmm": "rối loạn mỡ máu",
+    "tsh": "thyroid stimulating hormone",
+    "ft4": "free thyroxine",
+    "ft3": "free triiodothyronine",
+    "hba1c": "hemoglobin glycated",
+    "ldl": "low-density lipoprotein",
+    "hdl": "high-density lipoprotein",
+    "alt": "alanine aminotransferase",
+    "ast": "aspartate aminotransferase",
+    "gfr": "glomerular filtration rate",
+    "bmi": "body mass index",
+    "spo2": "oxygen saturation",
+}
+
+
+def _expand_abbreviations(text: str) -> str:
+    words = _norm(text).split()
+    expanded = []
+    for w in words:
+        clean = _PUNCT_RE.sub("", w)
+        if clean in _ABBREVIATIONS:
+            expanded.append(_ABBREVIATIONS[clean])
+        expanded.append(w)
+    return " ".join(expanded)
+
+
+def _semantic_match(claim_text: str, chunk: SourceChunk) -> bool:
+    ct = _norm(claim_text)
+    meta = chunk.metadata
+    stype = chunk.source_type
+
+    if stype == "medications":
+        drug = meta.get("drug_name", "")
+        claim_canonical = _canonical_drug(ct)
+        drug_canonical = _canonical_drug(drug)
+        if drug_canonical and drug_canonical in claim_canonical:
+            strength = meta.get("strength", "")
+            if strength:
+                chunk_mg = _normalize_strength_mg(strength)
+                for token in ct.split():
+                    claim_mg = _normalize_strength_mg(token)
+                    if claim_mg is not None and chunk_mg is not None:
+                        if abs(claim_mg - chunk_mg) < 0.01:
+                            return True
+
+    elif stype == "labs":
+        test_name = _norm(meta.get("test_name", ""))
+        test_short = test_name.split("(")[0].strip()
+        expanded_claim = _expand_abbreviations(claim_text)
+        expanded_test = _expand_abbreviations(test_name)
+
+        name_match = (
+            (test_short and len(test_short) > 2 and test_short in expanded_claim)
+            or (expanded_test and expanded_test in expanded_claim)
+        )
+        if name_match:
+            val = meta.get("value")
+            if val is not None and any(v in ct for v in _value_strings(val)):
+                return True
+
+    elif stype == "diagnoses":
+        dname = _norm(meta.get("diagnosis_name", ""))
+        expanded_claim = _expand_abbreviations(claim_text)
+        expanded_dname = _expand_abbreviations(dname)
+        if expanded_dname and len(expanded_dname) > 5 and expanded_dname in expanded_claim:
+            return True
+
     return False
 
 
@@ -220,6 +382,7 @@ def match_claim(
 
     exact_ids: list[str] = []
     value_ids: list[str] = []
+    semantic_ids: list[str] = []
     high_overlap_ids: list[str] = []
     allergy_review_ids: list[str] = []
     allergy_exact_ids: list[str] = []
@@ -245,19 +408,27 @@ def match_claim(
             exact_ids.append(chunk.source_id)
         elif _value_match(claim.claim_text, chunk):
             value_ids.append(chunk.source_id)
+        elif _semantic_match(claim.claim_text, chunk):
+            semantic_ids.append(chunk.source_id)
         elif _high_content_overlap(claim.claim_text, chunk.content):
             high_overlap_ids.append(chunk.source_id)
         elif _keyword_overlap(claim.claim_text, chunk.content, min_overlap=min_keyword_overlap):
             keyword_ids.append(chunk.source_id)
 
-    strong = _dedup(exact_ids + allergy_exact_ids + value_ids)
+    strong = _dedup(_sort_by_source_priority(exact_ids + allergy_exact_ids + value_ids, chunks))
     if strong:
         conf = 1.0 if (exact_ids or allergy_exact_ids) else 0.85
         return claim.model_copy(update={
             "status": "SUPPORTED", "citations": strong[:5], "confidence_score": conf})
+    if semantic_ids:
+        return claim.model_copy(update={
+            "status": "SUPPORTED",
+            "citations": _dedup(_sort_by_source_priority(semantic_ids, chunks))[:5],
+            "confidence_score": 0.9})
     if high_overlap_ids:
         return claim.model_copy(update={
-            "status": "SUPPORTED", "citations": _dedup(high_overlap_ids)[:5],
+            "status": "SUPPORTED",
+            "citations": _dedup(_sort_by_source_priority(high_overlap_ids, chunks))[:5],
             "confidence_score": 0.8})
     if allergy_review_ids:
         return claim.model_copy(update={
