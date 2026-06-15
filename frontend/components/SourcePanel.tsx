@@ -1,7 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import type { CitedClaim, ClaimStatus, SourceChunk } from "@/lib/types";
-import { SOURCE_TYPE_LABELS, STATUS_COLORS, STATUS_DISPLAY_NAMES, STATUS_LABELS, STATUS_TOOLTIPS } from "@/lib/types";
+import { SOURCE_TYPE_LABELS, STATUS_TOOLTIPS } from "@/lib/types";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -28,12 +29,22 @@ function MetaRow({ label, value }: { label: string; value: unknown }) {
   );
 }
 
-const VERIFICATION_LABELS: Record<string, { text: string; cls: string }> = {
-  PENDING:    { text: "⏳ Chờ bác sĩ duyệt",  cls: "bg-amber-50 text-amber-700 border-amber-200" },
-  CONFIRMED:  { text: "✅ Bác sĩ đã xác nhận", cls: "bg-green-50 text-green-700 border-green-200" },
-  UNVERIFIED: { text: "❓ Chưa xác nhận",      cls: "bg-gray-50 text-gray-600 border-gray-200"   },
-  INCORRECT:  { text: "❌ Không chính xác",    cls: "bg-red-50 text-red-700 border-red-200"      },
+const STATUS_DOCTOR_LABELS: Record<string, { icon: string; text: string; cls: string; explanation: string }> = {
+  SUPPORTED:           { icon: "✅", text: "Đã có nguồn xác nhận",       cls: "bg-green-50 text-green-700 border-green-200",  explanation: "Thông tin này được xác nhận bởi nguồn dữ liệu trong hồ sơ." },
+  PARTIALLY_SUPPORTED: { icon: "⚠️", text: "Có nguồn hỗ trợ một phần",   cls: "bg-amber-50 text-amber-700 border-amber-200",  explanation: "Nguồn trong hồ sơ chỉ hỗ trợ một phần thông tin này. Một số chi tiết chưa được xác nhận đầy đủ." },
+  LOW_CONFIDENCE:      { icon: "⚠️", text: "Nguồn chưa đủ rõ ràng",      cls: "bg-orange-50 text-orange-700 border-orange-200", explanation: "Có nguồn liên quan nhưng chưa đủ rõ ràng để xác nhận thông tin." },
+  UNSUPPORTED:         { icon: "❓", text: "Chưa tìm thấy nguồn",        cls: "bg-red-50 text-red-700 border-red-200",        explanation: "Không tìm thấy nguồn hỗ trợ thông tin này trong hồ sơ." },
+  NO_CITATION:         { icon: "➖", text: "Chưa tìm thấy nguồn",        cls: "bg-gray-50 text-gray-600 border-gray-200",     explanation: "Không tìm thấy nguồn dữ liệu cho thông tin này." },
+  CONTRADICTED:        { icon: "❌", text: "Có mâu thuẫn trong hồ sơ",   cls: "bg-red-50 text-red-700 border-red-300",        explanation: "Nguồn dữ liệu trong hồ sơ mâu thuẫn với thông tin này." },
+  NEED_REVIEW:         { icon: "🔍", text: "Cần bác sĩ kiểm tra",       cls: "bg-purple-50 text-purple-700 border-purple-200", explanation: "Thông tin này cần bác sĩ xác nhận trước khi tin cậy." },
 };
+
+const CONFIDENCE_LABELS: Record<string, string> = {};
+function confidenceLabel(score: number): string {
+  if (score >= 0.8) return "Cao";
+  if (score >= 0.5) return "Trung bình";
+  return "Thấp";
+}
 
 // ─── Props ────────────────────────────────────────────────────────────────────
 
@@ -44,6 +55,7 @@ interface Props {
   loading: boolean;
   error: string | null;
   onClose: () => void;
+  techMode?: boolean;
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -55,11 +67,14 @@ export default function SourcePanel({
   loading,
   error,
   onClose,
+  techMode,
 }: Props) {
+  const [showTechDetails, setShowTechDetails] = useState(false);
+
   if (!sourceId) return null;
 
-  const verif = claimContext
-    ? VERIFICATION_LABELS[claimContext.verification_status] ?? VERIFICATION_LABELS.PENDING
+  const statusInfo = claimContext
+    ? STATUS_DOCTOR_LABELS[claimContext.status] ?? STATUS_DOCTOR_LABELS.NEED_REVIEW
     : null;
 
   return (
@@ -67,8 +82,10 @@ export default function SourcePanel({
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b bg-gray-50">
         <div>
-          <h3 className="font-semibold text-gray-800 text-sm">Nguồn gốc dữ liệu</h3>
-          <p className="text-xs text-gray-400 mt-0.5">Citation Grounding</p>
+          <h3 className="font-semibold text-gray-800 text-sm">Nguồn tham chiếu</h3>
+          {techMode && (
+            <p className="text-xs text-gray-400 mt-0.5">Citation Grounding</p>
+          )}
         </div>
         <button
           onClick={onClose}
@@ -79,98 +96,76 @@ export default function SourcePanel({
       </div>
 
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {/* Source ID */}
-        <div className="font-mono text-xs bg-blue-50 text-blue-700 px-3 py-2 rounded-lg break-all border border-blue-100">
-          {sourceId}
-        </div>
 
         {/* ── Claim context ─────────────────────────────────────────────────── */}
-        {claimContext && (
-          <div className="rounded-xl border border-indigo-100 bg-indigo-50 p-3 space-y-2.5">
-            <p className="text-xs font-semibold text-indigo-700 uppercase tracking-wide">
-              Claim đã tham chiếu source này
+        {claimContext && statusInfo && (
+          <div className="rounded-xl border border-gray-100 bg-gray-50 p-3 space-y-2.5">
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+              Thông tin đang kiểm tra
             </p>
 
-            {/* Claim text — strip any known prefix before display */}
-            <p className="text-sm text-gray-800 bg-white rounded-lg px-3 py-2 border border-indigo-100 leading-relaxed italic">
+            {/* Claim text */}
+            <p className="text-sm text-gray-800 bg-white rounded-lg px-3 py-2 border border-gray-200 leading-relaxed italic">
               &ldquo;{stripClaimPrefix(claimContext.claim_text)}&rdquo;
             </p>
 
-            {/* Combined status + verification (issue 5) */}
-            <div className="flex flex-wrap gap-2 items-center">
-              {/* Primary combined badge — maps status + verification into one clear label */}
-              {claimContext.status === "SUPPORTED" ? (
-                <span
-                  title={STATUS_TOOLTIPS[claimContext.status as ClaimStatus]}
-                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800 border border-green-300"
-                >
-                  ✓ Đã có nguồn
-                  {verif && (
-                    <span className="text-green-600 font-normal">· {verif.text.replace(/^[^ ]+ /, "")}</span>
-                  )}
-                </span>
-              ) : (
-                <span
-                  title={STATUS_TOOLTIPS[claimContext.status as ClaimStatus]}
-                  className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold border ${
-                    STATUS_COLORS[claimContext.status as ClaimStatus]
-                  }`}
-                >
-                  {STATUS_LABELS[claimContext.status as ClaimStatus]}
-                  {STATUS_DISPLAY_NAMES[claimContext.status as ClaimStatus]}
-                </span>
-              )}
+            {/* Status badge — doctor-friendly */}
+            <div className="space-y-2">
+              <p className="text-xs font-semibold text-gray-500">Kết luận kiểm tra:</p>
+              <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border ${statusInfo.cls}`}>
+                {statusInfo.icon} {statusInfo.text}
+              </span>
 
               {/* Critical indicator */}
               {claimContext.is_critical && (
-                <span className="px-2 py-1 rounded-full text-xs font-medium bg-red-50 text-red-700 border border-red-200">
-                  🔴 Critical
+                <span className="ml-2 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-50 text-red-700 border border-red-200">
+                  Mức độ quan trọng: Cao
                 </span>
               )}
 
-              {/* Confidence score */}
+              {/* Confidence — doctor-friendly label instead of raw number */}
               {claimContext.confidence_score !== null && claimContext.confidence_score !== undefined && (
-                <span className="px-2 py-1 rounded-full text-xs font-mono bg-gray-100 text-gray-600 border border-gray-200">
-                  conf: {claimContext.confidence_score.toFixed(2)}
-                </span>
+                <div className="text-xs text-gray-500">
+                  Mức độ tin cậy:{" "}
+                  <span className={`font-medium ${
+                    claimContext.confidence_score >= 0.8 ? "text-green-600" :
+                    claimContext.confidence_score >= 0.5 ? "text-amber-600" :
+                    "text-red-600"
+                  }`}>
+                    {confidenceLabel(claimContext.confidence_score)}
+                  </span>
+                  {techMode && (
+                    <span className="ml-1 font-mono text-gray-400">
+                      ({claimContext.confidence_score.toFixed(2)})
+                    </span>
+                  )}
+                </div>
               )}
             </div>
 
-            {/* Verification status — only shown if NOT SUPPORTED (SUPPORTED already combined above) */}
-            {verif && claimContext.status !== "SUPPORTED" && (
-              <span className={`inline-flex text-xs px-2 py-1 rounded-lg border ${verif.cls}`}>
-                {verif.text}
-              </span>
-            )}
-
-            {/* Status explanation line */}
+            {/* Explanation */}
             <p className="text-xs text-gray-500 leading-relaxed">
-              {claimContext.status === "SUPPORTED" && "Claim này được hỗ trợ đầy đủ bởi nguồn dữ liệu bên dưới."}
-              {claimContext.status === "PARTIALLY_SUPPORTED" && "Nguồn này chỉ hỗ trợ một phần claim. Một số chi tiết chưa được xác nhận đầy đủ."}
-              {claimContext.status === "LOW_CONFIDENCE" && "Nguồn có liên quan nhưng chưa đủ rõ ràng để xác nhận claim."}
-              {claimContext.status === "NEED_REVIEW" && "Claim cần bác sĩ hoặc bệnh nhân xác nhận trước khi tin cậy."}
-              {claimContext.status === "NO_CITATION" && "Không tìm thấy nguồn dữ liệu hỗ trợ claim này."}
-              {claimContext.status === "UNSUPPORTED" && "Claim không có nguồn hỗ trợ trong dữ liệu được cung cấp."}
-              {claimContext.status === "CONTRADICTED" && "Nguồn dữ liệu mâu thuẫn với nội dung claim này."}
+              {statusInfo.explanation}
             </p>
 
-            {/* All citations for this claim (issue 4) */}
+            {/* All citations for this claim */}
             {claimContext.citations.length > 1 && (
               <div>
-                <p className="text-xs font-semibold text-indigo-600 mb-1">
-                  Claim này có {claimContext.citations.length} nguồn:
+                <p className="text-xs font-semibold text-gray-500 mb-1">
+                  Thông tin này có {claimContext.citations.length} nguồn liên quan:
                 </p>
                 <div className="flex flex-wrap gap-1">
                   {claimContext.citations.map((sid) => (
                     <span
                       key={sid}
-                      className={`font-mono text-xs px-2 py-0.5 rounded border ${
+                      className={`text-xs px-2 py-0.5 rounded border ${
                         sid === sourceId
                           ? "bg-blue-100 text-blue-700 border-blue-300 font-semibold"
                           : "bg-gray-50 text-gray-500 border-gray-200"
                       }`}
                     >
-                      {sid === sourceId ? "► " : ""}{sid.split("-").slice(-2).join("-")}
+                      {sid === sourceId ? "► " : ""}
+                      {techMode ? sid.split("-").slice(-2).join("-") : `Nguồn ${claimContext.citations.indexOf(sid) + 1}`}
                     </span>
                   ))}
                 </div>
@@ -196,33 +191,38 @@ export default function SourcePanel({
         {/* ── Chunk data ────────────────────────────────────────────────────── */}
         {chunk && !loading && (
           <>
-            {/* Type + Date */}
-            <div className="flex gap-2 flex-wrap">
-              <span className="px-2 py-1 bg-indigo-50 text-indigo-700 text-xs rounded-full border border-indigo-200 font-medium">
-                {SOURCE_TYPE_LABELS[chunk.source_type] ?? chunk.source_type}
-              </span>
-              {chunk.date && (
-                <span className="px-2 py-1 bg-gray-50 text-gray-600 text-xs rounded-full border border-gray-200">
-                  {chunk.date}
+            {/* Source type + Date — doctor-friendly */}
+            <div>
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+                Nguồn trong hồ sơ
+              </p>
+              <div className="flex gap-2 flex-wrap">
+                <span className="px-2 py-1 bg-indigo-50 text-indigo-700 text-xs rounded-full border border-indigo-200 font-medium">
+                  {SOURCE_TYPE_LABELS[chunk.source_type] ?? chunk.source_type}
                 </span>
-              )}
+                {chunk.date && (
+                  <span className="px-2 py-1 bg-gray-50 text-gray-600 text-xs rounded-full border border-gray-200">
+                    {chunk.date}
+                  </span>
+                )}
+              </div>
             </div>
 
-            {/* Raw content */}
+            {/* Content */}
             <div>
               <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">
-                Nội dung gốc
+                Nội dung trong hồ sơ
               </p>
               <p className="text-base text-gray-800 bg-gray-50 rounded-lg p-3 border border-gray-200 leading-relaxed whitespace-pre-line">
                 {chunk.content}
               </p>
             </div>
 
-            {/* Metadata */}
+            {/* Metadata — shown as "Thông tin chi tiết" in doctor mode */}
             {Object.keys(chunk.metadata).length > 0 && (
               <div>
                 <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
-                  Metadata
+                  Thông tin chi tiết
                 </p>
                 <div className="space-y-1.5 bg-gray-50 rounded-lg p-3 border border-gray-200">
                   {Object.entries(chunk.metadata).map(([k, v]) => (
@@ -232,12 +232,27 @@ export default function SourcePanel({
               </div>
             )}
 
-            {/* IDs */}
-            <div className="space-y-1 pt-1 border-t border-gray-100">
-              <MetaRow label="source_id"    value={chunk.source_id} />
-              <MetaRow label="patient_id"   value={chunk.patient_id} />
-              <MetaRow label="encounter_id" value={chunk.encounter_id} />
-            </div>
+            {/* Technical details toggle */}
+            {!techMode && (
+              <button
+                onClick={() => setShowTechDetails((v) => !v)}
+                className="text-xs text-gray-400 hover:text-indigo-600 transition flex items-center gap-1"
+              >
+                {showTechDetails ? "▼ Ẩn thông tin kỹ thuật" : "▶ Hiện thông tin kỹ thuật"}
+              </button>
+            )}
+
+            {/* Technical IDs — always shown in techMode, togglable otherwise */}
+            {(techMode || showTechDetails) && (
+              <div className="space-y-1 pt-1 border-t border-gray-100">
+                <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">
+                  Thông tin kỹ thuật
+                </p>
+                <MetaRow label="source_id"    value={chunk.source_id} />
+                <MetaRow label="patient_id"   value={chunk.patient_id} />
+                <MetaRow label="encounter_id" value={chunk.encounter_id} />
+              </div>
+            )}
           </>
         )}
       </div>

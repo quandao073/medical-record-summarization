@@ -69,10 +69,10 @@ function InlineBadge({
 const CLAIM_BADGE: Partial<Record<ClaimStatus, { text: string; cls: string }>> = {
   // PARTIALLY_SUPPORTED → no badge (only colored underline + hover tooltip)
   // LOW_CONFIDENCE      → no badge (only colored underline + hover tooltip)
-  UNSUPPORTED:         { text: "Cần xác minh",  cls: "bg-red-100 text-red-700 border border-red-300" },
-  NO_CITATION:         { text: "Chưa có nguồn", cls: "bg-gray-100 text-gray-600 border border-gray-300" },
-  CONTRADICTED:        { text: "Mâu thuẫn",     cls: "bg-red-200 text-red-800 border border-red-400" },
-  NEED_REVIEW:         { text: "Cần xem xét",   cls: "bg-purple-100 text-purple-700 border border-purple-300" },
+  UNSUPPORTED:         { text: "Chưa tìm thấy nguồn",     cls: "bg-red-100 text-red-700 border border-red-300" },
+  NO_CITATION:         { text: "Chưa tìm thấy nguồn",     cls: "bg-gray-100 text-gray-600 border border-gray-300" },
+  CONTRADICTED:        { text: "Có mâu thuẫn trong hồ sơ", cls: "bg-red-200 text-red-800 border border-red-400" },
+  NEED_REVIEW:         { text: "Cần bác sĩ kiểm tra",     cls: "bg-purple-100 text-purple-700 border border-purple-300" },
 };
 
 // ─── Single hoverable claim span ──────────────────────────────────────────────

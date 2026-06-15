@@ -101,23 +101,23 @@ export const STATUS_COLORS: Record<ClaimStatus, string> = {
 
 /** Human-readable display names — used in headers, panels, and tooltips */
 export const STATUS_DISPLAY_NAMES: Record<ClaimStatus, string> = {
-  SUPPORTED:           "Đã có nguồn",
-  PARTIALLY_SUPPORTED: "Hỗ trợ một phần",
-  LOW_CONFIDENCE:      "Độ tin cậy thấp",
-  UNSUPPORTED:         "Cần xác minh",
-  NO_CITATION:         "Chưa có nguồn",
-  CONTRADICTED:        "Mâu thuẫn",
-  NEED_REVIEW:         "Cần xem xét",
+  SUPPORTED:           "Đã có nguồn xác nhận",
+  PARTIALLY_SUPPORTED: "Có nguồn hỗ trợ một phần",
+  LOW_CONFIDENCE:      "Nguồn chưa đủ rõ ràng",
+  UNSUPPORTED:         "Chưa tìm thấy nguồn",
+  NO_CITATION:         "Chưa tìm thấy nguồn trong hồ sơ",
+  CONTRADICTED:        "Có mâu thuẫn trong hồ sơ",
+  NEED_REVIEW:         "Cần bác sĩ kiểm tra",
 };
 
 export const STATUS_TOOLTIPS: Record<ClaimStatus, string> = {
-  SUPPORTED:           "Khớp chính xác với dữ liệu nguồn",
-  PARTIALLY_SUPPORTED: "Hỗ trợ một phần — khớp từ khóa, nên xem lại nguồn gốc",
-  LOW_CONFIDENCE:      "Tin cậy thấp — không đủ bằng chứng rõ ràng",
-  UNSUPPORTED:         "Không tìm thấy bằng chứng hỗ trợ",
-  NO_CITATION:         "Không tìm thấy nguồn — cần xác minh",
-  CONTRADICTED:        "Mâu thuẫn với dữ liệu nguồn",
-  NEED_REVIEW:         "Cần xem xét thêm",
+  SUPPORTED:           "Thông tin này được xác nhận bởi nguồn trong hồ sơ",
+  PARTIALLY_SUPPORTED: "Nguồn hỗ trợ một phần — nên xem lại nguồn tham chiếu",
+  LOW_CONFIDENCE:      "Có nguồn liên quan nhưng chưa đủ rõ ràng",
+  UNSUPPORTED:         "Chưa tìm thấy nguồn hỗ trợ trong hồ sơ",
+  NO_CITATION:         "Chưa tìm thấy nguồn tham chiếu",
+  CONTRADICTED:        "Có mâu thuẫn với dữ liệu trong hồ sơ",
+  NEED_REVIEW:         "Cần bác sĩ kiểm tra thông tin này",
 };
 
 export const STATUS_LABELS: Record<ClaimStatus, string> = {

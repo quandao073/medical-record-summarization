@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Medical Record Summarization",
-  description: "Citation-grounded clinical summary demo",
+  title: "Tóm tắt bệnh án thông minh",
+  description: "Hỗ trợ bác sĩ đọc nhanh hồ sơ bệnh nhân",
 };
 
 export default function RootLayout({

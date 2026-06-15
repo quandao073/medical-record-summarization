@@ -56,6 +56,9 @@ export default function HomePage() {
   const [flagText, setFlagText]         = useState("");
   const [flagSubmitted, setFlagSubmitted] = useState(false);
 
+  // ─ Technical mode toggle
+  const [techMode, setTechMode] = useState(false);
+
   // ─ Source panel
   const [activeId, setActiveId]       = useState<string | null>(null);
   const [chunk, setChunk]             = useState<SourceChunk | null>(null);
@@ -79,13 +82,21 @@ export default function HomePage() {
 
   const abortRef = useRef<AbortController | null>(null);
 
-  const PIPELINE_STAGES = [
-    "C1: Xử lý EHR...",
-    "C2: Tạo chunks...",
-    "C3: Lọc nguồn theo section...",
-    "LLM: Tóm tắt 9 sections...",
-    "C5/C6: Xác minh nguồn gốc...",
-  ];
+  const PIPELINE_STAGES = techMode
+    ? [
+        "C1: Xử lý EHR...",
+        "C2: Tạo chunks...",
+        "C3: Lọc nguồn theo section...",
+        "LLM: Tóm tắt 9 sections...",
+        "C5/C6: Xác minh nguồn gốc...",
+      ]
+    : [
+        "Đang đọc hồ sơ bệnh nhân...",
+        "Đang phân tích dữ liệu...",
+        "Đang lọc thông tin theo chuyên mục...",
+        "Đang tạo bản tóm tắt...",
+        "Đang xác minh nguồn tham chiếu...",
+      ];
 
   // ─ Init: health check + patient list
   useEffect(() => {
@@ -233,9 +244,9 @@ export default function HomePage() {
             <span className="text-2xl">🏥</span>
             <div>
               <p className="font-bold text-gray-800 text-sm leading-tight">
-                Medical Record Summarization
+                Tóm tắt bệnh án thông minh
               </p>
-              <p className="text-xs text-gray-400">Citation-grounded PoC</p>
+              <p className="text-xs text-gray-400">Hỗ trợ bác sĩ đọc nhanh hồ sơ bệnh nhân</p>
             </div>
           </div>
 
@@ -253,28 +264,44 @@ export default function HomePage() {
             </select>
           </div>
 
-          {/* Model selector */}
-          <div className="flex items-center gap-1.5">
-            <label className="text-xs text-gray-500 font-medium">Model</label>
-            <select
-              value={model}
-              onChange={(e) => setModel(e.target.value)}
-              className="border border-gray-300 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white"
-            >
-              <option value="gpt-4o-mini">gpt-4o-mini</option>
-              <option value="gpt-4o">gpt-4o</option>
-            </select>
-          </div>
+          {/* Model selector — technical mode only */}
+          {techMode && (
+            <div className="flex items-center gap-1.5">
+              <label className="text-xs text-gray-500 font-medium">Model</label>
+              <select
+                value={model}
+                onChange={(e) => setModel(e.target.value)}
+                className="border border-gray-300 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white"
+              >
+                <option value="gpt-4o-mini">gpt-4o-mini</option>
+                <option value="gpt-4o">gpt-4o</option>
+              </select>
+            </div>
+          )}
 
           {/* Buttons */}
           <div className="flex gap-2 ml-auto">
+            {/* Technical mode toggle */}
             <button
-              onClick={handleClearCache}
-              disabled={loading}
-              className="px-3 py-1.5 text-sm rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-50 disabled:opacity-40 transition"
+              onClick={() => setTechMode((v) => !v)}
+              className={`px-3 py-1.5 text-sm rounded-lg border transition ${
+                techMode
+                  ? "border-indigo-300 bg-indigo-50 text-indigo-700"
+                  : "border-gray-300 text-gray-500 hover:bg-gray-50"
+              }`}
+              title={techMode ? "Đang hiện thông tin kỹ thuật" : "Hiện thông tin kỹ thuật"}
             >
-              Xóa cache
+              {techMode ? "🔧 Kỹ thuật" : "🔧"}
             </button>
+            {techMode && (
+              <button
+                onClick={handleClearCache}
+                disabled={loading}
+                className="px-3 py-1.5 text-sm rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-50 disabled:opacity-40 transition"
+              >
+                Xóa cache
+              </button>
+            )}
             <button
               onClick={() => handleGenerate(false)}
               disabled={loading}
@@ -389,7 +416,7 @@ export default function HomePage() {
             <p className="text-5xl mb-4">📋</p>
             <p className="text-lg font-medium text-gray-500">Chọn bệnh nhân và nhấn Tạo tóm tắt</p>
             <p className="text-sm mt-1">
-              Pipeline sẽ chạy C1→C2→C3→LLM→C5/C6 và trả về tóm tắt có nguồn gốc xác minh
+              Hệ thống sẽ đọc hồ sơ, tạo bản tóm tắt và xác minh nguồn tham chiếu cho từng thông tin
             </p>
           </div>
         )}
@@ -404,15 +431,20 @@ export default function HomePage() {
                   Tóm tắt bệnh án — {summary.patient_id}
                 </h1>
                 <p className="text-xs text-gray-400 mt-0.5">
-                  {new Date(summary.created_at).toLocaleString("vi-VN")} ·{" "}
-                  prompt: {summary.prompt_version}
+                  {new Date(summary.created_at).toLocaleString("vi-VN")}
+                  {techMode && <> · prompt: {summary.prompt_version}</>}
                 </p>
               </div>
-              {summary._from_cache && (
-                <span className="px-2 py-1 bg-amber-50 text-amber-600 text-xs rounded-full border border-amber-200">
-                  Từ cache
+              <div className="flex items-center gap-2">
+                <span className="px-3 py-1 bg-amber-50 text-amber-700 text-xs rounded-full border border-amber-200 font-medium">
+                  📝 Bản nháp AI — chưa được bác sĩ xác nhận
                 </span>
-              )}
+                {techMode && summary._from_cache && (
+                  <span className="px-2 py-1 bg-gray-100 text-gray-500 text-xs rounded-full border border-gray-200">
+                    Từ cache
+                  </span>
+                )}
+              </div>
             </div>
 
             {/* Metrics */}
@@ -420,6 +452,7 @@ export default function HomePage() {
               metrics={summary.metrics}
               fromCache={summary._from_cache ?? false}
               model={summary.model_version}
+              techMode={techMode}
             />
 
             {/* Flag bad output */}
@@ -475,7 +508,7 @@ export default function HomePage() {
 
             {/* Hint for citations */}
             <p className="text-xs text-gray-400 italic">
-              Hover vào thông tin để xem nguồn gốc dữ liệu. Màu xanh = có nguồn, vàng = khớp một phần, đỏ = chưa xác minh được nguồn.
+              Di chuột vào thông tin để xem nguồn tham chiếu. Màu xanh = có nguồn xác nhận, vàng = nguồn hỗ trợ một phần, đỏ = chưa tìm thấy nguồn.
             </p>
 
             {/* Sections — clinical_alerts first, then rest */}
@@ -502,6 +535,7 @@ export default function HomePage() {
         loading={chunkLoading}
         error={chunkError}
         onClose={() => { setActiveId(null); setChunk(null); setClaimContext(null); }}
+        techMode={techMode}
       />
     </div>
   );

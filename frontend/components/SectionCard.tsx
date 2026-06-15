@@ -74,17 +74,17 @@ export default function SectionCard({
             <span className="text-gray-400">{allCitations.length} nguồn</span>
             {nSupported > 0 && (
               <span className="px-2 py-0.5 rounded-full bg-green-50 text-green-700 border border-green-200 font-medium whitespace-nowrap">
-                {nSupported} đã có nguồn
+                {nSupported} có nguồn xác nhận
               </span>
             )}
             {nLowConf > 0 && (
               <span className="px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200 font-medium whitespace-nowrap">
-                {nLowConf} hỗ trợ một phần
+                {nLowConf} nguồn hỗ trợ một phần
               </span>
             )}
             {nNeedsAttention > 0 && (
               <span className="px-2 py-0.5 rounded-full bg-red-50 text-red-700 border border-red-200 font-medium whitespace-nowrap">
-                {nNeedsAttention} cần xem lại
+                {nNeedsAttention} cần kiểm tra
               </span>
             )}
           </span>
