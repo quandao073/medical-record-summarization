@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { CitedClaim, ClaimStatus, SourceChunk } from "@/lib/types";
-import { STATUS_COLORS, STATUS_LABELS, STATUS_TOOLTIPS } from "@/lib/types";
+import { STATUS_TOOLTIPS } from "@/lib/types";
 import { getSources } from "@/lib/api";
 
 
@@ -18,19 +18,19 @@ function InlineBadge({
   onClick: (id: string) => void;
 }) {
   const isOk = status === "SUPPORTED";
-  const label = isOk ? "Xem" : "⚠ Xem";
   return (
     <button
       onClick={() => onClick(sourceId)}
       title={`${STATUS_TOOLTIPS[status]}\nClick để xem nguồn trong hồ sơ`}
-      className={`
-        px-2.5 py-0.5 rounded-full text-xs font-medium cursor-pointer
-        transition-all hover:opacity-80
-        ${STATUS_COLORS[status]}
-        ${active ? "ring-2 ring-offset-1 ring-blue-400" : ""}
-      `}
+      className={`text-xs underline transition-colors ${
+        active
+          ? "text-blue-600"
+          : isOk
+          ? "text-gray-400 hover:text-gray-600"
+          : "text-amber-600 hover:text-amber-800"
+      }`}
     >
-      {label}
+      {isOk ? "Xem" : "⚠ Xem"}
     </button>
   );
 }
@@ -123,9 +123,9 @@ export default function MedsTable({ citedClaims, activeSourceId, onCitationClick
     <div className="overflow-x-auto rounded-lg border border-gray-200">
       {/* Prescription date header */}
       {prescriptionDate && !loading && (
-        <div className="bg-blue-50 border-b border-blue-100 px-3 py-1.5 flex items-center gap-2">
-          <span className="text-xs text-blue-600 font-medium">📅 Đơn thuốc ngày:</span>
-          <span className="text-xs text-blue-800 font-semibold font-mono">{prescriptionDate}</span>
+        <div className="bg-gray-50 border-b border-gray-100 px-3 py-1.5 flex items-center gap-2">
+          <span className="text-xs text-gray-500">Đơn thuốc ngày:</span>
+          <span className="text-xs text-gray-700 font-medium font-mono">{prescriptionDate}</span>
         </div>
       )}
       <table className="w-full text-sm">

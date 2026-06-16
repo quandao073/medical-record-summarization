@@ -2,15 +2,15 @@
 
 import { useEffect, useState } from "react";
 import type { CitedClaim, ClaimStatus, SourceChunk } from "@/lib/types";
-import { STATUS_COLORS, STATUS_LABELS, STATUS_TOOLTIPS } from "@/lib/types";
+import { STATUS_TOOLTIPS } from "@/lib/types";
 import { getSources } from "@/lib/api";
 
 // ─── Diagnosis type labels ────────────────────────────────────────────────────
 
 const DX_TYPE: Record<string, { text: string; cls: string }> = {
-  primary:      { text: "Chính",       cls: "bg-red-100 text-red-700 border border-red-300" },
-  comorbidity:  { text: "Bệnh kèm",    cls: "bg-amber-100 text-amber-700 border border-amber-300" },
-  complication: { text: "Biến chứng",  cls: "bg-orange-100 text-orange-700 border border-orange-300" },
+  primary:      { text: "Chính",       cls: "bg-red-50 text-red-600 border border-red-100" },
+  comorbidity:  { text: "Bệnh kèm",    cls: "bg-gray-100 text-gray-600 border border-gray-200" },
+  complication: { text: "Biến chứng",  cls: "bg-amber-50 text-amber-600 border border-amber-100" },
 };
 
 const DX_TYPE_ORDER: Record<string, number> = {
@@ -25,20 +25,20 @@ function InlineBadge({
   sourceId: string; status: ClaimStatus; active: boolean; onClick: (id: string) => void;
 }) {
   const isOk = status === "SUPPORTED";
-  const label = isOk ? "Xem" : "⚠ Xem";
   return (
     <button
       onMouseDown={(e) => e.stopPropagation()}
       onClick={(e) => { e.stopPropagation(); onClick(sourceId); }}
       title={`${STATUS_TOOLTIPS[status]}\nClick để xem nguồn trong hồ sơ`}
-      className={`
-        px-2.5 py-0.5 rounded-full text-xs font-medium cursor-pointer
-        transition-all hover:opacity-80
-        ${STATUS_COLORS[status]}
-        ${active ? "ring-2 ring-offset-1 ring-blue-400" : ""}
-      `}
+      className={`text-xs underline transition-colors ${
+        active
+          ? "text-blue-600"
+          : isOk
+          ? "text-gray-400 hover:text-gray-600"
+          : "text-amber-600 hover:text-amber-800"
+      }`}
     >
-      {label}
+      {isOk ? "Xem" : "⚠ Xem"}
     </button>
   );
 }
@@ -149,7 +149,7 @@ export default function DiagnosesTable({ citedClaims, activeSourceId, onCitation
                     <td className="px-3 py-2.5 text-gray-800 font-medium">{dxName}</td>
                     {/* ICD-10 */}
                     <td className="px-3 py-2.5">
-                      <span className="font-mono text-xs bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded border border-indigo-200">
+                      <span className="font-mono text-xs text-gray-500">
                         {icd}
                       </span>
                     </td>

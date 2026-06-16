@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { CitedClaim, ClaimStatus, SourceChunk } from "@/lib/types";
-import { STATUS_COLORS, STATUS_LABELS, STATUS_TOOLTIPS } from "@/lib/types";
+import { STATUS_TOOLTIPS } from "@/lib/types";
 import { getSources } from "@/lib/api";
 
 // ─── Value position indicator ────────────────────────────────────────────────
@@ -51,19 +51,19 @@ function InlineBadge({
   onClick: (id: string) => void;
 }) {
   const isOk = status === "SUPPORTED";
-  const label = isOk ? "Xem" : "⚠ Xem";
   return (
     <button
       onClick={() => onClick(sourceId)}
       title={`${STATUS_TOOLTIPS[status]}\nClick để xem nguồn trong hồ sơ`}
-      className={`
-        px-2.5 py-0.5 rounded-full text-xs font-medium cursor-pointer
-        transition-all hover:opacity-80
-        ${STATUS_COLORS[status]}
-        ${active ? "ring-2 ring-offset-1 ring-blue-400" : ""}
-      `}
+      className={`text-xs underline transition-colors ${
+        active
+          ? "text-blue-600"
+          : isOk
+          ? "text-gray-400 hover:text-gray-600"
+          : "text-amber-600 hover:text-amber-800"
+      }`}
     >
-      {label}
+      {isOk ? "Xem" : "⚠ Xem"}
     </button>
   );
 }
