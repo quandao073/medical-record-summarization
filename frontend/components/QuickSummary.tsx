@@ -23,16 +23,22 @@ export default function QuickSummary({ summary }: Props) {
   if (!displayText && medCount === 0 && labCount === 0) return null;
 
   return (
-    <div className="rounded-xl border-l-4 border-l-blue-400 border border-gray-200 bg-blue-50/30 p-4 space-y-2">
-      <h3 className="text-sm font-semibold text-blue-800">Tóm tắt nhanh</h3>
+    <div className="rounded-xl border border-gray-200 bg-white p-4 space-y-2">
+      <h3 className="text-sm font-semibold text-gray-800">Tóm tắt nhanh</h3>
       {displayText && (
         <p className="text-base text-gray-800 leading-relaxed">{displayText}</p>
       )}
-      <div className="flex flex-wrap gap-4 text-sm text-gray-600">
-        {medCount > 0 && <span>💊 {medCount} thuốc đang dùng</span>}
-        {labCount > 0 && <span>🧪 {labCount} xét nghiệm bất thường</span>}
+      <div className="flex flex-wrap gap-3 text-xs text-gray-500">
+        {medCount > 0 && <span>{medCount} thuốc đang dùng</span>}
+        {labCount > 0 && (
+          <>
+            {medCount > 0 && <span className="text-gray-300">·</span>}
+            <span>{labCount} xét nghiệm bất thường</span>
+          </>
+        )}
+        <span className="text-gray-300">·</span>
         <span className={needsReviewCount > 0 ? "text-purple-700 font-medium" : ""}>
-          🔍 {needsReviewCount} thông tin cần bác sĩ kiểm tra
+          {needsReviewCount} thông tin cần bác sĩ kiểm tra
         </span>
       </div>
     </div>
