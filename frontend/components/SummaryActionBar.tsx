@@ -8,6 +8,7 @@ interface Props {
   onSaveDraft: () => Promise<void>;
   onConfirm: () => Promise<void>;
   onFeedback: (text: string) => Promise<void>;
+  onOpenHumanEval?: () => void;
 }
 
 export default function SummaryActionBar({
@@ -16,6 +17,7 @@ export default function SummaryActionBar({
   onSaveDraft,
   onConfirm,
   onFeedback,
+  onOpenHumanEval,
 }: Props) {
   const [feedbackOpen, setFeedbackOpen] = useState(false);
   const [feedbackText, setFeedbackText] = useState("");
@@ -111,12 +113,22 @@ export default function SummaryActionBar({
       {/* Sticky bar */}
       <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 print:hidden">
         <div className="max-w-5xl mx-auto px-4 py-2 flex items-center justify-between">
-          <button
-            onClick={() => setFeedbackOpen(o => !o)}
-            className="text-xs text-gray-500 hover:text-gray-700 transition"
-          >
-            Góp ý{feedbackSent ? " (đã gửi)" : ""}
-          </button>
+          <div className="flex items-center gap-3">
+            {onOpenHumanEval && (
+              <button
+                onClick={onOpenHumanEval}
+                className="text-xs text-gray-500 hover:text-gray-700 transition"
+              >
+                Đánh giá
+              </button>
+            )}
+            <button
+              onClick={() => setFeedbackOpen(o => !o)}
+              className="text-xs text-gray-500 hover:text-gray-700 transition"
+            >
+              Góp ý{feedbackSent ? " (đã gửi)" : ""}
+            </button>
+          </div>
 
           <div className="flex items-center gap-2">
             {isConfirmed ? (

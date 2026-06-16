@@ -17,6 +17,7 @@ import SectionCard from "@/components/SectionCard";
 import SourcePanel from "@/components/SourcePanel";
 import QuickSummary from "@/components/QuickSummary";
 import SummaryActionBar from "@/components/SummaryActionBar";
+import HumanEvalPanel from "@/components/HumanEvalPanel";
 import PatientStrip from "@/components/PatientStrip";
 import { submitSummaryStatus, submitFeedback } from "@/lib/api";
 
@@ -86,6 +87,9 @@ export default function HomePage() {
 
   // ─ Read mode
   const [readMode, setReadMode] = useState<"quick" | "detail">("detail");
+
+  // ─ Human eval
+  const [humanEvalOpen, setHumanEvalOpen] = useState(false);
 
   // ─ Source panel
   const [activeId, setActiveId]       = useState<string | null>(null);
@@ -593,6 +597,21 @@ export default function HomePage() {
             await submitFeedback(summary.patient_id, text);
             const updated = await getReviewState(summary.patient_id);
             setReviewState(updated);
+          }}
+          onOpenHumanEval={() => setHumanEvalOpen(true)}
+        />
+      )}
+
+      {/* ── Human eval modal ─────────────────────────────────────────────── */}
+      {summary && (
+        <HumanEvalPanel
+          patientId={summary.patient_id}
+          isOpen={humanEvalOpen}
+          onClose={() => setHumanEvalOpen(false)}
+          summaryMeta={{
+            generatedAt: summary.created_at,
+            model: summary.model_version,
+            promptVersion: summary.prompt_version,
           }}
         />
       )}
