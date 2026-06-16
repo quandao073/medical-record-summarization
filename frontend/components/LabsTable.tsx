@@ -50,19 +50,20 @@ function InlineBadge({
   active: boolean;
   onClick: (id: string) => void;
 }) {
-  const tooltip = `${STATUS_TOOLTIPS[status]}\n${sourceId}`;
+  const isOk = status === "SUPPORTED";
+  const label = isOk ? "Xem" : "⚠ Xem";
   return (
     <button
       onClick={() => onClick(sourceId)}
-      title={tooltip}
+      title={`${STATUS_TOOLTIPS[status]}\nClick để xem nguồn trong hồ sơ`}
       className={`
-        px-2 py-0.5 rounded-full text-xs font-mono cursor-pointer
+        px-2.5 py-0.5 rounded-full text-xs font-medium cursor-pointer
         transition-all hover:opacity-80
         ${STATUS_COLORS[status]}
         ${active ? "ring-2 ring-offset-1 ring-blue-400" : ""}
       `}
     >
-      {STATUS_LABELS[status]}
+      {label}
     </button>
   );
 }
