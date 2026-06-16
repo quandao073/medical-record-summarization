@@ -1,4 +1,4 @@
-import type { FinalSummary, SourceChunk, ReviewState, ClaimReviewAction } from "./types";
+import type { FinalSummary, SourceChunk, ReviewState, ClaimReviewAction, HumanEval } from "./types";
 
 const API_BASE =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
@@ -125,4 +125,45 @@ export async function submitFeedback(
     body: JSON.stringify({ text }),
   });
   await handleResponse(res);
+}
+
+// ─── Human Eval API ───────────────────────────────────────────────────────────
+
+export async function getHumanEval(patientId: string): Promise<HumanEval> {
+  const res = await fetch(`${API_BASE}/api/v1/human-eval/${patientId}`);
+  return handleResponse<HumanEval>(res);
+}
+
+export async function submitHumanEval(
+  patientId: string,
+  payload: {
+    evaluator: string;
+    summary_generated_at: string | null;
+    model: string | null;
+    prompt_version: string | null;
+    scores: Record<string, { score: number; notes: string }>;
+    overall_notes: string;
+    error_categories: string[];
+  },
+): Promise<{ ok: boolean; weighted_score: number | null }> {
+  const res = await fetch(`${API_BASE}/api/v1/human-eval/${patientId}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  return handleResponse<{ ok: boolean; weighted_score: number | null }>(res);
+}
+
+export async function listHumanEvals(): Promise<{
+  evals: Array<{
+    patient_id: string;
+    evaluator: string | null;
+    evaluated_at: string | null;
+    weighted_score: number | null;
+    model: string | null;
+    prompt_version: string | null;
+  }>;
+}> {
+  const res = await fetch(`${API_BASE}/api/v1/human-eval`);
+  return handleResponse(res);
 }

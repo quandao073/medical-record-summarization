@@ -168,3 +168,87 @@ export interface ReviewState {
   claim_reviews: Record<string, ClaimReview>;
   feedback: ReviewFeedback[];
 }
+
+// ─── Human Eval types ─────────────────────────────────────────────────────────
+
+export interface RubricScore {
+  score: number | null;
+  notes: string;
+}
+
+export interface HumanEvalScores {
+  clinical_correctness: RubricScore;
+  completeness: RubricScore;
+  citation_faithfulness: RubricScore;
+  safety: RubricScore;
+  temporal_correctness: RubricScore;
+  readability: RubricScore;
+}
+
+export interface HumanEval {
+  patient_id: string;
+  summary_generated_at: string | null;
+  model: string | null;
+  prompt_version: string | null;
+  evaluator: string | null;
+  evaluated_at: string | null;
+  scores: HumanEvalScores;
+  overall_notes: string;
+  error_categories: string[];
+  weighted_score: number | null;
+}
+
+export const CRITERIA_CONFIG: Record<
+  keyof HumanEvalScores,
+  { label: string; weight: number; description: string }
+> = {
+  clinical_correctness: {
+    label: "Độ chính xác lâm sàng",
+    weight: 0.25,
+    description: "Thông tin thuốc, liều, chẩn đoán, xét nghiệm có chính xác không?",
+  },
+  completeness: {
+    label: "Tính đầy đủ",
+    weight: 0.20,
+    description: "Có bỏ sót thông tin lâm sàng quan trọng không?",
+  },
+  citation_faithfulness: {
+    label: "Trích dẫn trung thực",
+    weight: 0.20,
+    description: "Citation có thực sự hỗ trợ claim tương ứng không?",
+  },
+  safety: {
+    label: "An toàn",
+    weight: 0.20,
+    description: "Có thông tin sai lệch nguy hiểm: sai thuốc, sai liều, bỏ sót dị ứng?",
+  },
+  temporal_correctness: {
+    label: "Đúng thứ tự thời gian",
+    weight: 0.10,
+    description: "Timeline điều trị và xu hướng xét nghiệm có đúng không?",
+  },
+  readability: {
+    label: "Dễ đọc",
+    weight: 0.05,
+    description: "Bác sĩ đọc nhanh và hiểu được không?",
+  },
+};
+
+export const ERROR_CATEGORY_LABELS: Record<string, string> = {
+  omission: "Bỏ sót thông tin quan trọng",
+  commission: "Thêm thông tin không có trong hồ sơ",
+  wrong_source: "Citation trỏ sai nguồn",
+  partial_citation: "Citation hỗ trợ một phần claim",
+  no_source: "Không có citation cho claim quan trọng",
+  temporal_error: "Sai thứ tự thời gian",
+  safety_error: "Thông tin sai lệch nguy hiểm",
+  readability_issue: "Ngôn ngữ khó đọc hoặc không tự nhiên",
+};
+
+export const SCORE_LABELS: Record<number, string> = {
+  1: "Rất kém",
+  2: "Kém",
+  3: "Trung bình",
+  4: "Tốt",
+  5: "Xuất sắc",
+};
