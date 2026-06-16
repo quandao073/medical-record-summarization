@@ -5,36 +5,11 @@ interface Props {
   fromCache: boolean;
   model: string;
   techMode?: boolean;
+  readMode?: "quick" | "detail";
+  onReadModeChange?: (mode: "quick" | "detail") => void;
 }
 
-function TrustItem({
-  icon,
-  label,
-  value,
-  color,
-}: {
-  icon: string;
-  label: string;
-  value: string;
-  color: string;
-}) {
-  return (
-    <div className="flex items-center gap-2 text-sm">
-      <span className={`text-base ${color}`}>{icon}</span>
-      <span className="text-gray-700">
-        <span className={`font-semibold ${color}`}>{value}</span> {label}
-      </span>
-    </div>
-  );
-}
-
-function TechPill({
-  label,
-  value,
-}: {
-  label: string;
-  value: string;
-}) {
+function TechPill({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex flex-col items-center px-3 py-1.5 rounded-lg bg-white border border-gray-200 shadow-sm min-w-[90px]">
       <span className="text-base font-bold text-gray-700">{value}</span>
@@ -43,74 +18,91 @@ function TechPill({
   );
 }
 
-export default function MetricsBar({ metrics, fromCache, model, techMode }: Props) {
-  const coverage      = Math.round(metrics.citation_coverage * 100);
-  const critCoverage  = Math.round((metrics.critical_citation_coverage ?? 0) * 100);
-  const unsup         = Math.round(metrics.unsupported_claim_rate * 100);
-  const lowConf       = Math.round((metrics.low_confidence_rate ?? 0) * 100);
-  const needRev       = Math.round((metrics.need_review_rate ?? 0) * 100);
-  const halluc        = Math.round(metrics.hallucination_rate * 100);
+export default function MetricsBar({ metrics, fromCache, model, techMode, readMode, onReadModeChange }: Props) {
+  const coverage     = Math.round(metrics.citation_coverage * 100);
+  const critCoverage = Math.round((metrics.critical_citation_coverage ?? 0) * 100);
+  const unsup        = Math.round(metrics.unsupported_claim_rate * 100);
+  const lowConf      = Math.round((metrics.low_confidence_rate ?? 0) * 100);
+  const needRev      = Math.round((metrics.need_review_rate ?? 0) * 100);
+  const halluc       = Math.round(metrics.hallucination_rate * 100);
 
-  const partialCount  = Math.round((metrics.low_confidence_rate ?? 0) * metrics.total_claims);
-  const unsupCount    = Math.round(metrics.unsupported_claim_rate * metrics.total_claims);
-  const contradCount  = metrics.contradiction_count ?? 0;
+  const partialCount = Math.round((metrics.low_confidence_rate ?? 0) * metrics.total_claims);
+  const unsupCount   = Math.round(metrics.unsupported_claim_rate * metrics.total_claims);
+  const contradCount = metrics.contradiction_count ?? 0;
+
+  const hasIssues = unsupCount > 0 || contradCount > 0;
 
   return (
-    <div className="rounded-xl border border-emerald-100 bg-emerald-50/50 p-4 space-y-3">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-emerald-800">
-          Độ tin cậy bản tóm tắt
-        </h3>
-        {techMode && (
-          <div className="flex items-center gap-2 text-xs text-gray-500">
+    <div className="space-y-0">
+      {/* Compact trust status */}
+      <div className={`rounded-lg border px-4 py-2.5 flex items-center justify-between flex-wrap gap-2 ${
+        hasIssues ? "border-amber-200 bg-amber-50/30" : "border-gray-200 bg-white"
+      }`}>
+        <div className="flex items-center gap-3 flex-wrap text-xs text-gray-600">
+          <span className="font-medium text-gray-700">Độ tin cậy:</span>
+          <span>
+            <span className={coverage >= 80 ? "text-green-700 font-semibold" : "text-amber-700 font-semibold"}>{coverage}%</span>
+            {" "}có nguồn
+          </span>
+          <span className="text-gray-300">·</span>
+          <span>
+            <span className={critCoverage >= 80 ? "text-green-700 font-semibold" : "text-amber-700 font-semibold"}>{critCoverage}%</span>
+            {" "}thông tin quan trọng có nguồn
+          </span>
+          {partialCount > 0 && (
+            <>
+              <span className="text-gray-300">·</span>
+              <span className="text-amber-600">{partialCount} hỗ trợ một phần</span>
+            </>
+          )}
+          {unsupCount > 0 && (
+            <>
+              <span className="text-gray-300">·</span>
+              <span className="text-amber-600">{unsupCount} chưa có nguồn</span>
+            </>
+          )}
+          <span className="text-gray-300">·</span>
+          <span className={contradCount > 0 ? "text-red-600 font-medium" : "text-gray-500"}>
+            {contradCount} mâu thuẫn
+          </span>
+        </div>
+
+        {/* Read mode toggle — inline right side */}
+        {readMode && onReadModeChange && (
+          <div className="inline-flex rounded-md border border-gray-200 overflow-hidden">
+            <button
+              onClick={() => onReadModeChange("quick")}
+              className={`px-2.5 py-1 text-xs font-medium transition ${
+                readMode === "quick"
+                  ? "bg-gray-700 text-white"
+                  : "bg-white text-gray-500 hover:bg-gray-50"
+              }`}
+            >
+              Đọc nhanh
+            </button>
+            <button
+              onClick={() => onReadModeChange("detail")}
+              className={`px-2.5 py-1 text-xs font-medium transition ${
+                readMode === "detail"
+                  ? "bg-gray-700 text-white"
+                  : "bg-white text-gray-500 hover:bg-gray-50"
+              }`}
+            >
+              Chi tiết
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* Technical details — only in tech mode */}
+      {techMode && (
+        <div className="flex flex-wrap gap-2 pt-3 pb-1">
+          <div className="flex items-center gap-2 text-xs text-gray-500 mr-2">
             <span className="px-2 py-0.5 rounded bg-gray-100 font-mono">{model}</span>
             {fromCache && (
               <span className="px-2 py-0.5 rounded bg-amber-100 text-amber-700">từ cache</span>
             )}
           </div>
-        )}
-      </div>
-
-      {/* Doctor-friendly trust indicators */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-        <TrustItem
-          icon={coverage >= 80 ? "✅" : coverage >= 50 ? "⚠️" : "❌"}
-          label="thông tin có nguồn xác nhận"
-          value={`${coverage}%`}
-          color={coverage >= 80 ? "text-green-600" : coverage >= 50 ? "text-amber-600" : "text-red-600"}
-        />
-        <TrustItem
-          icon={critCoverage >= 80 ? "✅" : critCoverage >= 50 ? "⚠️" : "❌"}
-          label="thông tin quan trọng có nguồn xác nhận"
-          value={`${critCoverage}%`}
-          color={critCoverage >= 80 ? "text-green-600" : critCoverage >= 50 ? "text-amber-600" : "text-red-600"}
-        />
-        {partialCount > 0 && (
-          <TrustItem
-            icon="⚠️"
-            label="thông tin có nguồn hỗ trợ một phần"
-            value={String(partialCount)}
-            color="text-amber-600"
-          />
-        )}
-        <TrustItem
-          icon={unsupCount === 0 ? "✅" : "⚠️"}
-          label="thông tin chưa tìm thấy nguồn"
-          value={String(unsupCount)}
-          color={unsupCount === 0 ? "text-green-600" : "text-amber-600"}
-        />
-        <TrustItem
-          icon={contradCount === 0 ? "✅" : "❌"}
-          label="thông tin có mâu thuẫn"
-          value={String(contradCount)}
-          color={contradCount === 0 ? "text-green-600" : "text-red-600"}
-        />
-      </div>
-
-      {/* Technical details — only in tech mode */}
-      {techMode && (
-        <div className="flex flex-wrap gap-2 pt-2 border-t border-emerald-100">
           <TechPill label="Coverage tổng" value={`${coverage}%`} />
           <TechPill label="Coverage critical" value={`${critCoverage}%`} />
           <TechPill label="Chưa có nguồn" value={`${unsup}%`} />

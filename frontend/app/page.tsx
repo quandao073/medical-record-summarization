@@ -77,11 +77,6 @@ export default function HomePage() {
   // ─ Last request snapshot — for retry (not tied to current selectors)
   const [lastRequest, setLastRequest] = useState<{ patient: string; model: string } | null>(null);
 
-  // ─ Flag bad output
-  const [flagOpen, setFlagOpen]         = useState(false);
-  const [flagText, setFlagText]         = useState("");
-  const [flagSubmitted, setFlagSubmitted] = useState(false);
-
   // ─ Technical mode toggle
   const [techMode, setTechMode] = useState(false);
 
@@ -191,10 +186,6 @@ export default function HomePage() {
     setSummary(null);
     setActiveId(null);
     setChunk(null);
-    setFlagOpen(false);
-    setFlagText("");
-    setFlagSubmitted(false);
-
     if (intervalRef.current) clearInterval(intervalRef.current);
     intervalRef.current = setInterval(() => {
       setStageIdx((prev) => Math.min(prev + 1, PIPELINE_STAGES.length - 1));
@@ -218,26 +209,6 @@ export default function HomePage() {
         intervalRef.current = null;
       }
     }
-  };
-
-  // ─ Flag bad output → localStorage
-  const handleFlagSubmit = () => {
-    if (!summary || !flagText.trim()) return;
-    const entry = {
-      patient_id:    summary.patient_id,
-      model_version: summary.model_version,
-      created_at:    summary.created_at,
-      feedback:      flagText.trim(),
-      timestamp:     new Date().toISOString(),
-    };
-    try {
-      const existing = JSON.parse(localStorage.getItem("mrs_flagged") ?? "[]") as unknown[];
-      localStorage.setItem("mrs_flagged", JSON.stringify([...existing, entry]));
-    } catch {
-      // localStorage might be unavailable in some envs — silently ignore
-    }
-    setFlagSubmitted(true);
-    setFlagText("");
   };
 
   // ─ Clear cache
@@ -309,106 +280,126 @@ export default function HomePage() {
   return (
     <div className={`min-h-screen ${activeId ? "mr-[380px]" : ""} transition-all`}>
       {/* ── Header ─────────────────────────────────────────────────────────── */}
-      <header className="sticky top-0 z-40 bg-white border-b border-gray-200 shadow-sm">
-        <div className="max-w-5xl mx-auto px-4 py-3 flex items-center gap-4 flex-wrap">
-          {/* Logo */}
-          <div className="flex items-center gap-2 mr-2">
-            <span className="text-2xl">🏥</span>
-            <div>
-              <p className="font-bold text-gray-800 text-sm leading-tight">
-                Tóm tắt bệnh án thông minh
-              </p>
-              <p className="text-xs text-gray-400">Hỗ trợ bác sĩ đọc nhanh hồ sơ bệnh nhân</p>
-            </div>
-          </div>
+      <header className="sticky top-0 z-40 bg-white border-b border-gray-200">
+        {/* Row 1: Title + actions */}
+        <div className="max-w-5xl mx-auto px-4 py-2.5 flex items-center gap-3 flex-wrap">
+          <p className="font-bold text-gray-800 text-sm leading-tight">
+            Tóm tắt bệnh án thông minh
+          </p>
 
           {/* Patient selector */}
-          <div className="flex items-center gap-1.5">
-            <label className="text-xs text-gray-500 font-medium">Bệnh nhân</label>
-            <select
-              value={patient}
-              onChange={(e) => { setPatient(e.target.value); setSummary(null); }}
-              className="border border-gray-300 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white"
-            >
-              {patients.map((p) => (
-                <option key={p} value={p}>{p}</option>
-              ))}
-            </select>
-          </div>
+          <select
+            value={patient}
+            onChange={(e) => { setPatient(e.target.value); setSummary(null); }}
+            className="border border-gray-300 rounded-lg px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white"
+          >
+            {patients.map((p) => (
+              <option key={p} value={p}>{p}</option>
+            ))}
+          </select>
 
-          {/* Model selector — technical mode only */}
+          {/* Tech controls — only in tech mode */}
           {techMode && (
-            <div className="flex items-center gap-1.5">
-              <label className="text-xs text-gray-500 font-medium">Model</label>
+            <>
               <select
                 value={model}
                 onChange={(e) => setModel(e.target.value)}
-                className="border border-gray-300 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white"
+                className="border border-gray-300 rounded-lg px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white"
               >
                 <option value="gpt-4o-mini">gpt-4o-mini</option>
                 <option value="gpt-4o">gpt-4o</option>
               </select>
-            </div>
-          )}
-
-          {/* Buttons */}
-          <div className="flex gap-2 ml-auto">
-            {/* Technical mode toggle */}
-            <button
-              onClick={() => setTechMode((v) => !v)}
-              className={`px-3 py-1.5 text-sm rounded-lg border transition ${
-                techMode
-                  ? "border-indigo-300 bg-indigo-50 text-indigo-700"
-                  : "border-gray-300 text-gray-500 hover:bg-gray-50"
-              }`}
-              title={techMode ? "Đang hiện thông tin kỹ thuật" : "Hiện thông tin kỹ thuật"}
-            >
-              {techMode ? "🔧 Kỹ thuật" : "🔧"}
-            </button>
-            {techMode && (
               <button
                 onClick={handleClearCache}
                 disabled={loading}
-                className="px-3 py-1.5 text-sm rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-50 disabled:opacity-40 transition"
+                className="px-2.5 py-1 text-xs rounded-lg border border-gray-300 text-gray-500 hover:bg-gray-50 disabled:opacity-40 transition"
               >
                 Xóa cache
               </button>
-            )}
+            </>
+          )}
+
+          {/* Actions — right side */}
+          <div className="flex gap-2 ml-auto items-center">
+            <button
+              onClick={() => setTechMode((v) => !v)}
+              className={`px-2 py-1 text-xs rounded border transition ${
+                techMode
+                  ? "border-indigo-300 bg-indigo-50 text-indigo-600"
+                  : "border-gray-200 text-gray-400 hover:bg-gray-50"
+              }`}
+              title={techMode ? "Ẩn thông tin kỹ thuật" : "Hiện thông tin kỹ thuật"}
+            >
+              {techMode ? "Kỹ thuật" : "KT"}
+            </button>
+
             <button
               onClick={() => handleGenerate(false)}
               disabled={loading}
-              className="px-4 py-1.5 text-sm rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 disabled:opacity-40 transition flex items-center gap-2"
+              className="px-3 py-1 text-sm rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 disabled:opacity-40 transition flex items-center gap-1.5"
             >
               {loading ? (
                 <>
-                  <span className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  <span className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
                   Đang tạo...
                 </>
               ) : (
-                <>▶ Tạo tóm tắt</>
+                "Tạo tóm tắt"
               )}
             </button>
-
-            {/* ■ Hủy — visible ONLY while loading */}
             {loading && (
               <button
                 onClick={handleAbort}
-                className="px-3 py-1.5 text-sm rounded-lg border border-red-300 text-red-600 hover:bg-red-50 transition font-medium"
+                className="px-2.5 py-1 text-xs rounded-lg border border-red-300 text-red-600 hover:bg-red-50 transition font-medium"
               >
-                ■ Hủy
+                Hủy
               </button>
             )}
-            {summary && (
+            {summary && !loading && (
               <button
                 onClick={() => handleGenerate(true)}
                 disabled={loading}
-                className="px-3 py-1.5 text-sm rounded-lg border border-blue-300 text-blue-600 hover:bg-blue-50 disabled:opacity-40 transition"
+                className="px-2.5 py-1 text-xs rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-50 disabled:opacity-40 transition"
               >
                 Làm mới
               </button>
             )}
           </div>
         </div>
+
+        {/* Row 2: Patient info + status (only when summary exists) */}
+        {summary && !loading && (
+          <div className="max-w-5xl mx-auto px-4 pb-2 flex items-center gap-3 text-xs text-gray-500 flex-wrap">
+            <span className="font-medium text-gray-700">Bệnh nhân {summary.patient_id}</span>
+            <span className="text-gray-300">·</span>
+            <span>{new Date(summary.created_at).toLocaleString("vi-VN")}</span>
+            {techMode && <><span className="text-gray-300">·</span><span>prompt: {summary.prompt_version}</span></>}
+            <span className="text-gray-300">·</span>
+            {(() => {
+              const { label, stale } = summaryFreshness(summary.created_at);
+              return (
+                <span className={stale ? "text-amber-600" : "text-gray-500"}>
+                  {label}
+                </span>
+              );
+            })()}
+            <span className={`ml-auto px-2.5 py-0.5 rounded-full border text-xs font-medium ${
+              reviewState?.summary_status === "confirmed"
+                ? "bg-green-50 text-green-700 border-green-200"
+                : "text-gray-500 border-gray-200"
+            }`}>
+              {reviewState?.summary_status === "confirmed"
+                ? "Đã xác nhận"
+                : "Bản nháp"
+              }
+            </span>
+            {techMode && summary._from_cache && (
+              <span className="px-2 py-0.5 bg-gray-100 text-gray-400 text-xs rounded-full border border-gray-200">
+                cache
+              </span>
+            )}
+          </div>
+        )}
       </header>
 
       {/* ── Main content ────────────────────────────────────────────────────── */}
@@ -496,136 +487,18 @@ export default function HomePage() {
         {/* Summary result */}
         {summary && !loading && (
           <>
-            {/* Patient header */}
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-xl font-bold text-gray-800">
-                  Tóm tắt bệnh án — {summary.patient_id}
-                </h1>
-                <p className="text-xs text-gray-400 mt-0.5">
-                  {new Date(summary.created_at).toLocaleString("vi-VN")}
-                  {techMode && <> · prompt: {summary.prompt_version}</>}
-                </p>
-                {(() => {
-                  const { label, stale } = summaryFreshness(summary.created_at);
-                  return (
-                    <span className={`inline-block mt-1 text-xs px-2 py-0.5 rounded-full border ${
-                      stale
-                        ? "bg-amber-50 text-amber-700 border-amber-200"
-                        : "bg-green-50 text-green-700 border-green-200"
-                    }`}>
-                      🕐 {label}
-                    </span>
-                  );
-                })()}
-              </div>
-              <div className="flex items-center gap-2">
-                <span className={`px-3 py-1 text-xs rounded-full border font-medium ${
-                  reviewState?.summary_status === "confirmed"
-                    ? "bg-green-50 text-green-700 border-green-200"
-                    : "bg-amber-50 text-amber-700 border-amber-200"
-                }`}>
-                  {reviewState?.summary_status === "confirmed"
-                    ? "Đã được bác sĩ xác nhận"
-                    : "Bản nháp AI — chưa được bác sĩ xác nhận"
-                  }
-                </span>
-                {techMode && summary._from_cache && (
-                  <span className="px-2 py-1 bg-gray-100 text-gray-500 text-xs rounded-full border border-gray-200">
-                    Từ cache
-                  </span>
-                )}
-              </div>
-            </div>
-
-            {/* Metrics */}
+            {/* Metrics — compact trust status bar with read mode toggle */}
             <MetricsBar
               metrics={summary.metrics}
               fromCache={summary._from_cache ?? false}
               model={summary.model_version}
               techMode={techMode}
+              readMode={readMode}
+              onReadModeChange={setReadMode}
             />
 
             {/* Quick summary */}
             <QuickSummary summary={summary} />
-
-            {/* Read mode toggle */}
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-gray-500 font-medium">Chế độ đọc:</span>
-              <div className="inline-flex rounded-lg border border-gray-200 overflow-hidden">
-                <button
-                  onClick={() => setReadMode("quick")}
-                  className={`px-3 py-1.5 text-xs font-medium transition ${
-                    readMode === "quick"
-                      ? "bg-blue-600 text-white"
-                      : "bg-white text-gray-600 hover:bg-gray-50"
-                  }`}
-                >
-                  Đọc nhanh
-                </button>
-                <button
-                  onClick={() => setReadMode("detail")}
-                  className={`px-3 py-1.5 text-xs font-medium transition ${
-                    readMode === "detail"
-                      ? "bg-blue-600 text-white"
-                      : "bg-white text-gray-600 hover:bg-gray-50"
-                  }`}
-                >
-                  Chi tiết
-                </button>
-              </div>
-            </div>
-
-            {/* Flag bad output */}
-            <div className="flex flex-col gap-2">
-              {!flagSubmitted ? (
-                <>
-                  <button
-                    onClick={() => setFlagOpen((o) => !o)}
-                    className="self-start text-xs text-gray-400 hover:text-orange-600 transition flex items-center gap-1"
-                  >
-                    ⚑ Báo cáo kết quả sai
-                  </button>
-                  {flagOpen && (
-                    <div className="rounded-xl border border-orange-200 bg-orange-50 p-4 space-y-2">
-                      <p className="text-xs text-orange-700 font-medium">
-                        Nội dung nào không chính xác?
-                      </p>
-                      <textarea
-                        value={flagText}
-                        onChange={(e) => setFlagText(e.target.value.slice(0, 200))}
-                        maxLength={200}
-                        rows={3}
-                        placeholder="Mô tả vấn đề với tóm tắt này..."
-                        className="w-full text-sm border border-orange-200 rounded-lg p-2 resize-none focus:outline-none focus:ring-2 focus:ring-orange-300 bg-white"
-                      />
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs text-gray-400">{flagText.length}/200</span>
-                        <div className="flex gap-2">
-                          <button
-                            onClick={() => { setFlagOpen(false); setFlagText(""); }}
-                            className="text-xs text-gray-500 hover:text-gray-700 px-2 py-1"
-                          >
-                            Hủy
-                          </button>
-                          <button
-                            onClick={handleFlagSubmit}
-                            disabled={!flagText.trim()}
-                            className="text-xs px-3 py-1.5 rounded-lg bg-orange-500 text-white font-medium hover:bg-orange-600 disabled:opacity-40 transition"
-                          >
-                            Gửi
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </>
-              ) : (
-                <span className="self-start text-xs px-2 py-1 rounded-full bg-green-100 text-green-700 border border-green-200">
-                  ✓ Đã ghi nhận
-                </span>
-              )}
-            </div>
 
             {/* Hint for citations */}
             <p className="text-xs text-gray-400 italic">
