@@ -29,21 +29,31 @@ function MetaRow({ label, value, techMode }: { label: string; value: unknown; te
   if (!displayLabel) return null;
 
   return (
-    <div className="flex gap-2 text-sm">
-      <span className="text-gray-500 min-w-[130px] shrink-0">{displayLabel}</span>
-      <span className="text-gray-800 break-all">{formatMetaValue(value)}</span>
+    <div className="flex gap-2 text-xs">
+      <span className="text-gray-400 min-w-[110px] shrink-0">{displayLabel}</span>
+      <span className="text-gray-700 break-all">{formatMetaValue(value)}</span>
     </div>
   );
 }
 
-const STATUS_DOCTOR_LABELS: Record<string, { icon: string; text: string; cls: string; explanation: string }> = {
-  SUPPORTED:           { icon: "✅", text: "Đã có nguồn xác nhận",       cls: "bg-green-50 text-green-700 border-green-200",  explanation: "Thông tin này được xác nhận bởi nguồn dữ liệu trong hồ sơ." },
-  PARTIALLY_SUPPORTED: { icon: "⚠️", text: "Có nguồn hỗ trợ một phần",   cls: "bg-amber-50 text-amber-700 border-amber-200",  explanation: "Nguồn trong hồ sơ chỉ hỗ trợ một phần thông tin này. Một số chi tiết chưa được xác nhận đầy đủ." },
-  LOW_CONFIDENCE:      { icon: "⚠️", text: "Nguồn chưa đủ rõ ràng",      cls: "bg-orange-50 text-orange-700 border-orange-200", explanation: "Có nguồn liên quan nhưng chưa đủ rõ ràng để xác nhận thông tin." },
-  UNSUPPORTED:         { icon: "❓", text: "Chưa tìm thấy nguồn",        cls: "bg-red-50 text-red-700 border-red-200",        explanation: "Không tìm thấy nguồn hỗ trợ thông tin này trong hồ sơ." },
-  NO_CITATION:         { icon: "➖", text: "Chưa tìm thấy nguồn",        cls: "bg-gray-50 text-gray-600 border-gray-200",     explanation: "Không tìm thấy nguồn dữ liệu cho thông tin này." },
-  CONTRADICTED:        { icon: "❌", text: "Có mâu thuẫn trong hồ sơ",   cls: "bg-red-50 text-red-700 border-red-300",        explanation: "Nguồn dữ liệu trong hồ sơ mâu thuẫn với thông tin này." },
-  NEED_REVIEW:         { icon: "🔍", text: "Cần bác sĩ kiểm tra",       cls: "bg-purple-50 text-purple-700 border-purple-200", explanation: "Thông tin này cần bác sĩ xác nhận trước khi tin cậy." },
+const STATUS_DOCTOR: Record<string, { icon: string; text: string; color: string }> = {
+  SUPPORTED:           { icon: "✓", text: "Có nguồn xác nhận",       color: "text-green-700" },
+  PARTIALLY_SUPPORTED: { icon: "~", text: "Hỗ trợ một phần",         color: "text-amber-600" },
+  LOW_CONFIDENCE:      { icon: "~", text: "Nguồn chưa đủ rõ",        color: "text-amber-600" },
+  UNSUPPORTED:         { icon: "?", text: "Chưa tìm thấy nguồn",    color: "text-red-600" },
+  NO_CITATION:         { icon: "–", text: "Chưa tìm thấy nguồn",    color: "text-gray-500" },
+  CONTRADICTED:        { icon: "✕", text: "Mâu thuẫn trong hồ sơ",  color: "text-red-600" },
+  NEED_REVIEW:         { icon: "?", text: "Cần bác sĩ kiểm tra",    color: "text-purple-600" },
+};
+
+const STATUS_EXPLANATION: Record<string, string> = {
+  SUPPORTED:           "Thông tin này được xác nhận bởi nguồn dữ liệu trong hồ sơ.",
+  PARTIALLY_SUPPORTED: "Nguồn trong hồ sơ chỉ hỗ trợ một phần thông tin này.",
+  LOW_CONFIDENCE:      "Có nguồn liên quan nhưng chưa đủ rõ ràng để xác nhận.",
+  UNSUPPORTED:         "Không tìm thấy nguồn hỗ trợ thông tin này trong hồ sơ.",
+  NO_CITATION:         "Không tìm thấy nguồn dữ liệu cho thông tin này.",
+  CONTRADICTED:        "Nguồn dữ liệu trong hồ sơ mâu thuẫn với thông tin này.",
+  NEED_REVIEW:         "Thông tin này cần bác sĩ xác nhận trước khi tin cậy.",
 };
 
 const META_LABELS_VI: Record<string, string> = {
@@ -95,7 +105,6 @@ function formatMetaValue(value: unknown): string {
   return String(value);
 }
 
-const CONFIDENCE_LABELS: Record<string, string> = {};
 function confidenceLabel(score: number): string {
   if (score >= 0.8) return "Cao";
   if (score >= 0.5) return "Trung bình";
@@ -136,106 +145,88 @@ export default function SourcePanel({
   if (!sourceId) return null;
 
   const statusInfo = claimContext
-    ? STATUS_DOCTOR_LABELS[claimContext.status] ?? STATUS_DOCTOR_LABELS.NEED_REVIEW
+    ? STATUS_DOCTOR[claimContext.status] ?? STATUS_DOCTOR.NEED_REVIEW
     : null;
 
   return (
-    <aside className="fixed right-0 top-0 h-full w-[400px] bg-white shadow-2xl border-l border-gray-200 z-50 flex flex-col">
+    <aside className="fixed right-0 top-0 h-full w-[380px] bg-white shadow border-l border-gray-200 z-50 flex flex-col">
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b bg-gray-50">
-        <div>
-          <h3 className="font-semibold text-gray-800 text-sm">Nguồn tham chiếu</h3>
-          {techMode && (
-            <p className="text-xs text-gray-400 mt-0.5">Citation Grounding</p>
-          )}
-        </div>
+      <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200">
+        <h3 className="font-semibold text-gray-800 text-sm">Nguồn tham chiếu</h3>
         <button
           onClick={onClose}
-          className="text-gray-400 hover:text-gray-700 text-xl leading-none font-bold w-8 h-8 flex items-center justify-center rounded hover:bg-gray-100"
+          className="text-gray-400 hover:text-gray-700 text-lg leading-none w-7 h-7 flex items-center justify-center rounded hover:bg-gray-100"
         >
           ×
         </button>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 pb-20 space-y-4">
+      <div className="flex-1 overflow-y-auto px-4 py-3 pb-20 space-y-0">
 
         {/* ── Claim context ─────────────────────────────────────────────────── */}
         {claimContext && statusInfo && (
-          <div className="rounded-xl border border-gray-100 bg-gray-50 p-3 space-y-2.5">
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+          <div className="pb-3 mb-3 border-b border-gray-100 space-y-2.5">
+            <p className="text-xs font-medium text-gray-400 uppercase tracking-wide">
               Thông tin đang kiểm tra
             </p>
-
-            {/* Claim text */}
-            <p className="text-sm text-gray-800 bg-white rounded-lg px-3 py-2 border border-gray-200 leading-relaxed italic">
+            <p className="text-sm text-gray-800 leading-relaxed">
               &ldquo;{stripClaimPrefix(claimContext.claim_text)}&rdquo;
             </p>
 
-            {/* Status badge — doctor-friendly */}
-            <div className="space-y-2">
-              <p className="text-xs font-semibold text-gray-500">Kết luận kiểm tra:</p>
-              <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border ${statusInfo.cls}`}>
-                {statusInfo.icon} {statusInfo.text}
+            {/* Status — compact single line */}
+            <div className="flex items-center gap-2 flex-wrap text-xs">
+              <span className={`font-semibold ${statusInfo.color}`}>
+                {statusInfo.text}
               </span>
-
-              {/* Critical indicator */}
               {claimContext.is_critical && (
-                <span className="ml-2 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-50 text-red-700 border border-red-200">
-                  Mức độ quan trọng: Cao
-                </span>
+                <>
+                  <span className="text-gray-300">·</span>
+                  <span className="text-red-600 font-medium">Quan trọng</span>
+                </>
               )}
-
-              {/* Confidence — doctor-friendly label instead of raw number */}
-              {claimContext.confidence_score !== null && claimContext.confidence_score !== undefined && (
-                <div className="text-xs text-gray-500">
-                  Mức độ tin cậy:{" "}
+              {claimContext.confidence_score != null && (
+                <>
+                  <span className="text-gray-300">·</span>
                   <span className={`font-medium ${
                     claimContext.confidence_score >= 0.8 ? "text-green-600" :
                     claimContext.confidence_score >= 0.5 ? "text-amber-600" :
                     "text-red-600"
                   }`}>
-                    {confidenceLabel(claimContext.confidence_score)}
+                    Tin cậy: {confidenceLabel(claimContext.confidence_score)}
                   </span>
                   {techMode && (
-                    <span className="ml-1 font-mono text-gray-400">
+                    <span className="font-mono text-gray-400">
                       ({claimContext.confidence_score.toFixed(2)})
                     </span>
                   )}
-                </div>
+                </>
               )}
             </div>
 
-            {/* Explanation */}
-            <p className="text-xs text-gray-500 leading-relaxed">
-              {statusInfo.explanation}
+            <p className="text-xs text-gray-400 leading-relaxed">
+              {STATUS_EXPLANATION[claimContext.status] ?? ""}
             </p>
 
-            {/* All citations for this claim */}
+            {/* Multiple citations */}
             {claimContext.citations.length > 1 && (
-              <div>
-                <p className="text-xs font-semibold text-gray-500 mb-1">
-                  Thông tin này có {claimContext.citations.length} nguồn liên quan:
-                </p>
-                <div className="flex flex-wrap gap-1">
-                  {claimContext.citations.map((sid) => (
-                    <button
-                      key={sid}
-                      onClick={() => sid !== sourceId && onSourceSwitch?.(sid)}
-                      className={`text-xs px-2 py-0.5 rounded border transition ${
-                        sid === sourceId
-                          ? "bg-blue-100 text-blue-700 border-blue-300 font-semibold"
-                          : "bg-gray-50 text-gray-500 border-gray-200 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 cursor-pointer"
-                      }`}
-                    >
-                      {sid === sourceId ? "► " : ""}
-                      {techMode ? sid.split("-").slice(-2).join("-") : `Nguồn ${claimContext.citations.indexOf(sid) + 1}`}
-                    </button>
-                  ))}
-                </div>
+              <div className="flex flex-wrap gap-1">
+                {claimContext.citations.map((sid) => (
+                  <button
+                    key={sid}
+                    onClick={() => sid !== sourceId && onSourceSwitch?.(sid)}
+                    className={`text-xs px-2 py-0.5 rounded border transition ${
+                      sid === sourceId
+                        ? "bg-gray-100 text-gray-700 border-gray-300 font-medium"
+                        : "text-gray-500 border-gray-200 hover:bg-gray-50 cursor-pointer"
+                    }`}
+                  >
+                    {techMode ? sid.split("-").slice(-2).join("-") : `Nguồn ${claimContext.citations.indexOf(sid) + 1}`}
+                  </button>
+                ))}
               </div>
             )}
 
-            {/* Claim review buttons */}
+            {/* Review buttons */}
             {onClaimReview && (
               <ClaimReviewButtons
                 currentReview={claimReview ?? null}
@@ -248,54 +239,50 @@ export default function SourcePanel({
         {/* Loading */}
         {loading && (
           <div className="flex items-center justify-center py-8">
-            <div className="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+            <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
           </div>
         )}
 
         {/* Error */}
         {error && !loading && (
-          <div className="text-red-600 text-sm bg-red-50 p-3 rounded-lg border border-red-200">
+          <div className="text-red-600 text-sm p-3 rounded-lg border border-red-200">
             {error}
           </div>
         )}
 
         {/* ── Chunk data ────────────────────────────────────────────────────── */}
         {chunk && !loading && (
-          <>
-            {/* Source type + Date — doctor-friendly */}
-            <div>
-              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
-                Nguồn trong hồ sơ
-              </p>
-              <div className="flex gap-2 flex-wrap">
-                <span className="px-2 py-1 bg-indigo-50 text-indigo-700 text-xs rounded-full border border-indigo-200 font-medium">
-                  {SOURCE_TYPE_LABELS[chunk.source_type] ?? chunk.source_type}
-                </span>
-                {chunk.date && (
-                  <span className="px-2 py-1 bg-gray-50 text-gray-600 text-xs rounded-full border border-gray-200">
-                    {chunk.date}
-                  </span>
-                )}
-              </div>
+          <div className="space-y-3">
+            {/* Source type + Date */}
+            <div className="flex items-center gap-2 text-xs">
+              <span className="text-gray-500 font-medium">
+                {SOURCE_TYPE_LABELS[chunk.source_type] ?? chunk.source_type}
+              </span>
+              {chunk.date && (
+                <>
+                  <span className="text-gray-300">·</span>
+                  <span className="text-gray-400">{chunk.date}</span>
+                </>
+              )}
             </div>
 
             {/* Content */}
-            <div>
-              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">
+            <div className="pb-3 border-b border-gray-100">
+              <p className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-1">
                 Nội dung trong hồ sơ
               </p>
-              <p className="text-base text-gray-800 bg-gray-50 rounded-lg p-3 border border-gray-200 leading-relaxed whitespace-pre-line">
+              <p className="text-sm text-gray-800 leading-relaxed whitespace-pre-line">
                 {chunk.content}
               </p>
             </div>
 
-            {/* Metadata — shown as "Thông tin chi tiết" in doctor mode */}
+            {/* Metadata */}
             {Object.keys(chunk.metadata).length > 0 && (
-              <div>
-                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+              <div className="pb-3 border-b border-gray-100">
+                <p className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-2">
                   Thông tin chi tiết
                 </p>
-                <div className="space-y-1.5 bg-gray-50 rounded-lg p-3 border border-gray-200">
+                <div className="space-y-1">
                   {Object.entries(chunk.metadata).map(([k, v]) => (
                     <MetaRow key={k} label={k} value={v as unknown} techMode={techMode} />
                   ))}
@@ -307,24 +294,21 @@ export default function SourcePanel({
             {!techMode && (
               <button
                 onClick={() => setShowTechDetails((v) => !v)}
-                className="text-xs text-gray-400 hover:text-indigo-600 transition flex items-center gap-1"
+                className="text-xs text-gray-400 hover:text-gray-600 transition flex items-center gap-1"
               >
-                {showTechDetails ? "▼ Ẩn thông tin kỹ thuật" : "▶ Hiện thông tin kỹ thuật"}
+                {showTechDetails ? "▼ Ẩn thông tin kỹ thuật" : "▶ Thông tin kỹ thuật"}
               </button>
             )}
 
-            {/* Technical IDs — always shown in techMode, togglable otherwise */}
+            {/* Technical IDs */}
             {(techMode || showTechDetails) && (
               <div className="space-y-1 pt-1 border-t border-gray-100">
-                <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">
-                  Thông tin kỹ thuật
-                </p>
                 <MetaRow label="source_id"    value={chunk.source_id} techMode />
                 <MetaRow label="patient_id"   value={chunk.patient_id} techMode />
                 <MetaRow label="encounter_id" value={chunk.encounter_id} techMode />
               </div>
             )}
-          </>
+          </div>
         )}
       </div>
     </aside>
