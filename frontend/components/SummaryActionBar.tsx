@@ -109,7 +109,7 @@ export default function SummaryActionBar({
       )}
 
       {/* Sticky bar */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200">
+      <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 print:hidden">
         <div className="max-w-5xl mx-auto px-4 py-2 flex items-center justify-between">
           <button
             onClick={() => setFeedbackOpen(o => !o)}

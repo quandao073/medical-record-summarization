@@ -141,6 +141,7 @@ export default function SourcePanel({
   onSourceSwitch,
 }: Props) {
   const [showTechDetails, setShowTechDetails] = useState(false);
+  const [showRawNote, setShowRawNote] = useState(false);
 
   if (!sourceId) return null;
 
@@ -149,7 +150,7 @@ export default function SourcePanel({
     : null;
 
   return (
-    <aside className="fixed right-0 top-0 h-full w-[380px] bg-white shadow border-l border-gray-200 z-50 flex flex-col">
+    <aside className="fixed right-0 top-0 h-full w-[380px] bg-white shadow border-l border-gray-200 z-50 flex flex-col print:hidden">
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200">
         <h3 className="font-semibold text-gray-800 text-sm">Nguồn tham chiếu</h3>
@@ -308,6 +309,21 @@ export default function SourcePanel({
                 <MetaRow label="encounter_id" value={chunk.encounter_id} techMode />
               </div>
             )}
+
+            {/* Provenance — raw record link */}
+            <div className="pt-2 border-t border-gray-100">
+              <button
+                onClick={() => setShowRawNote(v => !v)}
+                className="text-xs text-gray-400 hover:text-gray-600 transition flex items-center gap-1"
+              >
+                {showRawNote ? "▼" : "▶"} Mở bản ghi gốc
+              </button>
+              {showRawNote && (
+                <p className="mt-1.5 text-xs text-gray-400 italic leading-relaxed">
+                  Chưa có bản ghi gốc. Chỉ có nguồn đã chuẩn hóa từ hồ sơ.
+                </p>
+              )}
+            </div>
           </div>
         )}
       </div>
