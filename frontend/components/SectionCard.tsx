@@ -33,11 +33,9 @@ export default function SectionCard({
   const hasHighRisk = section.cited_claims.some(c =>
     !c.is_structural && (c.status === "CONTRADICTED" || c.status === "UNSUPPORTED") && c.is_critical
   );
-  const alertStyle = isClinicalAlerts
-    ? hasHighRisk
-      ? "border-red-200 bg-red-50"
-      : "border-amber-200 bg-amber-50"
-    : "border-gray-200 bg-white hover:border-blue-200";
+  const borderLeft = isClinicalAlerts
+    ? hasHighRisk ? "border-l-4 border-l-red-500" : "border-l-4 border-l-amber-400"
+    : "";
   const alertTextStyle = isClinicalAlerts
     ? hasHighRisk ? "text-red-700" : "text-amber-700"
     : "text-gray-800";
@@ -71,7 +69,7 @@ export default function SectionCard({
 
   return (
     <div
-      className={`rounded-xl border p-5 shadow-sm ${alertStyle}`}
+      className={`rounded-xl border border-gray-200 bg-white p-5 ${borderLeft}`}
     >
       {/* Header */}
       <div

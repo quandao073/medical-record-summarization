@@ -63,20 +63,19 @@ export default function NeedsReviewSection({ sections, onCitationClick }: Props)
   }
 
   return (
-    <div className="rounded-xl border border-purple-200 bg-purple-50/50 p-4 space-y-3">
+    <div className={`rounded-xl border border-gray-200 bg-white p-4 space-y-3 ${items.length > 0 ? "border-l-4 border-l-purple-400" : ""}`}>
       <div className="flex items-center gap-2">
-        <span className="text-lg">🔍</span>
-        <h2 className="font-semibold text-base text-purple-800">Cần bác sĩ kiểm tra</h2>
+        <h2 className="font-semibold text-sm text-gray-800">Cần bác sĩ kiểm tra</h2>
         {items.length > 0 && (
-          <span className="ml-auto px-2 py-0.5 rounded-full bg-purple-100 text-purple-700 text-xs font-medium border border-purple-200">
+          <span className="ml-auto text-xs text-purple-600 font-medium">
             {items.length} thông tin
           </span>
         )}
       </div>
 
       {items.length === 0 ? (
-        <p className="text-sm text-green-600 flex items-center gap-1.5">
-          <span>✅</span> Không có thông tin cần bác sĩ kiểm tra.
+        <p className="text-xs text-gray-500">
+          Không có thông tin cần bác sĩ kiểm tra.
         </p>
       ) : (
         <div className="space-y-2">
@@ -89,17 +88,17 @@ export default function NeedsReviewSection({ sections, onCitationClick }: Props)
             return (
               <div
                 key={i}
-                className="bg-white rounded-lg border border-purple-100 p-3 space-y-1.5"
+                className="rounded-lg border border-gray-100 p-3 space-y-1.5"
               >
                 <div className="flex items-start gap-2">
-                  <span className="shrink-0 mt-0.5">{icon}</span>
+                  <span className="shrink-0 mt-0.5 text-sm">{icon}</span>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm text-gray-800">
                       {stripPrefix(item.claim.claim_text)}
                     </p>
                     <div className="flex items-center gap-2 mt-1 flex-wrap">
                       <span className="text-xs text-purple-600 font-medium">{label}</span>
-                      <span className="text-xs text-gray-400">·</span>
+                      <span className="text-xs text-gray-300">·</span>
                       <span className="text-xs text-gray-400">{sectionName}</span>
                       {firstCitation && (
                         <button
