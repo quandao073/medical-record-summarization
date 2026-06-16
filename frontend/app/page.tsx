@@ -17,6 +17,7 @@ import SectionCard from "@/components/SectionCard";
 import SourcePanel from "@/components/SourcePanel";
 import QuickSummary from "@/components/QuickSummary";
 import SummaryActionBar from "@/components/SummaryActionBar";
+import PatientStrip from "@/components/PatientStrip";
 import { submitSummaryStatus, submitFeedback } from "@/lib/api";
 
 // ─── Freshness helper ────────────────────────────────────────────────────────
@@ -280,7 +281,7 @@ export default function HomePage() {
   return (
     <div className={`min-h-screen ${activeId ? "mr-[380px]" : ""} transition-all`}>
       {/* ── Header ─────────────────────────────────────────────────────────── */}
-      <header className="sticky top-0 z-40 bg-white border-b border-gray-200">
+      <header className="sticky top-0 z-40 bg-white border-b border-gray-200 print:static print:border-0">
         {/* Row 1: Title + actions */}
         <div className="max-w-5xl mx-auto px-4 py-2.5 flex items-center gap-3 flex-wrap">
           <p className="font-bold text-gray-800 text-sm leading-tight">
@@ -291,7 +292,7 @@ export default function HomePage() {
           <select
             value={patient}
             onChange={(e) => { setPatient(e.target.value); setSummary(null); }}
-            className="border border-gray-300 rounded-lg px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white"
+            className="border border-gray-300 rounded-lg px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white print:hidden"
           >
             {patients.map((p) => (
               <option key={p} value={p}>{p}</option>
@@ -320,7 +321,7 @@ export default function HomePage() {
           )}
 
           {/* Actions — right side */}
-          <div className="flex gap-2 ml-auto items-center">
+          <div className="flex gap-2 ml-auto items-center print:hidden">
             <button
               onClick={() => setTechMode((v) => !v)}
               className={`px-2 py-1 text-xs rounded border transition ${
@@ -494,6 +495,9 @@ export default function HomePage() {
         {/* Summary result */}
         {summary && !loading && (
           <>
+            {/* Patient snapshot strip */}
+            <PatientStrip summary={summary} />
+
             {/* Metrics — compact trust status bar with read mode toggle */}
             <MetricsBar
               metrics={summary.metrics}
