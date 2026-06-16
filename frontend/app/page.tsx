@@ -393,10 +393,17 @@ export default function HomePage() {
                 : "Bản nháp"
               }
             </span>
-            {techMode && summary._from_cache && (
-              <span className="px-2 py-0.5 bg-gray-100 text-gray-400 text-xs rounded-full border border-gray-200">
-                cache
-              </span>
+            {techMode && (
+              <>
+                <span className="px-2 py-0.5 bg-gray-100 text-gray-500 text-xs rounded-full border border-gray-200 font-mono">
+                  {summary.model_version}
+                </span>
+                {summary._from_cache && (
+                  <span className="px-2 py-0.5 bg-amber-50 text-amber-600 text-xs rounded-full border border-amber-200">
+                    cache
+                  </span>
+                )}
+              </>
             )}
           </div>
         )}
@@ -490,8 +497,6 @@ export default function HomePage() {
             {/* Metrics — compact trust status bar with read mode toggle */}
             <MetricsBar
               metrics={summary.metrics}
-              fromCache={summary._from_cache ?? false}
-              model={summary.model_version}
               techMode={techMode}
               readMode={readMode}
               onReadModeChange={setReadMode}

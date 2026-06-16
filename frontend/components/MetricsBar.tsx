@@ -2,8 +2,6 @@ import type { SummaryMetrics } from "@/lib/types";
 
 interface Props {
   metrics: SummaryMetrics;
-  fromCache: boolean;
-  model: string;
   techMode?: boolean;
   readMode?: "quick" | "detail";
   onReadModeChange?: (mode: "quick" | "detail") => void;
@@ -18,7 +16,7 @@ function TechPill({ label, value }: { label: string; value: string }) {
   );
 }
 
-export default function MetricsBar({ metrics, fromCache, model, techMode, readMode, onReadModeChange }: Props) {
+export default function MetricsBar({ metrics, techMode, readMode, onReadModeChange }: Props) {
   const coverage     = Math.round(metrics.citation_coverage * 100);
   const critCoverage = Math.round((metrics.critical_citation_coverage ?? 0) * 100);
   const unsup        = Math.round(metrics.unsupported_claim_rate * 100);
@@ -96,22 +94,22 @@ export default function MetricsBar({ metrics, fromCache, model, techMode, readMo
 
       {/* Technical details — only in tech mode */}
       {techMode && (
-        <div className="flex flex-wrap gap-2 pt-3 pb-1">
-          <div className="flex items-center gap-2 text-xs text-gray-500 mr-2">
-            <span className="px-2 py-0.5 rounded bg-gray-100 font-mono">{model}</span>
-            {fromCache && (
-              <span className="px-2 py-0.5 rounded bg-amber-100 text-amber-700">từ cache</span>
-            )}
+        <div className="pt-3 pb-1 space-y-2">
+          <div className="grid grid-cols-3 gap-2">
+            <TechPill label="Coverage tổng" value={`${coverage}%`} />
+            <TechPill label="Coverage critical" value={`${critCoverage}%`} />
+            <TechPill label="Claims" value={String(metrics.total_claims)} />
           </div>
-          <TechPill label="Coverage tổng" value={`${coverage}%`} />
-          <TechPill label="Coverage critical" value={`${critCoverage}%`} />
-          <TechPill label="Chưa có nguồn" value={`${unsup}%`} />
-          <TechPill label="Tin cậy thấp" value={`${lowConf}%`} />
-          <TechPill label="Cần xem xét" value={`${needRev}%`} />
-          <TechPill label="Mâu thuẫn" value={`${halluc}%`} />
-          <TechPill label="Claims" value={String(metrics.total_claims)} />
-          <TechPill label="Latency" value={`${metrics.latency_seconds.toFixed(1)}s`} />
-          <TechPill label="Tokens" value={metrics.token_count.toLocaleString()} />
+          <div className="grid grid-cols-3 gap-2">
+            <TechPill label="Chưa có nguồn" value={`${unsup}%`} />
+            <TechPill label="Tin cậy thấp" value={`${lowConf}%`} />
+            <TechPill label="Mâu thuẫn" value={`${halluc}%`} />
+          </div>
+          <div className="grid grid-cols-3 gap-2">
+            <TechPill label="Cần xem xét" value={`${needRev}%`} />
+            <TechPill label="Latency" value={`${metrics.latency_seconds.toFixed(1)}s`} />
+            <TechPill label="Tokens" value={metrics.token_count.toLocaleString()} />
+          </div>
         </div>
       )}
     </div>
