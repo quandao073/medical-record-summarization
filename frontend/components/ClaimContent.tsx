@@ -7,12 +7,12 @@ import { STATUS_COLORS, STATUS_DISPLAY_NAMES, STATUS_LABELS, STATUS_TOOLTIPS } f
 // ─── Status → visual maps ────────────────────────────────────────────────────
 
 const STATUS_HIGHLIGHT: Record<ClaimStatus, string> = {
-  SUPPORTED:           "bg-green-100 text-green-900",
-  PARTIALLY_SUPPORTED: "bg-amber-100  text-amber-900",
-  LOW_CONFIDENCE:      "bg-orange-100 text-orange-900",
-  UNSUPPORTED:         "bg-red-50     text-red-900",
-  NO_CITATION:         "bg-gray-100   text-gray-900",
-  CONTRADICTED:        "bg-red-100    text-red-900",
+  SUPPORTED:           "bg-green-50   text-green-900",
+  PARTIALLY_SUPPORTED: "bg-amber-50   text-amber-900",
+  LOW_CONFIDENCE:      "bg-orange-50  text-orange-900",
+  UNSUPPORTED:         "bg-red-50     text-red-800",
+  NO_CITATION:         "bg-gray-50    text-gray-800",
+  CONTRADICTED:        "bg-red-50     text-red-900",
   NEED_REVIEW:         "bg-purple-50  text-purple-900",
 };
 
@@ -133,7 +133,7 @@ function ClaimSpan({
         className={`
           rounded px-0.5 py-0.5 transition-colors duration-200 cursor-default
           ${hasCitations ? "cursor-help" : ""}
-          ${isActive ? "ring-2 ring-blue-400 ring-offset-1 bg-blue-50" : ""}
+          ${isActive ? "bg-blue-50/50 border-l-2 border-l-blue-400" : ""}
           ${hovered && !isActive ? STATUS_HIGHLIGHT[claim.status] : ""}
         `}
       >
