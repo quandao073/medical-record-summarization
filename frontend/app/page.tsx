@@ -15,8 +15,29 @@ import MetricsBar from "@/components/MetricsBar";
 import NeedsReviewSection from "@/components/NeedsReviewSection";
 import SectionCard from "@/components/SectionCard";
 import SourcePanel from "@/components/SourcePanel";
+import QuickSummary from "@/components/QuickSummary";
 import SummaryActionBar from "@/components/SummaryActionBar";
 import { submitSummaryStatus, submitFeedback } from "@/lib/api";
+
+// ─── Freshness helper ────────────────────────────────────────────────────────
+function summaryFreshness(createdAt: string): { label: string; stale: boolean } {
+  const diffMs = Date.now() - new Date(createdAt).getTime();
+  const mins = Math.floor(diffMs / 60_000);
+  const hours = Math.floor(mins / 60);
+  const days = Math.floor(hours / 24);
+
+  let label: string;
+  if (mins < 5) label = "Vừa tạo";
+  else if (mins < 60) label = `Tạo ${mins} phút trước`;
+  else if (hours < 24) label = `Tạo ${hours} giờ trước`;
+  else label = `Tạo ${days} ngày trước`;
+
+  const stale = hours >= 4;
+  if (stale) {
+    label += " — nên kiểm tra/làm mới nếu hồ sơ đã thay đổi";
+  }
+  return { label, stale };
+}
 
 // ─── Loading skeleton ────────────────────────────────────────────────────────
 function SkeletonCard() {
@@ -66,6 +87,9 @@ export default function HomePage() {
 
   // ─ Review state
   const [reviewState, setReviewState] = useState<ReviewState | null>(null);
+
+  // ─ Read mode
+  const [readMode, setReadMode] = useState<"quick" | "detail">("detail");
 
   // ─ Source panel
   const [activeId, setActiveId]       = useState<string | null>(null);
@@ -482,6 +506,18 @@ export default function HomePage() {
                   {new Date(summary.created_at).toLocaleString("vi-VN")}
                   {techMode && <> · prompt: {summary.prompt_version}</>}
                 </p>
+                {(() => {
+                  const { label, stale } = summaryFreshness(summary.created_at);
+                  return (
+                    <span className={`inline-block mt-1 text-xs px-2 py-0.5 rounded-full border ${
+                      stale
+                        ? "bg-amber-50 text-amber-700 border-amber-200"
+                        : "bg-green-50 text-green-700 border-green-200"
+                    }`}>
+                      🕐 {label}
+                    </span>
+                  );
+                })()}
               </div>
               <div className="flex items-center gap-2">
                 <span className={`px-3 py-1 text-xs rounded-full border font-medium ${
@@ -509,6 +545,36 @@ export default function HomePage() {
               model={summary.model_version}
               techMode={techMode}
             />
+
+            {/* Quick summary */}
+            <QuickSummary summary={summary} />
+
+            {/* Read mode toggle */}
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-gray-500 font-medium">Chế độ đọc:</span>
+              <div className="inline-flex rounded-lg border border-gray-200 overflow-hidden">
+                <button
+                  onClick={() => setReadMode("quick")}
+                  className={`px-3 py-1.5 text-xs font-medium transition ${
+                    readMode === "quick"
+                      ? "bg-blue-600 text-white"
+                      : "bg-white text-gray-600 hover:bg-gray-50"
+                  }`}
+                >
+                  Đọc nhanh
+                </button>
+                <button
+                  onClick={() => setReadMode("detail")}
+                  className={`px-3 py-1.5 text-xs font-medium transition ${
+                    readMode === "detail"
+                      ? "bg-blue-600 text-white"
+                      : "bg-white text-gray-600 hover:bg-gray-50"
+                  }`}
+                >
+                  Chi tiết
+                </button>
+              </div>
+            </div>
 
             {/* Flag bad output */}
             <div className="flex flex-col gap-2">
@@ -604,6 +670,7 @@ export default function HomePage() {
                   section={section!}
                   activeSourceId={activeId}
                   onCitationClick={handleCitationClick}
+                  collapsed={readMode === "quick"}
                 />
               ));
             })()}

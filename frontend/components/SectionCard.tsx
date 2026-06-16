@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import type { SummarySection } from "@/lib/types";
 import { SECTION_ICONS, SECTION_LABELS } from "@/lib/types";
 import CitationBadge from "./CitationBadge";
@@ -12,6 +13,7 @@ interface Props {
   section: SummarySection;
   activeSourceId: string | null;
   onCitationClick: (sourceId: string) => void;
+  collapsed?: boolean;
 }
 
 
@@ -19,7 +21,12 @@ export default function SectionCard({
   section,
   activeSourceId,
   onCitationClick,
+  collapsed = false,
 }: Props) {
+  const [expanded, setExpanded] = useState(!collapsed);
+  useEffect(() => { setExpanded(!collapsed); }, [collapsed]);
+  const isCollapsed = collapsed && !expanded;
+
   const label = SECTION_LABELS[section.section_id] ?? section.section_id;
   const icon  = SECTION_ICONS[section.section_id] ?? "📄";
   const isClinicalAlerts = section.section_id === "clinical_alerts";
@@ -67,13 +74,24 @@ export default function SectionCard({
       className={`rounded-xl border p-5 shadow-sm ${alertStyle}`}
     >
       {/* Header */}
-      <div className="flex items-center gap-2 mb-3">
+      <div
+        className={`flex items-center gap-2 ${isCollapsed ? "" : "mb-3"} ${collapsed ? "cursor-pointer select-none" : ""}`}
+        onClick={collapsed ? () => setExpanded(e => !e) : undefined}
+      >
+        {collapsed && (
+          <span className="text-xs text-gray-400 w-4">{isCollapsed ? "▶" : "▼"}</span>
+        )}
         <span className="text-lg">{icon}</span>
         <h2
           className={`font-semibold text-base ${alertTextStyle}`}
         >
           {label}
         </h2>
+        {isCollapsed && (
+          <span className="text-xs text-gray-400 ml-1">
+            {claims.length} thông tin
+          </span>
+        )}
         {claims.length > 0 && (
           <span className="ml-auto flex items-center gap-1.5 text-xs text-gray-400 flex-wrap justify-end">
             <span className="text-gray-400">{allCitations.length} nguồn</span>
@@ -96,6 +114,9 @@ export default function SectionCard({
         )}
       </div>
 
+      {/* Content — hidden when collapsed */}
+      {!isCollapsed && (
+      <>
       {/* Specialised table renderers */}
       {section.section_id === "abnormal_labs" && section.cited_claims.length > 0 ? (
         <LabsTable
@@ -142,6 +163,8 @@ export default function SectionCard({
             </div>
           )}
         </>
+      )}
+      </>
       )}
     </div>
   );
