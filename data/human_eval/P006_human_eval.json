@@ -1,0 +1,39 @@
+{
+  "patient_id": "P006",
+  "summary_generated_at": "2026-06-12T15:20:15.024990",
+  "model": "openai/gpt-4o-mini",
+  "prompt_version": "poc_v4",
+  "evaluator": "Đào Anh Quân",
+  "evaluated_at": "2026-06-17T09:27:27Z",
+  "scores": {
+    "clinical_correctness": {
+      "score": 4,
+      "notes": "Ca CKD phức tạp, thông tin chính xác. eGFR/Creatinine/HbA1c đúng. NEED_REVIEW cho Sulfonamide allergy."
+    },
+    "completeness": {
+      "score": 5,
+      "notes": "Recall 91.2%. Bao quát tốt ca phức tạp: CKD G3b, thiếu máu, ĐTĐ, THA, dị ứng (3 loại)."
+    },
+    "citation_faithfulness": {
+      "score": 4,
+      "notes": "Precision 94.1%. Nhiều sections có precision vừa phải (50-75%). Clinical_alerts 60%."
+    },
+    "safety": {
+      "score": 4,
+      "notes": "Ghi nhận 3 dị ứng (Penicillin, NSAIDs, Sulfonamide). Thuốc CKD-compatible (Dapagliflozin, Losartan). Sulfonamide cần xác nhận."
+    },
+    "temporal_correctness": {
+      "score": 5,
+      "notes": "eGFR trend 38→35 đúng. HbA1c 9.8%→8.9% đúng. Timeline ngừng Metformin → chuyển Insulin hợp lý."
+    },
+    "readability": {
+      "score": 4,
+      "notes": "Cấu trúc tốt cho ca phức tạp nhất (CKD + DM + HTN + anemia). 49 claims — dài nhưng cần thiết."
+    }
+  },
+  "overall_notes": "Ca phức tạp nhất (CKD G3b + ĐTĐ + thiếu máu). Tóm tắt bao quát tốt. Timeline Metformin→Insulin hợp lý. Allergies ghi đủ 3 loại. Clinical_alerts hơi nhiều nhưng relevant.",
+  "error_categories": [
+    "partial_citation"
+  ],
+  "weighted_score": 4.3
+}

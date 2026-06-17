@@ -1,0 +1,39 @@
+{
+  "patient_id": "P007",
+  "summary_generated_at": "2026-06-15T11:02:58.169389",
+  "model": "openai/gpt-4o-mini",
+  "prompt_version": "poc_v4",
+  "evaluator": "Đào Anh Quân",
+  "evaluated_at": "2026-06-17T09:27:27Z",
+  "scores": {
+    "clinical_correctness": {
+      "score": 4,
+      "notes": "Chính xác cho ca Basedow. TSH/FT4/FT3 trends đúng. Methimazole dose reduction đúng."
+    },
+    "completeness": {
+      "score": 3,
+      "notes": "Recall 73.7% — thấp nhất. Diagnoses recall chỉ 33% (1/3). Overview recall 50%. Thiếu gold items lồi mắt và nhịp tim nhanh."
+    },
+    "citation_faithfulness": {
+      "score": 5,
+      "notes": "Precision 100%. Tất cả claims đều được gold support."
+    },
+    "safety": {
+      "score": 5,
+      "notes": "Không lỗi an toàn. Methimazole giảm liều đúng theo response."
+    },
+    "temporal_correctness": {
+      "score": 5,
+      "notes": "TSH recovery 0.01→0.3 đúng. FT4 45→22→14 đúng. Methimazole 20→10→5 đúng."
+    },
+    "readability": {
+      "score": 5,
+      "notes": "Gọn nhất (29 claims). Rất rõ ràng cho ca chuyên khoa nội tiết."
+    }
+  },
+  "overall_notes": "Precision hoàn hảo (100%) nhưng recall thấp nhất (73.7%). Thiếu một số gold items ở diagnoses và overview. Ca Basedow tóm tắt gọn, timeline điều trị rõ ràng.",
+  "error_categories": [
+    "omission"
+  ],
+  "weighted_score": 4.35
+}

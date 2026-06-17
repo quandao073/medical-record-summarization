@@ -1,0 +1,40 @@
+{
+  "patient_id": "P003",
+  "summary_generated_at": "2026-06-12T11:31:06.411819",
+  "model": "openai/gpt-4o-mini",
+  "prompt_version": "poc_v4",
+  "evaluator": "Đào Anh Quân",
+  "evaluated_at": "2026-06-17T09:27:27Z",
+  "scores": {
+    "clinical_correctness": {
+      "score": 4,
+      "notes": "Chính xác phần lớn. Dị ứng Sulfonamide ghi NEED_REVIEW — cần xác nhận."
+    },
+    "completeness": {
+      "score": 4,
+      "notes": "Recall 91.2%. Allergies section recall 0% — không match gold. Clinical_alerts thiếu 2/6 gold items."
+    },
+    "citation_faithfulness": {
+      "score": 4,
+      "notes": "Precision 93.9% tổng thể. Allergies 0% precision, clinical_alerts 44%."
+    },
+    "safety": {
+      "score": 4,
+      "notes": "Allergies section có NEED_REVIEW — cần xác nhận dị ứng Sulfonamide. Quan trọng với bệnh nhân dùng nhiều thuốc."
+    },
+    "temporal_correctness": {
+      "score": 5,
+      "notes": "Timeline phức tạp (bao gồm nhập viện cấp cứu tăng HA) được ghi đúng thứ tự."
+    },
+    "readability": {
+      "score": 4,
+      "notes": "Cấu trúc tốt cho ca phức tạp (THA + ĐTĐ + nhập viện)."
+    }
+  },
+  "overall_notes": "Ca phức tạp với tăng HA cấp cứu. Tóm tắt bao quát tốt. Allergies section cần cải thiện recall. NEED_REVIEW cho Sulfonamide là hợp lý.",
+  "error_categories": [
+    "partial_citation",
+    "omission"
+  ],
+  "weighted_score": 4.1
+}

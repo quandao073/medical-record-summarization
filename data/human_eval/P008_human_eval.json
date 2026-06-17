@@ -1,0 +1,39 @@
+{
+  "patient_id": "P008",
+  "summary_generated_at": "2026-06-12T15:19:54.850505",
+  "model": "openai/gpt-4o-mini",
+  "prompt_version": "poc_v4",
+  "evaluator": "Đào Anh Quân",
+  "evaluated_at": "2026-06-17T09:27:27Z",
+  "scores": {
+    "clinical_correctness": {
+      "score": 4,
+      "notes": "Thông tin chính xác. Overview precision 33% — mở rộng ngoài gold."
+    },
+    "completeness": {
+      "score": 4,
+      "notes": "Recall 82.4%. Diagnoses recall 50% (thiếu 2/4 gold). Overview recall 50%."
+    },
+    "citation_faithfulness": {
+      "score": 5,
+      "notes": "Precision 100%. Không có claim sai nguồn."
+    },
+    "safety": {
+      "score": 5,
+      "notes": "Không lỗi an toàn."
+    },
+    "temporal_correctness": {
+      "score": 4,
+      "notes": "Timeline đúng thứ tự. 2 PARTIALLY_SUPPORTED claims."
+    },
+    "readability": {
+      "score": 4,
+      "notes": "Gọn (21 claims). Cấu trúc rõ ràng."
+    }
+  },
+  "overall_notes": "Precision hoàn hảo. Recall trung bình — thiếu gold items ở diagnoses. Summary gọn, dễ đọc.",
+  "error_categories": [
+    "omission"
+  ],
+  "weighted_score": 4.4
+}

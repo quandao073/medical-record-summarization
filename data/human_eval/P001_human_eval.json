@@ -1,0 +1,39 @@
+{
+  "patient_id": "P001",
+  "summary_generated_at": "2026-06-16T10:24:17.060427",
+  "model": "openai/gpt-4o-mini",
+  "prompt_version": "poc_v4",
+  "evaluator": "Đào Anh Quân",
+  "evaluated_at": "2026-06-17T09:27:27Z",
+  "scores": {
+    "clinical_correctness": {
+      "score": 4,
+      "notes": "Thuốc/liều chính xác. Lab values đúng. BMI 28.0 đúng. Microalbuminuria trend đúng (42→32)."
+    },
+    "completeness": {
+      "score": 5,
+      "notes": "Recall 94.9%. Đủ thông tin quan trọng: thuốc, labs, chẩn đoán, tiền sử gia đình, dị ứng Penicillin."
+    },
+    "citation_faithfulness": {
+      "score": 4,
+      "notes": "Precision 92.3%. Core sections citation chính xác. Clinical_alerts có claims không khớp gold (38% prec)."
+    },
+    "safety": {
+      "score": 5,
+      "notes": "Dị ứng Penicillin được ghi nhận đầy đủ. Thuốc/liều đúng. Không có thông tin nguy hiểm."
+    },
+    "temporal_correctness": {
+      "score": 5,
+      "notes": "Timeline 3 lần khám rõ ràng. HbA1c trend 9.2%→8.1%→7.5%→7.1% đúng thứ tự."
+    },
+    "readability": {
+      "score": 4,
+      "notes": "Cấu trúc rõ ràng, dễ đọc. Clinical_alerts section hơi dài (8 items)."
+    }
+  },
+  "overall_notes": "Tóm tắt tốt cho bệnh nhân ĐTĐ type 2 kiểm soát ổn. Citation core sections chính xác. Clinical_alerts section có nhiều claim không match gold label.",
+  "error_categories": [
+    "partial_citation"
+  ],
+  "weighted_score": 4.5
+}

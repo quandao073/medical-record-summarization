@@ -1,0 +1,39 @@
+{
+  "patient_id": "P002",
+  "summary_generated_at": "2026-06-12T11:19:31.803175",
+  "model": "openai/gpt-4o-mini",
+  "prompt_version": "poc_v4",
+  "evaluator": "Đào Anh Quân",
+  "evaluated_at": "2026-06-17T09:27:27Z",
+  "scores": {
+    "clinical_correctness": {
+      "score": 4,
+      "notes": "Thông tin y tế chính xác. Overview section có precision thấp (33%)."
+    },
+    "completeness": {
+      "score": 4,
+      "notes": "Recall 90.9%. Đủ thông tin chính. Medical_history recall 80% — thiếu 1 gold item."
+    },
+    "citation_faithfulness": {
+      "score": 4,
+      "notes": "Precision 86.4%. Clinical_alerts 43% precision. Một số claims overview không match gold."
+    },
+    "safety": {
+      "score": 5,
+      "notes": "Không có lỗi an toàn. Thuốc đúng."
+    },
+    "temporal_correctness": {
+      "score": 4,
+      "notes": "Timeline đúng thứ tự."
+    },
+    "readability": {
+      "score": 4,
+      "notes": "Gọn, dễ đọc. 28 claims vừa phải."
+    }
+  },
+  "overall_notes": "Ca đơn giản, tóm tắt gọn gàng. Precision thấp ở overview và clinical_alerts do claims mở rộng ngoài gold label.",
+  "error_categories": [
+    "partial_citation"
+  ],
+  "weighted_score": 4.2
+}

@@ -1,0 +1,40 @@
+{
+  "patient_id": "P005",
+  "summary_generated_at": "2026-06-12T15:31:06.631198",
+  "model": "openai/gpt-4o-mini",
+  "prompt_version": "poc_v4",
+  "evaluator": "Đào Anh Quân",
+  "evaluated_at": "2026-06-17T09:27:27Z",
+  "scores": {
+    "clinical_correctness": {
+      "score": 4,
+      "notes": "Phần lớn chính xác. Có 1 claim UNSUPPORTED. Medical_history precision 60%."
+    },
+    "completeness": {
+      "score": 4,
+      "notes": "Recall 89.7%. Medical_history thiếu 1 gold item. Treatment_timeline thiếu 1/3."
+    },
+    "citation_faithfulness": {
+      "score": 4,
+      "notes": "Precision 93.1%. Clinical_alerts chỉ 29% precision. Có 3 PARTIALLY_SUPPORTED."
+    },
+    "safety": {
+      "score": 4,
+      "notes": "Có 1 UNSUPPORTED claim — cần kiểm tra. Thuốc (9 claims) đều đúng."
+    },
+    "temporal_correctness": {
+      "score": 4,
+      "notes": "Treatment_timeline recall/precision 67%. Thứ tự tổng thể đúng."
+    },
+    "readability": {
+      "score": 4,
+      "notes": "Dễ đọc. Medications section chi tiết (9 claims)."
+    }
+  },
+  "overall_notes": "Medications section xuất sắc (9/9 claims correct). Clinical_alerts và medical_history cần cải thiện. UNSUPPORTED claim cần xử lý.",
+  "error_categories": [
+    "partial_citation",
+    "wrong_source"
+  ],
+  "weighted_score": 4.0
+}
