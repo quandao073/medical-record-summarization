@@ -133,7 +133,7 @@ function ClaimSpan({
         className={`
           rounded px-0.5 py-0.5 transition-colors duration-200 cursor-default
           ${hasCitations ? "cursor-help" : ""}
-          ${isActive ? "bg-blue-50/50 border-l-2 border-l-blue-400" : ""}
+          ${isActive ? "bg-blue-100/80 border-l-2 border-l-blue-600" : ""}
           ${hovered && !isActive ? STATUS_HIGHLIGHT[claim.status] : ""}
         `}
       >
