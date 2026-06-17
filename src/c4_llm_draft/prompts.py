@@ -135,6 +135,8 @@ SECTION_GUIDELINES = {
     ),
 
     "allergies": (
+        "BẮT BUỘC: Liệt kê ĐẦY ĐỦ TẤT CẢ dị ứng riêng biệt có trong context, không bỏ sót dị ứng nào — "
+        "kể cả khi chỉ có tên tác nhân mà thiếu thông tin phản ứng/mức độ/trạng thái. "
         "Liệt kê tất cả dị ứng đã biết từ context, mỗi dị ứng viết thành MỘT câu văn tự nhiên. "
         "TUYỆT ĐỐI KHÔNG dùng định dạng liệt kê trường kiểu 'Dị ứng: X; phản ứng: Y; mức độ: Z; trạng thái: W' — "
         "đây là lỗi thường gặp cần tránh.\n"
@@ -216,6 +218,9 @@ SECTION_GUIDELINES = {
         "7. Mỗi bullet nên ngắn, tối đa 1 câu.\n"
         "8. Tối đa 4 bullets cho mỗi nhóm để tránh rối UI.\n"
         "9. Các giá trị xét nghiệm, huyết áp, thuốc, dị ứng phải giữ nguyên theo context.\n"
+        "10. BẮT BUỘC: mỗi bullet chỉ chứa MỘT thông tin/chỉ số duy nhất (atomic claim) — "
+        "không gộp nhiều chỉ số hoặc nhiều nhận xét khác nhau vào một bullet. "
+        "Nếu có nhiều chỉ số liên quan, tách thành nhiều bullet riêng, mỗi bullet ứng với một nguồn dữ liệu duy nhất.\n"
     ),
 }
 
