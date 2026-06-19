@@ -11,6 +11,7 @@ import {
   submitClaimReview,
   summarize,
 } from "@/lib/api";
+import { MODEL_GROUPS, DEFAULT_MODEL } from "@/lib/models";
 import MetricsBar from "@/components/MetricsBar";
 import NeedsReviewSection from "@/components/NeedsReviewSection";
 import SectionCard from "@/components/SectionCard";
@@ -66,7 +67,7 @@ export default function HomePage() {
   // ─ Controls
   const [patients, setPatients]   = useState<string[]>([]);
   const [patient, setPatient]     = useState("P001");
-  const [model, setModel]         = useState("gpt-4o-mini");
+  const [model, setModel]         = useState(DEFAULT_MODEL);
 
   // ─ Pipeline state
   const [summary, setSummary]     = useState<FinalSummary | null>(null);
@@ -196,8 +197,17 @@ export default function HomePage() {
       setStageIdx((prev) => Math.min(prev + 1, PIPELINE_STAGES.length - 1));
     }, 3000);
 
+    // Parse "provider:model" format
+    let provider: string | undefined;
+    let modelName = mdl;
+    if (mdl.includes(":")) {
+      const idx = mdl.indexOf(":");
+      provider = mdl.slice(0, idx);
+      modelName = mdl.slice(idx + 1);
+    }
+
     try {
-      const result = await summarize(pid, mdl, forceRefresh, abortRef.current.signal);
+      const result = await summarize(pid, modelName, forceRefresh, abortRef.current.signal, provider);
       setSummary(result);
       getReviewState(pid).then(setReviewState).catch(() => {});
     } catch (e) {
@@ -303,25 +313,30 @@ export default function HomePage() {
             ))}
           </select>
 
+          {/* Model selector — always visible */}
+          <select
+            value={model}
+            onChange={(e) => setModel(e.target.value)}
+            className="border border-gray-300 rounded-lg px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white print:hidden"
+          >
+            {MODEL_GROUPS.map((group) => (
+              <optgroup key={group.label} label={group.label}>
+                {group.options.map((opt) => (
+                  <option key={opt.value} value={opt.value}>{opt.label}</option>
+                ))}
+              </optgroup>
+            ))}
+          </select>
+
           {/* Tech controls — only in tech mode */}
           {techMode && (
-            <>
-              <select
-                value={model}
-                onChange={(e) => setModel(e.target.value)}
-                className="border border-gray-300 rounded-lg px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white"
-              >
-                <option value="gpt-4o-mini">gpt-4o-mini</option>
-                <option value="gpt-4o">gpt-4o</option>
-              </select>
-              <button
-                onClick={handleClearCache}
-                disabled={loading}
-                className="px-2.5 py-1 text-xs rounded-lg border border-gray-300 text-gray-500 hover:bg-gray-50 disabled:opacity-40 transition"
-              >
-                Xóa cache
-              </button>
-            </>
+            <button
+              onClick={handleClearCache}
+              disabled={loading}
+              className="px-2.5 py-1 text-xs rounded-lg border border-gray-300 text-gray-500 hover:bg-gray-50 disabled:opacity-40 transition"
+            >
+              Xóa cache
+            </button>
           )}
 
           {/* Actions — right side */}
