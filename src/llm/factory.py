@@ -20,10 +20,12 @@ def _ensure_registry() -> None:
     from .providers.openai_provider import OpenAIClient
     from .providers.anthropic_provider import AnthropicClient
     from .providers.ollama_provider import OllamaClient
+    from .providers.lmstudio_provider import LMStudioClient
 
     _PROVIDER_REGISTRY["openai"] = OpenAIClient
     _PROVIDER_REGISTRY["anthropic"] = AnthropicClient
     _PROVIDER_REGISTRY["ollama"] = OllamaClient
+    _PROVIDER_REGISTRY["lmstudio"] = LMStudioClient
 
 
 def _infer_provider(model: str) -> str | None:
