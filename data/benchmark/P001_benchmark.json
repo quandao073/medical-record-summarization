@@ -1,0 +1,1201 @@
+{
+  "openai:gpt-4o-mini": {
+    "summary": {
+      "patient_id": "P001",
+      "created_at": "2026-06-19T09:52:21.285996",
+      "prompt_version": "poc_v4",
+      "model_version": "openai/gpt-4o-mini",
+      "sections": [
+        {
+          "section_id": "overview",
+          "title": null,
+          "content": "Bệnh nhân Nguyễn Văn An, 55 tuổi, nam giới, có bệnh nền chính là đái tháo đường type 2. Bệnh nhân có BMI 28.0, thuộc nhóm thừa cân. Hiện tại đang theo dõi biến chứng microalbuminuria và bệnh thần kinh ngoại biên.",
+          "cited_claims": [
+            {
+              "claim_text": "Bệnh nhân Nguyễn Văn An, 55 tuổi, nam giới, có bệnh nền chính là đái tháo đường type 2.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-PATIENT-INFO",
+                "P001-E004-DX-E11"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": false,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "Bệnh nhân có BMI 28.0, thuộc nhóm thừa cân.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E004-VIT-VIT001"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": false,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "Hiện tại đang theo dõi biến chứng microalbuminuria và bệnh thần kinh ngoại biên.",
+              "status": "PARTIALLY_SUPPORTED",
+              "citations": [
+                "P001-E001-DX-G63.2"
+              ],
+              "confidence_score": 0.5,
+              "is_critical": false,
+              "verification_status": "PENDING",
+              "verifier_action": "FLAG",
+              "is_structural": false
+            }
+          ]
+        },
+        {
+          "section_id": "reason_for_visit",
+          "title": null,
+          "content": "Bệnh nhân tái khám lần 4 sau 9 tháng điều trị, ổn định, không phàn nàn.",
+          "cited_claims": [
+            {
+              "claim_text": "Bệnh nhân tái khám lần 4 sau 9 tháng điều trị, ổn định, không phàn nàn.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E004-NOTE-NOTE001"
+              ],
+              "confidence_score": 0.8,
+              "is_critical": false,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            }
+          ]
+        },
+        {
+          "section_id": "medical_history",
+          "title": null,
+          "content": "Đái tháo đường type 2, phát hiện năm 2021. Tăng huyết áp, phát hiện năm 2019. Rối loạn lipid máu, phát hiện năm 2020. Cha mắc đái tháo đường type 2, mất năm 2018 do nhồi máu cơ tim. Mẹ tăng huyết áp, đang điều trị. Anh trai tăng huyết áp và rối loạn lipid máu. Hút thuốc lá 15 gói-năm, đã bỏ 2 năm nay. Chế độ ăn chưa kiểm soát tốt (nhiều cơm trắng, ít rau). Ít vận động thể lực.",
+          "cited_claims": [
+            {
+              "claim_text": "Đái tháo đường type 2, phát hiện năm 2021.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E001-DX-E11",
+                "P001-E002-DX-E11"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": false,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "Tăng huyết áp, phát hiện năm 2019.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E001-NOTE-NOTE001",
+                "P001-E001-NOTE-NOTE002"
+              ],
+              "confidence_score": 0.8,
+              "is_critical": false,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "Rối loạn lipid máu, phát hiện năm 2020.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E001-NOTE-NOTE001",
+                "P001-E001-NOTE-NOTE002"
+              ],
+              "confidence_score": 0.8,
+              "is_critical": false,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "Cha mắc đái tháo đường type 2, mất năm 2018 do nhồi máu cơ tim.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E001-DX-E11",
+                "P001-E002-DX-E11"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": false,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "Mẹ tăng huyết áp, đang điều trị.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E001-NOTE-NOTE001",
+                "P001-E001-NOTE-NOTE004"
+              ],
+              "confidence_score": 0.8,
+              "is_critical": false,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "Anh trai tăng huyết áp và rối loạn lipid máu.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E001-NOTE-NOTE001",
+                "P001-E001-NOTE-NOTE002",
+                "P001-E001-NOTE-NOTE004"
+              ],
+              "confidence_score": 0.8,
+              "is_critical": false,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "Hút thuốc lá 15 gói-năm, đã bỏ 2 năm nay.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E001-NOTE-NOTE002"
+              ],
+              "confidence_score": 0.8,
+              "is_critical": false,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "Chế độ ăn chưa kiểm soát tốt (nhiều cơm trắng, ít rau).",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E001-NOTE-NOTE001"
+              ],
+              "confidence_score": 0.8,
+              "is_critical": false,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "Ít vận động thể lực.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E001-NOTE-NOTE001"
+              ],
+              "confidence_score": 0.8,
+              "is_critical": false,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            }
+          ]
+        },
+        {
+          "section_id": "current_medications",
+          "title": null,
+          "content": "Metformin 1000 mg — 1 viên, 2 lần/ngày, Uống sau ăn sáng và tối. Empagliflozin 10 mg — 1 viên, 1 lần/ngày (sáng), Uống buổi sáng. Amlodipine 5 mg — 1 viên, 1 lần/ngày, Uống buổi sáng. Perindopril 5 mg — 1 viên, 1 lần/ngày, Uống buổi sáng trước ăn. Atorvastatin 40 mg — 1 viên, 1 lần/ngày (tối), Uống buổi tối.",
+          "cited_claims": [
+            {
+              "claim_text": "Metformin 1000 mg — 1 viên, 2 lần/ngày, Uống sau ăn sáng và tối.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E004-MED-METFORMIN"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "Empagliflozin 10 mg — 1 viên, 1 lần/ngày (sáng), Uống buổi sáng.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E004-MED-EMPAGLIFLOZIN"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "Amlodipine 5 mg — 1 viên, 1 lần/ngày, Uống buổi sáng.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E004-MED-AMLODIPINE"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "Perindopril 5 mg — 1 viên, 1 lần/ngày, Uống buổi sáng trước ăn.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E004-MED-PERINDOPRIL"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "Atorvastatin 40 mg — 1 viên, 1 lần/ngày (tối), Uống buổi tối.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E004-MED-ATORVASTATIN"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            }
+          ]
+        },
+        {
+          "section_id": "allergies",
+          "title": null,
+          "content": "Dị ứng Penicillin, biểu hiện nổi mề đay toàn thân, mức độ moderate, trạng thái ghi nhận: active.",
+          "cited_claims": [
+            {
+              "claim_text": "Dị ứng Penicillin, biểu hiện nổi mề đay toàn thân, mức độ moderate, trạng thái ghi nhận: active.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-PATIENT-ALLERGY-PENICILLIN"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            }
+          ]
+        },
+        {
+          "section_id": "abnormal_labs",
+          "title": null,
+          "content": "HbA1c: 7.1%, cao, tham chiếu: <5.6%, ngày: 2024-10-10. Xu hướng: 9.2% xuống 7.1%, cải thiện. Glucose huyết tương lúc đói: 6.2 mmol/L, cao, tham chiếu: 3.9 - 6.1, ngày: 2024-10-10. Microalbumin/Creatinine ratio: 32 mg/g, cao, tham chiếu: <30, ngày: 2024-10-10. Xu hướng: 42 xuống 32 mg/g, cải thiện. LDL-Cholesterol: 2.8 mmol/L, cao, tham chiếu: <2.6, ngày: 2024-07-10. Cholesterol toàn phần: 5.8 mmol/L, cao, tham chiếu: <5.2, ngày: 2024-01-10. Triglyceride: 2.8 mmol/L, cao, tham chiếu: <1.7, ngày: 2024-01-10. HDL-Cholesterol: 0.9 mmol/L, thấp, tham chiếu: >1.0, ngày: 2024-01-10.",
+          "cited_claims": [
+            {
+              "claim_text": "HbA1c: 7.1%, cao, tham chiếu: <5.6%, ngày: 2024-10-10.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E004-LAB-HBA1C"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "Xu hướng: 9.2% xuống 7.1%, cải thiện.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E004-LAB-HBA1C"
+              ],
+              "confidence_score": 0.85,
+              "is_critical": false,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "Glucose huyết tương lúc đói: 6.2 mmol/L, cao, tham chiếu: 3.9 - 6.1, ngày: 2024-10-10.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E004-LAB-FPG"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "Microalbumin/Creatinine ratio: 32 mg/g, cao, tham chiếu: <30, ngày: 2024-10-10.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E004-LAB-UACR"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "Xu hướng: 42 xuống 32 mg/g, cải thiện.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E004-LAB-UACR"
+              ],
+              "confidence_score": 0.85,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "LDL-Cholesterol: 2.8 mmol/L, cao, tham chiếu: <2.6, ngày: 2024-07-10.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E003-LAB-LDL",
+                "P001-E001-LAB-TG"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "Cholesterol toàn phần: 5.8 mmol/L, cao, tham chiếu: <5.2, ngày: 2024-01-10.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E001-LAB-TC"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "Triglyceride: 2.8 mmol/L, cao, tham chiếu: <1.7, ngày: 2024-01-10.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E001-LAB-TG",
+                "P001-E003-LAB-LDL"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "HDL-Cholesterol: 0.9 mmol/L, thấp, tham chiếu: >1.0, ngày: 2024-01-10.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E001-LAB-HDL"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            }
+          ]
+        },
+        {
+          "section_id": "diagnoses",
+          "title": null,
+          "content": "Chính: Đái tháo đường type 2 (E11) Bệnh kèm: Tăng huyết áp nguyên phát (I10) Bệnh kèm: Rối loạn chuyển hóa lipid hỗn hợp (E78.5) Biến chứng: Microalbuminuria trong ĐTĐ (N18.3) Biến chứng: Bệnh thần kinh ngoại biên trong ĐTĐ (G63.2)",
+          "cited_claims": [
+            {
+              "claim_text": "Chính: Đái tháo đường type 2 (E11)",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E004-DX-E11"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "Bệnh kèm: Tăng huyết áp nguyên phát (I10)",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E004-DX-I10"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "Bệnh kèm: Rối loạn chuyển hóa lipid hỗn hợp (E78.5)",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E004-DX-E78.5"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "Biến chứng: Microalbuminuria trong ĐTĐ (N18.3)",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E004-DX-N18.3"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "Biến chứng: Bệnh thần kinh ngoại biên trong ĐTĐ (G63.2)",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E001-DX-G63.2"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            }
+          ]
+        },
+        {
+          "section_id": "treatment_timeline",
+          "title": null,
+          "content": "2024-01-10: HbA1c 9.2%, huyết áp 148/92 mmHg, LDL 3.4 mmol/L — tăng Metformin, thêm Empagliflozin, thêm Perindopril — kiểm soát chưa đạt. 2024-04-10: HbA1c 8.1%, huyết áp 138/88 mmHg, LDL 3.1 mmol/L — giữ nguyên phác đồ — cải thiện nhưng chưa đạt mục tiêu. 2024-07-10: HbA1c 7.5%, huyết áp 132/82 mmHg, LDL 2.8 mmol/L — giữ nguyên phác đồ — gần đạt mục tiêu.",
+          "cited_claims": [
+            {
+              "claim_text": "2024-01-10: HbA1c 9.2%, huyết áp 148/92 mmHg, LDL 3.4 mmol/L — tăng Metformin, thêm Empagliflozin, thêm Perindopril — kiểm soát chưa đạt.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E001-LAB-HBA1C",
+                "P001-E001-LAB-LDL"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "2024-04-10: HbA1c 8.1%, huyết áp 138/88 mmHg, LDL 3.1 mmol/L — giữ nguyên phác đồ — cải thiện nhưng chưa đạt mục tiêu.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E002-LAB-HBA1C",
+                "P001-E002-LAB-LDL"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "2024-07-10: HbA1c 7.5%, huyết áp 132/82 mmHg, LDL 2.8 mmol/L — giữ nguyên phác đồ — gần đạt mục tiêu.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E003-LAB-HBA1C",
+                "P001-E003-LAB-LDL",
+                "P001-E001-LAB-TG",
+                "P001-E002-LAB-FPG"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            }
+          ]
+        },
+        {
+          "section_id": "clinical_alerts",
+          "title": null,
+          "content": "Cảnh báo hiện tại: HbA1c 7.1% vẫn cao hơn mục tiêu <7.5%. Glucose huyết tương lúc đói 6.2 mmol/L vẫn cao hơn tham chiếu. Microalbumin/Creatinine ratio 32 mg/g vẫn cao hơn tham chiếu. Đã cải thiện: Microalbumin/Creatinine ratio giảm từ 42 mg/g sang 32 mg/g. Cần xác minh: Không ghi nhận.",
+          "cited_claims": [
+            {
+              "claim_text": "Cảnh báo hiện tại:",
+              "status": "SUPPORTED",
+              "citations": [],
+              "confidence_score": null,
+              "is_critical": false,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": true
+            },
+            {
+              "claim_text": "HbA1c 7.1% vẫn cao hơn mục tiêu <7.5%.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E004-LAB-HBA1C"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "Glucose huyết tương lúc đói 6.2 mmol/L vẫn cao hơn tham chiếu.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E004-LAB-FPG"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "Microalbumin/Creatinine ratio 32 mg/g vẫn cao hơn tham chiếu.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E004-LAB-UACR"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "Đã cải thiện:",
+              "status": "SUPPORTED",
+              "citations": [],
+              "confidence_score": null,
+              "is_critical": false,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": true
+            },
+            {
+              "claim_text": "Microalbumin/Creatinine ratio giảm từ 42 mg/g sang 32 mg/g.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E004-LAB-UACR"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "Cần xác minh:",
+              "status": "SUPPORTED",
+              "citations": [],
+              "confidence_score": null,
+              "is_critical": false,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": true
+            },
+            {
+              "claim_text": "Không ghi nhận.",
+              "status": "SUPPORTED",
+              "citations": [],
+              "confidence_score": null,
+              "is_critical": false,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": true
+            }
+          ]
+        }
+      ],
+      "metrics": {
+        "citation_coverage": 0.975,
+        "critical_citation_coverage": 1.0,
+        "total_critical_claims": 26,
+        "unsupported_claim_rate": 0.0,
+        "low_confidence_rate": 0.025,
+        "need_review_rate": 0.0,
+        "hallucination_rate": 0.0,
+        "missing_section_rate": 0.0,
+        "total_claims": 40,
+        "contradiction_count": 0,
+        "duplicate_claim_count": 0,
+        "need_review_count": 0,
+        "citation_precision": 0.0,
+        "citation_recall": 0.0,
+        "latency_seconds": 15.35,
+        "token_count": 20712
+      },
+      "removed_claims": []
+    },
+    "latency": 15.35,
+    "error": null
+  },
+  "lmstudio:meta-llama-3.1-8b-instruct": {
+    "summary": {
+      "patient_id": "P001",
+      "created_at": "2026-06-19T09:53:17.544800",
+      "prompt_version": "poc_v4",
+      "model_version": "lmstudio/meta-llama-3.1-8b-instruct",
+      "sections": [
+        {
+          "section_id": "overview",
+          "title": null,
+          "content": "Bệnh nhân Nguyễn Văn An, 55 tuổi, nam giới, có bệnh nền chính là đái tháo đường type 2. Bệnh nhân có BMI 28.0, thuộc nhóm thừa cân. Hiện tại đang theo dõi biến chứng microalbuminuria.",
+          "cited_claims": [
+            {
+              "claim_text": "Bệnh nhân Nguyễn Văn An, 55 tuổi, nam giới, có bệnh nền chính là đái tháo đường type 2.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-PATIENT-INFO",
+                "P001-E004-DX-E11"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": false,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "Bệnh nhân có BMI 28.0, thuộc nhóm thừa cân.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E004-VIT-VIT001"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": false,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "Hiện tại đang theo dõi biến chứng microalbuminuria.",
+              "status": "UNSUPPORTED",
+              "citations": [],
+              "confidence_score": 0.0,
+              "is_critical": false,
+              "verification_status": "PENDING",
+              "verifier_action": "FLAG",
+              "is_structural": false
+            }
+          ]
+        },
+        {
+          "section_id": "reason_for_visit",
+          "title": null,
+          "content": "Bệnh nhân tái khám lần 4 sau 9 tháng điều trị để đánh giá lại tình trạng sức khỏe và hiệu quả của phác đồ.",
+          "cited_claims": [
+            {
+              "claim_text": "Bệnh nhân tái khám lần 4 sau 9 tháng điều trị để đánh giá lại tình trạng sức khỏe và hiệu quả của phác đồ.",
+              "status": "PARTIALLY_SUPPORTED",
+              "citations": [
+                "P001-E004-NOTE-NOTE001",
+                "P001-E004-NOTE-NOTE002"
+              ],
+              "confidence_score": 0.5,
+              "is_critical": false,
+              "verification_status": "PENDING",
+              "verifier_action": "FLAG",
+              "is_structural": false
+            }
+          ]
+        },
+        {
+          "section_id": "medical_history",
+          "title": null,
+          "content": "Tiền sử bản thân: Đái tháo đường type 2, phát hiện năm 2021. Tăng huyết áp, phát hiện năm 2019. Tiền sử gia đình: Cha mắc đái tháo đường type 2, mất năm 2018 do nhồi máu cơ tim. Thói quen nguy cơ: Hút thuốc lá 15 gói-năm, đã bỏ 2 năm nay.",
+          "cited_claims": [
+            {
+              "claim_text": "Tiền sử bản thân:",
+              "status": "SUPPORTED",
+              "citations": [],
+              "confidence_score": null,
+              "is_critical": false,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": true
+            },
+            {
+              "claim_text": "Đái tháo đường type 2, phát hiện năm 2021.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E001-DX-E11",
+                "P001-E002-DX-E11"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": false,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "Tăng huyết áp, phát hiện năm 2019.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E001-NOTE-NOTE001",
+                "P001-E001-NOTE-NOTE002"
+              ],
+              "confidence_score": 0.8,
+              "is_critical": false,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "Tiền sử gia đình:",
+              "status": "SUPPORTED",
+              "citations": [],
+              "confidence_score": null,
+              "is_critical": false,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": true
+            },
+            {
+              "claim_text": "Cha mắc đái tháo đường type 2, mất năm 2018 do nhồi máu cơ tim.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E001-DX-E11",
+                "P001-E002-DX-E11"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": false,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "Thói quen nguy cơ:",
+              "status": "SUPPORTED",
+              "citations": [],
+              "confidence_score": null,
+              "is_critical": false,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": true
+            },
+            {
+              "claim_text": "Hút thuốc lá 15 gói-năm, đã bỏ 2 năm nay.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E001-NOTE-NOTE002"
+              ],
+              "confidence_score": 0.8,
+              "is_critical": false,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            }
+          ]
+        },
+        {
+          "section_id": "current_medications",
+          "title": null,
+          "content": "Metformin 1000 mg - 1 viên, tần suất: 2 lần/ngày, uống sau ăn sáng và tối. Empagliflozin 10 mg - 1 viên, tần suất: 1 lần/ngày (sáng), uống buổi sáng. Amlodipine 5 mg - 1 viên, tần suất: 1 lần/ngày, uống buổi sáng. Perindopril 5 mg - 1 viên, tần suất: 1 lần/ngày, uống buổi sáng trước ăn. Atorvastatin 40 mg - 1 viên, tần suất: 1 lần/ngày (tối), uống buổi tối.",
+          "cited_claims": [
+            {
+              "claim_text": "Metformin 1000 mg - 1 viên, tần suất: 2 lần/ngày, uống sau ăn sáng và tối.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E004-MED-METFORMIN"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "Empagliflozin 10 mg - 1 viên, tần suất: 1 lần/ngày (sáng), uống buổi sáng.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E004-MED-EMPAGLIFLOZIN"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "Amlodipine 5 mg - 1 viên, tần suất: 1 lần/ngày, uống buổi sáng.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E004-MED-AMLODIPINE"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "Perindopril 5 mg - 1 viên, tần suất: 1 lần/ngày, uống buổi sáng trước ăn.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E004-MED-PERINDOPRIL"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "Atorvastatin 40 mg - 1 viên, tần suất: 1 lần/ngày (tối), uống buổi tối.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E004-MED-ATORVASTATIN"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            }
+          ]
+        },
+        {
+          "section_id": "allergies",
+          "title": null,
+          "content": "Dị ứng Penicillin, biểu hiện nổi mề đay toàn thân, mức độ trung bình, trạng thái đang theo dõi.",
+          "cited_claims": [
+            {
+              "claim_text": "Dị ứng Penicillin, biểu hiện nổi mề đay toàn thân, mức độ trung bình, trạng thái đang theo dõi.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-PATIENT-ALLERGY-PENICILLIN"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            }
+          ]
+        },
+        {
+          "section_id": "abnormal_labs",
+          "title": null,
+          "content": "HbA1c: 7.1%, cao, tham chiếu: <5.6%, ngày: 2024-10-10. Glucose huyết tương lúc đói: 6.2 mmol/L, cao, tham chiếu: 3.9 - 6.1, ngày: 2024-10-10. Microalbumin/Creatinine ratio: 32 mg/g, cao, tham chiếu: <30, ngày: 2024-10-10. LDL-Cholesterol: 2.8 mmol/L, cao, tham chiếu: <2.6, ngày: 2024-07-10. Cholesterol toàn phần: 5.8 mmol/L, cao, tham chiếu: <5.2, ngày: 2024-01-10. Triglyceride: 2.8 mmol/L, cao, tham chiếu: <1.7, ngày: 2024-01-10. HDL-Cholesterol: 0.9 mmol/L, thấp, tham chiếu: >1.0, ngày: 2024-01-10.",
+          "cited_claims": [
+            {
+              "claim_text": "HbA1c: 7.1%, cao, tham chiếu: <5.6%, ngày: 2024-10-10.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E004-LAB-HBA1C"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "Glucose huyết tương lúc đói: 6.2 mmol/L, cao, tham chiếu: 3.9 - 6.1, ngày: 2024-10-10.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E004-LAB-FPG"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "Microalbumin/Creatinine ratio: 32 mg/g, cao, tham chiếu: <30, ngày: 2024-10-10.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E004-LAB-UACR"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "LDL-Cholesterol: 2.8 mmol/L, cao, tham chiếu: <2.6, ngày: 2024-07-10.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E003-LAB-LDL",
+                "P001-E001-LAB-TG"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "Cholesterol toàn phần: 5.8 mmol/L, cao, tham chiếu: <5.2, ngày: 2024-01-10.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E001-LAB-TC"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "Triglyceride: 2.8 mmol/L, cao, tham chiếu: <1.7, ngày: 2024-01-10.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E001-LAB-TG",
+                "P001-E003-LAB-LDL"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "HDL-Cholesterol: 0.9 mmol/L, thấp, tham chiếu: >1.0, ngày: 2024-01-10.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E001-LAB-HDL"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            }
+          ]
+        },
+        {
+          "section_id": "diagnoses",
+          "title": null,
+          "content": "Chính: Đái tháo đường type 2 (E11) Bệnh kèm: Tăng huyết áp nguyên phát (I10) Bệnh kèm: Rối loạn chuyển hóa lipid hỗn hợp (E78.5) Biến chứng: Microalbuminuria trong ĐTĐ (N18.3) Biến chứng: Bệnh thần kinh ngoại biên trong ĐTĐ (G63.2)",
+          "cited_claims": [
+            {
+              "claim_text": "Chính: Đái tháo đường type 2 (E11)",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E004-DX-E11"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "Bệnh kèm: Tăng huyết áp nguyên phát (I10)",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E004-DX-I10"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "Bệnh kèm: Rối loạn chuyển hóa lipid hỗn hợp (E78.5)",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E004-DX-E78.5"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "Biến chứng: Microalbuminuria trong ĐTĐ (N18.3)",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E004-DX-N18.3"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "Biến chứng: Bệnh thần kinh ngoại biên trong ĐTĐ (G63.2)",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E001-DX-G63.2"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            }
+          ]
+        },
+        {
+          "section_id": "treatment_timeline",
+          "title": null,
+          "content": "2024-01-10: HbA1c 9.2%, huyết áp 148/92 mmHg, LDL 3.4 mmol/L — tăng Metformin, thêm Empagliflozin, thêm Perindopril — kiểm soát chưa đạt. 2024-04-10: HbA1c 8.1%, huyết áp 138/88 mmHg, LDL 3.1 mmol/L — giữ nguyên phác đồ — cải thiện nhưng chưa đạt mục tiêu. 2024-07-10: HbA1c 7.5%, huyết áp 132/82 mmHg, LDL 2.8 mmol/L — giữ nguyên phác đồ — gần đạt mục tiêu.",
+          "cited_claims": [
+            {
+              "claim_text": "2024-01-10: HbA1c 9.2%, huyết áp 148/92 mmHg, LDL 3.4 mmol/L — tăng Metformin, thêm Empagliflozin, thêm Perindopril — kiểm soát chưa đạt.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E001-LAB-HBA1C",
+                "P001-E001-LAB-LDL"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "2024-04-10: HbA1c 8.1%, huyết áp 138/88 mmHg, LDL 3.1 mmol/L — giữ nguyên phác đồ — cải thiện nhưng chưa đạt mục tiêu.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E002-LAB-HBA1C",
+                "P001-E002-LAB-LDL"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "2024-07-10: HbA1c 7.5%, huyết áp 132/82 mmHg, LDL 2.8 mmol/L — giữ nguyên phác đồ — gần đạt mục tiêu.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E003-LAB-HBA1C",
+                "P001-E003-LAB-LDL",
+                "P001-E001-LAB-TG",
+                "P001-E002-LAB-FPG"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            }
+          ]
+        },
+        {
+          "section_id": "clinical_alerts",
+          "title": null,
+          "content": "Cảnh báo hiện tại: Microalbuminuria với tỷ lệ 32 mg/g cần tiếp tục theo dõi. Glucose huyết tương lúc đói 6.2 mmol/L còn cao. Đã cải thiện: Microalbuminuria giảm từ 42 mg/g sang 32 mg/g. HbA1c giảm từ 7.5% sang 7.1%. Cần xác minh: Không ghi nhận.",
+          "cited_claims": [
+            {
+              "claim_text": "Cảnh báo hiện tại:",
+              "status": "SUPPORTED",
+              "citations": [],
+              "confidence_score": null,
+              "is_critical": false,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": true
+            },
+            {
+              "claim_text": "Microalbuminuria với tỷ lệ 32 mg/g cần tiếp tục theo dõi.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E004-LAB-UACR"
+              ],
+              "confidence_score": 0.85,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "Glucose huyết tương lúc đói 6.2 mmol/L còn cao.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E004-LAB-FPG"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "Đã cải thiện:",
+              "status": "SUPPORTED",
+              "citations": [],
+              "confidence_score": null,
+              "is_critical": false,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": true
+            },
+            {
+              "claim_text": "Microalbuminuria giảm từ 42 mg/g sang 32 mg/g.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E004-LAB-UACR"
+              ],
+              "confidence_score": 0.85,
+              "is_critical": true,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "HbA1c giảm từ 7.5% sang 7.1%.",
+              "status": "SUPPORTED",
+              "citations": [
+                "P001-E004-LAB-HBA1C"
+              ],
+              "confidence_score": 1.0,
+              "is_critical": false,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": false
+            },
+            {
+              "claim_text": "Cần xác minh:",
+              "status": "SUPPORTED",
+              "citations": [],
+              "confidence_score": null,
+              "is_critical": false,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": true
+            },
+            {
+              "claim_text": "Không ghi nhận.",
+              "status": "SUPPORTED",
+              "citations": [],
+              "confidence_score": null,
+              "is_critical": false,
+              "verification_status": "PENDING",
+              "verifier_action": "KEEP",
+              "is_structural": true
+            }
+          ]
+        }
+      ],
+      "metrics": {
+        "citation_coverage": 0.939,
+        "critical_citation_coverage": 1.0,
+        "total_critical_claims": 24,
+        "unsupported_claim_rate": 0.03,
+        "low_confidence_rate": 0.03,
+        "need_review_rate": 0.0,
+        "hallucination_rate": 0.0,
+        "missing_section_rate": 0.0,
+        "total_claims": 33,
+        "contradiction_count": 0,
+        "duplicate_claim_count": 0,
+        "need_review_count": 0,
+        "citation_precision": 0.0,
+        "citation_recall": 0.0,
+        "latency_seconds": 56.09,
+        "token_count": 22259
+      },
+      "removed_claims": []
+    },
+    "latency": 56.09,
+    "error": null
+  }
+}
