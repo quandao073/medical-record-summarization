@@ -225,16 +225,64 @@ SECTION_GUIDELINES = {
 }
 
 
-def build_section_prompt(section_id: str, context: str) -> str:
+SECTION_EXAMPLES: dict[str, str] = {
+    "overview": '''{
+  "overview": {
+    "content": "Bệnh nhân Nguyễn Văn An, 55 tuổi, nam giới, có bệnh nền chính là đái tháo đường type 2. Bệnh nhân có BMI 28.0, thuộc nhóm thừa cân. Hiện tại đang theo dõi biến chứng microalbuminuria.",
+    "source_ids": ["P001-PATIENT-INFO", "P001-E004-DX-E11"]
+  }
+}''',
+    "medical_history": '''{
+  "medical_history": {
+    "content": "Tiền sử bản thân:\\n- Đái tháo đường type 2, phát hiện năm 2021.\\n- Tăng huyết áp, phát hiện năm 2019.\\n\\nTiền sử gia đình:\\n- Cha mắc đái tháo đường type 2, mất năm 2018 do nhồi máu cơ tim.\\n\\nThói quen nguy cơ:\\n- Hút thuốc lá 15 gói-năm, đã bỏ 2 năm nay.",
+    "source_ids": ["P001-E001-NOTE-NOTE002", "P001-E001-NOTE-NOTE004"]
+  }
+}''',
+    "abnormal_labs": '''{
+  "abnormal_labs": {
+    "content": "- HbA1c: 7.1%, cao, tham chiếu: <5.6%, ngày: 2024-10-10. Xu hướng: 9.2% xuống 7.1%, cải thiện.\\n- Glucose huyết tương lúc đói: 6.2 mmol/L, cao, tham chiếu: 3.9 - 6.1, ngày: 2024-10-10.\\n- Microalbumin/Creatinine ratio: 32 mg/g, cao, tham chiếu: <30, ngày: 2024-10-10. Xu hướng: 42 xuống 32, giảm.\\n- LDL-Cholesterol: 2.8 mmol/L, cao, tham chiếu: <2.6, ngày: 2024-07-10.\\n- Cholesterol toàn phần: 5.8 mmol/L, cao, tham chiếu: <5.2, ngày: 2024-01-10.\\n- Triglyceride: 2.8 mmol/L, cao, tham chiếu: <1.7, ngày: 2024-01-10.\\n- HDL-Cholesterol: 0.9 mmol/L, thấp, tham chiếu: >1.0, ngày: 2024-01-10.",
+    "source_ids": ["P001-E004-LAB-HBA1C", "P001-E004-LAB-GLUCOSE", "P001-E004-LAB-ACR", "P001-E003-LAB-LDL", "P001-E001-LAB-CHOL"]
+  }
+}''',
+    "diagnoses": '''{
+  "diagnoses": {
+    "content": "- Chính: Đái tháo đường type 2 (E11)\\n- Bệnh kèm: Tăng huyết áp nguyên phát (I10)\\n- Bệnh kèm: Rối loạn chuyển hóa lipid hỗn hợp (E78.5)\\n- Biến chứng: Microalbuminuria trong ĐTĐ (N18.3)\\n- Biến chứng: Bệnh thần kinh ngoại biên trong ĐTĐ (G63.2)",
+    "source_ids": ["P001-E004-DX-E11", "P001-E004-DX-I10", "P001-E004-DX-E78.5", "P001-E004-DX-N18.3", "P001-E001-DX-G63.2"]
+  }
+}''',
+    "clinical_alerts": '''{
+  "clinical_alerts": {
+    "content": "Cảnh báo hiện tại:\\n- Microalbuminuria với tỷ lệ 32 mg/g cần tiếp tục theo dõi.\\n- Glucose huyết tương lúc đói 6.2 mmol/L còn cao.\\n\\nĐã cải thiện:\\n- Microalbuminuria giảm từ 42 mg/g sang 32 mg/g.\\n- HbA1c giảm từ 7.5% sang 7.1%.\\n\\nCần xác minh:\\n- Không ghi nhận.",
+    "source_ids": ["P001-E004-LAB-ACR", "P001-E004-LAB-HBA1C"]
+  }
+}''',
+}
+
+
+def build_section_prompt(section_id: str, context: str, *, local_model: bool = False) -> str:
     label = SECTION_LABELS.get(section_id, section_id)
     guideline = SECTION_GUIDELINES.get(section_id, "Tóm tắt ngắn gọn thông tin liên quan.")
+
+    example_block = ""
+    if local_model and section_id in SECTION_EXAMPLES:
+        example_block = f"\n\n[VÍ DỤ OUTPUT]\n{SECTION_EXAMPLES[section_id]}"
+
+    local_reminders = ""
+    if local_model:
+        local_reminders = (
+            "\n\nLƯU Ý QUAN TRỌNG:"
+            "\n- content phải là văn bản tiếng Việt tự nhiên, KHÔNG chèn source_id vào content."
+            "\n- KHÔNG để raw field name (vd: overweight_bmi) — phải dịch sang tiếng Việt."
+            "\n- KHÔNG bọc output trong thêm JSON wrapper."
+            "\n- Liệt kê ĐẦY ĐỦ các mục, không bỏ sót."
+        )
 
     return f"""[CONTEXT]
 {context}
 
 [YÊU CẦU]
 Section: {label}
-Hướng dẫn: {guideline}
+Hướng dẫn: {guideline}{local_reminders}{example_block}
 
 Trả về JSON:
 {{

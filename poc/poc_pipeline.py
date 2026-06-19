@@ -116,6 +116,7 @@ def run_poc(
     # ──────────────────────────────────────────────────────────────────────────
     section_chunks_map: dict[str, list[SourceChunk]] = {}
     section_prompts: dict[str, str] = {}
+    is_local = client.provider_name in ("lmstudio", "ollama")
 
     for section_id in SECTIONS:
         top_k = TOP_K_PER_SECTION.get(section_id, 15)
@@ -127,7 +128,7 @@ def run_poc(
         else:
             context = format_chunks_as_context(section_chunks, top_k)
 
-        section_prompts[section_id] = build_section_prompt(section_id, context)
+        section_prompts[section_id] = build_section_prompt(section_id, context, local_model=is_local)
 
     # ──────────────────────────────────────────────────────────────────────────
     # C4 (LLM): Generate all section drafts concurrently
