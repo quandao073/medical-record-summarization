@@ -17,3 +17,7 @@ class APIKeyMissingError(LLMError):
 
 class LLMConnectionError(LLMError):
     """Raised when the LLM provider is unreachable."""
+
+
+class LLMUnavailableError(LLMError):
+    """Raised when the LLM is temporarily unavailable (circuit breaker open)."""
