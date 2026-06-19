@@ -28,11 +28,15 @@ export async function summarize(
   model: string,
   forceRefresh: boolean,
   signal?: AbortSignal,
+  provider?: string,
 ): Promise<FinalSummary> {
   const params = new URLSearchParams({
     model,
     force_refresh: String(forceRefresh),
   });
+  if (provider) {
+    params.set("provider", provider);
+  }
   const res = await fetch(
     `${API_BASE}/api/v1/summarize/${patientId}?${params}`,
     { method: "POST", signal },
