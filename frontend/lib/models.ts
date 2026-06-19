@@ -20,8 +20,8 @@ export const MODEL_GROUPS: ModelGroup[] = [
     label: "LM Studio (Local)",
     options: [
       { value: "lmstudio:meta-llama-3.1-8b-instruct", label: "Llama 3.1 8B" },
-      // { value: "lmstudio:qwen/qwen3.6-35b-a3b", label: "Qwen 3.6 35B" },
-      { value: "lmstudio:gemma-2-9b-it", label: "Gemma 2 9B" },
+      { value: "lmstudio:qwen/qwen3.5-9b", label: "Qwen 3.5 9B" },
+      { value: "lmstudio:qwen2.5-7b-instruct", label: "Qwen 2.5 7B" },
     ],
   },
 ];
