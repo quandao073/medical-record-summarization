@@ -8,9 +8,22 @@ from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from src.llm import BaseLLMClient
+from src.llm.circuit_breaker import CircuitBreaker, CircuitOpenError
 from src.schemas import SourceChunk, SummarySection
 
+from .fallback import FallbackStrategy, generate_fallback_content
 from .prompts import SYSTEM_PROMPT, SECTION_LABELS, SECTION_GUIDELINES, build_section_prompt
+
+_llm_circuit_breaker = CircuitBreaker(
+    failure_threshold=5,
+    timeout=60,
+    success_threshold=2,
+    name="c4_llm_draft",
+)
+
+
+def get_circuit_breaker() -> CircuitBreaker:
+    return _llm_circuit_breaker
 
 
 def format_chunks_as_context(chunks: list[SourceChunk], max_chunks: int = 60) -> str:
@@ -50,15 +63,20 @@ def _call_llm(
     max_tokens: int = 1200,
     retries: int = 3,
 ) -> tuple[str, int]:
+    def _do_call():
+        resp = client.complete(
+            system_prompt=SYSTEM_PROMPT,
+            user_prompt=prompt,
+            max_tokens=max_tokens,
+            json_mode=True,
+        )
+        return resp.text, resp.total_tokens
+
     for attempt in range(retries):
         try:
-            resp = client.complete(
-                system_prompt=SYSTEM_PROMPT,
-                user_prompt=prompt,
-                max_tokens=max_tokens,
-                json_mode=True,
-            )
-            return resp.text, resp.total_tokens
+            return _llm_circuit_breaker.call(_do_call)
+        except CircuitOpenError:
+            raise
         except Exception as e:
             if attempt == retries - 1:
                 raise
@@ -107,23 +125,66 @@ def _normalise_content(value: object) -> str:
     return str(value) if value is not None else ""
 
 
+def _clean_content(content: str) -> str:
+    """Remove source_id references and raw field names that leak into content."""
+    import re
+    content = re.sub(r'\s*\[P\d+-[A-Z0-9\-]+\]', '', content)
+    content = content.replace("overweight_bmi", "thừa cân")
+    content = content.replace("underweight_bmi", "thiếu cân")
+    content = content.replace("normal_bmi", "BMI bình thường")
+    content = content.replace("obese_bmi", "béo phì")
+    return content.strip()
+
+
+def _unwrap_nested_json(content: str, section_id: str) -> str:
+    """If content is itself a JSON string containing the section structure, extract the inner content."""
+    stripped = content.strip()
+    if not stripped.startswith("{"):
+        return content
+    try:
+        inner = json.loads(stripped)
+        if isinstance(inner, dict):
+            if section_id in inner and isinstance(inner[section_id], dict):
+                return inner[section_id].get("content", content)
+            if "content" in inner:
+                return inner["content"]
+    except (json.JSONDecodeError, ValueError):
+        pass
+    return content
+
+
 def parse_section_response(text: str, section_id: str) -> dict:
     try:
         raw = _extract_json_object(text)
         data = json.loads(raw)
+
         if section_id in data and isinstance(data[section_id], dict):
             result = data[section_id]
+        elif section_id in data and isinstance(data[section_id], str):
+            result = {"content": data[section_id], "source_ids": []}
         elif "content" in data:
             result = data
         else:
-            result = {"content": str(data), "source_ids": []}
+            inner = next(
+                (v for v in data.values() if isinstance(v, dict) and "content" in v),
+                None,
+            )
+            if inner:
+                result = inner
+            else:
+                result = {"content": str(data), "source_ids": []}
     except (json.JSONDecodeError, ValueError):
         result = {"content": text.strip(), "source_ids": []}
 
-    result["content"] = _normalise_content(result.get("content", ""))
+    content = _normalise_content(result.get("content", ""))
+    content = _unwrap_nested_json(content, section_id)
+    result["content"] = _clean_content(content)
     if not result["content"]:
         result["content"] = "Chưa thấy ghi nhận trong dữ liệu được cung cấp."
     return result
+
+
+LOCAL_PROVIDERS = {"lmstudio", "ollama"}
 
 
 def generate_section_drafts(
@@ -131,18 +192,27 @@ def generate_section_drafts(
     section_prompts: dict[str, str],
     section_chunks_map: dict[str, list[SourceChunk]],
     client: BaseLLMClient,
+    fallback_strategy: FallbackStrategy = FallbackStrategy.RULE_BASED,
     verbose: bool = True,
 ) -> tuple[list[SummarySection], int]:
     """Generate LLM drafts for all sections concurrently.
 
-    Returns (list of SummarySection, total_tokens).
+    On LLM failure the *fallback_strategy* determines behaviour:
+      RULE_BASED  – generate content from raw chunks (no LLM)
+      EMPTY       – return a placeholder message
+      FAIL_FAST   – raise immediately
     """
+    is_local = client.provider_name in LOCAL_PROVIDERS
+    max_workers = min(3, len(section_ids)) if is_local else len(section_ids)
+
     if verbose:
-        print(f"[C4→LLM] Generating {len(section_ids)} sections in parallel...")
+        extra = f" (local mode, {max_workers} workers)" if is_local else ""
+        print(f"[C4→LLM] Generating {len(section_ids)} sections in parallel...{extra}")
 
     llm_results: dict[str, tuple[str | None, int, Exception | None]] = {}
+    failed_sections: list[str] = []
 
-    with ThreadPoolExecutor(max_workers=len(section_ids)) as pool:
+    with ThreadPoolExecutor(max_workers=max_workers) as pool:
         future_to_section = {
             pool.submit(_call_llm, section_prompts[sid], client): sid
             for sid in section_ids
@@ -150,34 +220,48 @@ def generate_section_drafts(
         for future in as_completed(future_to_section):
             section_id = future_to_section[future]
             try:
-                raw_text, tokens = future.result()
+                raw_text, tokens = future.result(timeout=120)
                 llm_results[section_id] = (raw_text, tokens, None)
             except Exception as e:
+                failed_sections.append(section_id)
                 llm_results[section_id] = (None, 0, e)
+                if verbose:
+                    print(f"[C4→LLM] {section_id} FAILED: {e}")
 
     draft_sections: list[SummarySection] = []
     total_tokens = 0
 
     for section_id in section_ids:
         raw_text, tokens, err = llm_results[section_id]
-        if err is not None:
-            print(f"[C4→LLM] {section_id}: ERROR: {err}")
-            draft_sections.append(SummarySection(
-                section_id=section_id,
-                content="[LỖI: Không thể tạo section này]",
-            ))
-            continue
 
-        total_tokens += tokens
-        parsed  = parse_section_response(raw_text, section_id)
-        content = parsed.get("content", "Chưa thấy ghi nhận trong dữ liệu được cung cấp.")
+        if err is None:
+            total_tokens += tokens
+            parsed = parse_section_response(raw_text, section_id)
+            content = parsed.get("content", "Chưa thấy ghi nhận trong dữ liệu được cung cấp.")
+        else:
+            if fallback_strategy == FallbackStrategy.FAIL_FAST:
+                raise type(err)(f"Section {section_id} failed: {err}") from err
+
+            if fallback_strategy == FallbackStrategy.RULE_BASED:
+                content = generate_fallback_content(
+                    section_id,
+                    section_chunks_map.get(section_id, []),
+                )
+                if verbose:
+                    print(f"[C4→FALLBACK] {section_id}: Rule-based generation")
+            else:
+                content = "Chưa thể tạo section này do lỗi hệ thống."
+
         draft_sections.append(SummarySection(
             section_id=section_id,
             content=content,
             cited_claims=[],
         ))
 
-        if verbose:
+        if err is None and verbose:
             print(f"[C4→LLM] {section_id}: OK ({tokens} tok, {len(section_chunks_map.get(section_id, []))} chunks)")
+
+    if failed_sections and verbose:
+        print(f"[C4] {len(failed_sections)}/{len(section_ids)} sections used fallback: {failed_sections}")
 
     return draft_sections, total_tokens
