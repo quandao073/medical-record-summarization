@@ -2,11 +2,25 @@
 
 from __future__ import annotations
 
+import re
+
 from openai import OpenAI
 
 from ..base import BaseLLMClient
 from ..types import LLMResponse
 from ..errors import LLMConnectionError
+
+THINKING_MODELS = {"qwen3", "qwen3.5", "deepseek-r1"}
+THINKING_TOKEN_MULTIPLIER = 3
+
+
+def _is_thinking_model(model: str) -> bool:
+    model_lower = model.lower()
+    return any(t in model_lower for t in THINKING_MODELS)
+
+
+def _strip_thinking_tags(text: str) -> str:
+    return re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL).strip()
 
 
 class LMStudioClient(BaseLLMClient):
@@ -39,9 +53,15 @@ class LMStudioClient(BaseLLMClient):
         if json_mode:
             user_content += "\n\nRespond with valid JSON only, no extra text."
 
+        base_max = max_tokens or self.max_tokens
+        if _is_thinking_model(self.model):
+            effective_max = base_max * THINKING_TOKEN_MULTIPLIER
+        else:
+            effective_max = base_max
+
         kwargs: dict = dict(
             model=self.model,
-            max_tokens=max_tokens or self.max_tokens,
+            max_tokens=effective_max,
             temperature=temperature if temperature is not None else self.temperature,
             messages=[
                 {"role": "system", "content": system_prompt},
@@ -57,7 +77,9 @@ class LMStudioClient(BaseLLMClient):
                 f"Make sure LM Studio is running with a model loaded. Error: {e}"
             ) from e
 
-        text = resp.choices[0].message.content.strip()
+        raw_text = resp.choices[0].message.content or ""
+        text = _strip_thinking_tags(raw_text).strip()
+
         prompt_tokens = resp.usage.prompt_tokens if resp.usage else 0
         completion_tokens = resp.usage.completion_tokens if resp.usage else 0
         return LLMResponse(text=text, total_tokens=prompt_tokens + completion_tokens)
