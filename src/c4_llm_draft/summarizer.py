@@ -3,16 +3,19 @@
 from __future__ import annotations
 
 import json
-import time
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from src.llm import BaseLLMClient
 from src.llm.circuit_breaker import CircuitBreaker, CircuitOpenError
+from src.llm.retry import retry_with_backoff
+from src.logging_config import get_logger
 from src.schemas import SourceChunk, SummarySection
 
 from .fallback import FallbackStrategy, generate_fallback_content
 from .prompts import SYSTEM_PROMPT, SECTION_LABELS, SECTION_GUIDELINES, build_section_prompt
+
+_logger = get_logger("c4_llm_draft")
 
 _llm_circuit_breaker = CircuitBreaker(
     failure_threshold=5,
@@ -72,18 +75,14 @@ def _call_llm(
         )
         return resp.text, resp.total_tokens
 
-    for attempt in range(retries):
-        try:
-            return _llm_circuit_breaker.call(_do_call)
-        except CircuitOpenError:
-            raise
-        except Exception as e:
-            if attempt == retries - 1:
-                raise
-            print(f"    [RETRY {attempt+1}/{retries}] {e}")
-            time.sleep(2 ** attempt)
+    def _with_circuit_breaker():
+        return _llm_circuit_breaker.call(_do_call)
 
-    return "", 0
+    return retry_with_backoff(
+        _with_circuit_breaker,
+        max_retries=retries,
+        base_delay=1.0,
+    )
 
 
 def _extract_json_object(text: str) -> str:
@@ -206,8 +205,10 @@ def generate_section_drafts(
     max_workers = min(3, len(section_ids)) if is_local else len(section_ids)
 
     if verbose:
-        extra = f" (local mode, {max_workers} workers)" if is_local else ""
-        print(f"[C4→LLM] Generating {len(section_ids)} sections in parallel...{extra}")
+        _logger.info(
+            "Generating section drafts",
+            extra={"sections": len(section_ids), "workers": max_workers, "local": is_local},
+        )
 
     llm_results: dict[str, tuple[str | None, int, Exception | None]] = {}
     failed_sections: list[str] = []
@@ -226,7 +227,7 @@ def generate_section_drafts(
                 failed_sections.append(section_id)
                 llm_results[section_id] = (None, 0, e)
                 if verbose:
-                    print(f"[C4→LLM] {section_id} FAILED: {e}")
+                    _logger.warning("Section draft failed", extra={"section_id": section_id}, exc_info=e)
 
     draft_sections: list[SummarySection] = []
     total_tokens = 0
@@ -248,7 +249,7 @@ def generate_section_drafts(
                     section_chunks_map.get(section_id, []),
                 )
                 if verbose:
-                    print(f"[C4→FALLBACK] {section_id}: Rule-based generation")
+                    _logger.info("Using fallback", extra={"section_id": section_id})
             else:
                 content = "Chưa thể tạo section này do lỗi hệ thống."
 
@@ -259,9 +260,12 @@ def generate_section_drafts(
         ))
 
         if err is None and verbose:
-            print(f"[C4→LLM] {section_id}: OK ({tokens} tok, {len(section_chunks_map.get(section_id, []))} chunks)")
+            _logger.info(
+                "Section draft generated",
+                extra={"section_id": section_id, "tokens": tokens, "chunks": len(section_chunks_map.get(section_id, []))},
+            )
 
     if failed_sections and verbose:
-        print(f"[C4] {len(failed_sections)}/{len(section_ids)} sections used fallback: {failed_sections}")
+        _logger.warning("Sections used fallback", extra={"failed": failed_sections, "total": len(section_ids)})
 
     return draft_sections, total_tokens
