@@ -1,0 +1,9 @@
+# Override for local model development. Usage: docker compose -f docker-compose.yml -f docker-compose.local.yml up --build
+
+services:
+  api:
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      - LMSTUDIO_BASE_URL=http://host.docker.internal:1234/v1
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434

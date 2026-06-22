@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 import re
 
 from openai import OpenAI
@@ -30,11 +31,11 @@ class LMStudioClient(BaseLLMClient):
         model: str = "local-model",
         max_tokens: int = 1200,
         temperature: float = 0,
-        base_url: str = "http://localhost:1234/v1",
+        base_url: str | None = None,
     ):
         super().__init__(model, max_tokens, temperature)
-        self._base_url = base_url
-        self._client = OpenAI(api_key="lm-studio", base_url=base_url)
+        self._base_url = base_url or os.environ.get("LMSTUDIO_BASE_URL", "http://localhost:1234/v1")
+        self._client = OpenAI(api_key="lm-studio", base_url=self._base_url)
 
     @property
     def provider_name(self) -> str:
