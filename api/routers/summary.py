@@ -13,6 +13,8 @@ from poc.poc_pipeline import run_poc
 from api.dependencies import LLMClientDep
 from src.c2_chunking.store_builder import load_structured_store
 from src.c6_verifier.verifier import verify_summary
+from src.llm.circuit_breaker import CircuitOpenError
+from src.llm.errors import LLMError
 from src.schemas import SourceChunk
 
 load_dotenv()
@@ -60,6 +62,8 @@ async def summarize(
         summary = await asyncio.to_thread(
             run_poc, patient_id, client, None, 60, False
         )
+    except (LLMError, CircuitOpenError):
+        raise
     except Exception as exc:
         raise HTTPException(status_code=500, detail=f"Pipeline error: {exc}") from exc
 
