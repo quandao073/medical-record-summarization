@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 import urllib.request
 import urllib.error
 
@@ -18,10 +19,10 @@ class OllamaClient(BaseLLMClient):
         model: str = "llama3",
         max_tokens: int = 1200,
         temperature: float = 0,
-        base_url: str = "http://localhost:11434",
+        base_url: str | None = None,
     ):
         super().__init__(model, max_tokens, temperature)
-        self._base_url = base_url.rstrip("/")
+        self._base_url = (base_url or os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434")).rstrip("/")
 
     @property
     def provider_name(self) -> str:
