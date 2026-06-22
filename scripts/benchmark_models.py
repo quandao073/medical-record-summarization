@@ -143,6 +143,62 @@ def compare_results(patient_id: str, results: dict) -> str:
     return "\n".join(lines)
 
 
+def aggregate_results(all_results: dict[str, dict]) -> str:
+    """Aggregate metrics across all patients for each model."""
+    lines = []
+    lines.append(f"\n{'#'*70}")
+    lines.append("  AGGREGATE BENCHMARK RESULTS")
+    lines.append(f"{'#'*70}\n")
+
+    model_metrics: dict[str, list[dict]] = {}
+    for pid, results in all_results.items():
+        for spec, data in results.items():
+            if data.get("error") is not None:
+                continue
+            if spec not in model_metrics:
+                model_metrics[spec] = []
+            model_metrics[spec].append(data["summary"]["metrics"])
+
+    if not model_metrics:
+        lines.append("No successful results to aggregate.")
+        return "\n".join(lines)
+
+    specs = list(model_metrics.keys())
+    header = f"{'Metric':<35}"
+    for s in specs:
+        header += f" | {s:<30}"
+    lines.append(header)
+    lines.append("-" * len(header))
+
+    metric_names = [
+        "citation_coverage",
+        "critical_citation_coverage",
+        "unsupported_claim_rate",
+        "hallucination_rate",
+        "total_claims",
+        "latency_seconds",
+        "token_count",
+    ]
+
+    for metric_name in metric_names:
+        row = f"{metric_name:<35}"
+        for s in specs:
+            values = [m.get(metric_name, 0) for m in model_metrics[s]]
+            avg = sum(values) / len(values) if values else 0
+            if isinstance(avg, float) and avg <= 1.0 and metric_name not in ("latency_seconds",):
+                row += f" | {avg:<30.1%}"
+            else:
+                row += f" | {avg:<30.1f}"
+        lines.append(row)
+
+    row = f"{'patients_tested':<35}"
+    for s in specs:
+        row += f" | {len(model_metrics[s]):<30}"
+    lines.append(row)
+
+    return "\n".join(lines)
+
+
 def main():
     parser = argparse.ArgumentParser(description="Benchmark model comparison")
     parser.add_argument("--patient", default="P001")
@@ -159,10 +215,33 @@ def main():
 
     if args.all_patients:
         patient_ids = sorted(p.stem for p in ASSEMBLED_DIR.glob("*.json"))
-    else:
-        patient_ids = [args.patient]
+        print(f"Running benchmark for {len(patient_ids)} patients...")
+        all_results = {}
+        for pid in patient_ids:
+            results = run_benchmark(pid, args.models, args.max_chunks)
+            all_results[pid] = results
 
-    for pid in patient_ids:
+            out_path = BENCHMARK_DIR / f"{pid}_benchmark.json"
+            with open(out_path, "w", encoding="utf-8") as f:
+                json.dump(results, f, ensure_ascii=False, indent=2)
+
+            report = compare_results(pid, results)
+            report_path = BENCHMARK_DIR / f"{pid}_comparison.txt"
+            report_path.write_text(report, encoding="utf-8")
+
+        agg_report = aggregate_results(all_results)
+        print(agg_report)
+
+        agg_path = BENCHMARK_DIR / "aggregate_comparison.txt"
+        agg_path.write_text(agg_report, encoding="utf-8")
+        print(f"\nAggregate report saved to: {agg_path}")
+
+        all_path = BENCHMARK_DIR / "all_benchmark.json"
+        with open(all_path, "w", encoding="utf-8") as f:
+            json.dump(all_results, f, ensure_ascii=False, indent=2)
+        print(f"All results saved to: {all_path}")
+    else:
+        pid = args.patient
         results = run_benchmark(pid, args.models, args.max_chunks)
         report = compare_results(pid, results)
         print(report)
