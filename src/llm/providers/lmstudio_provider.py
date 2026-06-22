@@ -10,7 +10,7 @@ from ..base import BaseLLMClient
 from ..types import LLMResponse
 from ..errors import LLMConnectionError
 
-THINKING_MODELS = {"qwen3", "qwen3.5", "deepseek-r1"}
+THINKING_MODELS = {"qwen3", "qwen3.5", "deepseek-r1", "gemma-4"}
 THINKING_TOKEN_MULTIPLIER = 3
 
 

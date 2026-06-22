@@ -22,6 +22,7 @@ export const MODEL_GROUPS: ModelGroup[] = [
       { value: "lmstudio:meta-llama-3.1-8b-instruct", label: "Llama 3.1 8B" },
       { value: "lmstudio:qwen/qwen3.5-9b", label: "Qwen 3.5 9B" },
       { value: "lmstudio:qwen2.5-7b-instruct", label: "Qwen 2.5 7B" },
+      { value: "lmstudio:google/gemma-4-e4b", label: "Gemma 4 E4B" },
     ],
   },
 ];

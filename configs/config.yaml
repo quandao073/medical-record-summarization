@@ -18,6 +18,28 @@ llm:
     primary: "gpt-4o"
     mini:    "gpt-4o-mini"
 
+  local_models:
+    lmstudio:
+      base_url: "http://localhost:1234/v1"
+      presets:
+        - name: "qwen2.5-7b-instruct"
+          description: "Qwen 2.5 7B — best local model for Vietnamese medical text"
+        - name: "qwen3-8b"
+          description: "Qwen 3 8B — thinking model, good reasoning"
+        - name: "meta-llama-3.1-8b-instruct"
+          description: "LLaMA 3.1 8B — English-dominant, weaker Vietnamese"
+        - name: "gemma-2-9b-it"
+          description: "Gemma 2 9B — Google, decent multilingual"
+        - name: "google/gemma-4-e4b"
+          description: "Gemma 4 E4B — Google, efficient 4B parameter model"
+    ollama:
+      base_url: "http://localhost:11434"
+      presets:
+        - name: "qwen2.5:7b"
+          description: "Qwen 2.5 7B via Ollama"
+        - name: "llama3.1:8b"
+          description: "LLaMA 3.1 8B via Ollama"
+
   max_tokens: 1500
   temperature: 0
 

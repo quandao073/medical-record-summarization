@@ -35,6 +35,8 @@ def _infer_provider(model: str) -> str | None:
         return "openai"
     if m.startswith("claude-"):
         return "anthropic"
+    if any(k in m for k in ("qwen", "llama", "gemma", "mistral", "phi", "deepseek")):
+        return "lmstudio"
     return None
 
 
