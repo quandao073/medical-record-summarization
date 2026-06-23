@@ -1,0 +1,497 @@
+{
+  "P001": {
+    "openai:gpt-4o-mini": {
+      "metric_stats": {
+        "citation_coverage": {
+          "mean": 0.976,
+          "std": 0.001,
+          "min": 0.975,
+          "max": 0.977,
+          "n_runs": 3
+        },
+        "critical_citation_coverage": {
+          "mean": 1.0,
+          "std": 0.0,
+          "min": 1.0,
+          "max": 1.0,
+          "n_runs": 3
+        },
+        "total_critical_claims": {
+          "mean": 27,
+          "std": 1.7321,
+          "min": 26,
+          "max": 29,
+          "n_runs": 3
+        },
+        "unsupported_claim_rate": {
+          "mean": 0.0,
+          "std": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "n_runs": 3
+        },
+        "low_confidence_rate": {
+          "mean": 0.024,
+          "std": 0.001,
+          "min": 0.023,
+          "max": 0.025,
+          "n_runs": 3
+        },
+        "need_review_rate": {
+          "mean": 0.0,
+          "std": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "n_runs": 3
+        },
+        "hallucination_rate": {
+          "mean": 0.0,
+          "std": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "n_runs": 3
+        },
+        "missing_section_rate": {
+          "mean": 0.0,
+          "std": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "n_runs": 3
+        },
+        "total_claims": {
+          "mean": 41.6667,
+          "std": 2.0817,
+          "min": 40,
+          "max": 44,
+          "n_runs": 3
+        },
+        "contradiction_count": {
+          "mean": 0,
+          "std": 0.0,
+          "min": 0,
+          "max": 0,
+          "n_runs": 3
+        },
+        "duplicate_claim_count": {
+          "mean": 0,
+          "std": 0.0,
+          "min": 0,
+          "max": 0,
+          "n_runs": 3
+        },
+        "need_review_count": {
+          "mean": 0,
+          "std": 0.0,
+          "min": 0,
+          "max": 0,
+          "n_runs": 3
+        },
+        "citation_precision": {
+          "mean": 0.0,
+          "std": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "n_runs": 3
+        },
+        "citation_recall": {
+          "mean": 0.0,
+          "std": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "n_runs": 3
+        },
+        "latency_seconds": {
+          "mean": 8.0733,
+          "std": 0.3837,
+          "min": 7.79,
+          "max": 8.51,
+          "n_runs": 3
+        },
+        "token_count": {
+          "mean": 20788.3333,
+          "std": 78.5769,
+          "min": 20740,
+          "max": 20879,
+          "n_runs": 3
+        }
+      },
+      "n_successful_runs": 3,
+      "n_total_runs": 3
+    }
+  },
+  "P006": {
+    "openai:gpt-4o-mini": {
+      "metric_stats": {
+        "citation_coverage": {
+          "mean": 0.9173,
+          "std": 0.0125,
+          "min": 0.905,
+          "max": 0.93,
+          "n_runs": 3
+        },
+        "critical_citation_coverage": {
+          "mean": 0.919,
+          "std": 0.0017,
+          "min": 0.917,
+          "max": 0.92,
+          "n_runs": 3
+        },
+        "total_critical_claims": {
+          "mean": 24.6667,
+          "std": 0.5774,
+          "min": 24,
+          "max": 25,
+          "n_runs": 3
+        },
+        "unsupported_claim_rate": {
+          "mean": 0.007,
+          "std": 0.0121,
+          "min": 0.0,
+          "max": 0.021,
+          "n_runs": 3
+        },
+        "low_confidence_rate": {
+          "mean": 0.0307,
+          "std": 0.015,
+          "min": 0.021,
+          "max": 0.048,
+          "n_runs": 3
+        },
+        "need_review_rate": {
+          "mean": 0.0457,
+          "std": 0.0032,
+          "min": 0.042,
+          "max": 0.048,
+          "n_runs": 3
+        },
+        "hallucination_rate": {
+          "mean": 0.0,
+          "std": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "n_runs": 3
+        },
+        "missing_section_rate": {
+          "mean": 0.0,
+          "std": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "n_runs": 3
+        },
+        "total_claims": {
+          "mean": 44.3333,
+          "std": 3.2146,
+          "min": 42,
+          "max": 48,
+          "n_runs": 3
+        },
+        "contradiction_count": {
+          "mean": 0,
+          "std": 0.0,
+          "min": 0,
+          "max": 0,
+          "n_runs": 3
+        },
+        "duplicate_claim_count": {
+          "mean": 0,
+          "std": 0.0,
+          "min": 0,
+          "max": 0,
+          "n_runs": 3
+        },
+        "need_review_count": {
+          "mean": 2,
+          "std": 0.0,
+          "min": 2,
+          "max": 2,
+          "n_runs": 3
+        },
+        "citation_precision": {
+          "mean": 0.0,
+          "std": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "n_runs": 3
+        },
+        "citation_recall": {
+          "mean": 0.0,
+          "std": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "n_runs": 3
+        },
+        "latency_seconds": {
+          "mean": 6.7767,
+          "std": 0.2542,
+          "min": 6.5,
+          "max": 7.0,
+          "n_runs": 3
+        },
+        "token_count": {
+          "mean": 19868.3333,
+          "std": 28.006,
+          "min": 19836,
+          "max": 19885,
+          "n_runs": 3
+        }
+      },
+      "n_successful_runs": 3,
+      "n_total_runs": 3
+    }
+  },
+  "P007": {
+    "openai:gpt-4o-mini": {
+      "metric_stats": {
+        "citation_coverage": {
+          "mean": 0.8517,
+          "std": 0.0202,
+          "min": 0.84,
+          "max": 0.875,
+          "n_runs": 3
+        },
+        "critical_citation_coverage": {
+          "mean": 1.0,
+          "std": 0.0,
+          "min": 1.0,
+          "max": 1.0,
+          "n_runs": 3
+        },
+        "total_critical_claims": {
+          "mean": 8,
+          "std": 0.0,
+          "min": 8,
+          "max": 8,
+          "n_runs": 3
+        },
+        "unsupported_claim_rate": {
+          "mean": 0.0,
+          "std": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "n_runs": 3
+        },
+        "low_confidence_rate": {
+          "mean": 0.1483,
+          "std": 0.0202,
+          "min": 0.125,
+          "max": 0.16,
+          "n_runs": 3
+        },
+        "need_review_rate": {
+          "mean": 0.0,
+          "std": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "n_runs": 3
+        },
+        "hallucination_rate": {
+          "mean": 0.0,
+          "std": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "n_runs": 3
+        },
+        "missing_section_rate": {
+          "mean": 0.111,
+          "std": 0.0,
+          "min": 0.111,
+          "max": 0.111,
+          "n_runs": 3
+        },
+        "total_claims": {
+          "mean": 24.6667,
+          "std": 0.5774,
+          "min": 24,
+          "max": 25,
+          "n_runs": 3
+        },
+        "contradiction_count": {
+          "mean": 0,
+          "std": 0.0,
+          "min": 0,
+          "max": 0,
+          "n_runs": 3
+        },
+        "duplicate_claim_count": {
+          "mean": 0,
+          "std": 0.0,
+          "min": 0,
+          "max": 0,
+          "n_runs": 3
+        },
+        "need_review_count": {
+          "mean": 0,
+          "std": 0.0,
+          "min": 0,
+          "max": 0,
+          "n_runs": 3
+        },
+        "citation_precision": {
+          "mean": 0.0,
+          "std": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "n_runs": 3
+        },
+        "citation_recall": {
+          "mean": 0.0,
+          "std": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "n_runs": 3
+        },
+        "latency_seconds": {
+          "mean": 5.67,
+          "std": 0.795,
+          "min": 5.11,
+          "max": 6.58,
+          "n_runs": 3
+        },
+        "token_count": {
+          "mean": 17248,
+          "std": 9.5394,
+          "min": 17242,
+          "max": 17259,
+          "n_runs": 3
+        }
+      },
+      "n_successful_runs": 3,
+      "n_total_runs": 3
+    }
+  },
+  "P008": {
+    "openai:gpt-4o-mini": {
+      "metric_stats": {
+        "citation_coverage": {
+          "mean": 0.941,
+          "std": 0.0,
+          "min": 0.941,
+          "max": 0.941,
+          "n_runs": 3
+        },
+        "critical_citation_coverage": {
+          "mean": 1.0,
+          "std": 0.0,
+          "min": 1.0,
+          "max": 1.0,
+          "n_runs": 3
+        },
+        "total_critical_claims": {
+          "mean": 6,
+          "std": 0.0,
+          "min": 6,
+          "max": 6,
+          "n_runs": 3
+        },
+        "unsupported_claim_rate": {
+          "mean": 0.0,
+          "std": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "n_runs": 3
+        },
+        "low_confidence_rate": {
+          "mean": 0.059,
+          "std": 0.0,
+          "min": 0.059,
+          "max": 0.059,
+          "n_runs": 3
+        },
+        "need_review_rate": {
+          "mean": 0.0,
+          "std": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "n_runs": 3
+        },
+        "hallucination_rate": {
+          "mean": 0.0,
+          "std": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "n_runs": 3
+        },
+        "missing_section_rate": {
+          "mean": 0.222,
+          "std": 0.0,
+          "min": 0.222,
+          "max": 0.222,
+          "n_runs": 3
+        },
+        "total_claims": {
+          "mean": 17,
+          "std": 0.0,
+          "min": 17,
+          "max": 17,
+          "n_runs": 3
+        },
+        "contradiction_count": {
+          "mean": 0,
+          "std": 0.0,
+          "min": 0,
+          "max": 0,
+          "n_runs": 3
+        },
+        "duplicate_claim_count": {
+          "mean": 0,
+          "std": 0.0,
+          "min": 0,
+          "max": 0,
+          "n_runs": 3
+        },
+        "need_review_count": {
+          "mean": 0,
+          "std": 0.0,
+          "min": 0,
+          "max": 0,
+          "n_runs": 3
+        },
+        "citation_precision": {
+          "mean": 0.0,
+          "std": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "n_runs": 3
+        },
+        "citation_recall": {
+          "mean": 0.0,
+          "std": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "n_runs": 3
+        },
+        "latency_seconds": {
+          "mean": 5.2833,
+          "std": 1.5916,
+          "min": 4.31,
+          "max": 7.12,
+          "n_runs": 3
+        },
+        "token_count": {
+          "mean": 15303.3333,
+          "std": 10.504,
+          "min": 15293,
+          "max": 15314,
+          "n_runs": 3
+        }
+      },
+      "n_successful_runs": 3,
+      "n_total_runs": 3
+    }
+  },
+  "_meta": {
+    "n_patients": 4,
+    "patient_ids": [
+      "P001",
+      "P006",
+      "P007",
+      "P008"
+    ],
+    "models": [
+      "openai:gpt-4o-mini"
+    ],
+    "n_runs": 3,
+    "total_seconds": 80.5,
+    "timestamp": "2026-06-23T13:57:32.683444"
+  }
+}
