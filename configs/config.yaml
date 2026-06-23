@@ -6,15 +6,10 @@
 # LLM configuration
 # ---------------------------------------------------------------------------
 llm:
-  provider: "anthropic"              # Week 3+: migrated from openai → anthropic
-  model: "claude-haiku-4-5-20251001" # Default: fast/cheap for dev
+  provider: "openai"
+  model: "gpt-4o-mini"
 
-  anthropic_models:
-    dev:    "claude-haiku-4-5-20251001"  # Dev/test — fast, cheap
-    prod:   "claude-sonnet-4-6"          # Demo/production
-    reason: "claude-opus-4-8"            # Heavy reasoning tasks (optional)
-
-  openai_models:                     # Kept for benchmark comparison only
+  openai_models:
     primary: "gpt-4o"
     mini:    "gpt-4o-mini"
 
