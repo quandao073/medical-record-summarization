@@ -569,3 +569,25 @@ class TestRetrievalIntegration:
             f"Vitals should be from E003 only, got {[c.encounter_id for c in vitals]}"
         diag_encounters = {c.encounter_id for c in diags}
         assert "P007-E001" in diag_encounters, "E001 diagnoses should be in overview"
+
+
+# ---------------------------------------------------------------------------
+# Config-driven section top_k
+# ---------------------------------------------------------------------------
+
+class TestConfigDrivenTopK:
+    def test_top_k_loads_from_config(self):
+        from src.c4_llm_draft.prompts import TOP_K_PER_SECTION
+        assert isinstance(TOP_K_PER_SECTION, dict)
+        assert "diagnoses" in TOP_K_PER_SECTION
+        assert TOP_K_PER_SECTION["diagnoses"] > 0
+
+    def test_top_k_has_all_sections(self):
+        from src.c4_llm_draft.prompts import TOP_K_PER_SECTION, SECTIONS
+        for section_id in SECTIONS:
+            assert section_id in TOP_K_PER_SECTION, f"Missing top_k for {section_id}"
+
+    def test_config_override_applied(self):
+        from src.c4_llm_draft.prompts import TOP_K_PER_SECTION, _DEFAULT_TOP_K
+        assert TOP_K_PER_SECTION["diagnoses"] == 12, "config.yaml should override diagnoses to 12"
+        assert _DEFAULT_TOP_K["diagnoses"] == 10, "default should still be 10"

@@ -45,6 +45,17 @@ retrieval:
   max_chunks_per_section: 15         # Hard cap per section
   top_k_default: 10
 
+  section_top_k:
+    overview:            8
+    reason_for_visit:    5
+    medical_history:     15
+    current_medications: 15
+    allergies:           5
+    abnormal_labs:       20
+    diagnoses:           12
+    treatment_timeline:  50
+    clinical_alerts:     20
+
   section_source_types:
     overview:            ["patient_info", "diagnoses", "vitals"]
     reason_for_visit:    ["clinical_notes"]

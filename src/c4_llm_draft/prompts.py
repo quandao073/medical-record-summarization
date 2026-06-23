@@ -2,6 +2,12 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+
+import yaml
+
+_CONFIG_PATH = Path(__file__).parent.parent.parent / "configs" / "config.yaml"
+
 # ---------------------------------------------------------------------------
 # Section definitions — English IDs, Vietnamese display labels
 # ---------------------------------------------------------------------------
@@ -30,7 +36,7 @@ SECTION_LABELS = {
     "clinical_alerts":     "Điểm cần lưu ý / Cảnh báo",
 }
 
-TOP_K_PER_SECTION: dict[str, int] = {
+_DEFAULT_TOP_K: dict[str, int] = {
     "overview":            8,
     "reason_for_visit":    5,
     "medical_history":     15,
@@ -41,6 +47,21 @@ TOP_K_PER_SECTION: dict[str, int] = {
     "treatment_timeline":  50,
     "clinical_alerts":     20,
 }
+
+
+def _load_section_top_k() -> dict[str, int]:
+    result = dict(_DEFAULT_TOP_K)
+    if _CONFIG_PATH.exists():
+        with open(_CONFIG_PATH, encoding="utf-8") as f:
+            raw = yaml.safe_load(f) or {}
+        overrides = raw.get("retrieval", {}).get("section_top_k", {})
+        for section_id, val in overrides.items():
+            if isinstance(val, int) and val > 0:
+                result[section_id] = val
+    return result
+
+
+TOP_K_PER_SECTION: dict[str, int] = _load_section_top_k()
 
 # ---------------------------------------------------------------------------
 # System prompt — Vietnamese so LLM outputs Vietnamese
