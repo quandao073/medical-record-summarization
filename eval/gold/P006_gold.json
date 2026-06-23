@@ -8,6 +8,12 @@
           "claim_pattern": "BMI.*29\\.6",
           "expected_source_ids": ["P006-E002-VIT-VIT001"],
           "is_critical": false
+        },
+        {
+          "claim_pattern": "Nguyễn Thị Phương.*45 tuổi|45 tuổi.*nữ.*đái tháo đường",
+          "expected_source_ids": ["P006-PATIENT-INFO", "P006-E002-DX-E11.65"],
+          "is_critical": false,
+          "note": "added_week5"
         }
       ]
     },
@@ -48,6 +54,18 @@
           "claim_pattern": "mẹ.*thận mạn|mẹ.*chạy thận|gia đình.*thận",
           "expected_source_ids": ["P006-E001-NOTE-NOTE001"],
           "is_critical": false
+        },
+        {
+          "claim_pattern": "protein niệu.*12/2023|albumin.*creatinin.*3100|protein niệu nặng",
+          "expected_source_ids": ["P006-E001-NOTE-NOTE001"],
+          "is_critical": true,
+          "note": "added_week5"
+        },
+        {
+          "claim_pattern": "BMI.*28\\.8|thừa cân.*BMI",
+          "expected_source_ids": ["P006-E001-NOTE-NOTE002"],
+          "is_critical": false,
+          "note": "added_week5"
         }
       ]
     },

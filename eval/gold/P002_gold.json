@@ -18,6 +18,12 @@
           "claim_pattern": "BMI.*25\\.7",
           "expected_source_ids": ["P002-E003-VIT-VIT001"],
           "is_critical": false
+        },
+        {
+          "claim_pattern": "tăng huyết áp.*đạt mục tiêu|tăng huyết áp nguyên phát",
+          "expected_source_ids": ["P002-E003-DX-I10"],
+          "is_critical": false,
+          "note": "added_week5"
         }
       ]
     },
@@ -55,7 +61,7 @@
           "is_critical": false
         },
         {
-          "claim_pattern": "Tuân thủ tốt|uống thuốc đều|đi bộ 30 phút",
+          "claim_pattern": "Tuân thủ tốt|uống thuốc đều|đi bộ 30 phút|chế độ ăn kiêng.*vận động",
           "expected_source_ids": ["P002-E001-NOTE-NOTE001"],
           "is_critical": false
         }
@@ -93,6 +99,12 @@
           "claim_pattern": "Glucose.*6\\.2.*mmol",
           "expected_source_ids": ["P002-E003-LAB-FPG"],
           "is_critical": true
+        },
+        {
+          "claim_pattern": "6\\.7.*6\\.8|xu hướng.*ổn định|HbA1c.*ổn định",
+          "expected_source_ids": ["P002-E003-LAB-HBA1C", "P002-E002-LAB-HBA1C"],
+          "is_critical": false,
+          "note": "added_week5"
         }
       ]
     },

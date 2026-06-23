@@ -111,6 +111,14 @@
             "P001-E001-NOTE-NOTE001"
           ],
           "is_critical": false
+        },
+        {
+          "claim_pattern": "Không.*rượu bia|không uống rượu",
+          "expected_source_ids": [
+            "P001-E001-NOTE-NOTE002"
+          ],
+          "is_critical": false,
+          "note": "added_week5"
         }
       ]
     },
@@ -319,7 +327,7 @@
           "is_critical": true
         },
         {
-          "claim_pattern": "Microalbuminuria.*32.*mg.*theo dõi|Microalbuminuria.*32.*mg",
+          "claim_pattern": "Microalbumin.*32.*mg.*theo dõi|Microalbumin.*32.*mg",
           "expected_source_ids": [
             "P001-E004-LAB-UACR"
           ],

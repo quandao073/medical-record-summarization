@@ -1,41 +1,41 @@
 {
   "patient_id": "P006",
   "evaluation_mode": "loose",
-  "citation_precision": 0.9411764705882353,
-  "citation_recall": 0.9117647058823529,
-  "critical_precision": 0.9545454545454546,
-  "total_supported": 34,
-  "precision_correct": 32,
-  "total_gold": 34,
-  "gold_matched": 31,
+  "citation_precision": 0.9473684210526315,
+  "citation_recall": 0.918918918918919,
+  "critical_precision": 0.9565217391304348,
+  "total_supported": 38,
+  "precision_correct": 36,
+  "total_gold": 37,
+  "gold_matched": 34,
   "sections": [
     {
       "section_id": "overview",
-      "total_claims": 2,
-      "supported_claims": 1,
-      "precision_correct": 1,
-      "gold_matched": 1,
-      "gold_total": 1,
+      "total_claims": 3,
+      "supported_claims": 2,
+      "precision_correct": 2,
+      "gold_matched": 2,
+      "gold_total": 2,
       "claim_evals": [
         {
-          "claim_text": "Bệnh nhân Nguyễn Thị Phương, 45 tuổi, nữ, mắc đái tháo đường type 2 với biến chứng thận mạn.",
-          "status": "PARTIALLY_SUPPORTED",
+          "claim_text": "Bệnh nhân Nguyễn Thị Phương, 45 tuổi, nữ, có bệnh đái tháo đường type 2 với biến chứng thận mạn.",
+          "status": "SUPPORTED",
           "citations": [
-            "P006-E002-DX-E11.65",
-            "P006-E002-DX-D63.1",
             "P006-PATIENT-INFO"
           ],
-          "matched_gold_pattern": null,
-          "expected_source_ids": [],
-          "has_correct_citation": false,
+          "matched_gold_pattern": "Nguyễn Thị Phương.*45 tuổi|45 tuổi.*nữ.*đái tháo đường",
+          "expected_source_ids": [
+            "P006-PATIENT-INFO",
+            "P006-E002-DX-E11.65"
+          ],
+          "has_correct_citation": true,
           "is_critical": false
         },
         {
-          "claim_text": "Bệnh nhân có BMI 29.6 và đang theo dõi tăng huyết áp nguyên phát.",
+          "claim_text": "Thể trạng BMI là 29.6.",
           "status": "SUPPORTED",
           "citations": [
-            "P006-E002-VIT-VIT001",
-            "P006-E002-DX-I10"
+            "P006-E002-VIT-VIT001"
           ],
           "matched_gold_pattern": "BMI.*29\\.6",
           "expected_source_ids": [
@@ -43,27 +43,54 @@
           ],
           "has_correct_citation": true,
           "is_critical": false
+        },
+        {
+          "claim_text": "Bệnh nhân đang theo dõi các biến chứng như bệnh thận mạn và thiếu máu do CKD.",
+          "status": "PARTIALLY_SUPPORTED",
+          "citations": [
+            "P006-E002-DX-E11.65",
+            "P006-E002-DX-N18.3",
+            "P006-E002-DX-D63.1"
+          ],
+          "matched_gold_pattern": null,
+          "expected_source_ids": [],
+          "has_correct_citation": false,
+          "is_critical": false
         }
       ]
     },
     {
       "section_id": "reason_for_visit",
-      "total_claims": 2,
-      "supported_claims": 2,
-      "precision_correct": 2,
-      "gold_matched": 2,
+      "total_claims": 3,
+      "supported_claims": 3,
+      "precision_correct": 3,
+      "gold_matched": 3,
       "gold_total": 3,
       "claim_evals": [
         {
-          "claim_text": "Tái khám 6 tháng, bệnh nhân than mệt nhiều hơn, xanh xao.",
+          "claim_text": "Tái khám 6 tháng.",
           "status": "SUPPORTED",
           "citations": [
-            "P006-E002-NOTE-NOTE001"
+            "P006-E002-NOTE-NOTE001",
+            "P006-E002-NOTE-NOTE002"
           ],
           "matched_gold_pattern": "Tái khám.*6 tháng|tái khám định kỳ",
           "expected_source_ids": [
             "P006-E002-NOTE-NOTE001",
             "P006-E002-NOTE-NOTE002"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        },
+        {
+          "claim_text": "Bệnh nhân than mệt nhiều hơn, xanh xao.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P006-E002-NOTE-NOTE001"
+          ],
+          "matched_gold_pattern": "mệt.*nhiều|xanh xao",
+          "expected_source_ids": [
+            "P006-E002-NOTE-NOTE001"
           ],
           "has_correct_citation": true,
           "is_critical": false
@@ -85,11 +112,11 @@
     },
     {
       "section_id": "medical_history",
-      "total_claims": 5,
-      "supported_claims": 5,
-      "precision_correct": 3,
-      "gold_matched": 3,
-      "gold_total": 3,
+      "total_claims": 6,
+      "supported_claims": 6,
+      "precision_correct": 5,
+      "gold_matched": 5,
+      "gold_total": 5,
       "claim_evals": [
         {
           "claim_text": "Đái tháo đường type 2 phát hiện năm 2017, kiểm soát kém (hemoglobin A1c thường xuyên >9%).",
@@ -108,8 +135,8 @@
           "claim_text": "Tăng huyết áp 3 năm.",
           "status": "SUPPORTED",
           "citations": [
-            "P006-E001-NOTE-NOTE001",
-            "P006-E001-DX-I10"
+            "P006-E001-DX-I10",
+            "P006-E001-NOTE-NOTE001"
           ],
           "matched_gold_pattern": "Tăng huyết áp.*3 năm|huyết áp.*3 năm",
           "expected_source_ids": [
@@ -125,9 +152,11 @@
           "citations": [
             "P006-E001-NOTE-NOTE001"
           ],
-          "matched_gold_pattern": null,
-          "expected_source_ids": [],
-          "has_correct_citation": false,
+          "matched_gold_pattern": "protein niệu.*12/2023|albumin.*creatinin.*3100|protein niệu nặng",
+          "expected_source_ids": [
+            "P006-E001-NOTE-NOTE001"
+          ],
+          "has_correct_citation": true,
           "is_critical": true
         },
         {
@@ -147,6 +176,20 @@
           "claim_text": "Tổng trạng thừa cân (BMI 28.8).",
           "status": "SUPPORTED",
           "citations": [
+            "P006-E001-NOTE-NOTE002"
+          ],
+          "matched_gold_pattern": "BMI.*28\\.8|thừa cân.*BMI",
+          "expected_source_ids": [
+            "P006-E001-NOTE-NOTE002"
+          ],
+          "has_correct_citation": true,
+          "is_critical": false
+        },
+        {
+          "claim_text": "Phù mắt cá 2 bên, ấn lõm (+).",
+          "status": "SUPPORTED",
+          "citations": [
+            "P006-E001-NOTE-NOTE001",
             "P006-E001-NOTE-NOTE002"
           ],
           "matched_gold_pattern": null,
@@ -266,7 +309,7 @@
       "gold_total": 3,
       "claim_evals": [
         {
-          "claim_text": "Dị ứng Penicillin, biểu hiện nổi mề đay toàn thân, mức độ trung bình, trạng thái đang theo dõi.",
+          "claim_text": "Dị ứng Penicillin, biểu hiện nổi mề đay toàn thân, mức độ moderate, trạng thái đang theo dõi.",
           "status": "SUPPORTED",
           "citations": [
             "P006-PATIENT-ALLERGY-PENICILLIN"
@@ -279,7 +322,7 @@
           "is_critical": true
         },
         {
-          "claim_text": "Dị ứng NSAIDs (Ibuprofen), biểu hiện phù mạch, khó thở, mức độ nặng, trạng thái đang theo dõi.",
+          "claim_text": "Dị ứng NSAIDs (Ibuprofen), biểu hiện phù mạch, khó thở, mức độ severe, trạng thái đang theo dõi.",
           "status": "SUPPORTED",
           "citations": [
             "P006-PATIENT-ALLERGY-NSAIDS_(IBUPROF"
@@ -317,9 +360,9 @@
     },
     {
       "section_id": "abnormal_labs",
-      "total_claims": 9,
-      "supported_claims": 6,
-      "precision_correct": 6,
+      "total_claims": 7,
+      "supported_claims": 7,
+      "precision_correct": 7,
       "gold_matched": 5,
       "gold_total": 5,
       "claim_evals": [
@@ -367,18 +410,6 @@
           "is_critical": true
         },
         {
-          "claim_text": "Xu hướng: 175 lên 182, tăng.",
-          "status": "PARTIALLY_SUPPORTED",
-          "citations": [
-            "P006-E002-LAB-CREAT",
-            "P006-E001-LAB-CREAT"
-          ],
-          "matched_gold_pattern": null,
-          "expected_source_ids": [],
-          "has_correct_citation": false,
-          "is_critical": false
-        },
-        {
           "claim_text": "eGFR (CKD-EPI): 35 mL/min/1.73m2, thấp, tham chiếu: > 90, ngày: 2024-09-10.",
           "status": "SUPPORTED",
           "citations": [
@@ -390,17 +421,6 @@
             "P006-E001-LAB-EGFR"
           ],
           "has_correct_citation": true,
-          "is_critical": false
-        },
-        {
-          "claim_text": "Xu hướng: 38 xuống 35, giảm.",
-          "status": "PARTIALLY_SUPPORTED",
-          "citations": [
-            "P006-E002-LAB-EGFR"
-          ],
-          "matched_gold_pattern": null,
-          "expected_source_ids": [],
-          "has_correct_citation": false,
           "is_critical": false
         },
         {
@@ -418,16 +438,19 @@
           "is_critical": true
         },
         {
-          "claim_text": "Xu hướng: 2800 xuống 2200, cải thiện.",
-          "status": "PARTIALLY_SUPPORTED",
+          "claim_text": "Xu hướng: 2800 mg/g xuống 2200 mg/g, cải thiện.",
+          "status": "SUPPORTED",
           "citations": [
-            "P006-E002-LAB-HBA1C",
-            "P006-E002-LAB-UACR"
+            "P006-E002-LAB-UACR",
+            "P006-E001-LAB-UACR"
           ],
-          "matched_gold_pattern": null,
-          "expected_source_ids": [],
-          "has_correct_citation": false,
-          "is_critical": false
+          "matched_gold_pattern": "2200 mg/g|2800 mg/g|Albumin.*Creatinine.*nước tiểu",
+          "expected_source_ids": [
+            "P006-E002-LAB-UACR",
+            "P006-E001-LAB-UACR"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
         },
         {
           "claim_text": "Hemoglobin: 10.2 g/dL, thấp, tham chiếu: 12.0 - 16.0, ngày: 2024-09-10.",
@@ -447,13 +470,13 @@
     {
       "section_id": "diagnoses",
       "total_claims": 4,
-      "supported_claims": 3,
-      "precision_correct": 3,
-      "gold_matched": 3,
+      "supported_claims": 4,
+      "precision_correct": 4,
+      "gold_matched": 4,
       "gold_total": 4,
       "claim_evals": [
         {
-          "claim_text": "Chính: ĐTĐ type 2 với biến chứng thận mạn (E11.65)",
+          "claim_text": "Chính: Đái tháo đường type 2 với biến chứng thận mạn (E11.65)",
           "status": "SUPPORTED",
           "citations": [
             "P006-E002-DX-E11.65"
@@ -468,24 +491,14 @@
         },
         {
           "claim_text": "Bệnh kèm: Bệnh thận mạn giai đoạn 3b (N18.3)",
-          "status": "CONTRADICTED",
+          "status": "SUPPORTED",
           "citations": [
             "P006-E002-DX-N18.3"
           ],
-          "matched_gold_pattern": null,
-          "expected_source_ids": [],
-          "has_correct_citation": false,
-          "is_critical": true
-        },
-        {
-          "claim_text": "Biến chứng: Thiếu máu trong bệnh thận mạn (D63.1)",
-          "status": "SUPPORTED",
-          "citations": [
-            "P006-E002-DX-D63.1"
-          ],
-          "matched_gold_pattern": "Thiếu máu.*D63|thiếu máu.*CKD",
+          "matched_gold_pattern": "thận mạn.*N18|CKD.*N18",
           "expected_source_ids": [
-            "P006-E002-DX-D63.1"
+            "P006-E002-DX-N18.3",
+            "P006-E001-DX-N18.3"
           ],
           "has_correct_citation": true,
           "is_critical": true
@@ -502,6 +515,19 @@
           ],
           "has_correct_citation": true,
           "is_critical": true
+        },
+        {
+          "claim_text": "Biến chứng: Thiếu máu trong bệnh thận mạn (D63.1)",
+          "status": "SUPPORTED",
+          "citations": [
+            "P006-E002-DX-D63.1"
+          ],
+          "matched_gold_pattern": "Thiếu máu.*D63|thiếu máu.*CKD",
+          "expected_source_ids": [
+            "P006-E002-DX-D63.1"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
         }
       ]
     },
@@ -514,7 +540,7 @@
       "gold_total": 2,
       "claim_evals": [
         {
-          "claim_text": "2024-03-10: HbA1c 9.8%, huyết áp 162/98 mmHg, eGFR 38 mL/min/1.73m2 — ngừng Metformin, chuyển Insulin Glargine 20 IU, thêm Losartan 100 mg — kiểm soát kém.",
+          "claim_text": "2024-03-10: HbA1c 9.8%, eGFR 38, huyết áp 162/98 mmHg — ngừng Metformin, chuyển sang Insulin Glargine 20 IU, thêm Losartan 100 mg, Calcitriol, Calcium carbonate — kiểm soát kém.",
           "status": "SUPPORTED",
           "citations": [
             "P006-E001-LAB-HBA1C",
@@ -532,7 +558,7 @@
           "is_critical": true
         },
         {
-          "claim_text": "2024-09-10: HbA1c 8.9%, huyết áp 148/88 mmHg, eGFR 35 mL/min/1.73m2 — tăng Insulin 24 IU, thêm Dapagliflozin 10 mg, chỉ định EPO — cải thiện nhẹ nhưng CKD tiến triển.",
+          "claim_text": "2024-09-10: HbA1c 8.9%, eGFR 35, huyết áp 148/88 mmHg — tăng Insulin Glargine lên 24 IU, thêm Dapagliflozin 10 mg, EPO 2000 IU — cải thiện nhẹ nhưng CKD tiến triển.",
           "status": "SUPPORTED",
           "citations": [
             "P006-E002-LAB-HBA1C",
@@ -552,14 +578,25 @@
     },
     {
       "section_id": "clinical_alerts",
-      "total_claims": 10,
-      "supported_claims": 6,
-      "precision_correct": 6,
-      "gold_matched": 6,
+      "total_claims": 9,
+      "supported_claims": 5,
+      "precision_correct": 4,
+      "gold_matched": 4,
       "gold_total": 6,
       "claim_evals": [
         {
-          "claim_text": "Creatinine 182 µmol/L, vẫn cao.",
+          "claim_text": "HbA1c 8.9% vẫn cao, cần theo dõi tình trạng đái tháo đường type 2.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P006-E002-LAB-HBA1C"
+          ],
+          "matched_gold_pattern": null,
+          "expected_source_ids": [],
+          "has_correct_citation": false,
+          "is_critical": true
+        },
+        {
+          "claim_text": "Creatinine 182 µmol/L cao, CKD tiến triển cần theo dõi.",
           "status": "SUPPORTED",
           "citations": [
             "P006-E002-LAB-CREAT"
@@ -572,7 +609,7 @@
           "is_critical": true
         },
         {
-          "claim_text": "eGFR 35 mL/min/1.73m2, vẫn thấp.",
+          "claim_text": "eGFR 35 mL/min/1.73m2 thấp, CKD tiến triển cần theo dõi.",
           "status": "SUPPORTED",
           "citations": [
             "P006-E002-LAB-EGFR"
@@ -585,7 +622,7 @@
           "is_critical": false
         },
         {
-          "claim_text": "Tỷ số Albumin/Creatinine nước tiểu 2200 mg/g, vẫn cao.",
+          "claim_text": "Tỷ số Albumin/Creatinine 2200 mg/g cao, CKD cần theo dõi.",
           "status": "SUPPORTED",
           "citations": [
             "P006-E002-LAB-UACR"
@@ -598,33 +635,7 @@
           "is_critical": true
         },
         {
-          "claim_text": "Thiếu máu mức trung bình, Hemoglobin 10.2 g/dL, vẫn thấp.",
-          "status": "SUPPORTED",
-          "citations": [
-            "P006-E002-LAB-HGB"
-          ],
-          "matched_gold_pattern": "Hemoglobin.*10\\.2.*thấp",
-          "expected_source_ids": [
-            "P006-E002-LAB-HGB"
-          ],
-          "has_correct_citation": true,
-          "is_critical": true
-        },
-        {
-          "claim_text": "HbA1c 9.8% sang 8.9%, cải thiện nhẹ.",
-          "status": "SUPPORTED",
-          "citations": [
-            "P006-E002-LAB-HBA1C"
-          ],
-          "matched_gold_pattern": "HbA1c.*9\\.8.*8\\.9|HbA1c.*cải thiện",
-          "expected_source_ids": [
-            "P006-E002-LAB-HBA1C"
-          ],
-          "has_correct_citation": true,
-          "is_critical": true
-        },
-        {
-          "claim_text": "Tỷ số Albumin/Creatinine nước tiểu 2800 mg/g sang 2200 mg/g, đáp ứng điều trị.",
+          "claim_text": "Tỷ số Albumin/Creatinine giảm từ 2800 mg/g xuống 2200 mg/g, đáp ứng điều trị.",
           "status": "SUPPORTED",
           "citations": [
             "P006-E002-LAB-UACR"
@@ -637,7 +648,7 @@
           "is_critical": true
         },
         {
-          "claim_text": "Dị ứng Sulfonamide, cần xác nhận lại thông tin với bệnh nhân.",
+          "claim_text": "Dị ứng Sulfonamide cần xác nhận lại thông tin với bệnh nhân.",
           "status": "NEED_REVIEW",
           "citations": [
             "P006-PATIENT-ALLERGY-SULFONAMIDE"

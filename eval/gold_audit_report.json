@@ -1,0 +1,531 @@
+[
+  {
+    "patient_id": "P001",
+    "generated_without_gold_match": [
+      {
+        "section": "overview",
+        "claim": "Hiện tại đang theo dõi biến chứng microalbuminuria.",
+        "status": "UNSUPPORTED",
+        "citations": []
+      },
+      {
+        "section": "medical_history",
+        "claim": "Không uống rượu bia thường xuyên.",
+        "status": "SUPPORTED",
+        "citations": [
+          "P001-E001-NOTE-NOTE002"
+        ]
+      },
+      {
+        "section": "clinical_alerts",
+        "claim": "Microalbumin/Creatinine ratio 32 mg/g, vẫn cao hơn ngưỡng bình thường.",
+        "status": "SUPPORTED",
+        "citations": [
+          "P001-E004-LAB-UACR"
+        ]
+      }
+    ],
+    "gold_not_matched_by_output": [
+      {
+        "section": "overview",
+        "pattern": "theo dõi.*microalbuminuria|biến chứng.*microalbuminuria|microalbuminuria",
+        "is_critical": true
+      },
+      {
+        "section": "clinical_alerts",
+        "pattern": "Microalbuminuria.*32.*mg.*theo dõi|Microalbuminuria.*32.*mg",
+        "is_critical": true
+      }
+    ]
+  },
+  {
+    "patient_id": "P002",
+    "generated_without_gold_match": [
+      {
+        "section": "overview",
+        "claim": "Bệnh nhân cũng có tăng huyết áp nguyên phát đạt mục tiêu.",
+        "status": "SUPPORTED",
+        "citations": [
+          "P002-E003-DX-I10"
+        ]
+      },
+      {
+        "section": "medical_history",
+        "claim": "Không có tiền sử bệnh tim mạch, ung thư trong gia đình.",
+        "status": "PARTIALLY_SUPPORTED",
+        "citations": [
+          "P002-E001-NOTE-NOTE001",
+          "P002-E001-NOTE-NOTE002",
+          "P002-E001-NOTE-NOTE003"
+        ]
+      },
+      {
+        "section": "medical_history",
+        "claim": "Tuân thủ tốt chế độ ăn kiêng và vận động 30 phút mỗi ngày.",
+        "status": "PARTIALLY_SUPPORTED",
+        "citations": [
+          "P002-E001-NOTE-NOTE001",
+          "P002-E001-NOTE-NOTE003",
+          "P002-E002-NOTE-NOTE001"
+        ]
+      },
+      {
+        "section": "abnormal_labs",
+        "claim": "Xu hướng: 6.7% lên 6.8%, ổn định.",
+        "status": "SUPPORTED",
+        "citations": [
+          "P002-E003-LAB-HBA1C",
+          "P002-E002-LAB-HBA1C"
+        ]
+      },
+      {
+        "section": "clinical_alerts",
+        "claim": "Chưa rõ về liều thuốc điều trị hiện tại.",
+        "status": "UNSUPPORTED",
+        "citations": []
+      }
+    ],
+    "gold_not_matched_by_output": [
+      {
+        "section": "overview",
+        "pattern": "đái tháo đường type 2",
+        "is_critical": false
+      },
+      {
+        "section": "medical_history",
+        "pattern": "Tuân thủ tốt|uống thuốc đều|đi bộ 30 phút",
+        "is_critical": false
+      }
+    ]
+  },
+  {
+    "patient_id": "P003",
+    "generated_without_gold_match": [
+      {
+        "section": "medical_history",
+        "claim": "Ngưng Indapamide tháng 10/2023 do tăng acid uric.",
+        "status": "SUPPORTED",
+        "citations": [
+          "P003-E002-NOTE-NOTE001",
+          "P003-E003-NOTE-NOTE002"
+        ]
+      },
+      {
+        "section": "allergies",
+        "claim": "Dị ứng Sulfonamide, trạng thái ghi nhận đang hoạt động.",
+        "status": "NEED_REVIEW",
+        "citations": [
+          "P003-PATIENT-ALLERGY-SULFONAMIDE_(CO"
+        ]
+      },
+      {
+        "section": "allergies",
+        "claim": "Cần xác nhận lại thông tin này với bệnh nhân.",
+        "status": "PARTIALLY_SUPPORTED",
+        "citations": [
+          "P003-E005-NOTE-NOTE001",
+          "P003-E004-NOTE-NOTE002",
+          "P003-E004-NOTE-NOTE001"
+        ]
+      },
+      {
+        "section": "abnormal_labs",
+        "claim": "Xu hướng: ổn định.",
+        "status": "PARTIALLY_SUPPORTED",
+        "citations": [
+          "P003-E005-LAB-ALT"
+        ]
+      },
+      {
+        "section": "clinical_alerts",
+        "claim": "ALT 42 U/L vẫn cao, cần theo dõi chức năng gan.",
+        "status": "SUPPORTED",
+        "citations": [
+          "P003-E005-LAB-ALT"
+        ]
+      }
+    ],
+    "gold_not_matched_by_output": [
+      {
+        "section": "allergies",
+        "pattern": "Sulfonamide",
+        "is_critical": true
+      },
+      {
+        "section": "clinical_alerts",
+        "pattern": "Glucose.*7\\.0.*mmol.*cao",
+        "is_critical": true
+      },
+      {
+        "section": "clinical_alerts",
+        "pattern": "ALT.*42.*ổn định",
+        "is_critical": false
+      }
+    ]
+  },
+  {
+    "patient_id": "P004",
+    "generated_without_gold_match": [
+      {
+        "section": "overview",
+        "claim": "Bệnh nhân đang theo dõi hạ đường huyết do Gliclazide.",
+        "status": "PARTIALLY_SUPPORTED",
+        "citations": [
+          "P004-E003-DX-E11.9",
+          "P004-PATIENT-INFO"
+        ]
+      },
+      {
+        "section": "allergies",
+        "claim": "Dị ứng thuốc (chưa xác định loại).",
+        "status": "NEED_REVIEW",
+        "citations": [
+          "P004-PATIENT-ALLERGY-THUỐC_(KHÔNG_RÕ"
+        ]
+      },
+      {
+        "section": "allergies",
+        "claim": "Cần xác nhận lại thông tin này với bệnh nhân.",
+        "status": "PARTIALLY_SUPPORTED",
+        "citations": [
+          "P004-E003-NOTE-NOTE001",
+          "P004-E003-NOTE-NOTE002",
+          "P004-E002-NOTE-NOTE001"
+        ]
+      },
+      {
+        "section": "treatment_timeline",
+        "claim": "2024-06-05: huyết áp 138/88 mmHg — thêm Gliclazide MR — tuân thủ kém.",
+        "status": "PARTIALLY_SUPPORTED",
+        "citations": [
+          "P004-E001-NOTE-NOTE001",
+          "P004-E001-NOTE-NOTE002",
+          "P004-E001-DX-E11"
+        ]
+      },
+      {
+        "section": "clinical_alerts",
+        "claim": "Glucose huyết tương lúc đói 2.5 mmol/L, hạ đường huyết CRITICAL.",
+        "status": "SUPPORTED",
+        "citations": [
+          "P004-E003-LAB-FPG"
+        ]
+      },
+      {
+        "section": "clinical_alerts",
+        "claim": "Dị ứng thuốc (không rõ loại) cần xác nhận lại thông tin.",
+        "status": "NEED_REVIEW",
+        "citations": [
+          "P004-PATIENT-ALLERGY-THUỐC_(KHÔNG_RÕ"
+        ]
+      },
+      {
+        "section": "clinical_alerts",
+        "claim": "Dị ứng thuốc chưa xác nhận chi tiết phản ứng/mức độ.",
+        "status": "NEED_REVIEW",
+        "citations": [
+          "P004-PATIENT-ALLERGY-THUỐC_(KHÔNG_RÕ"
+        ]
+      }
+    ],
+    "gold_not_matched_by_output": [
+      {
+        "section": "allergies",
+        "pattern": "dị ứng thuốc.*chưa xác định|thuốc.*không rõ loại",
+        "is_critical": true
+      },
+      {
+        "section": "clinical_alerts",
+        "pattern": "hạ đường huyết.*glucose.*2\\.5",
+        "is_critical": true
+      },
+      {
+        "section": "clinical_alerts",
+        "pattern": "Đái tháo đường type 2.*không biến chứng.*theo dõi",
+        "is_critical": true
+      }
+    ]
+  },
+  {
+    "patient_id": "P005",
+    "generated_without_gold_match": [
+      {
+        "section": "medical_history",
+        "claim": "Thói quen nguy cơ: Hút thuốc lá 40 gói-năm, chưa bỏ.",
+        "status": "PARTIALLY_SUPPORTED",
+        "citations": [
+          "P005-E001-NOTE-NOTE001",
+          "P005-E002-NOTE-NOTE001",
+          "P005-E002-NOTE-NOTE002"
+        ]
+      },
+      {
+        "section": "medical_history",
+        "claim": "Thói quen nguy cơ: Giảm từ 20 điếu/ngày xuống 10 điếu, hiện tại còn 5 điếu/ngày.",
+        "status": "PARTIALLY_SUPPORTED",
+        "citations": [
+          "P005-E001-NOTE-NOTE001",
+          "P005-E002-NOTE-NOTE001",
+          "P005-E003-NOTE-NOTE001"
+        ]
+      },
+      {
+        "section": "treatment_timeline",
+        "claim": "2024-01-15: SpO2 84%, BNP 680 pg/mL — Methylprednisolone 40 mg, Furosemide 40 mg, Carvedilol 6.25 mg — đợt cấp COPD mức trung bình-nặng, suy tim mất bù.",
+        "status": "SUPPORTED",
+        "citations": [
+          "P005-E001-LAB-BNP",
+          "P005-E001-MED-METHYLPREDNISOLONE",
+          "P005-E001-MED-FUROSEMIDE",
+          "P005-E001-MED-CARVEDILOL",
+          "P005-E002-MED-FUROSEMIDE"
+        ]
+      },
+      {
+        "section": "clinical_alerts",
+        "claim": "SpO2 90% còn bất thường.",
+        "status": "SUPPORTED",
+        "citations": [
+          "P005-E003-VIT-VIT001"
+        ]
+      },
+      {
+        "section": "clinical_alerts",
+        "claim": "Chưa rõ liều thuốc Spironolactone.",
+        "status": "UNSUPPORTED",
+        "citations": []
+      }
+    ],
+    "gold_not_matched_by_output": [
+      {
+        "section": "medical_history",
+        "pattern": "Hút thuốc lá.*40 gói-năm",
+        "is_critical": true
+      },
+      {
+        "section": "treatment_timeline",
+        "pattern": "2024-01-15.*SpO2.*84.*BNP.*680.*Methylprednisolone.*Tiotropium.*Furosemide",
+        "is_critical": true
+      },
+      {
+        "section": "clinical_alerts",
+        "pattern": "Huyết áp.*135/82|138/85.*135/82.*ổn định",
+        "is_critical": false
+      }
+    ]
+  },
+  {
+    "patient_id": "P006",
+    "generated_without_gold_match": [
+      {
+        "section": "overview",
+        "claim": "Bệnh nhân Nguyễn Thị Phương, 45 tuổi, nữ, mắc đái tháo đường type 2 với biến chứng thận mạn.",
+        "status": "PARTIALLY_SUPPORTED",
+        "citations": [
+          "P006-E002-DX-E11.65",
+          "P006-E002-DX-D63.1",
+          "P006-PATIENT-INFO"
+        ]
+      },
+      {
+        "section": "medical_history",
+        "claim": "Phát hiện protein niệu nặng lần đầu tháng 12/2023 (tỷ lệ albumin/creatinin niệu 3100 mg/g).",
+        "status": "SUPPORTED",
+        "citations": [
+          "P006-E001-NOTE-NOTE001"
+        ]
+      },
+      {
+        "section": "medical_history",
+        "claim": "Tổng trạng thừa cân (BMI 28.8).",
+        "status": "SUPPORTED",
+        "citations": [
+          "P006-E001-NOTE-NOTE002"
+        ]
+      },
+      {
+        "section": "allergies",
+        "claim": "Dị ứng Sulfonamide, trạng thái đang theo dõi.",
+        "status": "NEED_REVIEW",
+        "citations": [
+          "P006-PATIENT-ALLERGY-SULFONAMIDE"
+        ]
+      },
+      {
+        "section": "allergies",
+        "claim": "Cần xác nhận lại thông tin này với bệnh nhân.",
+        "status": "PARTIALLY_SUPPORTED",
+        "citations": [
+          "P006-E002-NOTE-NOTE001"
+        ]
+      },
+      {
+        "section": "abnormal_labs",
+        "claim": "Xu hướng: 175 lên 182, tăng.",
+        "status": "PARTIALLY_SUPPORTED",
+        "citations": [
+          "P006-E002-LAB-CREAT",
+          "P006-E001-LAB-CREAT"
+        ]
+      },
+      {
+        "section": "abnormal_labs",
+        "claim": "Xu hướng: 38 xuống 35, giảm.",
+        "status": "PARTIALLY_SUPPORTED",
+        "citations": [
+          "P006-E002-LAB-EGFR"
+        ]
+      },
+      {
+        "section": "abnormal_labs",
+        "claim": "Xu hướng: 2800 xuống 2200, cải thiện.",
+        "status": "PARTIALLY_SUPPORTED",
+        "citations": [
+          "P006-E002-LAB-HBA1C",
+          "P006-E002-LAB-UACR"
+        ]
+      },
+      {
+        "section": "diagnoses",
+        "claim": "Bệnh kèm: Bệnh thận mạn giai đoạn 3b (N18.3)",
+        "status": "CONTRADICTED",
+        "citations": [
+          "P006-E002-DX-N18.3"
+        ]
+      },
+      {
+        "section": "clinical_alerts",
+        "claim": "Dị ứng Sulfonamide, cần xác nhận lại thông tin với bệnh nhân.",
+        "status": "NEED_REVIEW",
+        "citations": [
+          "P006-PATIENT-ALLERGY-SULFONAMIDE"
+        ]
+      }
+    ],
+    "gold_not_matched_by_output": [
+      {
+        "section": "reason_for_visit",
+        "pattern": "mệt.*nhiều|xanh xao",
+        "is_critical": false
+      },
+      {
+        "section": "allergies",
+        "pattern": "Sulfonamide",
+        "is_critical": true
+      },
+      {
+        "section": "diagnoses",
+        "pattern": "thận mạn.*N18|CKD.*N18",
+        "is_critical": true
+      }
+    ]
+  },
+  {
+    "patient_id": "P007",
+    "generated_without_gold_match": [
+      {
+        "section": "overview",
+        "claim": "Bệnh nhân Trần Thị Hoa, 32 tuổi, nữ, mắc nhiễm độc giáp với bướu giáp lan tỏa.",
+        "status": "PARTIALLY_SUPPORTED",
+        "citations": [
+          "P007-E003-DX-E05.0",
+          "P007-PATIENT-INFO"
+        ]
+      },
+      {
+        "section": "medical_history",
+        "claim": "Thói quen nguy cơ: không hút thuốc, không uống rượu bia.",
+        "status": "PARTIALLY_SUPPORTED",
+        "citations": [
+          "P007-E001-NOTE-NOTE001"
+        ]
+      },
+      {
+        "section": "clinical_alerts",
+        "claim": "FT3 giảm từ 12 pmol/L xuống 4.5 pmol/L, cải thiện về mức bình thường.",
+        "status": "PARTIALLY_SUPPORTED",
+        "citations": [
+          "P007-E003-LAB-TSH",
+          "P007-E003-DX-E05.0",
+          "P007-E002-DX-E05.0"
+        ]
+      },
+      {
+        "section": "clinical_alerts",
+        "claim": "Chưa rõ liều duy trì của Methimazole.",
+        "status": "PARTIALLY_SUPPORTED",
+        "citations": [
+          "P007-E003-DX-E05.0"
+        ]
+      }
+    ],
+    "gold_not_matched_by_output": [
+      {
+        "section": "overview",
+        "pattern": "32 tuổi.*nữ|nữ.*32 tuổi",
+        "is_critical": false
+      },
+      {
+        "section": "medical_history",
+        "pattern": "Không hút thuốc|không uống rượu",
+        "is_critical": false
+      },
+      {
+        "section": "abnormal_labs",
+        "pattern": "TRAb.*8\\.5|TRAB.*8\\.5",
+        "is_critical": false
+      },
+      {
+        "section": "diagnoses",
+        "pattern": "H06\\.2|lồi mắt|Graves",
+        "is_critical": false
+      },
+      {
+        "section": "diagnoses",
+        "pattern": "R00\\.0|nhịp tim nhanh xoang|nhịp nhanh xoang",
+        "is_critical": false
+      }
+    ]
+  },
+  {
+    "patient_id": "P008",
+    "generated_without_gold_match": [
+      {
+        "section": "overview",
+        "claim": "Bệnh nhân Lê Văn Tùng, 48 tuổi, nam giới, có bệnh nền chính là loét dạ dày mạn tính và trào ngược dạ dày - thực quản.",
+        "status": "PARTIALLY_SUPPORTED",
+        "citations": [
+          "P008-E002-DX-K25.7",
+          "P008-E002-DX-K21.0",
+          "P008-PATIENT-INFO"
+        ]
+      },
+      {
+        "section": "overview",
+        "claim": "Bệnh nhân đang theo dõi tình trạng cải thiện của các triệu chứng liên quan.",
+        "status": "PARTIALLY_SUPPORTED",
+        "citations": [
+          "P008-E002-DX-K21.0",
+          "P008-PATIENT-INFO"
+        ]
+      }
+    ],
+    "gold_not_matched_by_output": [
+      {
+        "section": "overview",
+        "pattern": "48 tuổi.*nam|nam.*48 tuổi",
+        "is_critical": false
+      },
+      {
+        "section": "diagnoses",
+        "pattern": "B98\\.0|H\\. ?pylori|Helicobacter|CLO.*dương tính",
+        "is_critical": false
+      },
+      {
+        "section": "diagnoses",
+        "pattern": "H\\. ?pylori.*diệt thành công|UBT.*âm tính|Urea.*âm tính|không còn nhiễm H\\. ?pylori",
+        "is_critical": false
+      }
+    ]
+  }
+]

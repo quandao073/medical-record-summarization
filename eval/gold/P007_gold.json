@@ -5,7 +5,7 @@
       "section_id": "overview",
       "expected_claims": [
         {
-          "claim_pattern": "32 tuổi.*nữ|nữ.*32 tuổi",
+          "claim_pattern": "Trần Thị Hoa.*32 tuổi|32 tuổi.*nữ|nữ.*32 tuổi",
           "expected_source_ids": ["P007-PATIENT-INFO"],
           "acceptable_source_groups": [
             ["P007-PATIENT-INFO"]
@@ -43,7 +43,7 @@
           "is_critical": false
         },
         {
-          "claim_pattern": "Không hút thuốc|không uống rượu",
+          "claim_pattern": "Không hút thuốc|không uống rượu|không hút thuốc.*không uống rượu",
           "expected_source_ids": ["P007-E001-NOTE-NOTE001"],
           "is_critical": false
         }
@@ -177,6 +177,12 @@
           "claim_pattern": "TSH.*0\\.3.*thấp|TSH.*thấp",
           "expected_source_ids": ["P007-E003-LAB-TSH"],
           "is_critical": false
+        },
+        {
+          "claim_pattern": "FT3.*giảm|FT3.*12.*4\\.5|FT3.*cải thiện",
+          "expected_source_ids": ["P007-E003-LAB-TSH", "P007-E001-LAB-FT3"],
+          "is_critical": false,
+          "note": "added_week5"
         },
         {
           "claim_pattern": "FT4.*45.*14|FT4.*về bình thường|FT4.*giảm",

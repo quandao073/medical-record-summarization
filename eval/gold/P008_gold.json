@@ -5,7 +5,7 @@
       "section_id": "overview",
       "expected_claims": [
         {
-          "claim_pattern": "48 tuổi.*nam|nam.*48 tuổi",
+          "claim_pattern": "Lê Văn Tùng.*48 tuổi|48 tuổi.*nam|nam.*48 tuổi",
           "expected_source_ids": ["P008-PATIENT-INFO"],
           "is_critical": false,
           "note": "Claim demographic này thường ở status PARTIALLY_SUPPORTED (không phải SUPPORTED) nên không được matcher xét — recall không đạt 100% cho pattern này là expected behavior"

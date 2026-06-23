@@ -50,7 +50,7 @@
           "is_critical": false
         },
         {
-          "claim_pattern": "Hút thuốc lá.*40 gói-năm",
+          "claim_pattern": "Hút thuốc.*40 gói-năm",
           "expected_source_ids": [
             "P005-E001-NOTE-NOTE001",
             "P005-E002-NOTE-NOTE001",
@@ -156,7 +156,7 @@
       "section_id": "treatment_timeline",
       "expected_claims": [
         {
-          "claim_pattern": "2024-01-15.*SpO2.*84.*BNP.*680.*Methylprednisolone.*Tiotropium.*Furosemide",
+          "claim_pattern": "2024-01-15.*SpO2.*84.*BNP.*680.*Methylprednisolone.*Furosemide",
           "expected_source_ids": [
             "P005-E001-LAB-BNP",
             "P005-E001-MED-METHYLPREDNISOLONE",
@@ -205,6 +205,12 @@
           "claim_pattern": "Huyết áp.*135/82|138/85.*135/82.*ổn định",
           "expected_source_ids": ["P005-E003-VIT-VIT001"],
           "is_critical": false
+        },
+        {
+          "claim_pattern": "SpO2.*90.*bất thường|SpO2.*90.*thấp|SpO2.*90.*còn",
+          "expected_source_ids": ["P005-E003-VIT-VIT001"],
+          "is_critical": true,
+          "note": "added_week5"
         }
       ]
     }

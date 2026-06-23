@@ -1,28 +1,27 @@
 {
   "patient_id": "P004",
   "evaluation_mode": "loose",
-  "citation_precision": 0.9629629629629629,
-  "citation_recall": 0.896551724137931,
-  "critical_precision": 0.9333333333333333,
-  "total_supported": 27,
-  "precision_correct": 26,
-  "total_gold": 29,
-  "gold_matched": 26,
+  "citation_precision": 0.7666666666666667,
+  "citation_recall": 0.7666666666666667,
+  "critical_precision": 0.8,
+  "total_supported": 30,
+  "precision_correct": 23,
+  "total_gold": 30,
+  "gold_matched": 23,
   "sections": [
     {
       "section_id": "overview",
-      "total_claims": 3,
-      "supported_claims": 2,
+      "total_claims": 4,
+      "supported_claims": 4,
       "precision_correct": 2,
       "gold_matched": 2,
-      "gold_total": 2,
+      "gold_total": 3,
       "claim_evals": [
         {
-          "claim_text": "Bệnh nhân Phạm Thị Dung, 68 tuổi, nữ, có bệnh nền chính là đái tháo đường type 2 không biến chứng và tăng huyết áp nguyên phát.",
+          "claim_text": "Bệnh nhân Phạm Thị Dung, 68 tuổi, nữ.",
           "status": "SUPPORTED",
           "citations": [
-            "P004-E003-DX-E11.9",
-            "P004-E003-DX-I10"
+            "P004-PATIENT-INFO"
           ],
           "matched_gold_pattern": "Phạm Thị Dung.*68 tuổi.*nữ",
           "expected_source_ids": [
@@ -31,6 +30,18 @@
             "P004-E003-DX-I10"
           ],
           "has_correct_citation": true,
+          "is_critical": false
+        },
+        {
+          "claim_text": "Bệnh nền chính là đái tháo đường type 2 không biến chứng.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P004-E003-DX-E11.9",
+            "P004-E002-DX-E11"
+          ],
+          "matched_gold_pattern": null,
+          "expected_source_ids": [],
+          "has_correct_citation": false,
           "is_critical": false
         },
         {
@@ -47,11 +58,10 @@
           "is_critical": false
         },
         {
-          "claim_text": "Bệnh nhân đang theo dõi hạ đường huyết do Gliclazide.",
-          "status": "PARTIALLY_SUPPORTED",
+          "claim_text": "Bệnh nhân có tiền sử tăng huyết áp nguyên phát.",
+          "status": "SUPPORTED",
           "citations": [
-            "P004-E003-DX-E11.9",
-            "P004-PATIENT-INFO"
+            "P004-E003-DX-I10"
           ],
           "matched_gold_pattern": null,
           "expected_source_ids": [],
@@ -99,8 +109,8 @@
     },
     {
       "section_id": "medical_history",
-      "total_claims": 6,
-      "supported_claims": 6,
+      "total_claims": 7,
+      "supported_claims": 7,
       "precision_correct": 6,
       "gold_matched": 6,
       "gold_total": 6,
@@ -135,6 +145,17 @@
             "P004-E003-NOTE-NOTE002"
           ],
           "has_correct_citation": true,
+          "is_critical": false
+        },
+        {
+          "claim_text": "Không phẫu thuật.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P004-E001-NOTE-NOTE002"
+          ],
+          "matched_gold_pattern": null,
+          "expected_source_ids": [],
+          "has_correct_citation": false,
           "is_critical": false
         },
         {
@@ -193,10 +214,10 @@
     },
     {
       "section_id": "current_medications",
-      "total_claims": 5,
-      "supported_claims": 5,
-      "precision_correct": 5,
-      "gold_matched": 5,
+      "total_claims": 4,
+      "supported_claims": 4,
+      "precision_correct": 4,
+      "gold_matched": 4,
       "gold_total": 5,
       "claim_evals": [
         {
@@ -226,7 +247,7 @@
           "is_critical": false
         },
         {
-          "claim_text": "Amlodipine 5 mg — 1 viên, 1 lần/ngày.",
+          "claim_text": "Amlodipine 5 mg — 1 viên, 1 lần/ngày, uống buổi sáng.",
           "status": "SUPPORTED",
           "citations": [
             "P004-E003-MED-AMLODIPINE"
@@ -239,28 +260,14 @@
           "is_critical": true
         },
         {
-          "claim_text": "Uống buổi sáng.",
+          "claim_text": "Losartan 50 mg — 1 viên, 1 lần/ngày, uống buổi sáng.",
           "status": "SUPPORTED",
           "citations": [
-            "P004-E003-MED-AMLODIPINE",
             "P004-E003-MED-LOSARTAN"
           ],
           "matched_gold_pattern": "Uống buổi sáng",
           "expected_source_ids": [
             "P004-E003-MED-AMLODIPINE",
-            "P004-E003-MED-LOSARTAN"
-          ],
-          "has_correct_citation": true,
-          "is_critical": false
-        },
-        {
-          "claim_text": "Losartan 50 mg — 1 viên, 1 lần/ngày.",
-          "status": "SUPPORTED",
-          "citations": [
-            "P004-E003-MED-LOSARTAN"
-          ],
-          "matched_gold_pattern": "Losartan.*50.*mg",
-          "expected_source_ids": [
             "P004-E003-MED-LOSARTAN"
           ],
           "has_correct_citation": true,
@@ -277,7 +284,7 @@
       "gold_total": 1,
       "claim_evals": [
         {
-          "claim_text": "Dị ứng thuốc (chưa xác định loại).",
+          "claim_text": "Dị ứng thuốc (không rõ loại).",
           "status": "NEED_REVIEW",
           "citations": [
             "P004-PATIENT-ALLERGY-THUỐC_(KHÔNG_RÕ"
@@ -326,7 +333,7 @@
           "is_critical": true
         },
         {
-          "claim_text": "HbA1c: 7.5 %, cao, tham chiếu: 4.0 - 5.6, ngày: 2024-09-05.",
+          "claim_text": "HbA1c: 7.5%, cao, tham chiếu: 4.0 - 5.6, ngày: 2024-09-05.",
           "status": "SUPPORTED",
           "citations": [
             "P004-E003-LAB-HBA1C"
@@ -394,7 +401,8 @@
           "claim_text": "Chính: Đái tháo đường type 2 không biến chứng (E11.9)",
           "status": "SUPPORTED",
           "citations": [
-            "P004-E003-DX-E11.9"
+            "P004-E003-DX-E11.9",
+            "P004-E002-DX-E11"
           ],
           "matched_gold_pattern": "Đái tháo đường type 2.*E11",
           "expected_source_ids": [
@@ -422,17 +430,17 @@
       "section_id": "treatment_timeline",
       "total_claims": 3,
       "supported_claims": 2,
-      "precision_correct": 2,
-      "gold_matched": 2,
+      "precision_correct": 1,
+      "gold_matched": 1,
       "gold_total": 2,
       "claim_evals": [
         {
-          "claim_text": "2024-03-05: HbA1c 7.8%, huyết áp 142/90 mmHg, glucose đói 8.2 mmol/L — duy trì Metformin, Amlodipine, Losartan — kiểm soát chưa đạt.",
+          "claim_text": "2024-03-05: HbA1c 7.8%, huyết áp 142/90 mmHg, glucose đói 8.2 mmol/L, LDL 3.0 mmol/L — duy trì Metformin, Amlodipine, Losartan — kiểm soát chưa đạt.",
           "status": "SUPPORTED",
           "citations": [
             "P004-E001-LAB-HBA1C",
-            "P004-E001-LAB-FPG",
-            "P004-E001-LAB-LDL"
+            "P004-E001-LAB-LDL",
+            "P004-E001-LAB-FPG"
           ],
           "matched_gold_pattern": "2024-03-05.*HbA1c.*7\\.8.*142/90.*glucose.*8\\.2.*Metformin.*Amlodipine.*Losartan",
           "expected_source_ids": [
@@ -444,12 +452,12 @@
           "is_critical": true
         },
         {
-          "claim_text": "2024-06-05: huyết áp 138/88 mmHg — thêm Gliclazide MR — tuân thủ kém.",
+          "claim_text": "2024-06-05: huyết áp 138/88 mmHg — duy trì Metformin, Amlodipine, Losartan, thêm Gliclazide MR — kiểm soát chưa đạt.",
           "status": "PARTIALLY_SUPPORTED",
           "citations": [
-            "P004-E001-NOTE-NOTE001",
-            "P004-E001-NOTE-NOTE002",
-            "P004-E001-DX-E11"
+            "P004-E001-LAB-HBA1C",
+            "P004-E001-DX-E11",
+            "P004-E001-DX-I10"
           ],
           "matched_gold_pattern": null,
           "expected_source_ids": [],
@@ -457,19 +465,16 @@
           "is_critical": true
         },
         {
-          "claim_text": "2024-09-05: HbA1c 7.5%, glucose đói 2.5 mmol/L, huyết áp 136/86 mmHg — ngưng Gliclazide MR, giảm liều Metformin — hạ đường huyết do Gliclazide.",
+          "claim_text": "2024-09-05: HbA1c 7.5%, huyết áp 136/86 mmHg, glucose đói 2.5 mmol/L — giảm liều Metformin, ngưng Gliclazide MR — hạ đường huyết do Gliclazide.",
           "status": "SUPPORTED",
           "citations": [
             "P004-E003-LAB-HBA1C",
             "P004-E001-LAB-LDL",
             "P004-E003-LAB-FPG"
           ],
-          "matched_gold_pattern": "2024-09-05.*HbA1c.*7\\.5.*glucose.*2\\.5.*136/86.*ngưng Gliclazide.*giảm.*Metformin",
-          "expected_source_ids": [
-            "P004-E003-LAB-HBA1C",
-            "P004-E003-LAB-FPG"
-          ],
-          "has_correct_citation": true,
+          "matched_gold_pattern": null,
+          "expected_source_ids": [],
+          "has_correct_citation": false,
           "is_critical": true
         }
       ]
@@ -477,13 +482,13 @@
     {
       "section_id": "clinical_alerts",
       "total_claims": 8,
-      "supported_claims": 3,
-      "precision_correct": 2,
-      "gold_matched": 2,
+      "supported_claims": 4,
+      "precision_correct": 1,
+      "gold_matched": 1,
       "gold_total": 4,
       "claim_evals": [
         {
-          "claim_text": "Glucose huyết tương lúc đói 2.5 mmol/L, hạ đường huyết CRITICAL.",
+          "claim_text": "Glucose huyết tương lúc đói 2.5 mmol/L, cần xử trí ngay.",
           "status": "SUPPORTED",
           "citations": [
             "P004-E003-LAB-FPG"
@@ -494,10 +499,10 @@
           "is_critical": true
         },
         {
-          "claim_text": "Dị ứng thuốc (không rõ loại) cần xác nhận lại thông tin.",
-          "status": "NEED_REVIEW",
+          "claim_text": "HbA1c 7.5 %, cao hơn mức bình thường.",
+          "status": "SUPPORTED",
           "citations": [
-            "P004-PATIENT-ALLERGY-THUỐC_(KHÔNG_RÕ"
+            "P004-E003-LAB-HBA1C"
           ],
           "matched_gold_pattern": null,
           "expected_source_ids": [],
@@ -505,7 +510,7 @@
           "is_critical": true
         },
         {
-          "claim_text": "Huyết áp 138/88 mmHg sang 136/86 mmHg, huyết áp ổn định.",
+          "claim_text": "Huyết áp 136/86 mmHg, cải thiện so với 142/90 mmHg.",
           "status": "SUPPORTED",
           "citations": [
             "P004-E003-VIT-VIT001"
@@ -519,20 +524,18 @@
           "is_critical": true
         },
         {
-          "claim_text": "HbA1c 7.8% sang 7.5%, cải thiện kiểm soát đường huyết.",
+          "claim_text": "Liều Gliclazide chưa rõ, cần xác nhận lại với bác sĩ.",
           "status": "SUPPORTED",
           "citations": [
-            "P004-E003-LAB-HBA1C"
+            "P004-E002-MED-GLICLAZIDE_MR"
           ],
-          "matched_gold_pattern": "HbA1c.*7\\.8.*7\\.5.*cải thiện",
-          "expected_source_ids": [
-            "P004-E003-LAB-HBA1C"
-          ],
-          "has_correct_citation": true,
-          "is_critical": true
+          "matched_gold_pattern": null,
+          "expected_source_ids": [],
+          "has_correct_citation": false,
+          "is_critical": false
         },
         {
-          "claim_text": "Dị ứng thuốc chưa xác nhận chi tiết phản ứng/mức độ.",
+          "claim_text": "Dị ứng thuốc chưa xác nhận chi tiết.",
           "status": "NEED_REVIEW",
           "citations": [
             "P004-PATIENT-ALLERGY-THUỐC_(KHÔNG_RÕ"

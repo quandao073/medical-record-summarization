@@ -218,9 +218,13 @@ SECTION_GUIDELINES = {
         "7. Mỗi bullet nên ngắn, tối đa 1 câu.\n"
         "8. Tối đa 4 bullets cho mỗi nhóm để tránh rối UI.\n"
         "9. Các giá trị xét nghiệm, huyết áp, thuốc, dị ứng phải giữ nguyên theo context.\n"
-        "10. BẮT BUỘC: mỗi bullet chỉ chứa MỘT thông tin/chỉ số duy nhất (atomic claim) — "
-        "không gộp nhiều chỉ số hoặc nhiều nhận xét khác nhau vào một bullet. "
+        "10. BẮT BUỘC — ATOMIC CLAIMS: mỗi bullet chỉ chứa ĐÚNG MỘT vấn đề lâm sàng duy nhất. "
+        "KHÔNG gộp nhiều chỉ số, nhiều dị ứng, hoặc nhiều nhận xét khác nhau vào một bullet. "
         "Nếu có nhiều chỉ số liên quan, tách thành nhiều bullet riêng, mỗi bullet ứng với một nguồn dữ liệu duy nhất.\n"
+        "Ví dụ SAI: 'Dị ứng Penicillin và Aspirin, cần theo dõi.'\n"
+        "Ví dụ ĐÚNG: 'Dị ứng Penicillin, cần theo dõi.' + 'Dị ứng Aspirin, cần theo dõi.'\n"
+        "Ví dụ SAI: 'HbA1c 7.1% cao và Glucose 6.2 mmol/L cao.'\n"
+        "Ví dụ ĐÚNG: 'HbA1c 7.1% còn cao.' + 'Glucose huyết tương lúc đói 6.2 mmol/L còn cao.'\n"
     ),
 }
 
