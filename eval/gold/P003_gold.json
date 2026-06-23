@@ -62,6 +62,12 @@
           "claim_pattern": "Ít vận động",
           "expected_source_ids": ["P003-E001-NOTE-NOTE001"],
           "is_critical": false
+        },
+        {
+          "claim_pattern": "[Nn]gưng Indapamide|Indapamide.*tăng acid uric",
+          "expected_source_ids": ["P003-E002-NOTE-NOTE001", "P003-E003-NOTE-NOTE002"],
+          "is_critical": true,
+          "note": "added_week5"
         }
       ]
     },
@@ -221,9 +227,10 @@
           "note": "Pipeline cite chỉ E005. Baseline 7.8% không cần source riêng nếu context rõ."
         },
         {
-          "claim_pattern": "ALT.*42.*ổn định",
+          "claim_pattern": "ALT.*42.*ổn định|ALT.*42.*cao.*theo dõi|ALT.*42.*theo dõi.*gan",
           "expected_source_ids": ["P003-E005-LAB-ALT"],
-          "is_critical": false
+          "is_critical": false,
+          "note": "widened_week5"
         }
       ]
     }

@@ -1,28 +1,28 @@
 {
   "patient_id": "P003",
   "evaluation_mode": "loose",
-  "citation_precision": 0.9393939393939394,
-  "citation_recall": 0.9117647058823529,
-  "critical_precision": 0.9545454545454546,
-  "total_supported": 33,
-  "precision_correct": 31,
-  "total_gold": 34,
-  "gold_matched": 31,
+  "citation_precision": 0.7428571428571429,
+  "citation_recall": 0.7714285714285715,
+  "critical_precision": 0.7307692307692307,
+  "total_supported": 35,
+  "precision_correct": 26,
+  "total_gold": 35,
+  "gold_matched": 27,
   "sections": [
     {
       "section_id": "overview",
-      "total_claims": 3,
-      "supported_claims": 3,
-      "precision_correct": 3,
-      "gold_matched": 3,
+      "total_claims": 2,
+      "supported_claims": 2,
+      "precision_correct": 1,
+      "gold_matched": 1,
       "gold_total": 3,
       "claim_evals": [
         {
-          "claim_text": "Bệnh nhân Lê Minh Cường, 62 tuổi, nam giới, có bệnh nền chính là đái tháo đường type 2 và tăng huyết áp nguyên phát.",
+          "claim_text": "Bệnh nhân Lê Minh Cường, 62 tuổi, nam giới, có bệnh nền chính là tăng huyết áp nguyên phát.",
           "status": "SUPPORTED",
           "citations": [
-            "P003-E005-DX-I10",
-            "P003-E005-DX-E11.9"
+            "P003-PATIENT-INFO",
+            "P003-E005-DX-I10"
           ],
           "matched_gold_pattern": "Lê Minh Cường.*62 tuổi.*nam",
           "expected_source_ids": [
@@ -34,29 +34,15 @@
           "is_critical": false
         },
         {
-          "claim_text": "Thể trạng của bệnh nhân có chỉ số BMI là 29.1, cho thấy tình trạng thừa cân.",
+          "claim_text": "Bệnh nhân đang theo dõi các biến chứng mạn tính như phì đại thất trái và gan nhiễm mỡ.",
           "status": "SUPPORTED",
           "citations": [
-            "P003-E005-VIT-VIT001"
+            "P003-E004-DX-I51.7",
+            "P003-E003-DX-K76.0"
           ],
-          "matched_gold_pattern": "BMI.*29\\.1",
-          "expected_source_ids": [
-            "P003-E005-VIT-VIT001"
-          ],
-          "has_correct_citation": true,
-          "is_critical": false
-        },
-        {
-          "claim_text": "Bệnh nhân đang theo dõi rối loạn chuyển hóa lipid hỗn hợp.",
-          "status": "SUPPORTED",
-          "citations": [
-            "P003-E005-DX-E78.5"
-          ],
-          "matched_gold_pattern": "rối loạn.*lipid|RLLPM",
-          "expected_source_ids": [
-            "P003-E005-DX-E78.5"
-          ],
-          "has_correct_citation": true,
+          "matched_gold_pattern": null,
+          "expected_source_ids": [],
+          "has_correct_citation": false,
           "is_critical": false
         }
       ]
@@ -86,19 +72,19 @@
     },
     {
       "section_id": "medical_history",
-      "total_claims": 6,
-      "supported_claims": 6,
-      "precision_correct": 5,
-      "gold_matched": 5,
-      "gold_total": 5,
+      "total_claims": 5,
+      "supported_claims": 5,
+      "precision_correct": 4,
+      "gold_matched": 4,
+      "gold_total": 6,
       "claim_evals": [
         {
-          "claim_text": "Tăng huyết áp phát hiện năm 2013.",
+          "claim_text": "Tăng huyết áp nguyên phát, phát hiện năm 2013.",
           "status": "SUPPORTED",
           "citations": [
-            "P003-E001-NOTE-NOTE002",
             "P003-E001-DX-I10",
-            "P003-E003-NOTE-NOTE002"
+            "P003-E002-DX-I10",
+            "P003-E003-DX-I10"
           ],
           "matched_gold_pattern": "Tăng huyết áp.*phát hiện.*2013|THA.*2013",
           "expected_source_ids": [
@@ -110,11 +96,10 @@
           "is_critical": false
         },
         {
-          "claim_text": "Rối loạn lipid máu phát hiện năm 2018.",
+          "claim_text": "Rối loạn lipid máu, phát hiện năm 2018.",
           "status": "SUPPORTED",
           "citations": [
-            "P003-E001-NOTE-NOTE002",
-            "P003-E003-NOTE-NOTE002"
+            "P003-E001-NOTE-NOTE002"
           ],
           "matched_gold_pattern": "Rối loạn lipid.*phát hiện.*2018|RLLPM.*2018",
           "expected_source_ids": [
@@ -125,18 +110,14 @@
           "is_critical": false
         },
         {
-          "claim_text": "Đái tháo đường type 2 mới chẩn đoán tháng 02/2024.",
+          "claim_text": "Đái tháo đường type 2, mới phát hiện tháng 02/2024.",
           "status": "SUPPORTED",
           "citations": [
-            "P003-E003-NOTE-NOTE001",
-            "P003-E003-NOTE-NOTE002"
+            "P003-E003-DX-E11.9"
           ],
-          "matched_gold_pattern": "Đái tháo đường type 2.*chẩn đoán.*2024|ĐTĐ.*02/2024",
-          "expected_source_ids": [
-            "P003-E003-NOTE-NOTE001",
-            "P003-E003-NOTE-NOTE002"
-          ],
-          "has_correct_citation": true,
+          "matched_gold_pattern": null,
+          "expected_source_ids": [],
+          "has_correct_citation": false,
           "is_critical": false
         },
         {
@@ -164,18 +145,6 @@
           ],
           "has_correct_citation": true,
           "is_critical": false
-        },
-        {
-          "claim_text": "Ngưng Indapamide tháng 10/2023 do tăng acid uric.",
-          "status": "SUPPORTED",
-          "citations": [
-            "P003-E002-NOTE-NOTE001",
-            "P003-E003-NOTE-NOTE002"
-          ],
-          "matched_gold_pattern": null,
-          "expected_source_ids": [],
-          "has_correct_citation": false,
-          "is_critical": false
         }
       ]
     },
@@ -188,7 +157,7 @@
       "gold_total": 6,
       "claim_evals": [
         {
-          "claim_text": "Valsartan 320 mg — liều: 1 viên, tần suất: 1 lần/ngày, Uống buổi sáng.",
+          "claim_text": "Valsartan 320 mg — 1 viên, 1 lần/ngày, Uống buổi sáng.",
           "status": "SUPPORTED",
           "citations": [
             "P003-E005-MED-VALSARTAN"
@@ -201,7 +170,7 @@
           "is_critical": true
         },
         {
-          "claim_text": "Amlodipine 10 mg — liều: 1 viên, tần suất: 1 lần/ngày, Uống buổi sáng.",
+          "claim_text": "Amlodipine 10 mg — 1 viên, 1 lần/ngày, Uống buổi sáng.",
           "status": "SUPPORTED",
           "citations": [
             "P003-E005-MED-AMLODIPINE"
@@ -214,7 +183,7 @@
           "is_critical": true
         },
         {
-          "claim_text": "Bisoprolol 5 mg — liều: 1 viên, tần suất: 1 lần/ngày, Uống buổi sáng.",
+          "claim_text": "Bisoprolol 5 mg — 1 viên, 1 lần/ngày, Uống buổi sáng.",
           "status": "SUPPORTED",
           "citations": [
             "P003-E005-MED-BISOPROLOL"
@@ -227,7 +196,7 @@
           "is_critical": true
         },
         {
-          "claim_text": "Spironolactone 25 mg — liều: 1 viên, tần suất: 1 lần/ngày, Uống buổi sáng.",
+          "claim_text": "Spironolactone 25 mg — 1 viên, 1 lần/ngày, Uống buổi sáng.",
           "status": "SUPPORTED",
           "citations": [
             "P003-E005-MED-SPIRONOLACTONE"
@@ -240,7 +209,7 @@
           "is_critical": true
         },
         {
-          "claim_text": "Metformin 1000 mg — liều: 1 viên, tần suất: 2 lần/ngày, Uống sau ăn sáng và tối.",
+          "claim_text": "Metformin 1000 mg — 1 viên, 2 lần/ngày, Uống sau ăn sáng và tối.",
           "status": "SUPPORTED",
           "citations": [
             "P003-E005-MED-METFORMIN"
@@ -253,7 +222,7 @@
           "is_critical": true
         },
         {
-          "claim_text": "Atorvastatin 40 mg — liều: 1 viên, tần suất: 1 lần/ngày (tối), Uống buổi tối.",
+          "claim_text": "Atorvastatin 40 mg — 1 viên, 1 lần/ngày, Uống buổi tối.",
           "status": "SUPPORTED",
           "citations": [
             "P003-E005-MED-ATORVASTATIN"
@@ -276,7 +245,7 @@
       "gold_total": 1,
       "claim_evals": [
         {
-          "claim_text": "Dị ứng Sulfonamide, trạng thái ghi nhận đang hoạt động.",
+          "claim_text": "Dị ứng Sulfonamide, trạng thái đang theo dõi.",
           "status": "NEED_REVIEW",
           "citations": [
             "P003-PATIENT-ALLERGY-SULFONAMIDE_(CO"
@@ -310,7 +279,7 @@
       "gold_total": 5,
       "claim_evals": [
         {
-          "claim_text": "HbA1c: 7.2 %, cao, tham chiếu: 4.0 - 5.6 %, ngày: 2024-10-10.",
+          "claim_text": "HbA1c: 7.2 %, cao, tham chiếu: 4.0 - 5.6, ngày: 2024-10-10.",
           "status": "SUPPORTED",
           "citations": [
             "P003-E005-LAB-HBA1C"
@@ -338,7 +307,7 @@
           "is_critical": false
         },
         {
-          "claim_text": "Glucose huyết tương lúc đói: 7.0 mmol/L, cao, tham chiếu: 3.9 - 6.1 mmol/L, ngày: 2024-10-10.",
+          "claim_text": "Glucose huyết tương lúc đói: 7.0 mmol/L, cao, tham chiếu: 3.9 - 6.1, ngày: 2024-10-10.",
           "status": "SUPPORTED",
           "citations": [
             "P003-E005-LAB-FPG"
@@ -351,7 +320,7 @@
           "is_critical": true
         },
         {
-          "claim_text": "LDL-Cholesterol: 2.7 mmol/L, cao, tham chiếu: < 2.6 mmol/L, ngày: 2024-10-10.",
+          "claim_text": "LDL-Cholesterol: 2.7 mmol/L, cao, tham chiếu: < 2.6, ngày: 2024-10-10.",
           "status": "SUPPORTED",
           "citations": [
             "P003-E005-LAB-LDL",
@@ -365,7 +334,7 @@
           "is_critical": true
         },
         {
-          "claim_text": "ALT: 42 U/L, cao, tham chiếu: 7 - 40 U/L, ngày: 2024-10-10.",
+          "claim_text": "ALT: 42 U/L, cao, tham chiếu: 7 - 40, ngày: 2024-10-10.",
           "status": "SUPPORTED",
           "citations": [
             "P003-E005-LAB-ALT"
@@ -392,8 +361,8 @@
     },
     {
       "section_id": "diagnoses",
-      "total_claims": 3,
-      "supported_claims": 3,
+      "total_claims": 7,
+      "supported_claims": 7,
       "precision_correct": 3,
       "gold_matched": 3,
       "gold_total": 3,
@@ -412,6 +381,19 @@
           "is_critical": true
         },
         {
+          "claim_text": "Bệnh kèm: Rối loạn chuyển hóa lipid hỗn hợp (E78.5)",
+          "status": "SUPPORTED",
+          "citations": [
+            "P003-E005-DX-E78.5"
+          ],
+          "matched_gold_pattern": "lipid.*E78|rối loạn chuyển hóa lipid",
+          "expected_source_ids": [
+            "P003-E005-DX-E78.5"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
+        },
+        {
           "claim_text": "Bệnh kèm: Đái tháo đường type 2 (E11.9)",
           "status": "SUPPORTED",
           "citations": [
@@ -425,16 +407,47 @@
           "is_critical": true
         },
         {
-          "claim_text": "Bệnh kèm: Rối loạn chuyển hóa lipid hỗn hợp (E78.5)",
+          "claim_text": "Biến chứng: Phì đại thất trái (I51.7)",
           "status": "SUPPORTED",
           "citations": [
-            "P003-E005-DX-E78.5"
+            "P003-E004-DX-I51.7"
           ],
-          "matched_gold_pattern": "lipid.*E78|rối loạn chuyển hóa lipid",
-          "expected_source_ids": [
-            "P003-E005-DX-E78.5"
+          "matched_gold_pattern": null,
+          "expected_source_ids": [],
+          "has_correct_citation": false,
+          "is_critical": true
+        },
+        {
+          "claim_text": "Biến chứng: Cơn tăng huyết áp cấp cứu (I16.1)",
+          "status": "SUPPORTED",
+          "citations": [
+            "P003-E004-DX-I16.1"
           ],
-          "has_correct_citation": true,
+          "matched_gold_pattern": null,
+          "expected_source_ids": [],
+          "has_correct_citation": false,
+          "is_critical": true
+        },
+        {
+          "claim_text": "Biến chứng: Gan nhiễm mỡ (K76.0)",
+          "status": "SUPPORTED",
+          "citations": [
+            "P003-E003-DX-K76.0"
+          ],
+          "matched_gold_pattern": null,
+          "expected_source_ids": [],
+          "has_correct_citation": false,
+          "is_critical": true
+        },
+        {
+          "claim_text": "Bệnh kèm: Tiền đái tháo đường (R73.0)",
+          "status": "SUPPORTED",
+          "citations": [
+            "P003-E002-DX-R73.0"
+          ],
+          "matched_gold_pattern": null,
+          "expected_source_ids": [],
+          "has_correct_citation": false,
           "is_critical": true
         }
       ]
@@ -443,16 +456,17 @@
       "section_id": "treatment_timeline",
       "total_claims": 4,
       "supported_claims": 4,
-      "precision_correct": 4,
+      "precision_correct": 3,
       "gold_matched": 4,
       "gold_total": 4,
       "claim_evals": [
         {
-          "claim_text": "2023-06-10: huyết áp 158/98 mmHg, LDL 4.1 mmol/L — duy trì Amlodipine, Valsartan, Atorvastatin 20mg — kiểm soát chưa đạt.",
+          "claim_text": "2023-06-10: huyết áp 158/98 mmHg, LDL 4.1 mmol/L — duy trì Amlodipine và Valsartan, thêm Atorvastatin 20 mg — kiểm soát chưa đạt.",
           "status": "SUPPORTED",
           "citations": [
             "P003-E001-LAB-LDL",
-            "P003-E003-LAB-TC"
+            "P003-E003-LAB-TC",
+            "P003-E001-MED-ATORVASTATIN"
           ],
           "matched_gold_pattern": "2023-06-10.*158/98.*LDL.*4\\.1.*Amlodipine.*Valsartan.*Atorvastatin",
           "expected_source_ids": [
@@ -463,11 +477,14 @@
           "is_critical": true
         },
         {
-          "claim_text": "2023-10-10: huyết áp 152/94 mmHg, LDL 3.2 mmol/L — tăng Atorvastatin 20→40mg, thêm Spironolactone 25mg — cải thiện nhẹ lipid nhưng huyết áp chưa đạt.",
+          "claim_text": "2023-10-10: huyết áp 152/94 mmHg, LDL 3.2 mmol/L — tăng Atorvastatin lên 40 mg, thêm Spironolactone 25 mg — cải thiện nhẹ lipid, kiểm soát huyết áp chưa đạt.",
           "status": "SUPPORTED",
           "citations": [
             "P003-E002-LAB-LDL",
-            "P003-E003-LAB-TC"
+            "P003-E003-LAB-TC",
+            "P003-E002-MED-ATORVASTATIN",
+            "P003-E002-MED-SPIRONOLACTONE",
+            "P003-E003-MED-SPIRONOLACTONE"
           ],
           "matched_gold_pattern": "2023-10-10.*152/94.*LDL.*3\\.2.*Atorvastatin.*40.*Spironolactone",
           "expected_source_ids": [
@@ -478,12 +495,14 @@
           "is_critical": true
         },
         {
-          "claim_text": "2024-02-10: huyết áp 148/92 mmHg, HbA1c 6.9% — khởi trị Metformin 500mg x2/ngày — xác nhận đái tháo đường type 2 mới phát hiện.",
+          "claim_text": "2024-02-10: huyết áp 148/92 mmHg, HbA1c 6.9%, glucose đói 7.2 mmol/L — khởi trị Metformin 500 mg x2/ngày — xác nhận đái tháo đường type 2 mới phát hiện, kiểm soát huyết áp chưa đạt.",
           "status": "SUPPORTED",
           "citations": [
-            "P003-E003-DX-E11.9",
             "P003-E003-LAB-HBA1C",
-            "P003-E004-DX-E11.9"
+            "P003-E003-LAB-FPG",
+            "P003-E003-LAB-TC",
+            "P003-E003-MED-METFORMIN",
+            "P003-E003-DX-E11.9"
           ],
           "matched_gold_pattern": "2024-02-10.*148/92.*HbA1c.*6\\.9.*Metformin.*đái tháo đường",
           "expected_source_ids": [
@@ -495,16 +514,18 @@
           "is_critical": true
         },
         {
-          "claim_text": "2024-06-10: huyết áp 178/108 mmHg — tăng Metformin — kiểm soát kém, nhập viện cấp cứu.",
+          "claim_text": "2024-06-10: huyết áp chưa rõ, glucose đói 8.5 mmol/L, HbA1c 7.8% — duy trì phác đồ — kiểm soát kém đái tháo đường.",
           "status": "SUPPORTED",
           "citations": [
-            "P003-E004-NOTE-NOTE001"
+            "P003-E004-LAB-HBA1C",
+            "P003-E003-LAB-TC",
+            "P003-E004-LAB-FPG"
           ],
           "matched_gold_pattern": "2024-06-10.*178/108.*Metformin.*nhập viện|kiểm soát kém",
           "expected_source_ids": [
             "P003-E004-NOTE-NOTE001"
           ],
-          "has_correct_citation": true,
+          "has_correct_citation": false,
           "is_critical": true
         }
       ]
@@ -513,38 +534,36 @@
       "section_id": "clinical_alerts",
       "total_claims": 9,
       "supported_claims": 5,
-      "precision_correct": 4,
-      "gold_matched": 4,
+      "precision_correct": 3,
+      "gold_matched": 3,
       "gold_total": 6,
       "claim_evals": [
         {
-          "claim_text": "Huyết áp 142/88 mmHg vẫn cao, chưa đạt mục tiêu.",
+          "claim_text": "HbA1c 7.2% vẫn cao hơn mức bình thường.",
           "status": "SUPPORTED",
           "citations": [
-            "P003-E005-VIT-VIT001"
+            "P003-E005-LAB-HBA1C"
           ],
-          "matched_gold_pattern": "huyết áp.*142/88.*chưa đạt",
+          "matched_gold_pattern": null,
+          "expected_source_ids": [],
+          "has_correct_citation": false,
+          "is_critical": true
+        },
+        {
+          "claim_text": "Glucose huyết tương lúc đói 7.0 mmol/L vẫn cao hơn mức bình thường.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P003-E005-LAB-FPG"
+          ],
+          "matched_gold_pattern": "Glucose.*7\\.0.*mmol.*cao",
           "expected_source_ids": [
-            "P003-E005-VIT-VIT001"
+            "P003-E005-LAB-FPG"
           ],
           "has_correct_citation": true,
           "is_critical": true
         },
         {
-          "claim_text": "HbA1c 7.2% vẫn cao, cần theo dõi đái tháo đường.",
-          "status": "SUPPORTED",
-          "citations": [
-            "P003-E005-LAB-HBA1C"
-          ],
-          "matched_gold_pattern": "HbA1c.*7\\.2.*cao.*theo dõi",
-          "expected_source_ids": [
-            "P003-E005-LAB-HBA1C"
-          ],
-          "has_correct_citation": true,
-          "is_critical": true
-        },
-        {
-          "claim_text": "LDL-Cholesterol 2.7 mmol/L vẫn cao, gần đạt mục tiêu.",
+          "claim_text": "LDL-Cholesterol 2.7 mmol/L vẫn cao hơn mức bình thường.",
           "status": "SUPPORTED",
           "citations": [
             "P003-E005-LAB-LDL",
@@ -559,7 +578,7 @@
           "is_critical": true
         },
         {
-          "claim_text": "ALT 42 U/L vẫn cao, cần theo dõi chức năng gan.",
+          "claim_text": "ALT 42 U/L vẫn cao hơn mức bình thường.",
           "status": "SUPPORTED",
           "citations": [
             "P003-E005-LAB-ALT"
@@ -570,7 +589,7 @@
           "is_critical": true
         },
         {
-          "claim_text": "HbA1c 7.8% sang 7.2% - cải thiện từ lần khám trước.",
+          "claim_text": "HbA1c 7.8% sang 7.2% — cải thiện.",
           "status": "SUPPORTED",
           "citations": [
             "P003-E005-LAB-HBA1C"
@@ -580,6 +599,17 @@
             "P003-E005-LAB-HBA1C"
           ],
           "has_correct_citation": true,
+          "is_critical": true
+        },
+        {
+          "claim_text": "Dị ứng Sulfonamide chưa xác nhận lại với bệnh nhân.",
+          "status": "NEED_REVIEW",
+          "citations": [
+            "P003-PATIENT-ALLERGY-SULFONAMIDE_(CO"
+          ],
+          "matched_gold_pattern": null,
+          "expected_source_ids": [],
+          "has_correct_citation": false,
           "is_critical": true
         }
       ]

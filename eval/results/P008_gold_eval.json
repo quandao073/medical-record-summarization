@@ -1,33 +1,33 @@
 {
   "patient_id": "P008",
   "evaluation_mode": "loose",
-  "citation_precision": 1.0,
-  "citation_recall": 0.8235294117647058,
+  "citation_precision": 0.9375,
+  "citation_recall": 0.8823529411764706,
   "critical_precision": 1.0,
-  "total_supported": 14,
-  "precision_correct": 14,
+  "total_supported": 16,
+  "precision_correct": 15,
   "total_gold": 17,
-  "gold_matched": 14,
+  "gold_matched": 15,
   "sections": [
     {
       "section_id": "overview",
       "total_claims": 3,
-      "supported_claims": 1,
-      "precision_correct": 1,
-      "gold_matched": 1,
+      "supported_claims": 2,
+      "precision_correct": 2,
+      "gold_matched": 2,
       "gold_total": 2,
       "claim_evals": [
         {
-          "claim_text": "Bệnh nhân Lê Văn Tùng, 48 tuổi, nam giới, có bệnh nền chính là loét dạ dày mạn tính và trào ngược dạ dày - thực quản.",
-          "status": "PARTIALLY_SUPPORTED",
+          "claim_text": "Bệnh nhân Lê Văn Tùng, 48 tuổi, nam giới, có bệnh nền chính là loét dạ dày mạn tính.",
+          "status": "SUPPORTED",
           "citations": [
-            "P008-E002-DX-K25.7",
-            "P008-E002-DX-K21.0",
             "P008-PATIENT-INFO"
           ],
-          "matched_gold_pattern": null,
-          "expected_source_ids": [],
-          "has_correct_citation": false,
+          "matched_gold_pattern": "Lê Văn Tùng.*48 tuổi|48 tuổi.*nam|nam.*48 tuổi",
+          "expected_source_ids": [
+            "P008-PATIENT-INFO"
+          ],
+          "has_correct_citation": true,
           "is_critical": false
         },
         {
@@ -44,9 +44,10 @@
           "is_critical": false
         },
         {
-          "claim_text": "Bệnh nhân đang theo dõi tình trạng cải thiện của các triệu chứng liên quan.",
+          "claim_text": "Bệnh nhân đang theo dõi trào ngược dạ dày - thực quản.",
           "status": "PARTIALLY_SUPPORTED",
           "citations": [
+            "P008-E002-DX-K25.7",
             "P008-E002-DX-K21.0",
             "P008-PATIENT-INFO"
           ],
@@ -153,7 +154,7 @@
       "gold_total": 1,
       "claim_evals": [
         {
-          "claim_text": "Esomeprazole 20 mg — 20 mg, 1 lần/ngày, trước ăn sáng.",
+          "claim_text": "Esomeprazole 20 mg — 20 mg, 1 lần/ngày (trước ăn sáng).",
           "status": "SUPPORTED",
           "citations": [
             "P008-E002-MED-ESOMEPRAZOLE"
@@ -187,10 +188,10 @@
     },
     {
       "section_id": "diagnoses",
-      "total_claims": 2,
-      "supported_claims": 2,
-      "precision_correct": 2,
-      "gold_matched": 2,
+      "total_claims": 3,
+      "supported_claims": 3,
+      "precision_correct": 3,
+      "gold_matched": 3,
       "gold_total": 4,
       "claim_evals": [
         {
@@ -220,6 +221,19 @@
           ],
           "has_correct_citation": true,
           "is_critical": true
+        },
+        {
+          "claim_text": "Bệnh kèm: Nhiễm Helicobacter pylori (B98.0)",
+          "status": "SUPPORTED",
+          "citations": [
+            "P008-E001-DX-B98.0"
+          ],
+          "matched_gold_pattern": "B98\\.0|H\\. ?pylori|Helicobacter|CLO.*dương tính",
+          "expected_source_ids": [
+            "P008-E001-DX-B98.0"
+          ],
+          "has_correct_citation": true,
+          "is_critical": true
         }
       ]
     },
@@ -232,7 +246,7 @@
       "gold_total": 2,
       "claim_evals": [
         {
-          "claim_text": "2024-04-12: Hemoglobin 13.8 g/dL — bắt đầu phác đồ diệt H.pylori 14 ngày với Esomeprazole, Amoxicillin, Clarithromycin — triệu chứng đau thượng vị và GERD chưa cải thiện.",
+          "claim_text": "2024-04-12: Hb 13.8 g/dL — bắt đầu phác đồ diệt H.pylori 14 ngày với Esomeprazole, Amoxicillin, Clarithromycin — triệu chứng đau thượng vị và GERD chưa cải thiện.",
           "status": "SUPPORTED",
           "citations": [
             "P008-E001-LAB-HGB"
@@ -250,7 +264,7 @@
           "is_critical": true
         },
         {
-          "claim_text": "2024-06-10: Hemoglobin 14.1 g/dL — giảm liều Esomeprazole xuống 20 mg/ngày — triệu chứng đau thượng vị cải thiện rõ, GERD còn nhẹ.",
+          "claim_text": "2024-06-10: Hb 14.1 g/dL — giảm liều Esomeprazole xuống 20 mg/ngày — triệu chứng đau thượng vị cải thiện rõ, diệt H.pylori thành công, GERD còn nhẹ.",
           "status": "SUPPORTED",
           "citations": [
             "P008-E002-LAB-HGB",
@@ -270,12 +284,12 @@
       "section_id": "clinical_alerts",
       "total_claims": 7,
       "supported_claims": 3,
-      "precision_correct": 3,
-      "gold_matched": 3,
+      "precision_correct": 2,
+      "gold_matched": 2,
       "gold_total": 3,
       "claim_evals": [
         {
-          "claim_text": "Ợ chua nhẹ khi ăn no hoặc nằm sớm sau ăn vẫn còn.",
+          "claim_text": "Ợ chua nhẹ khi ăn no hoặc nằm sớm sau ăn.",
           "status": "SUPPORTED",
           "citations": [
             "P008-E002-DX-K21.0"
@@ -301,18 +315,14 @@
           "is_critical": false
         },
         {
-          "claim_text": "Nhiễm Helicobacter pylori đã được diệt thành công với test hơi thở Urea âm tính.",
+          "claim_text": "Nhiễm Helicobacter pylori từ dương tính sang âm tính, diệt HP thành công.",
           "status": "SUPPORTED",
           "citations": [
             "P008-E001-DX-B98.0"
           ],
-          "matched_gold_pattern": "[Hh]\\.?[Pp]ylori.*diệt|Helicobacter.*diệt thành công|Urea.*âm tính|UBT.*âm tính",
-          "expected_source_ids": [
-            "P008-E002-PROC-PROC001",
-            "P008-E002-DX-K25.7",
-            "P008-E001-DX-B98.0"
-          ],
-          "has_correct_citation": true,
+          "matched_gold_pattern": null,
+          "expected_source_ids": [],
+          "has_correct_citation": false,
           "is_critical": false
         }
       ]

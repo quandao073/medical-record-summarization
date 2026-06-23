@@ -17,6 +17,12 @@
           "claim_pattern": "BMI.*28\\.1",
           "expected_source_ids": ["P004-E003-VIT-VIT001"],
           "is_critical": false
+        },
+        {
+          "claim_pattern": "theo dõi hạ đường huyết|hạ đường huyết.*Gliclazide",
+          "expected_source_ids": ["P004-E003-DX-E11.9", "P004-PATIENT-INFO"],
+          "is_critical": true,
+          "note": "added_week5"
         }
       ]
     },
@@ -191,7 +197,7 @@
       "section_id": "clinical_alerts",
       "expected_claims": [
         {
-          "claim_pattern": "hạ đường huyết.*glucose.*2\\.5",
+          "claim_pattern": "hạ đường huyết.*glucose.*2\\.5|[Gg]lucose.*2\\.5.*hạ đường huyết|glucose.*2\\.5.*CRITICAL",
           "expected_source_ids": ["P004-E003-LAB-FPG"],
           "is_critical": true
         },
