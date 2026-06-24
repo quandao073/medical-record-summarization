@@ -27,7 +27,7 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
 from dotenv import load_dotenv
 
 from src.llm import BaseLLMClient, create_llm_client
-from src.c1_emr.pipeline import load_and_process, C1ProcessingError
+from src.c1_emr.pipeline import load_and_process, process_ehr, C1ProcessingError
 from src.c2_chunking.chunker import chunk_ehr
 from src.c2_chunking.store_builder import build_structured_store, save_structured_store
 from src.c3_retrieval.retriever import retrieve_for_section
@@ -59,6 +59,7 @@ def run_poc(
     max_context_chunks: int = 60,
     verbose: bool = True,
     use_vector_store: bool = False,
+    raw_ehr: dict | None = None,
 ) -> FinalSummary:
     t_start = time.time()
     if verbose:
@@ -66,18 +67,27 @@ def run_poc(
         print(f"PoC Pipeline | Patient: {patient_id} | {client.provider_name}/{client.model}")
         print(f"{'='*60}")
 
-    # C1: Load + Validate + De-identify + Normalize
-    ehr_path = ASSEMBLED_DIR / f"{patient_id}.json"
-    if not ehr_path.exists():
-        raise FileNotFoundError(f"EHR not found: {ehr_path}")
+    # C1: Validate + De-identify + Normalize
+    if raw_ehr is not None:
+        if verbose:
+            print("[C1] Processing EHR (source: database)...")
+        try:
+            safe_ehr = process_ehr(raw_ehr)
+        except C1ProcessingError as e:
+            print(f"[C1] VALIDATION FAILED: {e}")
+            raise
+    else:
+        ehr_path = ASSEMBLED_DIR / f"{patient_id}.json"
+        if not ehr_path.exists():
+            raise FileNotFoundError(f"EHR not found: {ehr_path}")
 
-    if verbose:
-        print("[C1] Processing EHR...")
-    try:
-        safe_ehr = load_and_process(ehr_path)
-    except C1ProcessingError as e:
-        print(f"[C1] VALIDATION FAILED: {e}")
-        raise
+        if verbose:
+            print("[C1] Processing EHR (source: file)...")
+        try:
+            safe_ehr = load_and_process(ehr_path)
+        except C1ProcessingError as e:
+            print(f"[C1] VALIDATION FAILED: {e}")
+            raise
 
     # C2: Chunk + Build Store
     if verbose:

@@ -354,7 +354,7 @@ export default function SourcePanel({
                   <div className="mt-2 bg-amber-50 border border-amber-200 rounded-lg p-3 max-h-[300px] overflow-y-auto">
                     <p className="text-xs font-medium text-amber-700 mb-2">
                       Dữ liệu gốc — {rawEncounter.encounter.encounter_date as string ?? ""}
-                      {rawEncounter.encounter.department && ` — ${rawEncounter.encounter.department as string}`}
+                      {Boolean(rawEncounter.encounter.department) && ` — ${rawEncounter.encounter.department as string}`}
                     </p>
                     <pre className="text-xs text-gray-700 whitespace-pre-wrap font-mono leading-relaxed">
                       {JSON.stringify(rawEncounter.encounter, null, 2)}

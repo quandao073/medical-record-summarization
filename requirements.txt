@@ -14,3 +14,8 @@ rank-bm25>=0.2.2
 mlflow>=2.14.0
 # Data analysis
 pandas>=2.0.0
+# Database
+sqlalchemy>=2.0.0
+alembic>=1.13.0
+aiosqlite>=0.20.0
+asyncpg>=0.29.0

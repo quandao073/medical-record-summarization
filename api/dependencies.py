@@ -5,8 +5,12 @@ from __future__ import annotations
 from typing import Annotated
 
 from fastapi import Depends, HTTPException, Query
+from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.db.engine import get_db
 from src.llm import BaseLLMClient, create_llm_client, LLMError
+
+DBSessionDep = Annotated[AsyncSession, Depends(get_db)]
 
 
 def get_llm_client(

@@ -163,5 +163,19 @@ def main():
     print(f"\nAssembled {len(assembled)} patients -> {out_dir}")
 
 
+async def assemble_from_db(session, patient_id: str) -> dict | None:
+    """
+    Assemble EHR from database for a single patient.
+
+    Returns the same dict format as assemble()[patient_id], so downstream
+    pipeline (C1 process_ehr → C2 → C3 → ... → C7) works unchanged.
+
+    Returns None if patient not found in database.
+    """
+    from src.db.repositories.emr_repo import EMRRepository
+    repo = EMRRepository(session)
+    return await repo.get_assembled_dict(patient_id)
+
+
 if __name__ == "__main__":
     main()
