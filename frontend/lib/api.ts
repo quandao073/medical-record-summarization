@@ -66,6 +66,24 @@ export async function getSources(
   );
 }
 
+export interface RawEncounter {
+  patient_id: string;
+  encounter_id: string;
+  encounter: Record<string, unknown>;
+  patient_info: Record<string, unknown>;
+  allergies: unknown[];
+}
+
+export async function getRawEncounter(
+  patientId: string,
+  encounterId: string,
+): Promise<RawEncounter> {
+  const res = await fetch(
+    `${API_BASE}/api/v1/raw-encounter/${patientId}/${encounterId}`,
+  );
+  return handleResponse<RawEncounter>(res);
+}
+
 export async function clearCache(patientId: string): Promise<void> {
   await fetch(`${API_BASE}/api/v1/cache/${patientId}`, { method: "DELETE" });
 }
