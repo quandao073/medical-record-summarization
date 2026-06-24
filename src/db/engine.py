@@ -31,9 +31,11 @@ _SessionLocal: async_sessionmaker[AsyncSession] | None = None
 def create_async_engine_from_url(url: str) -> AsyncEngine:
     if not url:
         raise ValueError("DATABASE_URL must not be empty")
-    kwargs: dict = {}
+    kwargs: dict = {"pool_pre_ping": True}
     if url.startswith("sqlite"):
         kwargs["connect_args"] = {"check_same_thread": False}
+    else:
+        kwargs["pool_recycle"] = 1800
     return create_async_engine(url, echo=False, **kwargs)
 
 
