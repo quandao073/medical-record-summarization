@@ -33,7 +33,7 @@ EHR JSON → C1 (Xử lý) → C2 (Chunk) → C3 (Retrieve) → C4 (LLM) → C5 
 
 ### Multi-Run Benchmark (3 runs, gpt-4o-mini)
 
-| Patient | Citation Coverage | Critical Coverage | Latency |
+| Patient | Citation Precision | Critical Precision | Latency |
 |---|---|---|---|
 | P001 | 97.6% ± 0.1% | 100% | 8.1 ± 0.4s |
 | P006 | 91.7% ± 1.2% | 91.9% | 6.8 ± 0.3s |
