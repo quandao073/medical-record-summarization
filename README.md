@@ -2,7 +2,9 @@
 
 Pipeline tóm tắt bệnh án điện tử (EHR) tiếng Việt có citation grounding — mỗi thông tin trong summary đều được truy vết về nguồn dữ liệu gốc và xác minh tự động.
 
-**Dự án thực tập tại VSF - Khối y tế - Chương trình**
+**Dự án thực tập tại VSF - Khối y tế**
+
+**Chương trình Đào tạo Nhân tài AI thực chiến - VinUni - VinGroup**
 
 ---
 
