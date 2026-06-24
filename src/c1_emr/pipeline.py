@@ -98,3 +98,24 @@ def load_and_process(path: str | Path) -> dict:
     except C1ProcessingError as e:
         e.context.update(context)
         raise
+
+
+async def process_ehr_from_db(session, patient_id: str) -> dict:
+    """
+    Full C1 pipeline reading from database:
+      1. Assemble from DB
+      2. Validate
+      3. De-identify
+      4. Normalize
+    Returns safe, normalized EHR dict.
+    """
+    from src.c1_emr.assembler import assemble_from_db
+
+    raw_ehr = await assemble_from_db(session, patient_id)
+    if raw_ehr is None:
+        raise C1ProcessingError(
+            [ValidationError(field="patient_id", message=f"Patient {patient_id} not found in database")],
+            context={"patient_id": patient_id, "source": "database"},
+        )
+
+    return process_ehr(raw_ehr)
