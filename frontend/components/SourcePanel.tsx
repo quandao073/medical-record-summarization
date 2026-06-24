@@ -3,6 +3,8 @@
 import { useState } from "react";
 import type { CitedClaim, ClaimStatus, SourceChunk, ClaimReview, ClaimReviewAction } from "@/lib/types";
 import { SOURCE_TYPE_LABELS, STATUS_TOOLTIPS } from "@/lib/types";
+import type { RawEncounter } from "@/lib/api";
+import { getRawEncounter } from "@/lib/api";
 import ClaimReviewButtons from "./ClaimReviewButtons";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -142,6 +144,9 @@ export default function SourcePanel({
 }: Props) {
   const [showTechDetails, setShowTechDetails] = useState(false);
   const [showRawNote, setShowRawNote] = useState(false);
+  const [rawEncounter, setRawEncounter] = useState<RawEncounter | null>(null);
+  const [rawLoading, setRawLoading] = useState(false);
+  const [rawError, setRawError] = useState<string | null>(null);
 
   if (!sourceId) return null;
 
@@ -310,20 +315,54 @@ export default function SourcePanel({
               </div>
             )}
 
-            {/* Provenance — raw record link */}
-            <div className="pt-2 border-t border-gray-100">
-              <button
-                onClick={() => setShowRawNote(v => !v)}
-                className="text-xs text-gray-400 hover:text-gray-600 transition flex items-center gap-1"
-              >
-                {showRawNote ? "▼" : "▶"} Mở bản ghi gốc
-              </button>
-              {showRawNote && (
-                <p className="mt-1.5 text-xs text-gray-400 italic leading-relaxed">
-                  Chưa có bản ghi gốc. Chỉ có nguồn đã chuẩn hóa từ hồ sơ.
-                </p>
-              )}
-            </div>
+            {/* Raw encounter data */}
+            {chunk.encounter_id && chunk.encounter_id !== "PATIENT_LEVEL" && (
+              <div className="pt-2 border-t border-gray-100">
+                <button
+                  onClick={async () => {
+                    if (showRawNote) {
+                      setShowRawNote(false);
+                      return;
+                    }
+                    setShowRawNote(true);
+                    if (rawEncounter?.encounter_id === chunk.encounter_id) return;
+                    setRawLoading(true);
+                    setRawError(null);
+                    try {
+                      const data = await getRawEncounter(chunk.patient_id, chunk.encounter_id!);
+                      setRawEncounter(data);
+                    } catch (e) {
+                      setRawError((e as Error).message);
+                    } finally {
+                      setRawLoading(false);
+                    }
+                  }}
+                  className="text-xs text-gray-400 hover:text-gray-600 transition flex items-center gap-1"
+                >
+                  {showRawNote ? "▼" : "▶"} Xem bản ghi gốc (lần khám {chunk.encounter_id})
+                </button>
+                {showRawNote && rawLoading && (
+                  <div className="mt-2 flex items-center gap-2 text-xs text-gray-400">
+                    <span className="w-3 h-3 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
+                    Đang tải...
+                  </div>
+                )}
+                {showRawNote && rawError && (
+                  <p className="mt-1.5 text-xs text-red-500">{rawError}</p>
+                )}
+                {showRawNote && rawEncounter && !rawLoading && (
+                  <div className="mt-2 bg-amber-50 border border-amber-200 rounded-lg p-3 max-h-[300px] overflow-y-auto">
+                    <p className="text-xs font-medium text-amber-700 mb-2">
+                      Dữ liệu gốc — {rawEncounter.encounter.encounter_date as string ?? ""}
+                      {rawEncounter.encounter.department && ` — ${rawEncounter.encounter.department as string}`}
+                    </p>
+                    <pre className="text-xs text-gray-700 whitespace-pre-wrap font-mono leading-relaxed">
+                      {JSON.stringify(rawEncounter.encounter, null, 2)}
+                    </pre>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         )}
       </div>
