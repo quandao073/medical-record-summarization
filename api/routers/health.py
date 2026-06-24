@@ -24,7 +24,7 @@ def liveness():
 
 
 @router.get("/health/ready")
-def readiness():
+async def readiness():
     """Readiness probe — returns 200 only when the service can serve traffic."""
     checks: dict[str, dict] = {}
     overall_healthy = True
@@ -56,7 +56,21 @@ def readiness():
     except Exception as e:
         checks["disk"] = {"status": "unknown", "error": str(e)}
 
-    # Check 3: data directory
+    # Check 3: database
+    try:
+        from sqlalchemy import text as sa_text
+        from src.db.engine import _engine
+        if _engine:
+            async with _engine.connect() as conn:
+                await conn.execute(sa_text("SELECT 1"))
+            checks["database"] = {"status": "healthy"}
+        else:
+            checks["database"] = {"status": "not_initialized"}
+    except Exception as e:
+        checks["database"] = {"status": "error", "error": str(e)}
+        overall_healthy = False
+
+    # Check 4: data directory
     if ASSEMBLED_DIR.exists():
         patient_count = len(list(ASSEMBLED_DIR.glob("*.json")))
         checks["data"] = {"status": "healthy", "patients": patient_count}
