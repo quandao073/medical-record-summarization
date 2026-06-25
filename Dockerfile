@@ -1,21 +1,28 @@
-FROM python:3.11-slim AS base
+# ---- Build stage: compile native extensions ----
+FROM python:3.11-slim AS builder
 
-WORKDIR /app
+WORKDIR /build
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
 
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+COPY requirements.prod.txt .
+RUN pip install --no-cache-dir --prefix=/install \
+    --extra-index-url https://download.pytorch.org/whl/cpu \
+    -r requirements.prod.txt
+
+# ---- Runtime stage: minimal image ----
+FROM python:3.11-slim
+
+WORKDIR /app
+
+COPY --from=builder /install /usr/local
 
 COPY configs/ configs/
 COPY src/ src/
 COPY api/ api/
 COPY poc/ poc/
-COPY scripts/ scripts/
-COPY data/ data/
-COPY conftest.py .
 
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1

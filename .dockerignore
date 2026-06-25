@@ -5,8 +5,6 @@ __pycache__/
 .git/
 .gitignore
 frontend/
-frontend/node_modules/
-frontend/.next/
 *.md
 plans/
 drafts/
@@ -16,3 +14,9 @@ docs/
 *.egg-info/
 dist/
 build/
+scripts/
+conftest.py
+tests/
+nginx/
+mlruns/
+*.log
