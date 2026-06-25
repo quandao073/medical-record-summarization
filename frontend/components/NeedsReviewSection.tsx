@@ -24,17 +24,19 @@ function stripPrefix(text: string): string {
 }
 
 const STATUS_ICON: Record<string, string> = {
-  NEED_REVIEW:  "🔍",
-  UNSUPPORTED:  "❓",
-  NO_CITATION:  "➖",
-  CONTRADICTED: "❌",
+  NEED_REVIEW:         "🔍",
+  UNSUPPORTED:         "❓",
+  NO_CITATION:         "➖",
+  CONTRADICTED:        "❌",
+  PARTIALLY_SUPPORTED: "🔶",
 };
 
 const STATUS_LABEL: Record<string, string> = {
-  NEED_REVIEW:  "Cần bác sĩ kiểm tra",
-  UNSUPPORTED:  "Chưa tìm thấy nguồn",
-  NO_CITATION:  "Chưa tìm thấy nguồn trong hồ sơ",
-  CONTRADICTED: "Có mâu thuẫn trong hồ sơ",
+  NEED_REVIEW:         "Cần bác sĩ kiểm tra",
+  UNSUPPORTED:         "Chưa tìm thấy nguồn",
+  NO_CITATION:         "Chưa tìm thấy nguồn trong hồ sơ",
+  CONTRADICTED:        "Có mâu thuẫn trong hồ sơ",
+  PARTIALLY_SUPPORTED: "Hỗ trợ một phần",
 };
 
 interface ReviewItem {
@@ -81,7 +83,7 @@ export default function NeedsReviewSection({ sections, onCitationClick }: Props)
         <div className="space-y-2">
           {items.map((item, i) => {
             const icon = STATUS_ICON[item.claim.status] ?? "⚠️";
-            const label = STATUS_LABEL[item.claim.status] ?? item.claim.status;
+            const label = STATUS_LABEL[item.claim.status] ?? "Cần bác sĩ kiểm tra";
             const sectionName = SECTION_LABELS[item.sectionId] ?? item.sectionId;
             const firstCitation = item.claim.citations[0];
 
