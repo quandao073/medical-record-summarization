@@ -1,0 +1,215 @@
+{
+  "patient_id": "P005",
+  "citation_precision": 0.6857142857142857,
+  "citation_recall": 0.7666666666666667,
+  "critical_precision": 0.7142857142857143,
+  "total_precision_gaps": 15,
+  "total_recall_gaps": 7,
+  "precision_by_category": {
+    "numeric_value_mismatch": 12,
+    "compound_term_mismatch": 1,
+    "other": 2
+  },
+  "precision_gaps_detail": {
+    "numeric_value_mismatch": [
+      {
+        "section": "overview",
+        "claim_text": "Bệnh nhân 70 tuổi, nam giới, có bệnh nền chính là COPD GOLD III ổn định.",
+        "status": "SUPPORTED",
+        "citations": [
+          "P005-PATIENT-INFO",
+          "P005-E003-DX-J44.9"
+        ],
+        "is_critical": false,
+        "reason": "generated_without_gold_match"
+      },
+      {
+        "section": "reason_for_visit",
+        "claim_text": "Tái khám 3 tháng.",
+        "status": "SUPPORTED",
+        "citations": [
+          "P005-E003-NOTE-NOTE001",
+          "P005-E003-NOTE-NOTE002"
+        ],
+        "is_critical": false,
+        "reason": "generated_without_gold_match"
+      },
+      {
+        "section": "medical_history",
+        "claim_text": "Thói quen nguy cơ: Hút thuốc lá 40 gói-năm, chưa bỏ.",
+        "status": "PARTIALLY_SUPPORTED",
+        "citations": [
+          "P005-E001-NOTE-NOTE001",
+          "P005-E002-NOTE-NOTE001",
+          "P005-E002-NOTE-NOTE002"
+        ],
+        "is_critical": false,
+        "reason": "generated_without_gold_match"
+      },
+      {
+        "section": "medical_history",
+        "claim_text": "Thói quen nguy cơ: Giảm từ 20 điếu/ngày xuống 10 điếu.",
+        "status": "PARTIALLY_SUPPORTED",
+        "citations": [
+          "P005-E002-NOTE-NOTE001"
+        ],
+        "is_critical": false,
+        "reason": "generated_without_gold_match"
+      },
+      {
+        "section": "abnormal_labs",
+        "claim_text": "Xu hướng: 420 xuống 380, cải thiện.",
+        "status": "SUPPORTED",
+        "citations": [
+          "P005-E003-LAB-BNP"
+        ],
+        "is_critical": false,
+        "reason": "generated_without_gold_match"
+      },
+      {
+        "section": "abnormal_labs",
+        "claim_text": "PaO2 (khí máu động mạch): 56 mmHg, thấp, tham chiếu: 80 - 100, ngày: 2024-01-15.",
+        "status": "SUPPORTED",
+        "citations": [
+          "P005-E001-LAB-PAO2"
+        ],
+        "is_critical": false,
+        "reason": "generated_without_gold_match"
+      },
+      {
+        "section": "abnormal_labs",
+        "claim_text": "Hematocrit: 54 %, cao, tham chiếu: 40 - 50, ngày: 2024-01-15.",
+        "status": "SUPPORTED",
+        "citations": [
+          "P005-E001-LAB-HCT"
+        ],
+        "is_critical": false,
+        "reason": "generated_without_gold_match"
+      },
+      {
+        "section": "abnormal_labs",
+        "claim_text": "PaCO2 (khí máu động mạch): 52 mmHg, cao, tham chiếu: 35 - 45, ngày: 2024-01-15.",
+        "status": "SUPPORTED",
+        "citations": [
+          "P005-E001-LAB-PACO2"
+        ],
+        "is_critical": false,
+        "reason": "generated_without_gold_match"
+      },
+      {
+        "section": "diagnoses",
+        "claim_text": "Chính: COPD GOLD III ổn định (J44.9)",
+        "status": "SUPPORTED",
+        "citations": [
+          "P005-E003-DX-J44.9"
+        ],
+        "is_critical": true,
+        "reason": "generated_without_gold_match"
+      },
+      {
+        "section": "treatment_timeline",
+        "claim_text": "2024-01-15: BNP 680 pg/mL — thêm Methylprednisolone 40 mg, Furosemide 40 mg, Carvedilol 6.25 mg — suy tim mất bù, cần oxy liệu pháp.",
+        "status": "SUPPORTED",
+        "citations": [
+          "P005-E001-LAB-BNP",
+          "P005-E001-MED-METHYLPREDNISOLONE",
+          "P005-E001-MED-FUROSEMIDE",
+          "P005-E001-MED-CARVEDILOL",
+          "P005-E002-MED-FUROSEMIDE"
+        ],
+        "is_critical": true,
+        "reason": "generated_without_gold_match"
+      },
+      {
+        "section": "treatment_timeline",
+        "claim_text": "2024-07-15: BNP 420 pg/mL — tăng Carvedilol 12.5 mg, Enalapril 10 mg, thêm Fluticasone/Salmeterol — suy tim cải thiện, COPD ổn định.",
+        "status": "SUPPORTED",
+        "citations": [
+          "P005-E002-LAB-BNP",
+          "P005-E001-MED-ENALAPRIL",
+          "P005-E002-MED-CARVEDILOL",
+          "P005-E002-MED-ENALAPRIL",
+          "P005-E003-MED-CARVEDILOL"
+        ],
+        "is_critical": true,
+        "reason": "generated_without_gold_match"
+      },
+      {
+        "section": "treatment_timeline",
+        "claim_text": "2024-10-15: BNP 380 pg/mL — thêm Spironolactone 25 mg — suy tim EF giảm, COPD ổn định.",
+        "status": "SUPPORTED",
+        "citations": [
+          "P005-E003-LAB-BNP",
+          "P005-E003-MED-SPIRONOLACTONE"
+        ],
+        "is_critical": true,
+        "reason": "generated_without_gold_match"
+      }
+    ],
+    "compound_term_mismatch": [
+      {
+        "section": "medical_history",
+        "claim_text": "Ghi chú lâm sàng khác: Không đái tháo đường, không rối loạn lipid.",
+        "status": "PARTIALLY_SUPPORTED",
+        "citations": [
+          "P005-E001-NOTE-NOTE001"
+        ],
+        "is_critical": false,
+        "reason": "generated_without_gold_match"
+      }
+    ],
+    "other": [
+      {
+        "section": "clinical_alerts",
+        "claim_text": "Chưa rõ liều thuốc Spironolactone.",
+        "status": "UNSUPPORTED",
+        "citations": [],
+        "is_critical": false,
+        "reason": "generated_without_gold_match"
+      },
+      {
+        "section": "clinical_alerts",
+        "claim_text": "Cần kiểm tra ICD cho suy tim trái, phân suất tống máu giảm.",
+        "status": "SUPPORTED",
+        "citations": [
+          "P005-E003-DX-I50.1",
+          "P005-E002-DX-I50.1"
+        ],
+        "is_critical": false,
+        "reason": "generated_without_gold_match"
+      }
+    ]
+  },
+  "recall_gaps_by_section": [
+    {
+      "section": "overview",
+      "gold_total": 3,
+      "gold_matched": 2,
+      "missing_count": 1
+    },
+    {
+      "section": "medical_history",
+      "gold_total": 4,
+      "gold_matched": 3,
+      "missing_count": 1
+    },
+    {
+      "section": "abnormal_labs",
+      "gold_total": 4,
+      "gold_matched": 3,
+      "missing_count": 1
+    },
+    {
+      "section": "diagnoses",
+      "gold_total": 3,
+      "gold_matched": 2,
+      "missing_count": 1
+    },
+    {
+      "section": "treatment_timeline",
+      "gold_total": 3,
+      "gold_matched": 0,
+      "missing_count": 3
+    }
+  ]
+}

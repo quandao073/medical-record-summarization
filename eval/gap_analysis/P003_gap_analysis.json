@@ -1,0 +1,182 @@
+{
+  "patient_id": "P003",
+  "citation_precision": 0.7428571428571429,
+  "citation_recall": 0.7714285714285715,
+  "critical_precision": 0.7307692307692307,
+  "total_precision_gaps": 13,
+  "total_recall_gaps": 8,
+  "precision_by_category": {
+    "compound_term_mismatch": 9,
+    "other": 2,
+    "numeric_value_mismatch": 2
+  },
+  "precision_gaps_detail": {
+    "compound_term_mismatch": [
+      {
+        "section": "overview",
+        "claim_text": "Bệnh nhân đang theo dõi các biến chứng mạn tính như phì đại thất trái và gan nhiễm mỡ.",
+        "status": "SUPPORTED",
+        "citations": [
+          "P003-E004-DX-I51.7",
+          "P003-E003-DX-K76.0"
+        ],
+        "is_critical": false,
+        "reason": "generated_without_gold_match"
+      },
+      {
+        "section": "medical_history",
+        "claim_text": "Đái tháo đường type 2, mới phát hiện tháng 02/2024.",
+        "status": "SUPPORTED",
+        "citations": [
+          "P003-E003-DX-E11.9"
+        ],
+        "is_critical": false,
+        "reason": "generated_without_gold_match"
+      },
+      {
+        "section": "allergies",
+        "claim_text": "Dị ứng Sulfonamide, trạng thái đang theo dõi.",
+        "status": "NEED_REVIEW",
+        "citations": [
+          "P003-PATIENT-ALLERGY-SULFONAMIDE_(CO"
+        ],
+        "is_critical": true,
+        "reason": "generated_without_gold_match"
+      },
+      {
+        "section": "diagnoses",
+        "claim_text": "Biến chứng: Phì đại thất trái (I51.7)",
+        "status": "SUPPORTED",
+        "citations": [
+          "P003-E004-DX-I51.7"
+        ],
+        "is_critical": true,
+        "reason": "generated_without_gold_match"
+      },
+      {
+        "section": "diagnoses",
+        "claim_text": "Biến chứng: Cơn tăng huyết áp cấp cứu (I16.1)",
+        "status": "SUPPORTED",
+        "citations": [
+          "P003-E004-DX-I16.1"
+        ],
+        "is_critical": true,
+        "reason": "generated_without_gold_match"
+      },
+      {
+        "section": "diagnoses",
+        "claim_text": "Biến chứng: Gan nhiễm mỡ (K76.0)",
+        "status": "SUPPORTED",
+        "citations": [
+          "P003-E003-DX-K76.0"
+        ],
+        "is_critical": true,
+        "reason": "generated_without_gold_match"
+      },
+      {
+        "section": "diagnoses",
+        "claim_text": "Bệnh kèm: Tiền đái tháo đường (R73.0)",
+        "status": "SUPPORTED",
+        "citations": [
+          "P003-E002-DX-R73.0"
+        ],
+        "is_critical": true,
+        "reason": "generated_without_gold_match"
+      },
+      {
+        "section": "treatment_timeline",
+        "claim_text": "2024-06-10: huyết áp chưa rõ, glucose đói 8.5 mmol/L, HbA1c 7.8% — duy trì phác đồ — kiểm soát kém đái tháo đường.",
+        "status": "SUPPORTED",
+        "citations": [
+          "P003-E004-LAB-HBA1C",
+          "P003-E003-LAB-TC",
+          "P003-E004-LAB-FPG"
+        ],
+        "is_critical": true,
+        "reason": "generated_without_gold_match"
+      },
+      {
+        "section": "clinical_alerts",
+        "claim_text": "Dị ứng Sulfonamide chưa xác nhận lại với bệnh nhân.",
+        "status": "NEED_REVIEW",
+        "citations": [
+          "P003-PATIENT-ALLERGY-SULFONAMIDE_(CO"
+        ],
+        "is_critical": true,
+        "reason": "generated_without_gold_match"
+      }
+    ],
+    "other": [
+      {
+        "section": "allergies",
+        "claim_text": "Cần xác nhận lại thông tin này với bệnh nhân.",
+        "status": "PARTIALLY_SUPPORTED",
+        "citations": [
+          "P003-E005-NOTE-NOTE001",
+          "P003-E004-NOTE-NOTE002",
+          "P003-E004-NOTE-NOTE001"
+        ],
+        "is_critical": false,
+        "reason": "generated_without_gold_match"
+      },
+      {
+        "section": "abnormal_labs",
+        "claim_text": "Xu hướng: ổn định.",
+        "status": "PARTIALLY_SUPPORTED",
+        "citations": [
+          "P003-E005-LAB-ALT"
+        ],
+        "is_critical": false,
+        "reason": "generated_without_gold_match"
+      }
+    ],
+    "numeric_value_mismatch": [
+      {
+        "section": "clinical_alerts",
+        "claim_text": "HbA1c 7.2% vẫn cao hơn mức bình thường.",
+        "status": "SUPPORTED",
+        "citations": [
+          "P003-E005-LAB-HBA1C"
+        ],
+        "is_critical": true,
+        "reason": "generated_without_gold_match"
+      },
+      {
+        "section": "clinical_alerts",
+        "claim_text": "ALT 42 U/L vẫn cao hơn mức bình thường.",
+        "status": "SUPPORTED",
+        "citations": [
+          "P003-E005-LAB-ALT"
+        ],
+        "is_critical": true,
+        "reason": "generated_without_gold_match"
+      }
+    ]
+  },
+  "recall_gaps_by_section": [
+    {
+      "section": "overview",
+      "gold_total": 3,
+      "gold_matched": 1,
+      "missing_count": 2
+    },
+    {
+      "section": "medical_history",
+      "gold_total": 6,
+      "gold_matched": 4,
+      "missing_count": 2
+    },
+    {
+      "section": "allergies",
+      "gold_total": 1,
+      "gold_matched": 0,
+      "missing_count": 1
+    },
+    {
+      "section": "clinical_alerts",
+      "gold_total": 6,
+      "gold_matched": 3,
+      "missing_count": 3
+    }
+  ]
+}
