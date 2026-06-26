@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import shutil
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 from fastapi import APIRouter
@@ -20,7 +20,7 @@ ASSEMBLED_DIR = ROOT / "data" / "processed" / "assembled"
 @router.get("/health")
 def liveness():
     """Liveness probe — returns 200 if the process is alive."""
-    return {"status": "alive", "timestamp": datetime.now().isoformat()}
+    return {"status": "alive", "timestamp": datetime.now(timezone.utc).isoformat()}
 
 
 @router.get("/health/ready")
@@ -83,7 +83,7 @@ async def readiness():
         content={
             "status": "ready" if overall_healthy else "not_ready",
             "checks": checks,
-            "timestamp": datetime.now().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
         },
     )
 

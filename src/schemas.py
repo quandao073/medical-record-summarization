@@ -5,7 +5,7 @@ All components import from here — never define types elsewhere.
 
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Literal, Optional, Any
 
 from pydantic import BaseModel, Field
@@ -134,7 +134,7 @@ class SummaryMetrics(BaseModel):
 
 class FinalSummary(BaseModel):
     patient_id: str
-    created_at: str = Field(default_factory=lambda: datetime.now().isoformat())
+    created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     prompt_version: str = "poc_v1"
     model_version: str = "claude-sonnet-4-6"
     sections: list[SummarySection] = Field(default_factory=list)
