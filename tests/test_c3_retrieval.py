@@ -591,3 +591,49 @@ class TestConfigDrivenTopK:
         from src.c4_llm_draft.prompts import TOP_K_PER_SECTION, _DEFAULT_TOP_K
         assert TOP_K_PER_SECTION["diagnoses"] == 12, "config.yaml should override diagnoses to 12"
         assert _DEFAULT_TOP_K["diagnoses"] == 10, "default should still be 10"
+
+
+# ---------------------------------------------------------------------------
+# Default sort: patient-level chunks before encounter-level
+# ---------------------------------------------------------------------------
+
+class TestDefaultSortOrder:
+    def test_patient_level_chunks_before_encounter_level(self):
+        """Patient-level chunks should appear before encounter-level in default sort."""
+        patient_chunk = SourceChunk(
+            source_id="PAT-INFO", source_type="patient_info",
+            content="Nam, 55 tuổi", patient_id="P001",
+            encounter_id=None, date="2020-01-01", metadata={},
+        )
+        encounter_chunk = SourceChunk(
+            source_id="DX-001", source_type="diagnoses",
+            content="ĐTĐ type 2", patient_id="P001",
+            encounter_id="E001", date="2024-10-10", metadata={},
+        )
+
+        result = retrieve_for_section(
+            [encounter_chunk, patient_chunk], "overview"
+        )
+
+        ids = [c.source_id for c in result]
+        assert ids.index("PAT-INFO") < ids.index("DX-001"), \
+            f"Patient-level chunk should come first, got order: {ids}"
+
+    def test_encounter_level_sorted_by_date_descending(self):
+        """Within encounter-level chunks, most recent should come first."""
+        old = SourceChunk(
+            source_id="DX-OLD", source_type="diagnoses",
+            content="Old diagnosis", patient_id="P001",
+            encounter_id="E001", date="2023-01-01", metadata={},
+        )
+        new = SourceChunk(
+            source_id="DX-NEW", source_type="diagnoses",
+            content="New diagnosis", patient_id="P001",
+            encounter_id="E002", date="2024-10-10", metadata={},
+        )
+
+        result = retrieve_for_section([old, new], "overview")
+
+        ids = [c.source_id for c in result]
+        assert ids.index("DX-NEW") < ids.index("DX-OLD"), \
+            f"Newer chunk should come first, got order: {ids}"

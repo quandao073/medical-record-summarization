@@ -272,11 +272,17 @@ def retrieve_for_section(
         )
         filtered = allergy_chunks + other_chunks
     else:
-        filtered = sorted(
-            filtered,
-            key=lambda c: ("0" if _is_patient_level(c) else "1", c.date or ""),
+        patient_level = sorted(
+            [c for c in filtered if _is_patient_level(c)],
+            key=lambda c: c.date or "",
             reverse=True,
         )
+        encounter_level = sorted(
+            [c for c in filtered if not _is_patient_level(c)],
+            key=lambda c: c.date or "",
+            reverse=True,
+        )
+        filtered = patient_level + encounter_level
 
     return filtered[:max_chunks]
 
