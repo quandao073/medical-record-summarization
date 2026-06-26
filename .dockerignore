@@ -20,3 +20,9 @@ tests/
 nginx/
 mlruns/
 *.log
+data/processed/
+data/cache/
+data/benchmark/
+eval/
+reports/
+node_modules/

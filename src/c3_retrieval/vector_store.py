@@ -11,8 +11,12 @@ import logging
 from pathlib import Path
 from typing import Optional
 
-import faiss
-import numpy as np
+try:
+    import faiss
+    import numpy as np
+    _HAS_FAISS = True
+except ImportError:
+    _HAS_FAISS = False
 
 from src.schemas import SourceChunk
 
@@ -22,7 +26,13 @@ DEFAULT_MODEL_NAME = "paraphrase-multilingual-MiniLM-L12-v2"
 
 
 def _get_embedding_model(model_name: str):
-    from sentence_transformers import SentenceTransformer
+    try:
+        from sentence_transformers import SentenceTransformer
+    except ImportError:
+        raise ImportError(
+            "sentence-transformers required for vector store. "
+            "Install: pip install sentence-transformers"
+        )
     return SentenceTransformer(model_name)
 
 
@@ -52,6 +62,8 @@ class VectorStore:
 
     def build(self, chunks: list[SourceChunk]) -> None:
         """Embed and index all chunks."""
+        if not _HAS_FAISS:
+            raise ImportError("faiss-cpu required for vector store. Install: pip install faiss-cpu")
         if not chunks:
             self._chunks = []
             self._index = None
