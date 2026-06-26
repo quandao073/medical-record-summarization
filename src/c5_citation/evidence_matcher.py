@@ -16,23 +16,78 @@ from src.schemas import CitedClaim, SourceChunk, ClaimStatus, is_structural_cont
 _WS_RE = re.compile(r"\s+")
 _STOPWORDS = {
     "và", "hoặc", "của", "trong", "là", "có", "được", "cho", "với",
+    "bệnh_nhân",
     "a", "an", "the", "and", "or", "of", "in", "is", "are", "for",
 }
+
+_COMPOUND_TERMS = [
+    "đái tháo đường",
+    "tăng huyết áp",
+    "rối loạn chuyển hóa lipid",
+    "nhồi máu cơ tim",
+    "suy thận mạn",
+    "bệnh thần kinh ngoại biên",
+    "viêm gan siêu vi",
+    "xơ vữa động mạch",
+    "suy tim sung huyết",
+    "bệnh phổi tắc nghẽn mạn tính",
+    "huyết áp",
+    "nhịp tim",
+    "nhiệt độ",
+    "mề đay",
+    "phì đại thất trái",
+    "gan nhiễm mỡ",
+    "dị ứng thuốc",
+    "acid uric",
+    "protein niệu",
+    "thiếu máu",
+    "viêm loét dạ dày",
+    "cường giáp",
+    "bệnh nhân",
+]
+
+_COMPOUND_SORTED = sorted(_COMPOUND_TERMS, key=len, reverse=True)
+
+
+def _extract_compound_tokens(text: str) -> set[str]:
+    """Find compound medical terms and return their underscore-joined forms."""
+    lowered = text.lower()
+    found: set[str] = set()
+    for term in _COMPOUND_SORTED:
+        if term in lowered:
+            found.add(term.replace(" ", "_"))
+    return found
+
+
+_NUMERIC_UNIT_RE = re.compile(
+    r"(\d+(?:[.,]\d+)?)\s*(%|mmol|mg|µmol|umol|U/L|IU/L|g/dL|ng/mL|mL|mcg|mmHg)"
+)
+_COMMA_DOT_RE = re.compile(r"(\d+),(\d+)")
 
 
 def _norm(text: str) -> str:
     return _WS_RE.sub(" ", text.lower().strip())
 
 
+def _norm_numeric(text: str) -> str:
+    """Extended normalization: comma→dot and number+unit joining for token matching."""
+    result = _norm(text)
+    result = _COMMA_DOT_RE.sub(r"\1.\2", result)
+    result = _NUMERIC_UNIT_RE.sub(r"\1\2", result)
+    return result
+
+
 _PUNCT_RE = re.compile(r"^[^\w]+|[^\w]+$")
 
 
 def _tokens(text: str) -> set[str]:
+    normalized = _norm_numeric(text)
     words = set()
-    for w in _norm(text).split():
+    for w in normalized.split():
         clean = _PUNCT_RE.sub("", w)
         if clean:
             words.add(clean)
+    words |= _extract_compound_tokens(text)
     return words - _STOPWORDS
 
 
