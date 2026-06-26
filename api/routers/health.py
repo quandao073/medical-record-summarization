@@ -70,7 +70,19 @@ async def readiness():
         checks["database"] = {"status": "error", "error": str(e)}
         overall_healthy = False
 
-    # Check 4: data directory
+    # Check 4: Redis cache
+    try:
+        from src.cache.redis_cache import SummaryCache
+
+        _cache = SummaryCache()
+        redis_ok = await _cache.is_redis_healthy()
+        checks["redis"] = {
+            "status": "healthy" if redis_ok else "degraded",
+        }
+    except Exception as e:
+        checks["redis"] = {"status": "unavailable", "error": str(e)}
+
+    # Check 5: data directory
     if ASSEMBLED_DIR.exists():
         patient_count = len(list(ASSEMBLED_DIR.glob("*.json")))
         checks["data"] = {"status": "healthy", "patients": patient_count}
