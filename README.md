@@ -16,7 +16,7 @@ Hệ thống tự động tóm tắt hồ sơ bệnh án thành 9 sections có c
 EHR JSON → C1 (Xử lý) → C2 (Chunk) → C3 (Retrieve) → C4 (LLM) → C5 (Citation) → C6 (Verify) → FinalSummary
 ```
 
-**Stack:** Python 3.11+ · FastAPI · Next.js 14 · Docker Compose · Nginx · OpenAI / LM Studio / Ollama · Pydantic · Pytest
+**Stack:** Python 3.11+ · FastAPI · Next.js 14 · PostgreSQL · Redis · Docker Compose · Nginx · Prometheus · Grafana · OpenAI / LM Studio / Ollama · Alembic · Pydantic · Pytest
 
 ---
 
@@ -31,7 +31,7 @@ EHR JSON → C1 (Xử lý) → C2 (Chunk) → C3 (Retrieve) → C4 (LLM) → C5 
 | Critical precision | 87.6% |
 | Human eval (6 tiêu chí, 1 evaluator) | 4.23 / 5.0 |
 | Latency | 5.3–8.1s / case |
-| Tests | 332 pass |
+| Tests | 435 pass |
 
 ### Multi-Run Benchmark (3 runs, gpt-4o-mini)
 
@@ -98,7 +98,7 @@ python -m poc.poc_pipeline --patient P001 --model gpt-4o-mini
 python -m poc.poc_pipeline --all-patients --model gpt-4o-mini
 
 # Tests
-pytest tests/ -q                                 # 332 tests
+pytest tests/ -q                                 # 435 tests
 
 # Evaluation
 python -m src.c7_evaluation.run_eval --all
@@ -118,7 +118,7 @@ python -m scripts.run_multirun_benchmark --patients P001 P006 --models openai:gp
 │   ├── dependencies.py            #   LLM client dependency injection
 │   ├── errors.py                  #   Error handlers (LLM→502, Circuit→503)
 │   ├── middleware/                 #   Timeout, Rate Limiter, Request Tracing
-│   └── routers/                   #   summary, sources, review, human_eval, health
+│   └── routers/                   #   summary, sources, review, human_eval, health, metrics, tasks
 ├── src/
 │   ├── schemas.py                 # Pydantic models (15+ schemas)
 │   ├── c1_emr/                    # C1: EHR ingestion — validate, de-identify, normalize, assemble
@@ -128,6 +128,10 @@ python -m scripts.run_multirun_benchmark --patients P001 P006 --models openai:gp
 │   ├── c5_citation/               # C5: Claim extraction + evidence matching
 │   ├── c6_verifier/               # C6: Verification — SUPPORTED / PARTIAL / CONTRADICTED
 │   ├── c7_evaluation/             # C7: Gold label evaluation (precision, recall, critical)
+│   ├── cache/                     # Two-tier cache: Redis (L1) + file JSON (L2)
+│   ├── monitoring/                # Prometheus metrics (counters, histograms, gauges)
+│   ├── tasks/                     # Background task store (in-memory, dedup, eviction)
+│   ├── db/                        # Database engine, models, repositories, seed, timing
 │   ├── llm/                       # LLM abstraction layer
 │   │   ├── factory.py             #   create_llm_client() — auto-infer provider from model name
 │   │   ├── providers/             #   OpenAI, Anthropic (Claude), LM Studio, Ollama
@@ -151,8 +155,10 @@ python -m scripts.run_multirun_benchmark --patients P001 P006 --models openai:gp
 ├── scripts/                       # Benchmark, audit, multi-run scripts
 ├── poc/
 │   └── poc_pipeline.py            # End-to-end pipeline runner (C1→C6)
-├── tests/                         # 332 tests (20 test files)
-├── docker-compose.yml             # Full stack: API + Frontend + Nginx
+├── monitoring/                    # Prometheus + Grafana configs & dashboards
+├── migrations/                    # Alembic database migrations
+├── tests/                         # 435 tests (34 test files)
+├── docker-compose.yml             # Full stack: 7 services (DB, Redis, API, Frontend, Nginx, Prometheus, Grafana)
 ├── docker-compose.local.yml       # Override for local model access
 ├── Dockerfile                     # API image (Python 3.11-slim)
 ├── frontend/Dockerfile            # Frontend image (multi-stage, node:20-alpine)
@@ -270,11 +276,15 @@ Next.js 14 app với 14 components, mô hình T-C-R (Transparency · Control · 
 
 ### Docker Compose (production-like)
 
-| Service | Image | Port | Size |
+| Service | Image | Port | Mô tả |
 |---|---|---|---|
-| `api` | Python 3.11-slim + uvicorn (2 workers) | 8000 | 6.35 GB |
-| `frontend` | Node.js 20 Alpine (standalone Next.js) | 3000 | 155 MB |
-| `nginx` | nginx:alpine (reverse proxy) | 80 | 43 MB |
+| `db` | postgres:16-alpine | 5432 | PostgreSQL database |
+| `redis` | redis:7-alpine | 6379 | Summary cache (L1), LRU 256MB |
+| `api` | Python 3.11-slim + uvicorn (2 workers) | 8000 | FastAPI backend |
+| `frontend` | Node.js 20 Alpine (standalone Next.js) | 3000 | Next.js 14 frontend |
+| `nginx` | nginx:alpine | 80 | Reverse proxy |
+| `prometheus` | prom/prometheus | 9090 | Metrics collection (scrape 15s) |
+| `grafana` | grafana/grafana | 3001 | Dashboard (auto-provisioned, 7 panels) |
 
 ### Reliability
 
@@ -300,6 +310,11 @@ Next.js 14 app với 14 components, mô hình T-C-R (Transparency · Control · 
 | GET/POST | `/api/v1/review/{patient_id}` | Doctor review workflow |
 | GET/POST | `/api/v1/human-eval/{patient_id}` | Human evaluation scores |
 | GET | `/api/v1/health` | Health check |
+| GET | `/api/v1/cache/stats` | Cache hit/miss statistics |
+| POST | `/api/v1/cache/invalidate-all` | Xóa toàn bộ cache |
+| DELETE | `/api/v1/cache/{patient_id}` | Xóa cache bệnh nhân |
+| GET | `/api/v1/metrics` | Prometheus metrics |
+| GET | `/api/v1/tasks/{task_id}` | Trạng thái background task |
 
 ---
 
@@ -315,10 +330,9 @@ Next.js 14 app với 14 components, mô hình T-C-R (Transparency · Control · 
 
 ## Hạn chế
 
-- File-based storage — không có database
 - Dữ liệu synthetic — chưa test với EMR thật (cần IRB approval)
 - 1 evaluator cho human evaluation — không có inter-rater reliability
 - Single-node Docker Compose — không horizontally scalable
-- In-memory rate limiter — reset khi restart API
+- In-memory rate limiter và task store — reset khi restart API
 - Summary là bản nháp — cần bác sĩ review trước khi sử dụng lâm sàng
 - Citation partial/no-source claims được flag, không bị loại bỏ
