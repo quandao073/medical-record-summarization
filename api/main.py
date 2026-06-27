@@ -19,6 +19,7 @@ from api.routers import human_eval as human_eval_router
 from api.routers import health as health_router
 from api.routers import emr as emr_router
 from api.routers import metrics as metrics_router
+from api.routers import tasks as tasks_router
 from api.errors import llm_error_handler, circuit_open_handler, db_error_handler
 from api.middleware.rate_limiter import RateLimitMiddleware
 from api.middleware.timeout import TimeoutMiddleware
@@ -105,6 +106,7 @@ app.include_router(human_eval_router.router, prefix="/api/v1", tags=["human-eval
 app.include_router(health_router.router, prefix="/api/v1", tags=["health"])
 app.include_router(emr_router.router, prefix="/api/v1", tags=["emr"])
 app.include_router(metrics_router.router, prefix="/api/v1", tags=["metrics"])
+app.include_router(tasks_router.router, prefix="/api/v1", tags=["tasks"])
 
 
 app.add_exception_handler(LLMError, llm_error_handler)

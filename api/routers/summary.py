@@ -8,7 +8,9 @@ import time
 from pathlib import Path
 from typing import Annotated
 
-from fastapi import APIRouter, HTTPException, Query
+from datetime import datetime, timezone
+
+from fastapi import APIRouter, BackgroundTasks, HTTPException, Query
 from dotenv import load_dotenv
 
 from poc.poc_pipeline import run_poc
@@ -23,6 +25,7 @@ from src.monitoring.metrics import (
     SUMMARY_REQUESTS, SUMMARY_DURATION, CACHE_OPERATIONS, ACTIVE_REQUESTS,
 )
 from src.schemas import SourceChunk
+from src.tasks.store import TaskStore, TaskStatus
 
 load_dotenv()
 
@@ -33,6 +36,7 @@ ASSEMBLED_DIR = ROOT / "data" / "processed" / "assembled"
 STORE_DIR = ROOT / "data" / "processed" / "stores"
 
 _cache = SummaryCache()
+_task_store = TaskStore()
 
 
 @router.get("/patients")
@@ -59,12 +63,15 @@ async def summarize(
     patient_id: str,
     client: LLMClientDep,
     db: DBSessionDep,
+    background_tasks: BackgroundTasks,
     force_refresh: Annotated[bool, Query(description="Skip cache")] = False,
+    background: Annotated[bool, Query(description="Run in background")] = False,
 ):
     """
     Run the full pipeline: C1 → C2 → C3 → C4 → C5/C6 verification.
     EHR is read from the database (source of truth). Results are cached
     in Redis (L1) with file fallback (L2).
+    Pass background=true to get a task_id and poll GET /tasks/{task_id}.
     """
     start = time.perf_counter()
     ACTIVE_REQUESTS.inc()
@@ -87,6 +94,15 @@ async def summarize(
                 return cached
 
         CACHE_OPERATIONS.labels(operation="get", result="miss").inc()
+
+        if background:
+            task = _task_store.create(patient_id)
+            if task.status == TaskStatus.PENDING:
+                background_tasks.add_task(
+                    _run_pipeline_background,
+                    task.task_id, patient_id, client, raw_ehr, ehr_hash, model,
+                )
+            return {"status": task.status, "task_id": task.task_id, "patient_id": patient_id}
 
         try:
             summary = await asyncio.to_thread(
@@ -112,6 +128,29 @@ async def summarize(
         raise
     finally:
         ACTIVE_REQUESTS.dec()
+
+
+async def _run_pipeline_background(
+    task_id: str, patient_id: str, client, raw_ehr: dict, ehr_hash: str, model: str,
+):
+    _task_store.update(task_id, status=TaskStatus.PROCESSING)
+    try:
+        summary = await asyncio.to_thread(
+            run_poc, patient_id, client, None, 60, False, False, raw_ehr
+        )
+        result = summary.model_dump()
+        result["_from_cache"] = False
+        result["_cache_source"] = "none"
+        await _cache.set(patient_id, ehr_hash, model, result)
+        _task_store.update(
+            task_id, status=TaskStatus.READY, result=result,
+            completed_at=datetime.now(timezone.utc).isoformat(),
+        )
+    except Exception as exc:
+        _task_store.update(
+            task_id, status=TaskStatus.FAILED, error=str(exc),
+            completed_at=datetime.now(timezone.utc).isoformat(),
+        )
 
 
 @router.get("/cache/stats")
