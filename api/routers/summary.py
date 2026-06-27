@@ -1,8 +1,10 @@
 """Summary router: list patients, run pipeline, manage cache."""
 
 from __future__ import annotations
+
 import asyncio
 import json
+import time
 from pathlib import Path
 from typing import Annotated
 
@@ -14,8 +16,12 @@ from api.dependencies import LLMClientDep, DBSessionDep
 from src.c1_emr.assembler import assemble_from_db
 from src.c2_chunking.store_builder import load_structured_store
 from src.c6_verifier.verifier import verify_summary
+from src.cache.redis_cache import SummaryCache, compute_ehr_hash
 from src.llm.circuit_breaker import CircuitOpenError
 from src.llm.errors import LLMError
+from src.monitoring.metrics import (
+    SUMMARY_REQUESTS, SUMMARY_DURATION, CACHE_OPERATIONS, ACTIVE_REQUESTS,
+)
 from src.schemas import SourceChunk
 
 load_dotenv()
@@ -24,9 +30,9 @@ router = APIRouter()
 
 ROOT = Path(__file__).parent.parent.parent
 ASSEMBLED_DIR = ROOT / "data" / "processed" / "assembled"
-STORE_DIR     = ROOT / "data" / "processed" / "stores"
-CACHE_DIR     = ROOT / "data" / "cache"
-CACHE_DIR.mkdir(parents=True, exist_ok=True)
+STORE_DIR = ROOT / "data" / "processed" / "stores"
+
+_cache = SummaryCache()
 
 
 @router.get("/patients")
@@ -57,43 +63,79 @@ async def summarize(
 ):
     """
     Run the full pipeline: C1 → C2 → C3 → C4 → C5/C6 verification.
-    EHR is read from the database (source of truth). Results are cached per patient.
+    EHR is read from the database (source of truth). Results are cached
+    in Redis (L1) with file fallback (L2).
     """
-    cache_path = CACHE_DIR / f"{patient_id}_latest.json"
-
-    if cache_path.exists() and not force_refresh:
-        data = json.loads(cache_path.read_text(encoding="utf-8"))
-        data["_from_cache"] = True
-        return data
-
-    raw_ehr = await assemble_from_db(db, patient_id)
-    if raw_ehr is None:
-        raise HTTPException(status_code=404, detail=f"Patient {patient_id} not found")
-
+    start = time.perf_counter()
+    ACTIVE_REQUESTS.inc()
     try:
-        summary = await asyncio.to_thread(
-            run_poc, patient_id, client, None, 60, False, False, raw_ehr
-        )
-    except (LLMError, CircuitOpenError):
+        raw_ehr = await assemble_from_db(db, patient_id)
+        if raw_ehr is None:
+            raise HTTPException(status_code=404, detail=f"Patient {patient_id} not found")
+
+        ehr_hash = compute_ehr_hash(raw_ehr)
+        model = getattr(client, "model", "unknown")
+
+        if not force_refresh:
+            cached = await _cache.get(patient_id, ehr_hash, model)
+            if cached:
+                duration = time.perf_counter() - start
+                cache_source = cached.get("_cache_source", "unknown")
+                SUMMARY_REQUESTS.labels(patient_id=patient_id, status="success", cache_source=cache_source).inc()
+                SUMMARY_DURATION.labels(patient_id=patient_id, from_cache="true").observe(duration)
+                CACHE_OPERATIONS.labels(operation="get", result="hit").inc()
+                return cached
+
+        CACHE_OPERATIONS.labels(operation="get", result="miss").inc()
+
+        try:
+            summary = await asyncio.to_thread(
+                run_poc, patient_id, client, None, 60, False, False, raw_ehr
+            )
+        except (LLMError, CircuitOpenError):
+            raise
+        except Exception as exc:
+            raise HTTPException(status_code=500, detail=f"Pipeline error: {exc}") from exc
+
+        result = summary.model_dump()
+        result["_from_cache"] = False
+        result["_cache_source"] = "none"
+
+        await _cache.set(patient_id, ehr_hash, model, result)
+
+        duration = time.perf_counter() - start
+        SUMMARY_REQUESTS.labels(patient_id=patient_id, status="success", cache_source="none").inc()
+        SUMMARY_DURATION.labels(patient_id=patient_id, from_cache="false").observe(duration)
+        return result
+    except Exception:
+        SUMMARY_REQUESTS.labels(patient_id=patient_id, status="error", cache_source="none").inc()
         raise
-    except Exception as exc:
-        raise HTTPException(status_code=500, detail=f"Pipeline error: {exc}") from exc
+    finally:
+        ACTIVE_REQUESTS.dec()
 
-    final = summary
 
-    result = final.model_dump()
-    result["_from_cache"] = False
+@router.get("/cache/stats")
+async def cache_stats():
+    """Return cache hit/miss statistics and Redis health."""
+    redis_healthy = await _cache.is_redis_healthy()
+    return {
+        "redis_healthy": redis_healthy,
+        "stats": _cache.stats,
+    }
 
-    cache_path.write_text(
-        json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8"
-    )
-    return result
+
+@router.post("/cache/invalidate-all")
+async def invalidate_all_cache():
+    """Invalidate all cached summaries across Redis and file."""
+    deleted = await _cache.invalidate_all()
+    return {"deleted_keys": deleted}
 
 
 @router.get("/cache/{patient_id}")
 def get_cache(patient_id: str):
-    """Return cached summary if it exists."""
-    cache_path = CACHE_DIR / f"{patient_id}_latest.json"
+    """Return cached summary if it exists (file-based lookup)."""
+    cache_dir = _cache._cache_dir
+    cache_path = cache_dir / f"{patient_id}_latest.json"
     if not cache_path.exists():
         raise HTTPException(status_code=404, detail="No cached result for this patient")
     data = json.loads(cache_path.read_text(encoding="utf-8"))
@@ -102,9 +144,7 @@ def get_cache(patient_id: str):
 
 
 @router.delete("/cache/{patient_id}")
-def clear_cache(patient_id: str):
+async def clear_cache(patient_id: str):
     """Delete cached summary to force re-generation."""
-    cache_path = CACHE_DIR / f"{patient_id}_latest.json"
-    if cache_path.exists():
-        cache_path.unlink()
-    return {"cleared": patient_id}
+    deleted = await _cache.invalidate(patient_id)
+    return {"cleared": patient_id, "deleted_keys": deleted}
