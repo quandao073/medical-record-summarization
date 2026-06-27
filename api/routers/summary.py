@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import time
 from pathlib import Path
 from typing import Annotated
 
@@ -18,6 +19,9 @@ from src.c6_verifier.verifier import verify_summary
 from src.cache.redis_cache import SummaryCache, compute_ehr_hash
 from src.llm.circuit_breaker import CircuitOpenError
 from src.llm.errors import LLMError
+from src.monitoring.metrics import (
+    SUMMARY_REQUESTS, SUMMARY_DURATION, CACHE_OPERATIONS, ACTIVE_REQUESTS,
+)
 from src.schemas import SourceChunk
 
 load_dotenv()
@@ -62,33 +66,52 @@ async def summarize(
     EHR is read from the database (source of truth). Results are cached
     in Redis (L1) with file fallback (L2).
     """
-    raw_ehr = await assemble_from_db(db, patient_id)
-    if raw_ehr is None:
-        raise HTTPException(status_code=404, detail=f"Patient {patient_id} not found")
-
-    ehr_hash = compute_ehr_hash(raw_ehr)
-    model = getattr(client, "model", "unknown")
-
-    if not force_refresh:
-        cached = await _cache.get(patient_id, ehr_hash, model)
-        if cached:
-            return cached
-
+    start = time.perf_counter()
+    ACTIVE_REQUESTS.inc()
     try:
-        summary = await asyncio.to_thread(
-            run_poc, patient_id, client, None, 60, False, False, raw_ehr
-        )
-    except (LLMError, CircuitOpenError):
+        raw_ehr = await assemble_from_db(db, patient_id)
+        if raw_ehr is None:
+            raise HTTPException(status_code=404, detail=f"Patient {patient_id} not found")
+
+        ehr_hash = compute_ehr_hash(raw_ehr)
+        model = getattr(client, "model", "unknown")
+
+        if not force_refresh:
+            cached = await _cache.get(patient_id, ehr_hash, model)
+            if cached:
+                duration = time.perf_counter() - start
+                cache_source = cached.get("_cache_source", "unknown")
+                SUMMARY_REQUESTS.labels(patient_id=patient_id, status="success", cache_source=cache_source).inc()
+                SUMMARY_DURATION.labels(patient_id=patient_id, from_cache="true").observe(duration)
+                CACHE_OPERATIONS.labels(operation="get", result="hit").inc()
+                return cached
+
+        CACHE_OPERATIONS.labels(operation="get", result="miss").inc()
+
+        try:
+            summary = await asyncio.to_thread(
+                run_poc, patient_id, client, None, 60, False, False, raw_ehr
+            )
+        except (LLMError, CircuitOpenError):
+            raise
+        except Exception as exc:
+            raise HTTPException(status_code=500, detail=f"Pipeline error: {exc}") from exc
+
+        result = summary.model_dump()
+        result["_from_cache"] = False
+        result["_cache_source"] = "none"
+
+        await _cache.set(patient_id, ehr_hash, model, result)
+
+        duration = time.perf_counter() - start
+        SUMMARY_REQUESTS.labels(patient_id=patient_id, status="success", cache_source="none").inc()
+        SUMMARY_DURATION.labels(patient_id=patient_id, from_cache="false").observe(duration)
+        return result
+    except Exception:
+        SUMMARY_REQUESTS.labels(patient_id=patient_id, status="error", cache_source="none").inc()
         raise
-    except Exception as exc:
-        raise HTTPException(status_code=500, detail=f"Pipeline error: {exc}") from exc
-
-    result = summary.model_dump()
-    result["_from_cache"] = False
-    result["_cache_source"] = "none"
-
-    await _cache.set(patient_id, ehr_hash, model, result)
-    return result
+    finally:
+        ACTIVE_REQUESTS.dec()
 
 
 @router.get("/cache/stats")
