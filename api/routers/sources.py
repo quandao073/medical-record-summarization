@@ -6,12 +6,12 @@ from pathlib import Path
 
 from fastapi import APIRouter, HTTPException
 
-from src.c2_chunking.store_builder import load_structured_store, get_chunk
+from api.dependencies import DBSessionDep
+from src.db.repositories.chunk_repo import ChunkRepository
 
 router = APIRouter()
 
 ROOT = Path(__file__).parent.parent.parent
-STORE_DIR = ROOT / "data" / "processed" / "stores"
 ASSEMBLED_DIR = ROOT / "data" / "processed" / "assembled"
 
 
@@ -20,29 +20,15 @@ def _patient_from_source_id(source_id: str) -> str:
 
 
 @router.get("/source/{source_id}")
-def get_source(source_id: str):
-    """Look up a single SourceChunk by source_id."""
-    patient_id = _patient_from_source_id(source_id)
-    store_path = STORE_DIR / f"{patient_id}_store.json"
-
-    if not store_path.exists():
-        raise HTTPException(
-            status_code=404,
-            detail=(
-                f"Store not found for patient {patient_id}. "
-                "Run `python poc/dry_run.py` first to build the chunk store."
-            ),
-        )
-
-    store = load_structured_store(store_path)
-    chunk = get_chunk(store, source_id)
-
+async def get_source(source_id: str, db: DBSessionDep):
+    """Look up a single SourceChunk by source_id from the database."""
+    repo = ChunkRepository(db)
+    chunk = await repo.get_chunk_by_id(source_id)
     if chunk is None:
         raise HTTPException(
             status_code=404,
-            detail=f"Source ID '{source_id}' not found in store for {patient_id}",
+            detail=f"Source ID '{source_id}' not found. Run the pipeline first to populate chunk store.",
         )
-
     return chunk.model_dump()
 
 
