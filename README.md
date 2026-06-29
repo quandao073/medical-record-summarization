@@ -26,9 +26,9 @@ EHR JSON → C1 (Xử lý) → C2 (Chunk) → C3 (Retrieve) → C4 (LLM) → C5 
 
 | Chỉ số | Giá trị |
 |---|---|
-| Citation precision | 85.5% |
-| Citation recall | 84.6% |
-| Critical precision | 87.6% |
+| Citation precision | **90.2%** |
+| Citation recall | 84.7% |
+| Critical precision | **92.5%** |
 | Human eval (6 tiêu chí, 1 evaluator) | 4.23 / 5.0 |
 | Latency | 5.3–8.1s / case |
 | Tests | 435 pass |
@@ -150,14 +150,14 @@ python -m scripts.run_multirun_benchmark --patients P001 P006 --models openai:gp
 │   ├── human_eval/                # Human evaluation scores (8 patients)
 │   └── benchmark/                 # Benchmark results + multi-run
 ├── eval/
-│   ├── gold/                      # Gold labels (233 claims, 132 critical)
+│   ├── gold/                      # Gold labels (257 claims, 144 critical)
 │   └── results/                   # C7 evaluation results per patient
 ├── scripts/                       # Benchmark, audit, multi-run scripts
 ├── poc/
 │   └── poc_pipeline.py            # End-to-end pipeline runner (C1→C6)
 ├── monitoring/                    # Prometheus + Grafana configs & dashboards
 ├── migrations/                    # Alembic database migrations
-├── tests/                         # 435 tests (34 test files)
+├── tests/                         # 435 tests (32 test files)
 ├── docker-compose.yml             # Full stack: 7 services (DB, Redis, API, Frontend, Nginx, Prometheus, Grafana)
 ├── docker-compose.local.yml       # Override for local model access
 ├── Dockerfile                     # API image (Python 3.11-slim)
@@ -236,7 +236,7 @@ Gán trạng thái cho từng claim:
 Conservative mode (default): FLAG thay vì REMOVE — để bác sĩ quyết định.
 
 ### C7 — Gold Label Evaluation
-- 233 gold claims (132 critical) across 8 patients
+- 254 gold claims (143 critical) across 8 patients
 - Regex pattern matching: `claim_pattern` → `expected_source_ids`
 - Metrics: `citation_precision`, `citation_recall`, `critical_precision`
 - Audit script phân tách precision gaps vs recall gaps
