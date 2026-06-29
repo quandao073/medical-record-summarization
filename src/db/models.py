@@ -236,3 +236,21 @@ class ProcedureDB(Base):
     result = Column(Text, nullable=True)
 
     encounter = relationship("EncounterDB", back_populates="procedures")
+
+
+# ─── 11. chunks ──────────────────────────────────────────────────────────────
+
+class ChunkDB(Base):
+    __tablename__ = "chunks"
+
+    source_id    = Column(String(100), primary_key=True)
+    patient_id   = Column(String(10), nullable=False, index=True)
+    source_type  = Column(String(30), nullable=False)
+    encounter_id = Column(String(30), nullable=True)
+    date         = Column(String(20), nullable=True)
+    content      = Column(Text, nullable=False, default="")
+    metadata_json = Column("metadata", JSON, nullable=True, default=dict)
+
+    __table_args__ = (
+        Index("ix_chunks_patient_type", "patient_id", "source_type"),
+    )
