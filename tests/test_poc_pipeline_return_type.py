@@ -1,5 +1,4 @@
 """Smoke test: run_poc return type is (FinalSummary, list[SourceChunk])."""
-import inspect
 import typing
 from poc.poc_pipeline import run_poc
 from src.schemas import FinalSummary, SourceChunk
@@ -17,3 +16,5 @@ def test_run_poc_return_annotation():
     args = getattr(ret, "__args__", ())
     assert len(args) == 2
     assert args[0] is FinalSummary
+    # list[SourceChunk] is a generic alias — use == not is
+    assert args[1] == list[SourceChunk], f"Expected list[SourceChunk], got {args[1]}"
