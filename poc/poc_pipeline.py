@@ -29,7 +29,6 @@ from dotenv import load_dotenv
 from src.llm import BaseLLMClient, create_llm_client
 from src.c1_emr.pipeline import load_and_process, process_ehr, C1ProcessingError
 from src.c2_chunking.chunker import chunk_ehr
-from src.c2_chunking.store_builder import build_structured_store, save_structured_store
 from src.c3_retrieval.retriever import retrieve_for_section
 from src.c3_retrieval.vector_store import VectorStore
 from src.c4_llm_draft import SECTIONS, SECTION_LABELS
@@ -47,7 +46,6 @@ load_dotenv()
 ROOT = Path(__file__).parent.parent
 DATA_DIR      = ROOT / "data" / "processed"
 ASSEMBLED_DIR = DATA_DIR / "assembled"
-STORE_DIR     = DATA_DIR / "stores"
 OUTPUT_DIR    = DATA_DIR / "outputs"
 VECTOR_DIR    = DATA_DIR / "vector_store"
 
@@ -60,7 +58,7 @@ def run_poc(
     verbose: bool = True,
     use_vector_store: bool = False,
     raw_ehr: dict | None = None,
-) -> FinalSummary:
+) -> tuple[FinalSummary, list[SourceChunk]]:
     t_start = time.time()
     if verbose:
         print(f"\n{'='*60}")
@@ -93,9 +91,6 @@ def run_poc(
     if verbose:
         print("[C2] Chunking...")
     chunks = chunk_ehr(safe_ehr)
-    store = build_structured_store(chunks)
-    STORE_DIR.mkdir(parents=True, exist_ok=True)
-    save_structured_store(store, STORE_DIR / f"{patient_id}_store.json")
 
     if verbose:
         type_counts = {}
@@ -232,17 +227,17 @@ def run_poc(
         print(f"  Output:           {out_path}")
         print(f"{'='*60}")
 
-    return final
+    return final, chunks
 
 
-def main():
+async def _async_main() -> None:
     parser = argparse.ArgumentParser(description="PoC Pipeline — Medical Record Summarization")
     parser.add_argument("--patient", default="P001")
     parser.add_argument("--all-patients", action="store_true")
-    parser.add_argument("--provider", default=None, help="LLM provider: openai | anthropic | ollama (default: from config)")
-    parser.add_argument("--model", default=None, help="Model name (default: from config)")
+    parser.add_argument("--provider", default=None)
+    parser.add_argument("--model", default=None)
     parser.add_argument("--max-chunks", type=int, default=60)
-    parser.add_argument("--vector", action="store_true", help="Enable vector store hybrid retrieval (default: disabled)")
+    parser.add_argument("--vector", action="store_true")
     args = parser.parse_args()
 
     try:
@@ -254,16 +249,31 @@ def main():
     print(f"LLM: {client.provider_name} / {client.model}")
     use_vs = args.vector
 
+    from src.db.engine import init_db, get_db
+    from src.db.repositories.chunk_repo import ChunkRepository
+    await init_db()
+
     if args.all_patients:
         patient_ids = sorted(p.stem for p in ASSEMBLED_DIR.glob("*.json"))
         print(f"Running PoC | {len(patient_ids)} patients | vector: {use_vs}")
         for pid in patient_ids:
             try:
-                run_poc(pid, client, args.model, args.max_chunks, use_vector_store=use_vs)
+                final, chunks = run_poc(pid, client, args.model, args.max_chunks, use_vector_store=use_vs)
+                async for session in get_db():
+                    repo = ChunkRepository(session)
+                    await repo.save_chunks(chunks)
             except Exception as e:
                 print(f"[ERROR] {pid}: {e}")
     else:
-        run_poc(args.patient, client, args.model, args.max_chunks, use_vector_store=use_vs)
+        final, chunks = run_poc(args.patient, client, args.model, args.max_chunks, use_vector_store=use_vs)
+        async for session in get_db():
+            repo = ChunkRepository(session)
+            await repo.save_chunks(chunks)
+
+
+def main() -> None:
+    import asyncio
+    asyncio.run(_async_main())
 
 
 if __name__ == "__main__":
