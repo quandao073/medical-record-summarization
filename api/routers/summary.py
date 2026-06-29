@@ -16,7 +16,6 @@ from dotenv import load_dotenv
 from poc.poc_pipeline import run_poc
 from api.dependencies import LLMClientDep, DBSessionDep
 from src.c1_emr.assembler import assemble_from_db
-from src.c2_chunking.store_builder import load_structured_store
 from src.c6_verifier.verifier import verify_summary
 from src.cache.redis_cache import SummaryCache, compute_ehr_hash
 from src.llm.circuit_breaker import CircuitOpenError
@@ -105,9 +104,13 @@ async def summarize(
             return {"status": task.status, "task_id": task.task_id, "patient_id": patient_id}
 
         try:
-            summary = await asyncio.to_thread(
+            final, chunks = await asyncio.to_thread(
                 run_poc, patient_id, client, None, 60, False, False, raw_ehr
             )
+            from src.db.repositories.chunk_repo import ChunkRepository
+            repo = ChunkRepository(db)
+            await repo.save_chunks(chunks)
+            summary = final
         except (LLMError, CircuitOpenError):
             raise
         except Exception as exc:
@@ -135,9 +138,15 @@ async def _run_pipeline_background(
 ):
     _task_store.update(task_id, status=TaskStatus.PROCESSING)
     try:
-        summary = await asyncio.to_thread(
+        final, chunks = await asyncio.to_thread(
             run_poc, patient_id, client, None, 60, False, False, raw_ehr
         )
+        from src.db.engine import get_db
+        from src.db.repositories.chunk_repo import ChunkRepository
+        async for session in get_db():
+            repo = ChunkRepository(session)
+            await repo.save_chunks(chunks)
+        summary = final
         result = summary.model_dump()
         result["_from_cache"] = False
         result["_cache_source"] = "none"
