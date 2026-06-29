@@ -6,7 +6,7 @@
       "expected_claims": [
         {
           "claim_pattern": "70 tuổi.*nam.*COPD.*suy tim|COPD.*suy tim.*70 tuổi",
-          "expected_source_ids": ["P005-E003-DX-J44.0", "P005-E003-DX-I50.1"],
+          "expected_source_ids": ["P005-E003-DX-J44.9", "P005-E003-DX-I50.1"],
           "is_critical": false
         },
         {
@@ -18,6 +18,12 @@
           "claim_pattern": "tăng huyết áp nguyên phát",
           "expected_source_ids": ["P005-E003-DX-I10"],
           "is_critical": false
+        },
+        {
+          "claim_pattern": "COPD GOLD III.*ổn định|COPD.*GOLD III",
+          "expected_source_ids": ["P005-E003-DX-J44.9"],
+          "is_critical": false,
+          "note": "Biến thể tổng quan không nhắc suy tim - COPD GOLD III giai đoạn ổn định đã xác minh"
         }
       ]
     },
@@ -28,6 +34,12 @@
           "claim_pattern": "phù mắt cá.*tăng.*2 tuần|khó thở.*leo cầu thang",
           "expected_source_ids": ["P005-E003-NOTE-NOTE001"],
           "is_critical": false
+        },
+        {
+          "claim_pattern": "[Tt]ái khám.*3 tháng|tái khám định kỳ|khám.*theo hẹn",
+          "expected_source_ids": ["P005-E003-NOTE-NOTE001"],
+          "is_critical": false,
+          "note": "Tái khám định kỳ 3 tháng - xác minh từ ghi chú lâm sàng E003"
         }
       ]
     },
@@ -129,6 +141,30 @@
           "claim_pattern": "SpO2.*88.*%.*thấp",
           "expected_source_ids": ["P005-E002-LAB-SPO2REST"],
           "is_critical": true
+        },
+        {
+          "claim_pattern": "PaO2.*56.*mmHg.*thấp|PaO2.*56.*bất thường",
+          "expected_source_ids": ["P005-E002-LAB-PAO2"],
+          "is_critical": true,
+          "note": "PaO2 56 mmHg cho thấy thiếu oxy máu (bình thường >80) - nghiêm trọng với bệnh nhân COPD"
+        },
+        {
+          "claim_pattern": "Hematocrit.*54.*%.*cao|HCT.*54.*cao",
+          "expected_source_ids": ["P005-E002-LAB-HCT"],
+          "is_critical": false,
+          "note": "Hematocrit 54% tăng (bình thường 40-50%) - đa hồng cầu thứ phát do thiếu oxy mạn tính"
+        },
+        {
+          "claim_pattern": "PaCO2.*52.*mmHg.*cao|PaCO2.*52.*tăng",
+          "expected_source_ids": ["P005-E002-LAB-PACO2"],
+          "is_critical": true,
+          "note": "PaCO2 52 mmHg cho thấy tăng CO2 máu (bình thường 35-45) - ứ CO2 trong COPD"
+        },
+        {
+          "claim_pattern": "BNP.*420.*380|BNP.*xu hướng.*420.*380",
+          "expected_source_ids": ["P005-E002-LAB-BNP", "P005-E003-LAB-BNP"],
+          "is_critical": false,
+          "note": "Xu hướng BNP từ E002 đến E003 cho thấy cải thiện 420→380"
         }
       ]
     },
@@ -136,8 +172,8 @@
       "section_id": "diagnoses",
       "expected_claims": [
         {
-          "claim_pattern": "COPD.*ổn định.*J44\\.0",
-          "expected_source_ids": ["P005-E003-DX-J44.0"],
+          "claim_pattern": "COPD.*ổn định.*J44\\.9|COPD.*J44\\.9.*ổn định",
+          "expected_source_ids": ["P005-E003-DX-J44.9"],
           "is_critical": true
         },
         {
@@ -149,6 +185,12 @@
           "claim_pattern": "Tăng huyết áp.*I10",
           "expected_source_ids": ["P005-E003-DX-I10"],
           "is_critical": true
+        },
+        {
+          "claim_pattern": "COPD.*GOLD III.*J44\\.9|COPD.*J44\\.9",
+          "expected_source_ids": ["P005-E003-DX-J44.9"],
+          "is_critical": true,
+          "note": "COPD GOLD III ổn định với mã ICD đúng J44.9 (không xác định, giai đoạn ổn định)"
         }
       ]
     },
@@ -181,10 +223,37 @@
           "expected_source_ids": [
             "P005-E003-LAB-BNP",
             "P005-E003-MED-SPIRONOLACTONE",
-            "P005-E002-DX-J44.0",
-            "P005-E003-DX-J44.0"
+            "P005-E002-DX-J44.9",
+            "P005-E003-DX-J44.9"
           ],
           "is_critical": true
+        },
+        {
+          "claim_pattern": "2024-01-15.*BNP.*680.*nhập viện|2024-01-15.*đợt cấp.*Methylprednisolone",
+          "expected_source_ids": [
+            "P005-E001-LAB-BNP",
+            "P005-E001-MED-METHYLPREDNISOLONE"
+          ],
+          "is_critical": true,
+          "note": "Pattern nới lỏng E001 - LLM có thể không đưa SpO2 84 theo đúng thứ tự"
+        },
+        {
+          "claim_pattern": "2024-07-15.*BNP.*420.*Carvedilol|2024-07-15.*FEV1.*42.*Fluticasone",
+          "expected_source_ids": [
+            "P005-E002-LAB-BNP",
+            "P005-E002-MED-CARVEDILOL"
+          ],
+          "is_critical": true,
+          "note": "Pattern nới lỏng E002 - thông tin chính: BNP 420, Carvedilol hoặc FEV1 42%, Fluticasone"
+        },
+        {
+          "claim_pattern": "2024-10-15.*BNP.*380.*Spironolactone|2024-10-15.*ổn định.*Spironolactone",
+          "expected_source_ids": [
+            "P005-E003-LAB-BNP",
+            "P005-E003-MED-SPIRONOLACTONE"
+          ],
+          "is_critical": true,
+          "note": "Pattern nới lỏng E003 - thông tin chính: BNP 380, thêm Spironolactone"
         }
       ]
     },

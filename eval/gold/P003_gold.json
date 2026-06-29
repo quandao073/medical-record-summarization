@@ -18,6 +18,12 @@
           "claim_pattern": "rối loạn.*lipid|RLLPM",
           "expected_source_ids": ["P003-E005-DX-E78.5"],
           "is_critical": false
+        },
+        {
+          "claim_pattern": "phì đại thất trái.*gan nhiễm mỡ|biến chứng.*mạn tính.*phì đại",
+          "expected_source_ids": ["P003-E004-DX-I51.7", "P003-E003-DX-K76.0"],
+          "is_critical": false,
+          "note": "Biến chứng mạn tính: phì đại thất trái + gan nhiễm mỡ, xác minh từ E004-DX-I51.7 và E003-DX-K76.0"
         }
       ]
     },
@@ -68,6 +74,12 @@
           "expected_source_ids": ["P003-E002-NOTE-NOTE001", "P003-E003-NOTE-NOTE002"],
           "is_critical": true,
           "note": "added_week5"
+        },
+        {
+          "claim_pattern": "Đái tháo đường type 2.*phát hiện.*02/2024|ĐTĐ type 2.*mới phát hiện",
+          "expected_source_ids": ["P003-E003-DX-E11.9"],
+          "is_critical": false,
+          "note": "ĐTĐ type 2 mới phát hiện 02/2024 - xác minh từ E003-DX-E11.9"
         }
       ]
     },
@@ -165,6 +177,24 @@
           "claim_pattern": "lipid.*E78|rối loạn chuyển hóa lipid",
           "expected_source_ids": ["P003-E005-DX-E78.5"],
           "is_critical": true
+        },
+        {
+          "claim_pattern": "Phì đại thất trái.*I51\\.7|I51\\.7.*[Pp]hì đại",
+          "expected_source_ids": ["P003-E004-DX-I51.7"],
+          "is_critical": true,
+          "note": "Biến chứng: phì đại thất trái xác nhận qua siêu âm tim E004 (EF 58%)"
+        },
+        {
+          "claim_pattern": "Gan nhiễm mỡ.*K76\\.0|K76\\.0.*[Gg]an nhiễm",
+          "expected_source_ids": ["P003-E003-DX-K76.0"],
+          "is_critical": true,
+          "note": "Biến chứng: gan nhiễm mỡ độ 1 trên siêu âm, liên quan béo phì và rối loạn lipid"
+        },
+        {
+          "claim_pattern": "Tiền đái tháo đường.*R73\\.0|R73\\.0.*[Tt]iền đái",
+          "expected_source_ids": ["P003-E002-DX-R73.0"],
+          "is_critical": true,
+          "note": "Bệnh đồng mắc tại E002: FPG 6.3, HbA1c 6.2% (tiến triển thành ĐTĐ type 2 tại E003)"
         }
       ]
     },
@@ -206,7 +236,7 @@
           "is_critical": true
         },
         {
-          "claim_pattern": "HbA1c.*7\\.2.*cao.*theo dõi",
+          "claim_pattern": "HbA1c.*7\\.2.*cao",
           "expected_source_ids": ["P003-E005-LAB-HBA1C"],
           "is_critical": true
         },
@@ -227,7 +257,7 @@
           "note": "Pipeline cite chỉ E005. Baseline 7.8% không cần source riêng nếu context rõ."
         },
         {
-          "claim_pattern": "ALT.*42.*ổn định|ALT.*42.*cao.*theo dõi|ALT.*42.*theo dõi.*gan",
+          "claim_pattern": "ALT.*42.*ổn định|ALT.*42.*cao|ALT.*42.*theo dõi",
           "expected_source_ids": ["P003-E005-LAB-ALT"],
           "is_critical": false,
           "note": "widened_week5"

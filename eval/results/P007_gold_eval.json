@@ -1,13 +1,13 @@
 {
   "patient_id": "P007",
   "evaluation_mode": "loose",
-  "citation_precision": 0.9523809523809523,
-  "citation_recall": 0.85,
+  "citation_precision": 0.9565217391304348,
+  "citation_recall": 0.95,
   "critical_precision": 1.0,
-  "total_supported": 21,
-  "precision_correct": 20,
+  "total_supported": 23,
+  "precision_correct": 22,
   "total_gold": 20,
-  "gold_matched": 17,
+  "gold_matched": 19,
   "sections": [
     {
       "section_id": "overview",
@@ -34,6 +34,7 @@
           "claim_text": "Bệnh nhân có BMI 20.8.",
           "status": "SUPPORTED",
           "citations": [
+            "P007-E002-VIT-VIT001",
             "P007-E003-VIT-VIT001"
           ],
           "matched_gold_pattern": "BMI.*20\\.8",
@@ -68,6 +69,8 @@
           "claim_text": "Tái khám sau 6 tháng điều trị cường giáp Basedow.",
           "status": "SUPPORTED",
           "citations": [
+            "P007-E001-NOTE-NOTE002",
+            "P007-E002-NOTE-NOTE002",
             "P007-E003-NOTE-NOTE001",
             "P007-E003-NOTE-NOTE002"
           ],
@@ -119,7 +122,9 @@
           "claim_text": "Thói quen nguy cơ: không hút thuốc, không uống rượu bia.",
           "status": "PARTIALLY_SUPPORTED",
           "citations": [
-            "P007-E001-NOTE-NOTE001"
+            "P007-E001-NOTE-NOTE001",
+            "P007-E001-LAB-WBC",
+            "P007-E001-MED-METHIMAZOLE"
           ],
           "matched_gold_pattern": null,
           "expected_source_ids": [],
@@ -140,6 +145,8 @@
           "claim_text": "Methimazole 5 mg — liều: 5 mg, tần suất: 1 lần/ngày (buổi sáng).",
           "status": "SUPPORTED",
           "citations": [
+            "P007-E001-MED-METHIMAZOLE",
+            "P007-E002-MED-METHIMAZOLE",
             "P007-E003-MED-METHIMAZOLE"
           ],
           "matched_gold_pattern": "Methimazole.*5 ?mg",
@@ -187,8 +194,9 @@
           "claim_text": "Xu hướng: 0.01 mIU/L lên 0.3 mIU/L, đang phục hồi nhưng vẫn thấp hơn bình thường.",
           "status": "SUPPORTED",
           "citations": [
-            "P007-E003-LAB-TSH",
-            "P007-E002-LAB-TSH"
+            "P007-E001-LAB-TSH",
+            "P007-E002-LAB-TSH",
+            "P007-E003-LAB-TSH"
           ],
           "matched_gold_pattern": "TSH.*0\\.3|0\\.01.*0\\.3|TSH.*0\\.01",
           "expected_source_ids": [
@@ -218,6 +226,7 @@
           "claim_text": "Xu hướng: 45 pmol/L xuống 22.0 pmol/L, giảm rõ.",
           "status": "SUPPORTED",
           "citations": [
+            "P007-E001-LAB-FT4",
             "P007-E002-LAB-FT4"
           ],
           "matched_gold_pattern": "FT4.*45|FT4.*22\\.0.*pmol|45.*pmol.*22|FT4.*giảm|FT4.*về.*bình thường",
@@ -247,6 +256,7 @@
           "claim_text": "Xu hướng: 12 pmol/L xuống 6.8 pmol/L, giảm.",
           "status": "SUPPORTED",
           "citations": [
+            "P007-E001-LAB-FT3",
             "P007-E002-LAB-FT3"
           ],
           "matched_gold_pattern": "FT3.*6\\.8|12.*6\\.8|FT3.*12",
@@ -284,6 +294,8 @@
           "claim_text": "Chính: Nhiễm độc giáp với bướu giáp lan tỏa (Basedow) (E05.0)",
           "status": "SUPPORTED",
           "citations": [
+            "P007-E001-DX-E05.0",
+            "P007-E002-DX-E05.0",
             "P007-E003-DX-E05.0"
           ],
           "matched_gold_pattern": "E05\\.0|Basedow|Cường giáp",
@@ -389,9 +401,9 @@
     {
       "section_id": "clinical_alerts",
       "total_claims": 7,
-      "supported_claims": 1,
-      "precision_correct": 1,
-      "gold_matched": 1,
+      "supported_claims": 3,
+      "precision_correct": 3,
+      "gold_matched": 3,
       "gold_total": 3,
       "claim_evals": [
         {
@@ -409,35 +421,43 @@
         },
         {
           "claim_text": "FT4 giảm từ 45 pmol/L xuống 14 pmol/L, đã về bình thường.",
-          "status": "PARTIALLY_SUPPORTED",
+          "status": "SUPPORTED",
           "citations": [
-            "P007-E003-LAB-TSH",
-            "P007-E003-DX-E05.0",
-            "P007-E002-DX-E05.0"
+            "P007-E001-LAB-FT4",
+            "P007-E003-LAB-FT4"
           ],
-          "matched_gold_pattern": null,
-          "expected_source_ids": [],
-          "has_correct_citation": false,
+          "matched_gold_pattern": "FT4.*45.*14|FT4.*về bình thường|FT4.*giảm",
+          "expected_source_ids": [
+            "P007-E003-LAB-FT4",
+            "P007-E002-LAB-FT4",
+            "P007-E002-DX-E05.0",
+            "P007-E001-LAB-FT4"
+          ],
+          "has_correct_citation": true,
           "is_critical": false
         },
         {
           "claim_text": "FT3 giảm từ 12 pmol/L xuống 4.5 pmol/L, đã về bình thường.",
-          "status": "PARTIALLY_SUPPORTED",
+          "status": "SUPPORTED",
           "citations": [
-            "P007-E003-LAB-TSH",
-            "P007-E003-DX-E05.0",
-            "P007-E002-DX-E05.0"
+            "P007-E001-LAB-FT3",
+            "P007-E003-LAB-FT3"
           ],
-          "matched_gold_pattern": null,
-          "expected_source_ids": [],
-          "has_correct_citation": false,
+          "matched_gold_pattern": "FT3.*giảm|FT3.*12.*4\\.5|FT3.*cải thiện",
+          "expected_source_ids": [
+            "P007-E003-LAB-TSH",
+            "P007-E001-LAB-FT3"
+          ],
+          "has_correct_citation": true,
           "is_critical": false
         },
         {
           "claim_text": "Chưa rõ liều duy trì của Methimazole.",
           "status": "PARTIALLY_SUPPORTED",
           "citations": [
-            "P007-E003-DX-E05.0"
+            "P007-E001-NOTE-NOTE001",
+            "P007-E001-MED-METHIMAZOLE",
+            "P007-E002-NOTE-NOTE001"
           ],
           "matched_gold_pattern": null,
           "expected_source_ids": [],

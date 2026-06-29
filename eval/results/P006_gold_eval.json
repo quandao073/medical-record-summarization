@@ -1,11 +1,11 @@
 {
   "patient_id": "P006",
   "evaluation_mode": "loose",
-  "citation_precision": 0.9473684210526315,
+  "citation_precision": 0.9210526315789473,
   "citation_recall": 0.918918918918919,
   "critical_precision": 0.9565217391304348,
   "total_supported": 38,
-  "precision_correct": 36,
+  "precision_correct": 35,
   "total_gold": 37,
   "gold_matched": 34,
   "sections": [
@@ -48,9 +48,9 @@
           "claim_text": "Bệnh nhân đang theo dõi các biến chứng như bệnh thận mạn và thiếu máu do CKD.",
           "status": "PARTIALLY_SUPPORTED",
           "citations": [
-            "P006-E002-DX-E11.65",
-            "P006-E002-DX-N18.3",
-            "P006-E002-DX-D63.1"
+            "P006-PATIENT-INFO",
+            "P006-E001-NOTE-NOTE001",
+            "P006-E001-NOTE-NOTE003"
           ],
           "matched_gold_pattern": null,
           "expected_source_ids": [],
@@ -71,6 +71,7 @@
           "claim_text": "Tái khám 6 tháng.",
           "status": "SUPPORTED",
           "citations": [
+            "P006-E001-NOTE-NOTE003",
             "P006-E002-NOTE-NOTE001",
             "P006-E002-NOTE-NOTE002"
           ],
@@ -114,7 +115,7 @@
       "section_id": "medical_history",
       "total_claims": 6,
       "supported_claims": 6,
-      "precision_correct": 5,
+      "precision_correct": 4,
       "gold_matched": 5,
       "gold_total": 5,
       "claim_evals": [
@@ -136,6 +137,7 @@
           "status": "SUPPORTED",
           "citations": [
             "P006-E001-DX-I10",
+            "P006-E002-DX-I10",
             "P006-E001-NOTE-NOTE001"
           ],
           "matched_gold_pattern": "Tăng huyết áp.*3 năm|huyết áp.*3 năm",
@@ -176,13 +178,13 @@
           "claim_text": "Tổng trạng thừa cân (BMI 28.8).",
           "status": "SUPPORTED",
           "citations": [
-            "P006-E001-NOTE-NOTE002"
+            "P006-E001-VIT-VIT001"
           ],
           "matched_gold_pattern": "BMI.*28\\.8|thừa cân.*BMI",
           "expected_source_ids": [
             "P006-E001-NOTE-NOTE002"
           ],
-          "has_correct_citation": true,
+          "has_correct_citation": false,
           "is_critical": false
         },
         {
@@ -211,6 +213,7 @@
           "claim_text": "Insulin Glargine 100 IU/mL — 24 IU, 1 lần/ngày trước ngủ.",
           "status": "SUPPORTED",
           "citations": [
+            "P006-E001-MED-INSULIN_GLARGINE",
             "P006-E002-MED-INSULIN_GLARGINE"
           ],
           "matched_gold_pattern": "Insulin Glargine.*24.*IU",
@@ -224,6 +227,7 @@
           "claim_text": "Losartan 100 mg — 1 viên, 1 lần/ngày buổi sáng.",
           "status": "SUPPORTED",
           "citations": [
+            "P006-E001-MED-LOSARTAN",
             "P006-E002-MED-LOSARTAN"
           ],
           "matched_gold_pattern": "Losartan.*100.*mg",
@@ -276,6 +280,7 @@
           "claim_text": "Calcitriol 0.25 mcg — 1 viên, 1 lần/ngày.",
           "status": "SUPPORTED",
           "citations": [
+            "P006-E001-MED-CALCITRIOL",
             "P006-E002-MED-CALCITRIOL"
           ],
           "matched_gold_pattern": "Calcitriol.*0\\.25",
@@ -289,6 +294,7 @@
           "claim_text": "Calcium carbonate 500 mg — 1 viên, 3 lần/ngày cùng bữa ăn.",
           "status": "SUPPORTED",
           "citations": [
+            "P006-E001-MED-CALCIUM_CARBONATE",
             "P006-E002-MED-CALCIUM_CARBONATE"
           ],
           "matched_gold_pattern": "Calcium carbonate.*500",
@@ -349,7 +355,9 @@
           "claim_text": "Cần xác nhận lại thông tin này với bệnh nhân.",
           "status": "PARTIALLY_SUPPORTED",
           "citations": [
-            "P006-E002-NOTE-NOTE001"
+            "P006-PATIENT-INFO",
+            "P006-E001-NOTE-NOTE001",
+            "P006-E001-DX-N18.3"
           ],
           "matched_gold_pattern": null,
           "expected_source_ids": [],
@@ -384,8 +392,8 @@
           "claim_text": "Xu hướng: 9.8% xuống 8.9%, cải thiện.",
           "status": "SUPPORTED",
           "citations": [
-            "P006-E002-LAB-HBA1C",
-            "P006-E001-LAB-HBA1C"
+            "P006-E001-LAB-HBA1C",
+            "P006-E002-LAB-HBA1C"
           ],
           "matched_gold_pattern": "HbA1c.*8\\.9|HbA1c.*9\\.8|9\\.8.*xuống.*8\\.9",
           "expected_source_ids": [
@@ -441,8 +449,8 @@
           "claim_text": "Xu hướng: 2800 mg/g xuống 2200 mg/g, cải thiện.",
           "status": "SUPPORTED",
           "citations": [
-            "P006-E002-LAB-UACR",
-            "P006-E001-LAB-UACR"
+            "P006-E001-LAB-UACR",
+            "P006-E002-LAB-UACR"
           ],
           "matched_gold_pattern": "2200 mg/g|2800 mg/g|Albumin.*Creatinine.*nước tiểu",
           "expected_source_ids": [
@@ -479,6 +487,7 @@
           "claim_text": "Chính: Đái tháo đường type 2 với biến chứng thận mạn (E11.65)",
           "status": "SUPPORTED",
           "citations": [
+            "P006-E001-DX-E11.65",
             "P006-E002-DX-E11.65"
           ],
           "matched_gold_pattern": "ĐTĐ type 2.*E11|đái tháo đường.*E11",
@@ -493,6 +502,7 @@
           "claim_text": "Bệnh kèm: Bệnh thận mạn giai đoạn 3b (N18.3)",
           "status": "SUPPORTED",
           "citations": [
+            "P006-E001-DX-N18.3",
             "P006-E002-DX-N18.3"
           ],
           "matched_gold_pattern": "thận mạn.*N18|CKD.*N18",
@@ -507,6 +517,7 @@
           "claim_text": "Bệnh kèm: Tăng huyết áp nguyên phát (I10)",
           "status": "SUPPORTED",
           "citations": [
+            "P006-E001-DX-I10",
             "P006-E002-DX-I10"
           ],
           "matched_gold_pattern": "Tăng huyết áp.*I10|huyết áp nguyên phát.*I10",
@@ -546,7 +557,8 @@
             "P006-E001-LAB-HBA1C",
             "P006-E001-LAB-EGFR",
             "P006-E001-MED-LOSARTAN",
-            "P006-E002-MED-LOSARTAN"
+            "P006-E002-MED-LOSARTAN",
+            "P006-E001-VIT-VIT001"
           ],
           "matched_gold_pattern": "2024-03-10.*HbA1c.*9\\.8|2024-03-10.*eGFR.*38",
           "expected_source_ids": [
@@ -563,7 +575,8 @@
           "citations": [
             "P006-E002-LAB-HBA1C",
             "P006-E002-LAB-EGFR",
-            "P006-E002-MED-DAPAGLIFLOZIN"
+            "P006-E002-MED-DAPAGLIFLOZIN",
+            "P006-E002-VIT-VIT001"
           ],
           "matched_gold_pattern": "2024-09-10.*HbA1c.*8\\.9|2024-09-10.*eGFR.*35",
           "expected_source_ids": [
@@ -638,6 +651,7 @@
           "claim_text": "Tỷ số Albumin/Creatinine giảm từ 2800 mg/g xuống 2200 mg/g, đáp ứng điều trị.",
           "status": "SUPPORTED",
           "citations": [
+            "P006-E001-LAB-UACR",
             "P006-E002-LAB-UACR"
           ],
           "matched_gold_pattern": "2800 mg/g.*sang.*2200|Albumin.*Creatinine.*đáp ứng",

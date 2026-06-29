@@ -1,39 +1,39 @@
 {
   "patient_id": "P001",
   "evaluation_mode": "loose",
-  "citation_precision": 0.85,
-  "citation_recall": 0.85,
-  "critical_precision": 0.8076923076923077,
-  "total_supported": 40,
-  "precision_correct": 34,
+  "citation_precision": 0.8048780487804879,
+  "citation_recall": 0.825,
+  "critical_precision": 0.7777777777777778,
+  "total_supported": 41,
+  "precision_correct": 33,
   "total_gold": 40,
-  "gold_matched": 34,
+  "gold_matched": 33,
   "sections": [
     {
       "section_id": "overview",
       "total_claims": 3,
       "supported_claims": 2,
-      "precision_correct": 2,
-      "gold_matched": 2,
+      "precision_correct": 1,
+      "gold_matched": 1,
       "gold_total": 3,
       "claim_evals": [
         {
-          "claim_text": "Bệnh nhân Nguyễn Văn An, 55 tuổi, nam giới, có bệnh đái tháo đường type 2.",
+          "claim_text": "Bệnh nhân 55 tuổi, nam giới, có bệnh nền chính là đái tháo đường type 2.",
           "status": "SUPPORTED",
           "citations": [
             "P001-PATIENT-INFO",
+            "P001-E001-DX-E11",
+            "P001-E002-DX-E11",
+            "P001-E003-DX-E11",
             "P001-E004-DX-E11"
           ],
-          "matched_gold_pattern": "Nguyễn Văn An.*55 tuổi.*nam.*đái tháo đường",
-          "expected_source_ids": [
-            "P001-PATIENT-INFO",
-            "P001-E004-DX-E11"
-          ],
-          "has_correct_citation": true,
+          "matched_gold_pattern": null,
+          "expected_source_ids": [],
+          "has_correct_citation": false,
           "is_critical": false
         },
         {
-          "claim_text": "Bệnh nhân có chỉ số BMI 28.0, thuộc nhóm thừa cân.",
+          "claim_text": "BMI là 28.0, cho thấy tình trạng thừa cân.",
           "status": "SUPPORTED",
           "citations": [
             "P001-E004-VIT-VIT001"
@@ -46,11 +46,12 @@
           "is_critical": false
         },
         {
-          "claim_text": "Hiện tại, bệnh nhân đang theo dõi biến chứng microalbuminuria và bệnh thần kinh ngoại biên.",
+          "claim_text": "Bệnh nhân đang theo dõi biến chứng microalbuminuria và bệnh thần kinh ngoại biên.",
           "status": "PARTIALLY_SUPPORTED",
           "citations": [
-            "P001-E001-DX-G63.2",
-            "P001-PATIENT-INFO"
+            "P001-PATIENT-INFO",
+            "P001-E001-NOTE-NOTE001",
+            "P001-E001-NOTE-NOTE003"
           ],
           "matched_gold_pattern": null,
           "expected_source_ids": [],
@@ -95,7 +96,9 @@
           "status": "SUPPORTED",
           "citations": [
             "P001-E001-DX-E11",
-            "P001-E002-DX-E11"
+            "P001-E002-DX-E11",
+            "P001-E003-DX-E11",
+            "P001-E004-DX-E11"
           ],
           "matched_gold_pattern": "Đái tháo đường type 2.*phát hiện.*2021|ĐTĐ type 2.*phát hiện.*2021",
           "expected_source_ids": [
@@ -138,7 +141,9 @@
           "status": "SUPPORTED",
           "citations": [
             "P001-E001-DX-E11",
-            "P001-E002-DX-E11"
+            "P001-E002-DX-E11",
+            "P001-E003-DX-E11",
+            "P001-E004-DX-E11"
           ],
           "matched_gold_pattern": "Cha.*(đái tháo đường type 2|ĐTĐ type 2).*2018.*(nhồi máu cơ tim|NMCT)",
           "expected_source_ids": [
@@ -241,9 +246,12 @@
       "gold_total": 5,
       "claim_evals": [
         {
-          "claim_text": "Metformin 1000 mg — liều: 1 viên, tần suất: 2 lần/ngày, Uống sau ăn sáng và tối.",
+          "claim_text": "Metformin 1000 mg — 1 viên, 2 lần/ngày, Uống sau ăn sáng và tối.",
           "status": "SUPPORTED",
           "citations": [
+            "P001-E001-MED-METFORMIN",
+            "P001-E002-MED-METFORMIN",
+            "P001-E003-MED-METFORMIN",
             "P001-E004-MED-METFORMIN"
           ],
           "matched_gold_pattern": "Metformin.*1000.*mg",
@@ -254,9 +262,12 @@
           "is_critical": true
         },
         {
-          "claim_text": "Empagliflozin 10 mg — liều: 1 viên, tần suất: 1 lần/ngày (sáng), Uống buổi sáng.",
+          "claim_text": "Empagliflozin 10 mg — 1 viên, 1 lần/ngày (sáng), Uống buổi sáng.",
           "status": "SUPPORTED",
           "citations": [
+            "P001-E001-MED-EMPAGLIFLOZIN",
+            "P001-E002-MED-EMPAGLIFLOZIN",
+            "P001-E003-MED-EMPAGLIFLOZIN",
             "P001-E004-MED-EMPAGLIFLOZIN"
           ],
           "matched_gold_pattern": "Empagliflozin.*10.*mg",
@@ -267,9 +278,12 @@
           "is_critical": true
         },
         {
-          "claim_text": "Amlodipine 5 mg — liều: 1 viên, tần suất: 1 lần/ngày, Uống buổi sáng.",
+          "claim_text": "Amlodipine 5 mg — 1 viên, 1 lần/ngày, Uống buổi sáng.",
           "status": "SUPPORTED",
           "citations": [
+            "P001-E001-MED-AMLODIPINE",
+            "P001-E002-MED-AMLODIPINE",
+            "P001-E003-MED-AMLODIPINE",
             "P001-E004-MED-AMLODIPINE"
           ],
           "matched_gold_pattern": "Amlodipine.*5.*mg",
@@ -280,9 +294,12 @@
           "is_critical": true
         },
         {
-          "claim_text": "Perindopril 5 mg — liều: 1 viên, tần suất: 1 lần/ngày, Uống buổi sáng trước ăn.",
+          "claim_text": "Perindopril 5 mg — 1 viên, 1 lần/ngày, Uống buổi sáng trước ăn.",
           "status": "SUPPORTED",
           "citations": [
+            "P001-E001-MED-PERINDOPRIL",
+            "P001-E002-MED-PERINDOPRIL",
+            "P001-E003-MED-PERINDOPRIL",
             "P001-E004-MED-PERINDOPRIL"
           ],
           "matched_gold_pattern": "Perindopril.*5.*mg",
@@ -293,9 +310,12 @@
           "is_critical": true
         },
         {
-          "claim_text": "Atorvastatin 40 mg — liều: 1 viên, tần suất: 1 lần/ngày (tối), Uống buổi tối.",
+          "claim_text": "Atorvastatin 40 mg — 1 viên, 1 lần/ngày (tối), Uống buổi tối.",
           "status": "SUPPORTED",
           "citations": [
+            "P001-E001-MED-ATORVASTATIN",
+            "P001-E002-MED-ATORVASTATIN",
+            "P001-E003-MED-ATORVASTATIN",
             "P001-E004-MED-ATORVASTATIN"
           ],
           "matched_gold_pattern": "Atorvastatin.*40.*mg",
@@ -355,6 +375,7 @@
           "claim_text": "Xu hướng: 9.2% xuống 7.1%, cải thiện.",
           "status": "SUPPORTED",
           "citations": [
+            "P001-E001-LAB-HBA1C",
             "P001-E004-LAB-HBA1C"
           ],
           "matched_gold_pattern": "(9\\.2.*7\\.1|9\\.2%.*xuống.*7\\.1|HbA1c.*giảm.*9\\.2.*7\\.1)",
@@ -393,9 +414,10 @@
           "is_critical": true
         },
         {
-          "claim_text": "Xu hướng: 42 mg/g xuống 32 mg/g, cải thiện.",
+          "claim_text": "Xu hướng: 42 xuống 32 mg/g, giảm.",
           "status": "SUPPORTED",
           "citations": [
+            "P001-E001-LAB-UACR",
             "P001-E004-LAB-UACR"
           ],
           "matched_gold_pattern": "(42.*32.*mg/g|Microalbumin.*42.*32)",
@@ -411,6 +433,7 @@
           "status": "SUPPORTED",
           "citations": [
             "P001-E003-LAB-LDL",
+            "P001-E004-LAB-LDL",
             "P001-E001-LAB-TG"
           ],
           "matched_gold_pattern": "LDL.*2\\.8.*mmol",
@@ -468,6 +491,9 @@
           "claim_text": "Chính: Đái tháo đường type 2 (E11)",
           "status": "SUPPORTED",
           "citations": [
+            "P001-E001-DX-E11",
+            "P001-E002-DX-E11",
+            "P001-E003-DX-E11",
             "P001-E004-DX-E11"
           ],
           "matched_gold_pattern": "Đái tháo đường type 2.*E11",
@@ -481,6 +507,9 @@
           "claim_text": "Bệnh kèm: Tăng huyết áp nguyên phát (I10)",
           "status": "SUPPORTED",
           "citations": [
+            "P001-E001-DX-I10",
+            "P001-E002-DX-I10",
+            "P001-E003-DX-I10",
             "P001-E004-DX-I10"
           ],
           "matched_gold_pattern": "Tăng huyết áp.*I10",
@@ -494,6 +523,9 @@
           "claim_text": "Bệnh kèm: Rối loạn chuyển hóa lipid hỗn hợp (E78.5)",
           "status": "SUPPORTED",
           "citations": [
+            "P001-E001-DX-E78.5",
+            "P001-E002-DX-E78.5",
+            "P001-E003-DX-E78.5",
             "P001-E004-DX-E78.5"
           ],
           "matched_gold_pattern": "lipid.*E78",
@@ -507,6 +539,8 @@
           "claim_text": "Biến chứng: Microalbuminuria trong ĐTĐ (N18.3)",
           "status": "SUPPORTED",
           "citations": [
+            "P001-E001-DX-N18.3",
+            "P001-E002-DX-N18.3",
             "P001-E004-DX-N18.3"
           ],
           "matched_gold_pattern": "Microalbuminuria.*N18",
@@ -542,7 +576,8 @@
           "status": "SUPPORTED",
           "citations": [
             "P001-E001-LAB-HBA1C",
-            "P001-E001-LAB-LDL"
+            "P001-E001-LAB-LDL",
+            "P001-E001-VIT-VIT001"
           ],
           "matched_gold_pattern": "2024-01-10.*HbA1c.*9\\.2.*148/92.*LDL.*3\\.4.*Metformin.*Empagliflozin.*Perindopril",
           "expected_source_ids": [
@@ -559,7 +594,8 @@
           "status": "SUPPORTED",
           "citations": [
             "P001-E002-LAB-HBA1C",
-            "P001-E002-LAB-LDL"
+            "P001-E002-LAB-LDL",
+            "P001-E002-VIT-VIT001"
           ],
           "matched_gold_pattern": "2024-04-10.*HbA1c.*8\\.1.*138/88.*LDL.*3\\.1.*giữ nguyên",
           "expected_source_ids": [
@@ -577,7 +613,8 @@
             "P001-E003-LAB-HBA1C",
             "P001-E003-LAB-LDL",
             "P001-E001-LAB-TG",
-            "P001-E002-LAB-FPG"
+            "P001-E002-LAB-FPG",
+            "P001-E003-VIT-VIT001"
           ],
           "matched_gold_pattern": "2024-07-10.*HbA1c.*7\\.5.*132/82.*LDL.*2\\.8.*giữ nguyên",
           "expected_source_ids": [
@@ -592,8 +629,8 @@
     },
     {
       "section_id": "clinical_alerts",
-      "total_claims": 8,
-      "supported_claims": 4,
+      "total_claims": 9,
+      "supported_claims": 5,
       "precision_correct": 3,
       "gold_matched": 2,
       "gold_total": 4,
@@ -636,9 +673,21 @@
           "is_critical": true
         },
         {
+          "claim_text": "Dị ứng Penicillin, cần theo dõi.",
+          "status": "SUPPORTED",
+          "citations": [
+            "P001-PATIENT-ALLERGY-PENICILLIN"
+          ],
+          "matched_gold_pattern": null,
+          "expected_source_ids": [],
+          "has_correct_citation": false,
+          "is_critical": true
+        },
+        {
           "claim_text": "Microalbumin/Creatinine ratio giảm từ 42 mg/g sang 32 mg/g.",
           "status": "SUPPORTED",
           "citations": [
+            "P001-E001-LAB-UACR",
             "P001-E004-LAB-UACR"
           ],
           "matched_gold_pattern": "Microalbumin.*32.*mg.*theo dõi|Microalbumin.*32.*mg",

@@ -11,14 +11,14 @@
   "sections": [
     {
       "section_id": "overview",
-      "total_claims": 3,
+      "total_claims": 4,
       "supported_claims": 2,
       "precision_correct": 2,
       "gold_matched": 2,
       "gold_total": 2,
       "claim_evals": [
         {
-          "claim_text": "Bệnh nhân Lê Văn Tùng, 48 tuổi, nam giới, có bệnh nền chính là loét dạ dày mạn tính.",
+          "claim_text": "Bệnh nhân Lê Văn Tùng, 48 tuổi, nam giới.",
           "status": "SUPPORTED",
           "citations": [
             "P008-PATIENT-INFO"
@@ -31,7 +31,20 @@
           "is_critical": false
         },
         {
-          "claim_text": "Thể trạng BMI là 23.9.",
+          "claim_text": "Bệnh nền chính là loét dạ dày mạn tính.",
+          "status": "PARTIALLY_SUPPORTED",
+          "citations": [
+            "P008-PATIENT-INFO",
+            "P008-E001-NOTE-NOTE001",
+            "P008-E001-NOTE-NOTE002"
+          ],
+          "matched_gold_pattern": null,
+          "expected_source_ids": [],
+          "has_correct_citation": false,
+          "is_critical": false
+        },
+        {
+          "claim_text": "BMI hiện tại là 23.9.",
           "status": "SUPPORTED",
           "citations": [
             "P008-E002-VIT-VIT001"
@@ -47,9 +60,9 @@
           "claim_text": "Bệnh nhân đang theo dõi trào ngược dạ dày - thực quản.",
           "status": "PARTIALLY_SUPPORTED",
           "citations": [
-            "P008-E002-DX-K25.7",
-            "P008-E002-DX-K21.0",
-            "P008-PATIENT-INFO"
+            "P008-PATIENT-INFO",
+            "P008-E001-NOTE-NOTE001",
+            "P008-E001-NOTE-NOTE002"
           ],
           "matched_gold_pattern": null,
           "expected_source_ids": [],
@@ -70,6 +83,8 @@
           "claim_text": "Tái khám sau 2 tháng.",
           "status": "SUPPORTED",
           "citations": [
+            "P008-E001-NOTE-NOTE001",
+            "P008-E001-NOTE-NOTE002",
             "P008-E002-NOTE-NOTE001",
             "P008-E002-NOTE-NOTE002"
           ],
@@ -198,6 +213,7 @@
           "claim_text": "Chính: Loét dạ dày mạn tính, đang hồi phục (K25.7)",
           "status": "SUPPORTED",
           "citations": [
+            "P008-E001-DX-K25.7",
             "P008-E002-DX-K25.7"
           ],
           "matched_gold_pattern": "K25\\.7|[Ll]oét dạ dày",
@@ -212,6 +228,7 @@
           "claim_text": "Bệnh kèm: Trào ngược dạ dày - thực quản, cải thiện (K21.0)",
           "status": "SUPPORTED",
           "citations": [
+            "P008-E001-DX-K21.0",
             "P008-E002-DX-K21.0"
           ],
           "matched_gold_pattern": "K21\\.0|GERD|[Tt]rào ngược",
@@ -246,7 +263,7 @@
       "gold_total": 2,
       "claim_evals": [
         {
-          "claim_text": "2024-04-12: Hb 13.8 g/dL — bắt đầu phác đồ diệt H.pylori 14 ngày với Esomeprazole, Amoxicillin, Clarithromycin — triệu chứng đau thượng vị và GERD chưa cải thiện.",
+          "claim_text": "2024-04-12: Hemoglobin 13.8 g/dL — bắt đầu phác đồ diệt H.pylori 14 ngày với Esomeprazole, Amoxicillin, Clarithromycin — triệu chứng đau thượng vị và GERD chưa cải thiện.",
           "status": "SUPPORTED",
           "citations": [
             "P008-E001-LAB-HGB"
@@ -264,7 +281,7 @@
           "is_critical": true
         },
         {
-          "claim_text": "2024-06-10: Hb 14.1 g/dL — giảm liều Esomeprazole xuống 20 mg/ngày — triệu chứng đau thượng vị cải thiện rõ, diệt H.pylori thành công, GERD còn nhẹ.",
+          "claim_text": "2024-06-10: Hemoglobin 14.1 g/dL — giảm liều Esomeprazole xuống 20 mg/ngày — triệu chứng đau thượng vị cải thiện rõ, GERD còn nhẹ.",
           "status": "SUPPORTED",
           "citations": [
             "P008-E002-LAB-HGB",
@@ -292,7 +309,8 @@
           "claim_text": "Ợ chua nhẹ khi ăn no hoặc nằm sớm sau ăn.",
           "status": "SUPPORTED",
           "citations": [
-            "P008-E002-DX-K21.0"
+            "P008-E002-DX-K21.0",
+            "P008-E002-NOTE-NOTE001"
           ],
           "matched_gold_pattern": "ợ chua.*ăn no|ợ chua nhẹ",
           "expected_source_ids": [

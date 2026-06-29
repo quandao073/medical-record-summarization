@@ -23,6 +23,18 @@
           "expected_source_ids": ["P004-E003-DX-E11.9", "P004-PATIENT-INFO"],
           "is_critical": true,
           "note": "added_week5"
+        },
+        {
+          "claim_pattern": "đái tháo đường type 2.*không biến chứng|ĐTĐ type 2.*không biến chứng",
+          "expected_source_ids": ["P004-E003-DX-E11.9", "P004-E002-DX-E11", "P004-E001-DX-E11"],
+          "is_critical": false,
+          "note": "ĐTĐ type 2 không biến chứng - xác minh qua E001/E002/E003 đều DX-E11 không có mã biến chứng"
+        },
+        {
+          "claim_pattern": "tăng huyết áp nguyên phát|THA nguyên phát|tăng huyết áp.*I10",
+          "expected_source_ids": ["P004-E003-DX-I10", "P004-E001-DX-I10"],
+          "is_critical": false,
+          "note": "Tăng huyết áp nguyên phát - xác minh từ chẩn đoán E001/E003"
         }
       ]
     },
@@ -78,6 +90,12 @@
           "claim_pattern": "Chế độ ăn không kiểm soát|ăn uống không kiểm soát",
           "expected_source_ids": ["P004-E001-NOTE-NOTE001"],
           "is_critical": false
+        },
+        {
+          "claim_pattern": "[Kk]hông.*phẫu thuật|[Cc]hưa.*phẫu thuật|tiền sử.*phẫu thuật.*không",
+          "expected_source_ids": ["P004-E001-NOTE-NOTE001"],
+          "is_critical": false,
+          "note": "Không có tiền sử phẫu thuật - xác minh từ ghi chú lâm sàng E001"
         }
       ]
     },
@@ -223,6 +241,24 @@
           "expected_source_ids": ["P004-E003-LAB-HBA1C"],
           "is_critical": false,
           "note": "Pipeline cite E003. Baseline 7.8% đã có trong E001-LAB-HBA1C nhưng pipeline không luôn cite."
+        },
+        {
+          "claim_pattern": "[Gg]lucose.*2\\.5.*cần xử trí|[Gg]lucose.*2\\.5.*nguy hiểm|[Gg]lucose.*2\\.5.*mmol.*cấp cứu",
+          "expected_source_ids": ["P004-E003-LAB-FPG"],
+          "is_critical": true,
+          "note": "Glucose 2.5 mmol/L nguy hiểm (<3.9), cần xử trí cấp cứu - xác minh từ xét nghiệm E003"
+        },
+        {
+          "claim_pattern": "HbA1c.*7\\.5.*%.*cao.*mục tiêu|HbA1c.*7\\.5.*chưa đạt|HbA1c.*7\\.5.*kiểm soát",
+          "expected_source_ids": ["P004-E003-LAB-HBA1C"],
+          "is_critical": true,
+          "note": "HbA1c 7.5% vượt mục tiêu (<7.0%) - xác minh từ xét nghiệm E003"
+        },
+        {
+          "claim_pattern": "Gliclazide.*chưa rõ liều|Gliclazide.*không rõ liều|[Nn]gưng.*Gliclazide",
+          "expected_source_ids": ["P004-E002-MED-GLICLAZIDE"],
+          "is_critical": false,
+          "note": "Gliclazide kê tại E002 chưa rõ liều, ngưng tại E003 do hạ đường huyết"
         }
       ]
     }
