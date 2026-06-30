@@ -32,7 +32,9 @@ from src.c2_chunking.chunker import chunk_ehr
 from src.c3_retrieval.retriever import retrieve_for_section
 from src.c3_retrieval.vector_store import VectorStore
 from src.c4_llm_draft import SECTIONS, SECTION_LABELS
-from src.c4_llm_draft.prompts import TOP_K_PER_SECTION, build_section_prompt
+from src.c4_llm_draft.prompts import TOP_K_PER_SECTION
+from src.guardrails.input_guard import scan_chunks, build_safe_prompt
+from src.guardrails import run_guardrails
 from src.c4_llm_draft.summarizer import (
     format_chunks_as_context,
     format_chunks_by_encounter,
@@ -92,6 +94,11 @@ def run_poc(
         print("[C2] Chunking...")
     chunks = chunk_ehr(safe_ehr)
 
+    # Input Guardrail: drop injected chunks before retrieval
+    clean_chunks, injection_alerts = scan_chunks(chunks)
+    if injection_alerts and verbose:
+        print(f"[GUARDRAIL] {len(injection_alerts)} chunk(s) blocked (injection detected)")
+
     if verbose:
         type_counts = {}
         for c in chunks:
@@ -125,7 +132,7 @@ def run_poc(
 
     for section_id in SECTIONS:
         top_k = TOP_K_PER_SECTION.get(section_id, 15)
-        section_chunks = retrieve_for_section(chunks, section_id, max_chunks=top_k, vector_store=vs)
+        section_chunks = retrieve_for_section(clean_chunks, section_id, max_chunks=top_k, vector_store=vs)
         section_chunks_map[section_id] = section_chunks
 
         if section_id == "treatment_timeline":
@@ -133,7 +140,7 @@ def run_poc(
         else:
             context = format_chunks_as_context(section_chunks, top_k)
 
-        section_prompts[section_id] = build_section_prompt(section_id, context, local_model=is_local)
+        section_prompts[section_id] = build_safe_prompt(section_id, context, local_model=is_local)
 
     # ──────────────────────────────────────────────────────────────────────────
     # C4 (LLM): Generate all section drafts concurrently
@@ -159,6 +166,14 @@ def run_poc(
         sc = section_chunks_map.get(draft.section_id, chunks)
         v_section, _ = verify_section(draft, sc, conservative=True, removed_out=removed_claims)
         verified_sections.append(v_section)
+
+    # Output Guardrail + LLM Judge
+    guardrail_result = run_guardrails(verified_sections, clean_chunks, injection_alerts)
+    if verbose and (guardrail_result.safety_violations or guardrail_result.judge_results):
+        fails = sum(1 for j in guardrail_result.judge_results if j.verdict == "FAIL")
+        unknowns = sum(1 for j in guardrail_result.judge_results if j.verdict == "UNKNOWN")
+        print(f"[GUARDRAIL] violations={len(guardrail_result.safety_violations)} "
+              f"judge_fails={fails} judge_unknown={unknowns}")
 
     # Metrics — computed from verified atomic claims (not blob-per-section)
     # ──────────────────────────────────────────────────────────────────────────
@@ -205,6 +220,7 @@ def run_poc(
         sections=sections,
         metrics=metrics,
         removed_claims=removed_claims,
+        guardrail=guardrail_result,
     )
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)

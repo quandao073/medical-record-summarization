@@ -123,3 +123,24 @@ poc:
     - diagnoses
     - treatment_timeline
     - clinical_alerts
+
+# ---------------------------------------------------------------------------
+# Guardrails (Week 6)
+# ---------------------------------------------------------------------------
+guardrails:
+  enabled: true
+
+  input:
+    enabled: true
+
+  output:
+    enabled: true
+
+  llm_judge:
+    enabled: true
+    mode: critical           # critical = configured sections only; all = all 9 sections
+    sections:
+      - diagnoses
+      - current_medications
+      - clinical_alerts
+    model: gpt-4o-mini
