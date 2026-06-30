@@ -30,7 +30,13 @@ Tuần 6 tập trung vào **scaling infrastructure** và cải thiện chất l�
 - Sửa mã ICD J44.0→J44.9 (P005), tái tạo summary P001 bị hỏng
 - Kết quả: Citation Precision **90.2%**, Critical Precision **92.5%**, Recall **84.7%**
 
-**Metrics:** 435 tests passing (+66 từ scaling), 7 Docker services, Docker image 348 MB, Grafana dashboard cho demo.
+**Guardrails (hoàn thành):**
+- Input guard: scanner regex (EN + VI) chặn cứng chunk bị injection, không tiếp tục pipeline
+- Output guard: phát hiện role-drift (khuyến nghị điều trị) trong nội dung tóm tắt
+- LLM-as-Judge: gpt-4o-mini đánh giá 3 sections quan trọng song song sau C6
+- 39 tests, cấu hình độc lập từng lớp qua `config.yaml`
+
+**Metrics:** 487 tests passing (+39 từ guardrails, +66 từ scaling), 7 Docker services, Docker image 348 MB, Grafana dashboard cho demo.
 
 ---
 
@@ -47,6 +53,7 @@ Tuần 6 tập trung vào **scaling infrastructure** và cải thiện chất l�
 | Sửa lỗi sắp xếp C3 | Hoàn thành | Patient-level trước encounter-level |
 | Integration test | Hoàn thành | C1→C6 end-to-end với mock LLM |
 | Sửa frontend | Hoàn thành | Nhãn tiếng Việt cho PARTIALLY_SUPPORTED |
+| Guardrails 3 lớp | Hoàn thành | Input guard, output guard, LLM judge; 39 tests |
 | Demo dry run | Chờ thực hiện | P006 E2E + P001 dự phòng |
 | Demo slide deck | V1 | 15 slides reveal.js |
 | Báo cáo cuối | V1 | Tài liệu này |
@@ -61,11 +68,12 @@ Tuần 6 tập trung vào **scaling infrastructure** và cải thiện chất l�
 4. [Track B — Cải thiện chất lượng Citation](#4-track-b--cải-thiện-chất-lượng-citation)
 5. [Track C — Tối ưu Docker](#5-track-c--tối-ưu-docker)
 6. [Track D — Sửa lỗi & Hoàn thiện](#6-track-d--sửa-lỗi--hoàn-thiện)
-7. [Tổng kết dự án (6 tuần)](#7-tổng-kết-dự-án-6-tuần)
-8. [Bộ kiểm thử](#8-bộ-kiểm-thử)
-9. [Lịch sử Git](#9-lịch-sử-git)
-10. [Hạn chế & Rủi ro](#10-hạn-chế--rủi-ro)
-11. [Kết luận](#11-kết-luận)
+7. [Track E — Guardrails](#7-track-e--guardrails)
+8. [Tổng kết dự án (6 tuần)](#8-tổng-kết-dự-án-6-tuần)
+9. [Bộ kiểm thử](#9-bộ-kiểm-thử)
+10. [Lịch sử Git](#10-lịch-sử-git)
+11. [Hạn chế & Rủi ro](#11-hạn-chế--rủi-ro)
+12. [Kết luận](#12-kết-luận)
 
 ---
 
@@ -377,9 +385,124 @@ Sửa trường `created_at` dùng timezone-aware UTC timestamps thay vì naive 
 
 ---
 
-## 7. Tổng kết dự án (6 tuần)
+## 7. Track E — Guardrails
 
-### 7.1. Kiến trúc tổng thể
+Guardrails là lớp an toàn 3 tầng được tích hợp vào pipeline sau C6, bảo vệ hệ thống khỏi prompt injection và role-drift trong nội dung tóm tắt.
+
+### 7.1. Kiến trúc
+
+```
+EHR Chunks (C2)
+    │
+    ▼
+[Layer 1 — Input Guard]          scan_chunks()
+    │  Phát hiện injection (regex EN+VI)
+    │  Hard-block: drop chunk, tiếp tục với chunks sạch
+    │  Alerts lưu vào GuardrailResult.injection_alerts
+    ▼
+[C3 → C4 → C5 → C6]             build_safe_prompt() — wrap EHR trong <data> tags
+    │
+    ▼
+[Layer 2 — Output Guard]         check_role_drift()
+    │  Phát hiện khuyến nghị điều trị trong nội dung tóm tắt
+    │  "nên dùng", "khuyến cáo", "recommend", "consider adding", ...
+    │  Violations lưu vào GuardrailResult.safety_violations
+    ▼
+[Layer 3 — LLM Judge]            judge_sections()
+    │  gpt-4o-mini đánh giá 3 sections quan trọng (diagnoses, current_medications, clinical_alerts)
+    │  Chạy song song qua ThreadPoolExecutor
+    │  Timeout/lỗi → verdict UNKNOWN (không bao giờ PASS khi không có kết quả)
+    ▼
+GuardrailResult (luôn có trong FinalSummary, không bao giờ None)
+```
+
+### 7.2. Files tạo mới
+
+| File | Dòng | Mô tả |
+|---|---|---|
+| `src/guardrails/__init__.py` | 5 | Re-export `run_guardrails` |
+| `src/guardrails/input_guard.py` | 68 | `scan_chunks()`, `build_safe_prompt()` |
+| `src/guardrails/output_guard.py` | 54 | `check_role_drift()`, 13 regex patterns |
+| `src/guardrails/llm_judge.py` | 95 | `judge_sections()`, parallel gpt-4o-mini |
+| `src/guardrails/orchestrator.py` | 44 | `run_guardrails()`, load config |
+
+**Schemas mới trong `src/schemas.py`:**
+
+```python
+class InjectionAlert(BaseModel):   # chunk bị chặn
+    source_id: str
+    matched_pattern: str
+
+class SafetyViolation(BaseModel):  # role-drift trong output
+    section_id: str
+    matched_text: str
+    severity: Literal["HIGH", "MEDIUM"]
+
+class JudgeResult(BaseModel):      # kết quả LLM judge
+    section_id: str
+    verdict: Literal["PASS", "FAIL", "UNKNOWN"]
+    reason: str
+
+class GuardrailResult(BaseModel):  # luôn có trong FinalSummary
+    injection_alerts: list[InjectionAlert] = []
+    safety_violations: list[SafetyViolation] = []
+    judge_results: list[JudgeResult] = []
+```
+
+### 7.3. Cấu hình (config.yaml)
+
+```yaml
+guardrails:
+  enabled: true
+  input:
+    enabled: true
+  output:
+    enabled: true
+  llm_judge:
+    enabled: true
+    mode: critical           # critical = 3 sections; all = 9 sections
+    sections:
+      - diagnoses
+      - current_medications
+      - clinical_alerts
+    model: gpt-4o-mini
+```
+
+Mỗi lớp có thể bật/tắt độc lập. `mode: critical` chỉ judge 3 sections quan trọng nhất để tiết kiệm chi phí API.
+
+### 7.4. Tích hợp vào Pipeline
+
+**`poc/poc_pipeline.py`** được sửa ở 3 điểm:
+
+1. **Sau C2:** `clean_chunks, injection_alerts = scan_chunks(chunks)` — chunks bị inject bị loại trước khi retrieval
+2. **Trước C4:** `build_safe_prompt(section_id, context)` thay `build_section_prompt` — wrap EHR trong `<data>` tags
+3. **Sau C6:** `guardrail_result = run_guardrails(verified_sections, clean_chunks, injection_alerts)` — kết quả gắn vào `FinalSummary.guardrail`
+
+### 7.5. Phân biệt với C6 Verifier
+
+| | C6 Verifier | Guardrails Output Guard |
+|---|---|---|
+| Mục tiêu | Độ chính xác trích dẫn (claim có source_id đúng không?) | Ranh giới vai trò (bác sĩ không phải AI) |
+| Input | Claims + chunks nguồn | Nội dung tóm tắt đã xác minh |
+| Output | KEEP / FLAG / REMOVE per claim | SafetyViolation per section |
+| Khi nào | Trong pipeline (C5→C6) | Sau C6, trước khi trả về |
+
+### 7.6. Tests
+
+| Test file | Số tests | Nội dung |
+|---|---|---|
+| `tests/test_guardrail_schemas.py` | 5 | Validate Pydantic models, default fields |
+| `tests/test_input_guard.py` | 10 | scan_chunks, build_safe_prompt, injection patterns EN+VI |
+| `tests/test_output_guard.py` | 9 | check_role_drift, patterns tiếng Việt + English |
+| `tests/test_llm_judge.py` | 8 | mock OpenAI, PASS/FAIL/UNKNOWN verdicts, parallel |
+| `tests/test_orchestrator.py` | 7 | run_guardrails, config toggle từng lớp |
+| **Tổng** | **39** | |
+
+---
+
+## 8. Tổng kết dự án (6 tuần)
+
+### 8.1. Kiến trúc tổng thể
 
 ```
 +--------------------------------------------------------------------+
@@ -408,8 +531,9 @@ Sửa trường `created_at` dùng timezone-aware UTC timestamps thay vì naive 
 - **C5 Citation:** Trích xuất claim nguyên tử + đối khớp bằng chứng (23 thuật ngữ ghép)
 - **C6 Verifier:** Phát hiện hallucination, kiểm tra mâu thuẫn, gán trạng thái
 - **C7 Evaluation:** So sánh gold label, benchmark multi-run
+- **Guardrails:** Input guard (injection), output guard (role-drift), LLM judge (gpt-4o-mini)
 
-### 7.2. Tiến độ theo tuần
+### 8.2. Tiến độ theo tuần
 
 | Tuần | Trọng tâm | Sản phẩm chính |
 |---|---|---|
@@ -418,9 +542,9 @@ Sửa trường `created_at` dùng timezone-aware UTC timestamps thay vì naive 
 | 3 | Citation & Đánh giá | C5 citation, C6 verifier, C7 evaluation, vector store, Claude API |
 | 4 | Frontend & Human Eval | Next.js 14 UI, 14 components, mẫu T-C-R, HumanEvalPanel |
 | 5 | Triển khai & Độ tin cậy | Docker Compose (4 services), PostgreSQL migration, reliability middleware, benchmark multi-run |
-| 6 | Scaling & Nộp bài | Redis cache, Prometheus + Grafana, background generation, DB indexes, tối ưu Docker (348 MB), bổ sung gold labels (precision 90.2%), 435 tests |
+| 6 | Scaling & Nộp bài | Redis cache, Prometheus + Grafana, background generation, DB indexes, tối ưu Docker (348 MB), bổ sung gold labels (precision 90.2%), guardrails 3 lớp, 487 tests |
 
-### 7.3. Metrics cuối cùng
+### 8.3. Metrics cuối cùng
 
 | Metric | Giá trị |
 |---|---|
@@ -428,7 +552,8 @@ Sửa trường `created_at` dùng timezone-aware UTC timestamps thay vì naive 
 | Citation Recall (trung bình) | **84.7%** |
 | Critical Precision (trung bình) | **92.5%** |
 | Human Eval (trung bình) | 4.23/5.0 |
-| Số lượng tests | **435 passed** (32 test files) |
+| Số lượng tests | **487 passed** (37 test files) |
+| Guardrails | Input guard + Output guard + LLM judge (gpt-4o-mini) |
 | Kích thước Docker Image (API) | **348 MB** (multi-stage, đã loại sentence-transformers) |
 | Độ trễ (trung bình) | 6.4s |
 | Thành phần Pipeline | 7 (C1→C7) |
@@ -444,7 +569,7 @@ Sửa trường `created_at` dùng timezone-aware UTC timestamps thay vì naive 
 
 ---
 
-## 8. Bộ kiểm thử
+## 9. Bộ kiểm thử
 
 ### Bảng 4 — Bộ kiểm thử: Tuần 5 → Tuần 6
 
@@ -461,6 +586,11 @@ Sửa trường `created_at` dùng timezone-aware UTC timestamps thay vì naive 
 | Prometheus Metrics (`test_metrics`) | 0 | 11 | **+11 (mới)** |
 | Background Tasks (`test_background_tasks`) | 0 | 14 | **+14 (mới)** |
 | Pipeline Integration (`test_pipeline_integration`) | 0 | 4 | **+4 (mới)** |
+| Guardrail Schemas (`test_guardrail_schemas`) | 0 | 5 | **+5 (mới)** |
+| Input Guard (`test_input_guard`) | 0 | 10 | **+10 (mới)** |
+| Output Guard (`test_output_guard`) | 0 | 9 | **+9 (mới)** |
+| LLM Judge (`test_llm_judge`) | 0 | 8 | **+8 (mới)** |
+| Orchestrator (`test_orchestrator`) | 0 | 7 | **+7 (mới)** |
 | Human Eval API (`test_human_eval_api`) | 15 | 15 | — |
 | Review API (`test_review_api`) | 10 | 10 | — |
 | DB Models (`test_db_models`) | 12 | 12 | — |
@@ -482,13 +612,13 @@ Sửa trường `created_at` dùng timezone-aware UTC timestamps thay vì naive 
 | EMR API (`test_emr_api`) | 3 | 3 | — |
 | DB Seed (`test_db_seed`) | 3 | 3 | — |
 | Timeout Middleware (`test_timeout_middleware`) | 2 | 2 | — |
-| **Tổng** | **369** | **435** | **+66 (+18%)** |
+| **Tổng** | **369** | **487** | **+118 (+32%)** |
 
-Tất cả **435 tests pass, 3 warnings** (pytest, 235s).
+Tất cả **487 tests pass, 3 warnings** (pytest).
 
 ---
 
-## 9. Lịch sử Git
+## 10. Lịch sử Git
 
 ### Bảng 5 — Commits tuần 6
 
@@ -506,8 +636,11 @@ Tất cả **435 tests pass, 3 warnings** (pytest, 235s).
 | `a3068b0` | feat(scaling): background generation, DB indexes, query timing | 8 | +283/-1 |
 | `3117994` | docs: cập nhật README với scaling stack tuần 6 | 1 | +26/-12 |
 | `0f866e8` | eval: bổ sung gold labels P003/P004/P005, sửa P001, sửa ICD J44.0→J44.9 | 11 | +780/-418 |
+| `ace95e8` | feat(schemas): add guardrail types and FinalSummary.guardrail field | 2 | +65 |
+| `1563a2e` | feat(guardrails): input/output guard, LLM judge, orchestrator with full tests | 9 | +626 |
+| `4acb3a4` | feat(pipeline): wire guardrails into poc_pipeline and add config section | 2 | +40/-3 |
 
-**Tổng: 14 commits, 50 files thay đổi, +3045/-490 dòng**
+**Tổng: 17 commits, 63 files thay đổi, +3776/-493 dòng**
 
 ### Pull Requests
 
@@ -518,7 +651,7 @@ Tất cả **435 tests pass, 3 warnings** (pytest, 235s).
 
 ---
 
-## 10. Hạn chế & Rủi ro
+## 11. Hạn chế & Rủi ro
 
 | # | Hạn chế | Mức độ | Ghi chú |
 |---|---|---|---|
@@ -529,10 +662,12 @@ Tất cả **435 tests pass, 3 warnings** (pytest, 235s).
 | 5 | Rate limiter + task store trong bộ nhớ — mất khi khởi động lại API | Thấp | Đủ cho single-instance, Redis cache bền vững |
 | 6 | Docker Compose single-node — không mở rộng ngang | Thấp | Redis cache sẵn sàng cho multi-instance |
 | 7 | Đã loại sentence-transformers khỏi prod → vector search tắt | Thấp | Rule-based retrieval đủ cho quy mô hiện tại |
+| 8 | LLM judge gọi OpenAI thật trong production → tốn chi phí API | Thấp | Chỉ 3 sections quan trọng, mode có thể tắt qua config |
+| 9 | Injection patterns chỉ match literal — chưa handle obfuscation (Base64, unicode escape) | Thấp | Đủ cho threat model hiện tại với EHR synthetic |
 
 ---
 
-## 11. Kết luận
+## 12. Kết luận
 
 Tuần 6 đã hoàn thành **4 scaling phases** và nhiều cải tiến chất lượng:
 
@@ -548,4 +683,6 @@ Tuần 6 đã hoàn thành **4 scaling phases** và nhiều cải tiến chất 
 
 6. **Chất lượng Citation:** Phân tích khoảng cách P003/P004/P005, 23 thuật ngữ ghép tiếng Việt, chuẩn hóa số. Bổ sung 24 gold labels đã xác minh y khoa, sửa mã ICD J44.0→J44.9, tái tạo summary P001 bị hỏng. Sửa lỗi sắp xếp C3. Integration test C1→C6. Kết quả: precision **85.5% → 90.2%**, critical **87.6% → 92.5%**.
 
-**Tổng kết 6 tuần:** Dự án đã xây dựng được hệ thống toàn diện từ pipeline 7 bước (C1→C7), frontend 14 components, Docker Compose 7 services, 435 tests, Redis cache, Prometheus + Grafana observability, và background generation. Citation precision đạt **90.2%**, critical precision **92.5%**, human eval 4.23/5.0. Hệ thống sẵn sàng cho demo và có thể mở rộng thêm trong tương lai.
+7. **Guardrails 3 lớp:** Input guard chặn cứng chunk bị injection (EN + VI), output guard phát hiện khuyến nghị điều trị trong tóm tắt, LLM judge (gpt-4o-mini) đánh giá 3 sections quan trọng song song sau C6. Verdict UNKNOWN khi timeout — không bao giờ tự động PASS. Cấu hình độc lập từng lớp. 39 tests.
+
+**Tổng kết 6 tuần:** Dự án đã xây dựng được hệ thống toàn diện từ pipeline 7 bước (C1→C7) + guardrails 3 lớp, frontend 14 components, Docker Compose 7 services, 487 tests, Redis cache, Prometheus + Grafana observability, và background generation. Citation precision đạt **90.2%**, critical precision **92.5%**, human eval 4.23/5.0. Hệ thống sẵn sàng cho demo và có thể mở rộng thêm trong tương lai.
