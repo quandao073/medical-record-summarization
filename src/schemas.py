@@ -139,8 +139,8 @@ class FinalSummary(BaseModel):
     model_version: str = "claude-sonnet-4-6"
     sections: list[SummarySection] = Field(default_factory=list)
     metrics: SummaryMetrics = Field(default_factory=SummaryMetrics)
-    # Audit trail: claims removed by C6 (only populated in strict/non-conservative mode)
     removed_claims: list[CitedClaim] = Field(default_factory=list)
+    guardrail: "GuardrailResult" = Field(default_factory=lambda: GuardrailResult())
 
 
 # ---------------------------------------------------------------------------
@@ -298,3 +298,30 @@ class ValidationError(BaseModel):
     field: str
     message: str
     severity: Literal["error", "warning"] = "error"
+
+
+# ---------------------------------------------------------------------------
+# Guardrails layer
+# ---------------------------------------------------------------------------
+
+class InjectionAlert(BaseModel):
+    source_id: str
+    matched_pattern: str
+
+
+class SafetyViolation(BaseModel):
+    section_id: str
+    matched_text: str
+    severity: Literal["HIGH", "MEDIUM"]
+
+
+class JudgeResult(BaseModel):
+    section_id: str
+    verdict: Literal["PASS", "FAIL", "UNKNOWN"]
+    reason: str
+
+
+class GuardrailResult(BaseModel):
+    injection_alerts: list[InjectionAlert] = Field(default_factory=list)
+    safety_violations: list[SafetyViolation] = Field(default_factory=list)
+    judge_results: list[JudgeResult] = Field(default_factory=list)
